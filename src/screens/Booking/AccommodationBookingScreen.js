@@ -35,16 +35,21 @@ export default class AccommodationBookingScreen extends Component {
       zipcode: "",
       startDate: "DD/MM/YYYY",
       endDate: "DD/MM/YYYY",
-      startTime: "00:00",
-      endTime: "00:00",
       isDatePickerVisible: false,
       date: new Date(),
       select_1: [],
       select_3: [],
-      isTimePickerVisible: false,
-      isStartTime: false,
-      formFlight: "",
-      toFlight: "",
+      tem: -1,
+      accommodation: [],
+      accommodationItem: {
+        data: {
+          //dates: "DD/MM/YYYY",
+          startDate: "DD/MM/YYYY",
+          endDate: "DD/MM/YYYY",
+          province_id: "",
+          accommodation: "",
+        },
+      },
     };
   }
 
@@ -117,6 +122,7 @@ export default class AccommodationBookingScreen extends Component {
     } catch (error) {}
   }
 
+  
   formatDate = (date) => {
     let d = new Date(date),
       month = "" + (d.getMonth() + 1),
@@ -128,64 +134,63 @@ export default class AccommodationBookingScreen extends Component {
 
     return [day, month, year].join("/");
   };
-  formatDatetotal = (date) => {
-    let d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [month, day, year].join("/");
-  };
-  showDatePicker = (props) => {
+  showDatePicker = (props,index) => {
     this.setState({ isDatePickerVisible: true });
     if (props == "start") {
       this.setState({ isStart: true });
+    }
+    if (props == "start" && index >= 0) {
+      this.setState({ isStart: true,tem: index });
+    }
+    if (props != "start" && props >= 0) {
+      this.setState({ tem: props });
     }
   };
   hideDatePicker = () => {
     this.setState({ isDatePickerVisible: false });
   };
-  handleConfirm = (dates) => {
-    var date = this.formatDate(dates);
-    var dates = this.formatDatetotal(dates);
-
-    if (this.state.isStart) {
-      this.setState({ startDate: date, startcul: dates, isStart: false });
-      if (this.state.endcul != 0) {
-        this.culDate(dates, this.state.endcul);
-      }
-    } else {
-      this.setState({ endDate: date, endcul: dates });
-      if (this.state.startcul != 0) {
-        this.culDate(this.state.startcul, dates);
-      }
+  handleConfirm = (date) => {
+    var date = this.formatDate(date);
+    if (this.state.isStart && this.state.tem ==-1) {
+      this.setState({ startDate: date, isStart: false });
+    }else if(this.state.isStart && this.state.tem >=0){
+      let tem = this.state.tem;
+        let accommodation = [...this.state.accommodation];
+        let item = { ...accommodation[tem] };
+        let data = { ...item["data"] };
+        data.startDate = date;
+        item["data"] = data;
+        accommodation[tem] = item;
+        this.setState({ accommodation: accommodation,tem:-1, isStart: false });
+    }else if(this.state.tem >=0){
+      let tem = this.state.tem;
+        let accommodation = [...this.state.accommodation];
+        let item = { ...accommodation[tem] };
+        let data = { ...item["data"] };
+        data.endDate = date;
+        item["data"] = data;
+        accommodation[tem] = item;
+        this.setState({ accommodation: accommodation,tem:-1  });
+    }
+     else {
+      this.setState({ endDate: date, isStart: false,tem:-1 });
     }
 
     this.hideDatePicker();
   };
-  culDate = (startcul, endcul) => {
-    let date1 = new Date(startcul);
-    let date2 = new Date(endcul);
+  deleteAccommodation(index, courseItem) {
+    let itemCopy = [...courseItem];
+    itemCopy.splice(index, 1);
     this.setState({
-      total: "0",
+      accommodation: itemCopy,
     });
-    if (date2 >= date1) {
-      let diffInMs = Math.abs(date2 - date1);
-      let totals = diffInMs / (1000 * 60 * 60 * 24) + 1;
-      this.setState({
-        total: totals.toString(),
-      });
-    }
-  };
+  }
 
   render() {
     return (
       <View style={styles.background}>
         <ScrollView>
-          {/* Start flight booking form section 1 */}
+          {/* Start accommodation booking form section 1 */}
           <View style={styles.containerSec1}>
             <View style={styles.textHeader}>
               <Text style={{ color: "#398DDD", fontSize: 20 }}>
@@ -196,7 +201,7 @@ export default class AccommodationBookingScreen extends Component {
               </Text>
             </View>
 
-            <Divider style={{ paddingBottom: 1 , marginTop: 5}} />
+            <Divider style={{ paddingBottom: 1, marginTop: 5 }} />
 
             {/* ส่วนที่1 */}
             <Text style={{ marginTop: 10 }}>Name:</Text>
@@ -289,7 +294,7 @@ export default class AccommodationBookingScreen extends Component {
             ></TextInput>
             {/* กรณีเลือกอื่นๆ */}
           </View>
-{/* จบส่วนที่1 */}
+          {/* จบส่วนที่1 */}
 
           <View
             style={{
@@ -360,9 +365,11 @@ export default class AccommodationBookingScreen extends Component {
 
               <Text>Check in date (D/M/Y):</Text>
               <Text style={styles.textInput}>เช็คอิน</Text>
-              <TouchableOpacity onPress={() => this.showDatePicker()}>
+              <TouchableOpacity onPress={() => this.showDatePicker("start")}>
                 <View style={styles.inputDate}>
-                  <Text style={{ color: "#bfc6ea" }}>{this.state.startDate}</Text>
+                  <Text style={{ color: "#bfc6ea" }}>
+                    {this.state.startDate}
+                  </Text>
                 </View>
               </TouchableOpacity>
 
@@ -376,10 +383,147 @@ export default class AccommodationBookingScreen extends Component {
             </View>
           </View>
           {/* จบส่วนที่2 */}
-          
+
+          {/* เพิ่มที่พัก */}
+          <View style={{ marginBottom: 12, marginTop: 12 }}>
+            {this.state.accommodation.map((item, index) => {
+              return (
+                <View>
+                  <View style={styles.containerSec2}>
+                    <View style={styles.contentInSec2}>
+                      <Text>Province:</Text>
+                      <Text style={styles.textInput}>จังหวัด</Text>
+                      <Picker
+                        mode="dropdown"
+                        iosIcon={
+                          <Icon
+                            name="angle-down"
+                            style={{ width: "8%", paddingHorizontal: 2 }}
+                          />
+                        }
+                        style={styles.inputLightStyle}
+                        placeholder={
+                          this.state.lang === "EN" ? "Selecte" : "เลือก"
+                        }
+                        placeholderStyle={{ color: "#bfc6ea" }}
+                        placeholderIconColor="#007aff"
+                        selectedValue={item.data.province_id}
+                        onValueChange={(text) =>
+                          {
+                            let accommodation = [...this.state.accommodation];
+                            let item = { ...accommodation[tem] };
+                            let data = { ...item["data"] };
+                            data.province_id = text;
+                            item["data"] = data;
+                            accommodation[tem] = item;
+                            this.setState({ accommodation: accommodation,tem:-1  });}
+                        }
+                        textStyle={{ fontSize: 14 }}
+                      >
+                        <Picker.Item
+                          label={
+                            this.state.lang === "EN"
+                              ? "Please select your Province"
+                              : "กรุณาเลือกจังหวัด"
+                          }
+                          value=""
+                        />
+                        {this.state.select_3.map((data) => {
+                          return (
+                            <Picker.Item
+                              label={
+                                this.state.lang === "EN"
+                                  ? data.pv_name_en
+                                  : data.pv_name_th
+                              }
+                              value={data.pv_id}
+                            />
+                          );
+                        })}
+                      </Picker>
+
+                      <Text>Accommodation (Province, Hotel name):</Text>
+                      <Text style={styles.textInput}>
+                        ที่พัก (จังหวัด ชื่อโรงแรม)
+                      </Text>
+                      <TextInput
+                        style={styles.inputStyle1}
+                        value={item.data.accommodation}
+                        onValueText={text=>{
+                          let accommodation = [...this.state.accommodation];
+                          let item = { ...accommodation[tem] };
+                          let data = { ...item["data"] };
+                          data.accommodation = text;
+                          item["data"] = data;
+                          accommodation[tem] = item;
+                          this.setState({ accommodation: accommodation,tem:-1  });
+                        }}
+                        placeholder="ที่พัก (จังหวัด ชื่อโรงแรม)"
+                      ></TextInput>
+
+                      <Text>Check in date (D/M/Y):</Text>
+                      <Text style={styles.textInput}>เช็คอิน</Text>
+                      <TouchableOpacity
+                        onPress={() => this.showDatePicker("start", index)}
+                      >
+                        <View style={styles.inputDate}>
+                          <Text style={{ color: "#bfc6ea" }}>
+                            {item.data.startDate}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <Text>Check out date (D/M/Y):</Text>
+                      <Text style={styles.textInput}>เช็คเอาต์</Text>
+                      <TouchableOpacity
+                        onPress={() => this.showDatePicker(index)}
+                      >
+                        <View style={styles.inputDate}>
+                          <Text style={{ color: "#bfc6ea" }}>
+                            {item.data.endDate}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  <View style={styles.buttonContainer1}>
+                    <TouchableOpacity
+                      style={styles.btnDelaccommodationStyle}
+                      onPress={() =>
+                        this.deleteaccommodation(index, this.state.accommodation)
+                      }
+                    >
+                      <Text style={{ color: "white" }}>ลบเที่ยวบิน</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            })}
+          </View>
+          {/* เพิ่มที่พัก */}
+
+          {/* โชว์ DateTimePickerModal*/}
+          <DateTimePickerModal
+            isVisible={this.state.isDatePickerVisible}
+            mode="date"
+            onConfirm={this.handleConfirm}
+            onCancel={this.hideDatePicker}
+          />
+
           {/* Action Button */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.btnAddFlightStyle}>
+            <TouchableOpacity
+              style={styles.btnAddAccommodationStyle}
+              onPress={() =>
+                this.setState({
+                  accommodation: [
+                    ...this.state.accommodation,
+                    this.state.accommodationItem,
+                  ],
+                })
+              }
+            >
               <Text style={{ color: "white" }}>เพิ่มที่พัก</Text>
             </TouchableOpacity>
           </View>
@@ -402,14 +546,6 @@ export default class AccommodationBookingScreen extends Component {
               </TouchableOpacity>
             </View>
           </View>
-
-          <DateTimePickerModal
-                isVisible={this.state.isDatePickerVisible}
-                mode="date"
-                onConfirm={this.handleConfirm}
-                onCancel={this.hideDatePicker}
-              />
-
         </ScrollView>
       </View>
     );
@@ -482,8 +618,23 @@ const styles = StyleSheet.create({
     width: "30%",
     borderRadius: 4,
   },
-  btnAddFlightStyle: {
+  buttonContainer1: {
+    alignSelf: "center",
+    justifyContent: "center",
+    paddingTop: 20,
+    width: "30%",
+    borderRadius: 4,
+    marginTop: 2,
+    marginBottom: 18,
+  },
+  btnAddAccommodationStyle: {
     backgroundColor: "#0097fc",
+    padding: 8,
+    alignItems: "center",
+    borderRadius: 4,
+  },
+  btnDelaccommodationStyle: {
+    backgroundColor: "red",
     padding: 8,
     alignItems: "center",
     borderRadius: 4,

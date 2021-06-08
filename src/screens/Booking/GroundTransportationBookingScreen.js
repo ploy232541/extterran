@@ -39,13 +39,24 @@ export default class GroundTransportationBookingScreen extends Component {
       address_alley: "",
       address_road: "",
       startDate: "DD/MM/YYYY",
-      endDate: "DD/MM/YYYY",
       startTime: "00:00",
       endTime: "00:00",
       isDatePickerVisible: false,
       date: new Date(),
       isTimePickerVisible: false,
       isStartTime: false,
+      formGround: "",
+      toGround: "",
+      tem: -1,
+      ground: [],
+      groundItem: {
+        data: {
+          dates: "DD/MM/YYYY",
+          startTime: "00:00",
+          froms_id: "",
+          tos_id: "",
+        },
+      },
     };
   }
 
@@ -95,6 +106,7 @@ export default class GroundTransportationBookingScreen extends Component {
     } catch (error) {}
   }
 
+  // เวลา
   formatTime = (date) => {
     let d = new Date(date),
       hours = d.getHours().toString(),
@@ -106,10 +118,18 @@ export default class GroundTransportationBookingScreen extends Component {
     return [hours, minutes].join(":");
   };
 
-  showTimePicker = (props) => {
+  showTimePicker = (props, index) => {
+  
     this.setState({ isTimePickerVisible: true });
-    if (props == "start") {
+    if (props == "start" && index==null) {
+    
       this.setState({ isStartTime: true });
+      
+    } else if (props == "start" && index>=0) {
+      this.setState({ isStartTime: true, tem: index });
+      
+    } else if (props >= 0) {
+      this.setState({ tem: props });
     }
   };
 
@@ -118,16 +138,40 @@ export default class GroundTransportationBookingScreen extends Component {
   };
 
   handleTimePicker = (date) => {
-    console.log(this.state.isStartTime);
+    
     date = this.formatTime(date);
-    if (this.state.isStartTime) {
-      this.setState({ startTime: date, isStartTime: false });
+    if (this.state.isStartTime && this.state.tem == -1) {
+      this.setState({ startTime: date, isStartTime: false, tem: -1 });
+    } else if (this.state.isStartTime && this.state.tem >= 0) {
+      if (this.state.tem >= 0) {
+        let tem = this.state.tem;
+        let ground = [...this.state.ground];
+        let item = { ...ground[tem] };
+        let data = { ...item["data"] };
+        data.startTime = date;
+        item["data"] = data;
+        ground[tem] = item;
+        this.setState({ ground: ground, tem: -1, isStartTime: false });
+      }
+    } else if (this.state.tem >= 0) {
+      if (this.state.tem >= 0) {
+        let tem = this.state.tem;
+        let ground = [...this.state.ground];
+        let item = { ...ground[tem] };
+        let data = { ...item["data"] };
+        data.endTime = date;
+        item["data"] = data;
+        ground[tem] = item;
+        this.setState({ ground: ground, tem: -1 });
+      }
     } else {
       this.setState({ endTime: date });
     }
     this.hideTimePicker();
   };
+// เวลา
 
+  // วันที่
   formatDate = (date) => {
     let d = new Date(date),
       month = "" + (d.getMonth() + 1),
@@ -155,24 +199,31 @@ export default class GroundTransportationBookingScreen extends Component {
     if (props == "start") {
       this.setState({ isStart: true });
     }
+    if (props != "start" && props >= 0) {
+      this.setState({ tem: props });
+    }
   };
 
   hideDatePicker = () => {
     this.setState({ isDatePickerVisible: false });
   };
   handleConfirm = (dates) => {
-    var date = this.formatDate(dates);
+    var datess = this.formatDate(dates);
     var dates = this.formatDatetotal(dates);
 
     if (this.state.isStart) {
-      this.setState({ startDate: date, startcul: dates, isStart: false });
-      if (this.state.endcul != 0) {
-        this.culDate(dates, this.state.endcul);
-      }
+      this.setState({ startDate: datess, startcul: dates, isStart: false });
     } else {
-      this.setState({ endDate: date, endcul: dates });
-      if (this.state.startcul != 0) {
-        this.culDate(this.state.startcul, dates);
+      if (this.state.tem > -1) {
+        let tem = this.state.tem;
+        let ground = [...this.state.ground];
+        let item = { ...ground[tem] };
+        let data = { ...item["data"] };
+        data.dates = datess;
+        item["data"] = data;
+        ground[tem] = item;
+        this.setState({ ground: ground,tem:-1 });
+        
       }
     }
 
@@ -193,12 +244,19 @@ export default class GroundTransportationBookingScreen extends Component {
       });
     }
   };
+  deleteGround(index, courseItem) {
+    let itemCopy = [...courseItem];
+    itemCopy.splice(index, 1);
+    this.setState({
+      ground: itemCopy,
+    });
+  }
 
   render() {
     return (
       <View style={styles.background}>
         <ScrollView>
-          {/* Start flight booking form section 1 */}
+          {/* Start ground booking form section 1 */}
           <View style={styles.containerSec1}>
             <View style={styles.textHeader}>
               <Text style={{ color: "#398DDD", fontSize: 20 }}>
@@ -295,7 +353,7 @@ export default class GroundTransportationBookingScreen extends Component {
             <View style={styles.contentInSec2}>
               <Text>Date:</Text>
               <Text style={styles.textInput}>วันออกเดินทาง</Text>
-              <TouchableOpacity onPress={() => this.showDatePicker()}>
+              <TouchableOpacity onPress={() => this.showDatePicker("start")}>
                 <View style={styles.inputDate}>
                   <Text style={{ color: "#bfc6ea" }}>
                     {this.state.startDate}
@@ -330,9 +388,97 @@ export default class GroundTransportationBookingScreen extends Component {
           </View>
           {/* จบส่วนที่2 */}
 
+          {/* เพิ่ม */}
+          <View style={{ marginBottom: 12, marginTop: 12 }}>
+            {this.state.ground.map((item, index) => {
+              return (
+              <View>
+<View style={styles.containerSec2}>
+            <View style={styles.contentInSec2}>
+            <Text>Date:</Text>
+                      <Text style={styles.textInput}>วันออกเดินทาง</Text>
+                      <TouchableOpacity
+                        onPress={() => this.showDatePicker(index)}
+                      >
+                        <View style={styles.inputDate}>
+                          <Text style={{ color: "#bfc6ea" }}>
+                            {item.data.dates}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <Text>Time:</Text>
+                      <Text style={styles.textInput}>เวลาเดินทาง</Text>
+                      <TouchableOpacity
+                        // onPress={() => this.showTimePicker("start", index)}
+                        onPress={() => this.showTimePicker("start", index)}
+                      >
+                        <View style={styles.inputDate}>
+                          <Text style={{ color: "#bfc6ea" }}>
+                            {item.data.startTime}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+              <Text>From:</Text>
+              <Text style={styles.textInput}>ต้นทาง</Text>
+              <TextInput
+                style={styles.inputStyle1}
+                placeholder="กรุณากรอกต้นทาง"
+              ></TextInput>
+
+              <Text>To:</Text>
+              <Text style={styles.textInput}>ปลายทาง</Text>
+              <TextInput
+                style={styles.inputStyle1}
+                placeholder="กรุณากรอกปลายทาง"
+              ></TextInput>
+            </View>
+          </View>
+
+
+          <View style={styles.buttonContainer1}>
+                    <TouchableOpacity
+                      style={styles.btnDelGroundStyle}
+                      onPress={() =>
+                        this.deleteGround(index, this.state.ground)
+                      }
+                    >
+                      <Text style={{ color: "white" }}>ลบ</Text>
+                    </TouchableOpacity>
+                  </View>
+
+             </View>
+              );
+            })}
+          </View>
+          {/* เพิ่ม */}
+
+          {/* โชว์ DateTimePickerModal*/}
+          <DateTimePickerModal
+            isVisible={this.state.isDatePickerVisible}
+            mode="date"
+            onConfirm={this.handleConfirm}
+            onCancel={this.hideDatePicker}
+          />
+
+          <DateTimePickerModal
+            isVisible={this.state.isTimePickerVisible}
+            mode="time"
+            onConfirm={this.handleTimePicker}
+            onCancel={this.hideTimePicker}
+          />
+
           {/* Action Button */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.btnAddFlightStyle}>
+            <TouchableOpacity
+              style={styles.btnAddGroundStyle}
+              onPress={() =>
+                this.setState({
+                  ground: [...this.state.ground, this.state.groundItem],
+                })
+              }
+            >
               <Text style={{ color: "white" }}>เพิ่ม</Text>
             </TouchableOpacity>
           </View>
@@ -356,20 +502,6 @@ export default class GroundTransportationBookingScreen extends Component {
               </TouchableOpacity>
             </View>
           </View>
-
-          <DateTimePickerModal
-            isVisible={this.state.isDatePickerVisible}
-            mode="date"
-            onConfirm={this.handleConfirm}
-            onCancel={this.hideDatePicker}
-          />
-
-          <DateTimePickerModal
-            isVisible={this.state.isTimePickerVisible}
-            mode="time"
-            onConfirm={this.handleTimePicker}
-            onCancel={this.hideTimePicker}
-          />
         </ScrollView>
       </View>
     );
@@ -442,8 +574,23 @@ const styles = StyleSheet.create({
     width: "30%",
     borderRadius: 4,
   },
-  btnAddFlightStyle: {
+  buttonContainer1: {
+    alignSelf: "center",
+    justifyContent: "center",
+    paddingTop: 20,
+    width: "30%",
+    borderRadius: 4,
+    marginTop: 2,
+    marginBottom: 18,
+  },
+  btnAddGroundStyle: {
     backgroundColor: "#0097fc",
+    padding: 8,
+    alignItems: "center",
+    borderRadius: 4,
+  },
+  btnDelGroundStyle: {
+    backgroundColor: "red",
     padding: 8,
     alignItems: "center",
     borderRadius: 4,

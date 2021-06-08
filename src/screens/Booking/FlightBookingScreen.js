@@ -152,12 +152,11 @@ export default class FlightBookingScreen extends Component {
 
   showTimePicker = (props, index) => {
     this.setState({ isTimePickerVisible: true });
-    if (props == "start" && !index) {
+    if (props == "start" && index==null) {
       this.setState({ isStartTime: true });
-    } else if (props == "start" && index) {
+    } else if (props == "start" && index>=0) {
       this.setState({ isStartTime: true, tem: index });
     } else if (props >= 0) {
-      console.log(props);
       this.setState({ tem: props });
     }
   };
@@ -168,6 +167,7 @@ export default class FlightBookingScreen extends Component {
 
   handleTimePicker = (date) => {
     date = this.formatTime(date);
+    
     if (this.state.isStartTime && this.state.tem == -1) {
       this.setState({ startTime: date, isStartTime: false, tem: -1 });
     } else if (this.state.isStartTime && this.state.tem >= 0) {
@@ -197,7 +197,9 @@ export default class FlightBookingScreen extends Component {
     }
     this.hideTimePicker();
   };
+// เวลา
 
+  // วันที่
   formatDate = (date) => {
     let d = new Date(date),
       month = "" + (d.getMonth() + 1),
@@ -410,7 +412,7 @@ export default class FlightBookingScreen extends Component {
           {/* ส่วนที่2 */}
           <View style={styles.containerSec2}>
             <View style={styles.contentInSec2}>
-              <Text>Date:</Text>
+            <Text>Date:</Text>
               <Text style={styles.textInput}>วันออกเดินทาง</Text>
               <TouchableOpacity onPress={() => this.showDatePicker("start")}>
                 <View style={styles.inputDate}>
@@ -633,7 +635,7 @@ export default class FlightBookingScreen extends Component {
                 <View>
                   <View style={styles.containerSec2}>
                     <View style={styles.contentInSec2}>
-                      <Text>Date:</Text>
+                    <Text>Date:</Text>
                       <Text style={styles.textInput}>วันออกเดินทาง</Text>
                       <TouchableOpacity
                         onPress={() => this.showDatePicker(index)}
@@ -942,7 +944,7 @@ export default class FlightBookingScreen extends Component {
 
                   <View style={styles.buttonContainer1}>
                     <TouchableOpacity
-                      style={styles.btnAddFlightStyle}
+                      style={styles.btnDelFlightStyle}
                       onPress={() =>
                         this.deleteFlight(index, this.state.flight)
                       }
@@ -956,6 +958,7 @@ export default class FlightBookingScreen extends Component {
             )
             }
           </View>
+          {/* เพิ่มเที่ยวบิน */}
 
           {/* โชว์ DateTimePickerModal*/}
           <DateTimePickerModal
@@ -1104,6 +1107,12 @@ const styles = StyleSheet.create({
   },
   btnAddFlightStyle: {
     backgroundColor: "#0097fc",
+    padding: 8,
+    alignItems: "center",
+    borderRadius: 4,
+  },
+  btnDelFlightStyle: {
+    backgroundColor: "red",
     padding: 8,
     alignItems: "center",
     borderRadius: 4,
