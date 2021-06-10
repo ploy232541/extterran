@@ -23,7 +23,6 @@ const HEIGHT = Dimensions.get("window").height;
 export default class FlightBookingScreen extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       lang: "",
       lang_id: "",
@@ -152,9 +151,9 @@ export default class FlightBookingScreen extends Component {
 
   showTimePicker = (props, index) => {
     this.setState({ isTimePickerVisible: true });
-    if (props == "start" && index==null) {
+    if (props == "start" && index == null) {
       this.setState({ isStartTime: true });
-    } else if (props == "start" && index>=0) {
+    } else if (props == "start" && index >= 0) {
       this.setState({ isStartTime: true, tem: index });
     } else if (props >= 0) {
       this.setState({ tem: props });
@@ -167,7 +166,7 @@ export default class FlightBookingScreen extends Component {
 
   handleTimePicker = (date) => {
     date = this.formatTime(date);
-    
+
     if (this.state.isStartTime && this.state.tem == -1) {
       this.setState({ startTime: date, isStartTime: false, tem: -1 });
     } else if (this.state.isStartTime && this.state.tem >= 0) {
@@ -197,7 +196,7 @@ export default class FlightBookingScreen extends Component {
     }
     this.hideTimePicker();
   };
-// เวลา
+  // เวลา
 
   // วันที่
   formatDate = (date) => {
@@ -412,7 +411,7 @@ export default class FlightBookingScreen extends Component {
           {/* ส่วนที่2 */}
           <View style={styles.containerSec2}>
             <View style={styles.contentInSec2}>
-            <Text>Date:</Text>
+              <Text>Date:</Text>
               <Text style={styles.textInput}>วันออกเดินทาง</Text>
               <TouchableOpacity onPress={() => this.showDatePicker("start")}>
                 <View style={styles.inputDate}>
@@ -635,7 +634,7 @@ export default class FlightBookingScreen extends Component {
                 <View>
                   <View style={styles.containerSec2}>
                     <View style={styles.contentInSec2}>
-                    <Text>Date:</Text>
+                      <Text>Date:</Text>
                       <Text style={styles.textInput}>วันออกเดินทาง</Text>
                       <TouchableOpacity
                         onPress={() => this.showDatePicker(index)}
@@ -954,9 +953,7 @@ export default class FlightBookingScreen extends Component {
                   </View>
                 </View>
               );
-            }
-            )
-            }
+            })}
           </View>
           {/* เพิ่มเที่ยวบิน */}
 
@@ -1009,7 +1006,6 @@ export default class FlightBookingScreen extends Component {
               </TouchableOpacity>
             </View>
           </View>
-        
         </ScrollView>
       </View>
     );
