@@ -110,7 +110,7 @@ export default class ExternalScreen extends Component {
       Alert.alert(error);
     }
   }
-  
+
   formatDate = (date) => {
     let d = new Date(date),
       month = "" + (d.getMonth() + 1),
