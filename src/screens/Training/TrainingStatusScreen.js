@@ -82,7 +82,7 @@ export default class TrainingStatusScreen extends Component {
     }
   }
   checkStatus = (status) => {
-    return this.lang === "EN"
+    return this.state.lang === "EN"
       ? this.state.status.en[status]
       : this.state.status.th[status];
   };
@@ -1023,36 +1023,146 @@ export default class TrainingStatusScreen extends Component {
   }
   // มี 2 ช่อง ลายเซ็น Accom
 
-    // มี 2 ช่อง ลายเซ็น Ground
-    showdialog4() {
-      const { modalVisible } = this.state;
-      return (
-        <View style={stylesdialog.centeredView}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
-              this.setModalVisible(!modalVisible);
-            }}
-          >
-            <ScrollView>
-              <View style={stylesdialog.centeredView}>
-                <View style={stylesdialog.modalView}>
-                  <View style={styles.containerSec1}>
-                    <Text style={stylesdialog.modalText}>
-                      {this.state.lang === "EN"
-                        ? "Booking Request"
-                        : "ใบคำขอ Booking"}
+  // มี 2 ช่อง ลายเซ็น Ground
+  showdialog4() {
+    const { modalVisible } = this.state;
+    return (
+      <View style={stylesdialog.centeredView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            this.setModalVisible(!modalVisible);
+          }}
+        >
+          <ScrollView>
+            <View style={stylesdialog.centeredView}>
+              <View style={stylesdialog.modalView}>
+                <View style={styles.containerSec1}>
+                  <Text style={stylesdialog.modalText}>
+                    {this.state.lang === "EN"
+                      ? "Booking Request"
+                      : "ใบคำขอ Booking"}
+                  </Text>
+                  <Text style={stylesdialog.modalText1}>
+                    {this.state.lang === "EN"
+                      ? "Exotheran Thailand Co., Ltd."
+                      : "บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด"}
+                  </Text>
+                  <Text style={stylesdialog.modalText2}>Booking Request</Text>
+
+                  <Divider
+                    style={{
+                      paddingBottom: 1,
+                      marginTop: 15,
+                      marginBottom: 15,
+                    }}
+                  />
+
+                  <View
+                    style={{
+                      flexDirection: "column",
+                      justifyContent: "space-around",
+                      // paddingVertical: 24,
+                      // marginBottom: 20,
+                    }}
+                  >
+                    <Text>
+                      {" "}
+                      {this.state.lang === "EN" ? "First Name:" : "ชื่อ:"}{" "}
                     </Text>
-                    <Text style={stylesdialog.modalText1}>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>
+                      {" "}
                       {this.state.lang === "EN"
-                        ? "Exotheran Thailand Co., Ltd."
-                        : "บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด"}
+                        ? "Last Name:"
+                        : "นามสกุล:"}{" "}
                     </Text>
-                    <Text style={stylesdialog.modalText2}>Booking Request</Text>
-  
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>
+                      {" "}
+                      {this.state.lang === "EN" ? "ID No:" : "เลขบัตรประชาชน:"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>
+                      {" "}
+                      {this.state.lang === "EN"
+                        ? "Phone No:"
+                        : "เบอร์โทรศัพท์:"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>
+                      {" "}
+                      {this.state.lang === "EN" ? "Resident:" : "ที่อยู่:"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>
+                      {" "}
+                      {this.state.lang === "EN" ? "Province:" : "จังหวัด:"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>
+                      {" "}
+                      {this.state.lang === "EN" ? "District:" : "อำเภอ"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>
+                      {" "}
+                      {this.state.lang === "EN" ? "Subdistrict:" : "ตำบล"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>
+                      {" "}
+                      {this.state.lang === "EN" ? "Zip:" : "รหัสไปรษณีย์"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <View
+                      style={{
+                        marginVertical: 18,
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Divider style={{ paddingBottom: 1, flex: 1 }} />
+                      <Avatar.Icon
+                        icon="arrow-down"
+                        size={30}
+                        style={{ backgroundColor: "#6c757d" }}
+                      />
+                      <Divider style={{ paddingBottom: 1, flex: 1 }} />
+                    </View>
+
+                    <Text>
+                      {this.state.lang === "EN" ? "Date:" : "วันออกเดินทาง:"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>
+                      {this.state.lang === "EN" ? "Time:" : "เวลาเดินทาง:"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>
+                      {this.state.lang === "EN" ? "From:" : "ต้นทาง:"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>{this.state.lang === "EN" ? "To:" : "ปลายทาง:"}</Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    {/* เพิ่มการจองได้เรื่อยๆ */}
                     <Divider
                       style={{
                         paddingBottom: 1,
@@ -1060,213 +1170,87 @@ export default class TrainingStatusScreen extends Component {
                         marginBottom: 15,
                       }}
                     />
-  
+
+                    <Text>
+                      {this.state.lang === "EN" ? "Date:" : "วันออกเดินทาง:"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>
+                      {this.state.lang === "EN" ? "Time:" : "เวลาเดินทาง:"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>
+                      {this.state.lang === "EN" ? "From:" : "ต้นทาง:"}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+
+                    <Text>{this.state.lang === "EN" ? "To:" : "ปลายทาง:"}</Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
+                    {/* เพิ่มการจองได้เรื่อยๆ */}
+
                     <View
                       style={{
-                        flexDirection: "column",
-                        justifyContent: "space-around",
-                        // paddingVertical: 24,
-                        // marginBottom: 20,
+                        marginVertical: 18,
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
                     >
-                      <Text>
-                        {" "}
-                        {this.state.lang === "EN" ? "First Name:" : "ชื่อ:"}{" "}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {" "}
-                        {this.state.lang === "EN"
-                          ? "Last Name:"
-                          : "นามสกุล:"}{" "}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {" "}
-                        {this.state.lang === "EN" ? "ID No:" : "เลขบัตรประชาชน:"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {" "}
-                        {this.state.lang === "EN"
-                          ? "Phone No:"
-                          : "เบอร์โทรศัพท์:"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {" "}
-                        {this.state.lang === "EN" ? "Resident:" : "ที่อยู่:"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-
-                      <Text>
-                        {" "}
-                        {this.state.lang === "EN" ? "Province:" : "จังหวัด:"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {" "}
-                        {this.state.lang === "EN" ? "District:" : "อำเภอ"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {" "}
-                        {this.state.lang === "EN" ? "Subdistrict:" : "ตำบล"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {" "}
-                        {this.state.lang === "EN" ? "Zip:" : "รหัสไปรษณีย์"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <View
-                        style={{
-                          marginVertical: 18,
-                          flexDirection: "row",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Divider style={{ paddingBottom: 1, flex: 1 }} />
-                        <Avatar.Icon
-                          icon="arrow-down"
-                          size={30}
-                          style={{ backgroundColor: "#6c757d" }}
-                        />
-                        <Divider style={{ paddingBottom: 1, flex: 1 }} />
-                      </View>
-  
-                      <Text>
-                        {this.state.lang === "EN" ? "Date:" : "วันออกเดินทาง:"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {this.state.lang === "EN"
-                          ? "Time:"
-                          : "เวลาเดินทาง:"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {this.state.lang === "EN"
-                          ? "From:"
-                          : "ต้นทาง:"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {this.state.lang === "EN"
-                          ? "To:"
-                          : "ปลายทาง:"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      {/* เพิ่มการจองได้เรื่อยๆ */}
-                      <Divider
-                        style={{
-                          paddingBottom: 1,
-                          marginTop: 15,
-                          marginBottom: 15,
-                        }}
+                      <Divider style={{ paddingBottom: 1, flex: 1 }} />
+                      <Avatar.Icon
+                        icon="check"
+                        size={30}
+                        style={{ backgroundColor: "#6c757d" }}
                       />
-  
-  <Text>
-                        {this.state.lang === "EN" ? "Date:" : "วันออกเดินทาง:"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {this.state.lang === "EN"
-                          ? "Time:"
-                          : "เวลาเดินทาง:"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {this.state.lang === "EN"
-                          ? "From:"
-                          : "ต้นทาง:"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-  
-                      <Text>
-                        {this.state.lang === "EN"
-                          ? "To:"
-                          : "ปลายทาง:"}
-                      </Text>
-                      <TextInput style={styles.inputStyle}></TextInput>
-                      {/* เพิ่มการจองได้เรื่อยๆ */}
-  
-                      <View
-                        style={{
-                          marginVertical: 18,
-                          flexDirection: "row",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Divider style={{ paddingBottom: 1, flex: 1 }} />
-                        <Avatar.Icon
-                          icon="check"
-                          size={30}
-                          style={{ backgroundColor: "#6c757d" }}
-                        />
-                        <Divider style={{ paddingBottom: 1, flex: 1 }} />
+                      <Divider style={{ paddingBottom: 1, flex: 1 }} />
+                    </View>
+
+                    <Text>
+                      {this.state.lang === "EN" ? "Approved:" : "อนุมัติโดย:"}{" "}
+                    </Text>
+                    <View style={styles.confirmStyle}>
+                      <Divider
+                        style={{ paddingBottom: 1, backgroundColor: "blue" }}
+                      />
+                      <View style={styles.textConfirm}>
+                        <Text>Particlapant's Supervisor</Text>
+                        <Text>ผู้บังคับบัญชาของผู้เข้าฝึกอบรม</Text>
                       </View>
-  
-                      <Text>
-                        {this.state.lang === "EN" ? "Approved:" : "อนุมัติโดย:"}{" "}
-                      </Text>
-                      <View style={styles.confirmStyle}>
-                        <Divider
-                          style={{ paddingBottom: 1, backgroundColor: "blue" }}
-                        />
-                        <View style={styles.textConfirm}>
-                          <Text>Particlapant's Supervisor</Text>
-                          <Text>ผู้บังคับบัญชาของผู้เข้าฝึกอบรม</Text>
-                        </View>
-                      </View>
-  
-                      <Text>Acknowledged By HR:</Text>
-                      <View style={styles.confirmStyle}>
-                        <Divider
-                          style={{ paddingBottom: 1, backgroundColor: "blue" }}
-                        />
-                        <View style={styles.textConfirm}>
-                          <Text>Human Resources Manager</Text>
-                          <Text>ผู้จัดการฝ่ายทรัพยากรบุคคล</Text>
-                        </View>
+                    </View>
+
+                    <Text>Acknowledged By HR:</Text>
+                    <View style={styles.confirmStyle}>
+                      <Divider
+                        style={{ paddingBottom: 1, backgroundColor: "blue" }}
+                      />
+                      <View style={styles.textConfirm}>
+                        <Text>Human Resources Manager</Text>
+                        <Text>ผู้จัดการฝ่ายทรัพยากรบุคคล</Text>
                       </View>
                     </View>
                   </View>
-  
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                      style={[stylesdialog.button, stylesdialog.buttonClose]}
-                      onPress={() => this.setModalVisible(!modalVisible)}
-                    >
-                      <Text style={{ color: "white" }}>
-                        {this.state.lang === "EN" ? "Close" : "ปิด"}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                </View>
+
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity
+                    style={[stylesdialog.button, stylesdialog.buttonClose]}
+                    onPress={() => this.setModalVisible(!modalVisible)}
+                  >
+                    <Text style={{ color: "white" }}>
+                      {this.state.lang === "EN" ? "Close" : "ปิด"}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
-            </ScrollView>
-          </Modal>
-        </View>
-      );
-    }
-    // มี 2 ช่อง ลายเซ็น Ground
+            </View>
+          </ScrollView>
+        </Modal>
+      </View>
+    );
+  }
+  // มี 2 ช่อง ลายเซ็น Ground
 
   render() {
     return (
@@ -1296,42 +1280,39 @@ export default class TrainingStatusScreen extends Component {
               <View>
                 <View style={styles.container1}>
                   {/* <View style={styles.container}> */}
-                  <DataTable style={{ borderWidth: 1 }}>
+                  <DataTable
+                    style={{
+                      borderWidth: 1,
+                      width: "100%",
+                      borderRadius: "20",
+                    }}
+                  >
                     <DataTable.Header>
-                      <DataTable.Title>
-                        <Text style={{ textAlign: "center" }}>No</Text>
+                      {/* <DataTable.Title sortDirection='descending'> */}
+                      <DataTable.Title>No</DataTable.Title>
+                      <DataTable.Title style={{ flex: 3 }}>
+                        {this.state.lang === "EN" ? "Course" : "หลักสูตร"}
                       </DataTable.Title>
-                      <DataTable.Title>
-                        <Text style={{ textAlign: "center" }}>หลักสูตร</Text>
+                      <DataTable.Title style={{ flex: 2.8 }}>
+                        {this.state.lang === "EN" ? "Detail" : "ติดตามสถานะ"}
                       </DataTable.Title>
-                      <DataTable.Title>
-                        <Text
-                          style={{ textAlign: "center", paddingHorizontal: 2 }}
-                        >
-                          ติดตามสถานะ
-                        </Text>
+                      <DataTable.Title style={{ flex: 3.2 }}>
+                        {this.state.lang === "EN"
+                          ? "Approval status"
+                          : "สถานะการอนุมัติ"}
                       </DataTable.Title>
-                      <DataTable.Title>
-                        <Text
-                          style={{ textAlign: "center", paddingHorizontal: 2 }}
-                        >
-                          สถานะการอนุมัติ
-                        </Text>
-                      </DataTable.Title>
-                      <DataTable.Title>
-                        <Text style={{ textAlign: "center" }}>พิมพ์</Text>
+                      <DataTable.Title style={{ flex: 0.75 }}>
+                        {this.state.lang === "EN" ? "Print" : "พิมพ์"}
                       </DataTable.Title>
                     </DataTable.Header>
                     {this.state.training_request_status.map((data, index) => {
                       return (
                         <DataTable.Row>
-                          <DataTable.Cell style={{ textAlign: "center" }}>
-                            {index + 1}
-                          </DataTable.Cell>
-                          <DataTable.Cell style={{ textAlign: "center" }}>
+                          <DataTable.Cell>{index + 1}</DataTable.Cell>
+                          <DataTable.Cell style={{ flex: 3 }}>
                             {data.course_title}
                           </DataTable.Cell>
-                          <DataTable.Cell>
+                          <DataTable.Cell style={{ flex: 3 }}>
                             <IconButton
                               icon="menu"
                               color={Colors.green500}
@@ -1339,11 +1320,10 @@ export default class TrainingStatusScreen extends Component {
                               onPress={(index) => this.setModalVisible(true)}
                             />
                           </DataTable.Cell>
-                          <DataTable.Cell>
+                          <DataTable.Cell style={{ flex: 3 }}>
                             {this.checkStatus(data.request_status)}
                           </DataTable.Cell>
-                          <DataTable.Cell>
-                            {" "}
+                          <DataTable.Cell style={{ flex: 1 }}>
                             <IconButton
                               icon="printer"
                               color={Colors.red500}
@@ -1444,6 +1424,8 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "white",
+    width: "100%",
+    height: "100%",
   },
   container: {
     paddingTop: 20,
@@ -1459,6 +1441,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 10,
     marginTop: 18,
+    borderColor: "#398DDD",
   },
   titleStyle: {
     fontWeight: "bold",
@@ -1509,12 +1492,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingLeft: 10,
     marginBottom: 10,
-    borderWidth: 1,
   },
   inputStyle1: {
     borderRadius: 15,
     backgroundColor: "#DCDCDC",
-    borderWidth: 1,
+
     height: HEIGHT / 20,
     width: WIDTH * (80 / 100),
     marginTop: 10,
@@ -1616,4 +1598,3 @@ const stylesdialog = StyleSheet.create({
     fontSize: 18,
   },
 });
-
