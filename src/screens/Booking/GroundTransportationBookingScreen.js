@@ -15,6 +15,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { httpClient } from "../../core/HttpClient";
 import { CheckBox, Picker } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { Alert } from "react-native";
 
 const HEIGHT = Dimensions.get("window").height;
 
@@ -40,7 +41,8 @@ export default class GroundTransportationBookingScreen extends Component {
       address_road: "",
       startDate: "DD/MM/YYYY",
       startTime: "00:00",
-      endTime: "00:00",
+      froms: "",
+      tos: "",
       isDatePickerVisible: false,
       date: new Date(),
       isTimePickerVisible: false,
@@ -119,15 +121,11 @@ export default class GroundTransportationBookingScreen extends Component {
   };
 
   showTimePicker = (props, index) => {
-  
     this.setState({ isTimePickerVisible: true });
-    if (props == "start" && index==null) {
-    
+    if (props == "start" && index == null) {
       this.setState({ isStartTime: true });
-      
-    } else if (props == "start" && index>=0) {
+    } else if (props == "start" && index >= 0) {
       this.setState({ isStartTime: true, tem: index });
-      
     } else if (props >= 0) {
       this.setState({ tem: props });
     }
@@ -138,7 +136,6 @@ export default class GroundTransportationBookingScreen extends Component {
   };
 
   handleTimePicker = (date) => {
-    
     date = this.formatTime(date);
     if (this.state.isStartTime && this.state.tem == -1) {
       this.setState({ startTime: date, isStartTime: false, tem: -1 });
@@ -169,7 +166,7 @@ export default class GroundTransportationBookingScreen extends Component {
     }
     this.hideTimePicker();
   };
-// เวลา
+  // เวลา
 
   // วันที่
   formatDate = (date) => {
@@ -222,8 +219,7 @@ export default class GroundTransportationBookingScreen extends Component {
         data.dates = datess;
         item["data"] = data;
         ground[tem] = item;
-        this.setState({ ground: ground,tem:-1 });
-        
+        this.setState({ ground: ground, tem: -1 });
       }
     }
 
@@ -251,6 +247,99 @@ export default class GroundTransportationBookingScreen extends Component {
       ground: itemCopy,
     });
   }
+  //บันทึกข้อมูล
+  onPressSend = () => {
+    try {
+      const { startDate, startTime, froms, tos, ground } = this.state;
+      if (startDate == "DD/MM/YYYY") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a departure date")
+          : Alert.alert("กรุณาเลือกวันเดินทาง");
+      } else if (startTime == "00:00") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a travel time")
+          : Alert.alert("กรุณาเลือกเวลาเดินทาง");
+      } else if (froms == "") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a departure .")
+          : Alert.alert("โปรดเลือกต้นทาง");
+      } else if (tos == "") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select destination ")
+          : Alert.alert("โปรดเลือกปลายทาง");
+      } else {
+        var endi = ground.length - 1;
+        var error = false;
+        if (ground.length > 0) {
+          var index = 0;
+          do {
+            error = true;
+            var param = ground[index].data;
+
+            if (param.dates == "DD/MM/YYYY") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select a departure date" +
+                      " \n ( field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาเลือกวันเดินทาง" +
+                      " \n (ช่องกรอกที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.startTime == "00:00") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select a travel time" +
+                      " \n ( field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาเลือกเวลาเดินทาง" +
+                      " \n (ช่องกรอกที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.froms == "") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select a departure " +
+                      " \n ( field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "โปรดเลือกต้นทาง" +
+                      " \n (ช่องกรอกที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.tos == "") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select destination " +
+                      " \n ( field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "โปรดเลือกปลายทาง" +
+                      " \n (ช่องกรอกที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            }
+          } while (condition);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   render() {
     return (
@@ -376,6 +465,8 @@ export default class GroundTransportationBookingScreen extends Component {
               <TextInput
                 style={styles.inputStyle1}
                 placeholder="กรุณากรอกต้นทาง"
+                value={this.state.froms}
+                onChangeText={(text) => this.setState({ froms: text })}
               ></TextInput>
 
               <Text>To:</Text>
@@ -383,6 +474,8 @@ export default class GroundTransportationBookingScreen extends Component {
               <TextInput
                 style={styles.inputStyle1}
                 placeholder="กรุณากรอกปลายทาง"
+                value={this.state.tos}
+                onChangeText={(text) => this.setState({ tos: text })}
               ></TextInput>
             </View>
           </View>
@@ -392,10 +485,10 @@ export default class GroundTransportationBookingScreen extends Component {
           <View style={{ marginBottom: 12, marginTop: 12 }}>
             {this.state.ground.map((item, index) => {
               return (
-              <View>
-<View style={styles.containerSec2}>
-            <View style={styles.contentInSec2}>
-            <Text>Date:</Text>
+                <View>
+                  <View style={styles.containerSec2}>
+                    <View style={styles.contentInSec2}>
+                      <Text>Date:</Text>
                       <Text style={styles.textInput}>วันออกเดินทาง</Text>
                       <TouchableOpacity
                         onPress={() => this.showDatePicker(index)}
@@ -420,24 +513,23 @@ export default class GroundTransportationBookingScreen extends Component {
                         </View>
                       </TouchableOpacity>
 
-              <Text>From:</Text>
-              <Text style={styles.textInput}>ต้นทาง</Text>
-              <TextInput
-                style={styles.inputStyle1}
-                placeholder="กรุณากรอกต้นทาง"
-              ></TextInput>
+                      <Text>From:</Text>
+                      <Text style={styles.textInput}>ต้นทาง</Text>
+                      <TextInput
+                        style={styles.inputStyle1}
+                        placeholder="กรุณากรอกต้นทาง"
+                      ></TextInput>
 
-              <Text>To:</Text>
-              <Text style={styles.textInput}>ปลายทาง</Text>
-              <TextInput
-                style={styles.inputStyle1}
-                placeholder="กรุณากรอกปลายทาง"
-              ></TextInput>
-            </View>
-          </View>
+                      <Text>To:</Text>
+                      <Text style={styles.textInput}>ปลายทาง</Text>
+                      <TextInput
+                        style={styles.inputStyle1}
+                        placeholder="กรุณากรอกปลายทาง"
+                      ></TextInput>
+                    </View>
+                  </View>
 
-
-          <View style={styles.buttonContainer1}>
+                  <View style={styles.buttonContainer1}>
                     <TouchableOpacity
                       style={styles.btnDelGroundStyle}
                       onPress={() =>
@@ -447,8 +539,7 @@ export default class GroundTransportationBookingScreen extends Component {
                       <Text style={{ color: "white" }}>ลบ</Text>
                     </TouchableOpacity>
                   </View>
-
-             </View>
+                </View>
               );
             })}
           </View>
@@ -492,7 +583,10 @@ export default class GroundTransportationBookingScreen extends Component {
             }}
           >
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.btnConfirmStyle}>
+              <TouchableOpacity
+                style={styles.btnConfirmStyle}
+                onPress={() => this.onPressSend()}
+              >
                 <Text style={{ color: "white" }}>ยืนยัน</Text>
               </TouchableOpacity>
             </View>
