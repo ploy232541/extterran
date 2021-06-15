@@ -328,13 +328,13 @@ export default class FlightBookingScreen extends Component {
               this.state.lang === "EN"
                 ? Alert.alert(
                     "Please select a departure date" +
-                      " (Flight field " +
+                      " \n (Flight field " +
                       (index + 2) +
                       ")"
                   )
                 : Alert.alert(
                     "กรุณาเลือกวันเดินทาง" +
-                      " (ช่องกรอกเที่ยวบินที่  " +
+                      " \n (ช่องกรอกเที่ยวบินที่  " +
                       (index + 2) +
                       ")"
                   );
@@ -342,13 +342,13 @@ export default class FlightBookingScreen extends Component {
               this.state.lang === "EN"
                 ? Alert.alert(
                     "Please select a travel time" +
-                      " (Flight field " +
+                      " \n (Flight field " +
                       (index + 2) +
                       ")"
                   )
                 : Alert.alert(
                     "กรุณาเลือกเวลาเดินทาง" +
-                      " (ช่องกรอกเที่ยวบินที่  " +
+                      " \n (ช่องกรอกเที่ยวบินที่  " +
                       (index + 2) +
                       ")"
                   );
@@ -356,13 +356,13 @@ export default class FlightBookingScreen extends Component {
               this.state.lang === "EN"
                 ? Alert.alert(
                     "Please select an end time" +
-                      " (Flight field " +
+                      " \n (Flight field " +
                       (index + 2) +
                       ")"
                   )
                 : Alert.alert(
                     "กรุณาเลือกเวลาสิ้นสุดการเดินทาง" +
-                      " (ช่องกรอกเที่ยวบินที่  " +
+                      " \n (ช่องกรอกเที่ยวบินที่  " +
                       (index + 2) +
                       ")"
                   );
@@ -370,13 +370,13 @@ export default class FlightBookingScreen extends Component {
               this.state.lang === "EN"
                 ? Alert.alert(
                     "Please select a departure flight" +
-                      " (Flight field " +
+                      " \n (Flight field " +
                       (index + 2) +
                       ")"
                   )
                 : Alert.alert(
                     "โปรดเลือกเที่ยวบินต้นทาง" +
-                      " (ช่องกรอกเที่ยวบินที่  " +
+                      " \n (ช่องกรอกเที่ยวบินที่  " +
                       (index + 2) +
                       ")"
                   );
@@ -384,13 +384,13 @@ export default class FlightBookingScreen extends Component {
               this.state.lang === "EN"
                 ? Alert.alert(
                     "Please select destination flight" +
-                      " (Flight field " +
+                      " \n (Flight field " +
                       (index + 2) +
                       ")"
                   )
                 : Alert.alert(
                     "โปรดเลือกเที่ยวบินปลายทาง" +
-                      " (ช่องกรอกเที่ยวบินที่  " +
+                      " \n (ช่องกรอกเที่ยวบินที่  " +
                       (index + 2) +
                       ")"
                   );
@@ -398,13 +398,13 @@ export default class FlightBookingScreen extends Component {
               this.state.lang === "EN"
                 ? Alert.alert(
                     "Please enter your flight" +
-                      " (Flight field " +
+                      " \n (Flight field " +
                       (index + 2) +
                       ")"
                   )
                 : Alert.alert(
                     "กรุณาใส่เที่ยวบินของคุณ" +
-                      " (ช่องกรอกเที่ยวบินที่  " +
+                      " \n (ช่องกรอกเที่ยวบินที่  " +
                       (index + 2) +
                       ")"
                   );
@@ -412,13 +412,13 @@ export default class FlightBookingScreen extends Component {
               this.state.lang === "EN"
                 ? Alert.alert(
                     "Please enter your baggage weight" +
-                      " (Flight field " +
+                      " \n (Flight field " +
                       (index + 2) +
                       ")"
                   )
                 : Alert.alert(
                     "กรุณาป้อนน้ำหนักสัมภาระของคุณ" +
-                      " (ช่องกรอกเที่ยวบินที่  " +
+                      " \n (ช่องกรอกเที่ยวบินที่  " +
                       (index + 2) +
                       ")"
                   );
@@ -584,7 +584,6 @@ export default class FlightBookingScreen extends Component {
             </Picker>
 
             {/* กรณีเลือกอื่นๆ */}
-
             {this.state.purpose == 3 && (
               <View>
                 <Text>Purpose:</Text>
@@ -603,8 +602,8 @@ export default class FlightBookingScreen extends Component {
                 ></TextInput>
               </View>
             )}
-
             {/* กรณีเลือกอื่นๆ */}
+
           </View>
           {/* จบส่วนที่1 */}
 

@@ -15,6 +15,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { httpClient } from "../../core/HttpClient";
 import { CheckBox, Picker } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { Alert } from "react-native";
 
 const HEIGHT = Dimensions.get("window").height;
 // เริ่ม
@@ -30,6 +31,7 @@ export default class AccommodationBookingScreen extends Component {
       identification: "",
       phone: "",
       province: "",
+      province_id: "",
       district: "",
       subdistrict: "",
       zipcode: "",
@@ -41,6 +43,9 @@ export default class AccommodationBookingScreen extends Component {
       select_3: [],
       tem: -1,
       accommodation: [],
+      purpose: "",
+      purpose_id: "",
+      accom: "",
       accommodationItem: {
         data: {
           //dates: "DD/MM/YYYY",
@@ -122,7 +127,6 @@ export default class AccommodationBookingScreen extends Component {
     } catch (error) {}
   }
 
-  
   formatDate = (date) => {
     let d = new Date(date),
       month = "" + (d.getMonth() + 1),
@@ -134,13 +138,13 @@ export default class AccommodationBookingScreen extends Component {
 
     return [day, month, year].join("/");
   };
-  showDatePicker = (props,index) => {
+  showDatePicker = (props, index) => {
     this.setState({ isDatePickerVisible: true });
     if (props == "start") {
       this.setState({ isStart: true });
     }
     if (props == "start" && index >= 0) {
-      this.setState({ isStart: true,tem: index });
+      this.setState({ isStart: true, tem: index });
     }
     if (props != "start" && props >= 0) {
       this.setState({ tem: props });
@@ -151,40 +155,139 @@ export default class AccommodationBookingScreen extends Component {
   };
   handleConfirm = (date) => {
     var date = this.formatDate(date);
-    if (this.state.isStart && this.state.tem ==-1) {
+    if (this.state.isStart && this.state.tem == -1) {
       this.setState({ startDate: date, isStart: false });
-    }else if(this.state.isStart && this.state.tem >=0){
+    } else if (this.state.isStart && this.state.tem >= 0) {
       let tem = this.state.tem;
-        let accommodation = [...this.state.accommodation];
-        let item = { ...accommodation[tem] };
-        let data = { ...item["data"] };
-        data.startDate = date;
-        item["data"] = data;
-        accommodation[tem] = item;
-        this.setState({ accommodation: accommodation,tem:-1, isStart: false });
-    }else if(this.state.tem >=0){
+      let accommodation = [...this.state.accommodation];
+      let item = { ...accommodation[tem] };
+      let data = { ...item["data"] };
+      data.startDate = date;
+      item["data"] = data;
+      accommodation[tem] = item;
+      this.setState({ accommodation: accommodation, tem: -1, isStart: false });
+    } else if (this.state.tem >= 0) {
       let tem = this.state.tem;
-        let accommodation = [...this.state.accommodation];
-        let item = { ...accommodation[tem] };
-        let data = { ...item["data"] };
-        data.endDate = date;
-        item["data"] = data;
-        accommodation[tem] = item;
-        this.setState({ accommodation: accommodation,tem:-1  });
-    }
-     else {
-      this.setState({ endDate: date, isStart: false,tem:-1 });
+      let accommodation = [...this.state.accommodation];
+      let item = { ...accommodation[tem] };
+      let data = { ...item["data"] };
+      data.endDate = date;
+      item["data"] = data;
+      accommodation[tem] = item;
+      this.setState({ accommodation: accommodation, tem: -1 });
+    } else {
+      this.setState({ endDate: date, isStart: false, tem: -1 });
     }
 
     this.hideDatePicker();
   };
-  deleteAccommodation(index, courseItem) {
-    let itemCopy = [...courseItem];
+  deleteAccommodation(index) {
+    let itemCopy = [...this.state.accommodation];
     itemCopy.splice(index, 1);
     this.setState({
       accommodation: itemCopy,
     });
   }
+
+  onPressSend = () => {
+    try {
+      const {
+      purpose,
+      purpose_id,
+      province_id,
+      accom,
+      startDate,
+      endDate,
+      accommodation,
+    } = this.state;
+    if (
+      (purpose_id == "" && purpose_id != 6) ||
+      (purpose == "" && purpose_id == 6)
+    ) 
+    {
+      this.state.lang === "EN"
+        ? Alert.alert("Please select a travel purpose.")
+        : Alert.alert("กรุณาเลือกเลือกวัตถุประสงค์ในการเดินทาง");
+    }
+    else if (province_id == "") {
+      this.state.lang === "EN"
+        ? Alert.alert("Please select a province")
+        : Alert.alert("กรุณาเลือกจังหวัด");
+        console.log(province_id);
+    }else if (accom == "") {
+      this.state.lang === "EN"
+        ? Alert.alert("Please enter your Accommodation")
+        : Alert.alert("กรุณาใส่ที่พัก");
+    }else if (startDate == "DD/MM/YYYY") {
+      this.state.lang === "EN"
+        ? Alert.alert("Please select a Check-in date")
+        : Alert.alert("กรุณาเลือกวันเช็คอิน");
+    }
+    else if (endDate == "DD/MM/YYYY") {
+      this.state.lang === "EN"
+        ? Alert.alert("Please select a Check-out date")
+        : Alert.alert("กรุณาเลือกวันเช็คเอาต์");
+    }
+    else{
+      var i = 0;
+      var end_i = accommodation.length - 1;
+      var err = false;
+      do {
+        err = true;
+        var item = accommodation[i].data;
+        if (item.province_id == "") {
+          this.state.lang === "EN"
+            ? Alert.alert("Please select a province"+
+            " \n (Province selection box  " +
+            (i + 2) +
+            ")")
+            : Alert.alert("กรุณาเลือกจังหวัด" +
+            " \n (ช่องเลือกจังหวัด  " +
+            (i + 2) +
+            ")");   
+        }else if (item.accommodation == "") {
+              this.state.lang === "EN"
+                ? Alert.alert("Please enter your Accommodation" +
+                " \n (Accommodation field  " +
+                (i + 2) +
+                ")")
+                : Alert.alert("กรุณาใส่ที่พัก" +
+                " \n (ช่องกรอกที่พัก  " +
+                (i + 2) +
+                ")");
+            }else if (item.startDate == "DD/MM/YYYY") {
+                this.state.lang === "EN"
+                  ? Alert.alert("Please select a Check-in date" +
+                  " \n (Check-in box  " +
+                  (i + 2) +
+                  ")")
+                  : Alert.alert("กรุณาเลือกวันเช็คอิน" +
+                  " \n (ช่องเช็คอิน  " +
+                  (i + 2) +
+                  ")");
+              }else if (item.endDate == "DD/MM/YYYY") {
+                this.state.lang === "EN"
+                  ? Alert.alert("Please select a Check-out date" +
+                  " \n (Check-out box  " +
+                  (i + 2) +
+                  ")")
+                  : Alert.alert("กรุณาเลือกวันเช็คเอ้าต์" +
+                  " \n (ช่องเช็คเอ้าต์  " +
+                  (i + 2) +
+                  ")");
+              }
+          else {
+            err = !err;
+          }
+          i++;
+      } while (i <= end_i && err != true);
+    }
+
+    } catch (error) {
+      console.log(error);
+    }
+    
+  };
 
   render() {
     return (
@@ -259,8 +362,11 @@ export default class AccommodationBookingScreen extends Component {
               placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
               placeholderStyle={{ color: "#bfc6ea" }}
               placeholderIconColor="#007aff"
-              selectedValue={this.state.course}
-              onValueChange={(text) => this.setState({ course: text })}
+              selectedValue={this.state.purpose_id}
+              onValueChange={(text) => {
+                this.setState({ purpose_id: text });
+                console.log(this.state.purpose_id);
+              }}
               textStyle={{ fontSize: 14 }}
             >
               <Picker.Item
@@ -286,12 +392,25 @@ export default class AccommodationBookingScreen extends Component {
             </Picker>
 
             {/* กรณีเลือกอื่นๆ */}
-            <Text>Purpose:</Text>
-            <Text style={styles.textInput}>กรุณาระบุวัตถุประสงค์ อื่นๆ</Text>
-            <TextInput
-              style={styles.inputStyle1}
-              placeholder="กรุณากรอกวัตถุประสงค์"
-            ></TextInput>
+
+            {this.state.purpose_id == 6 && (
+              <View>
+                <Text>Purpose:</Text>
+                <Text style={styles.textInput}>
+                  กรุณาระบุวัตถุประสงค์ อื่นๆ
+                </Text>
+                <TextInput
+                  style={styles.inputStyle1}
+                  placeholder={
+                    this.state.lang === "EN"
+                      ? "Please enter purpose"
+                      : "กรุณากรอกวัตถุประสงค์"
+                  }
+                  value={this.state.purposeEtc}
+                  onChangeText={(text) => this.setState({ purposeEtc: text })}
+                ></TextInput>
+              </View>
+            )}
             {/* กรณีเลือกอื่นๆ */}
           </View>
           {/* จบส่วนที่1 */}
@@ -330,8 +449,8 @@ export default class AccommodationBookingScreen extends Component {
                 placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
-                selectedValue={this.state.course}
-                onValueChange={(text) => this.setState({ course: text })}
+                selectedValue={this.state.province_id}
+                onValueChange={(text) => this.setState({ province_id: text })}
                 textStyle={{ fontSize: 14 }}
               >
                 <Picker.Item
@@ -361,6 +480,8 @@ export default class AccommodationBookingScreen extends Component {
               <TextInput
                 style={styles.inputStyle1}
                 placeholder="ที่พัก (จังหวัด ชื่อโรงแรม)"
+                value={this.state.accom}
+                onChangeText={(text) => this.setState({ accom: text })}
               ></TextInput>
 
               <Text>Check in date (D/M/Y):</Text>
@@ -408,16 +529,15 @@ export default class AccommodationBookingScreen extends Component {
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholderIconColor="#007aff"
                         selectedValue={item.data.province_id}
-                        onValueChange={(text) =>
-                          {
-                            let accommodation = [...this.state.accommodation];
-                            let item = { ...accommodation[tem] };
-                            let data = { ...item["data"] };
-                            data.province_id = text;
-                            item["data"] = data;
-                            accommodation[tem] = item;
-                            this.setState({ accommodation: accommodation,tem:-1  });}
-                        }
+                        onValueChange={(text) => {
+                          let accommodation = [...this.state.accommodation];
+                          let item = { ...accommodation[index] };
+                          let data = { ...item["data"] };
+                          data.province_id = text;
+                          item["data"] = data;
+                          accommodation[index] = item;
+                          this.setState({ accommodation: accommodation });
+                        }}
                         textStyle={{ fontSize: 14 }}
                       >
                         <Picker.Item
@@ -449,14 +569,14 @@ export default class AccommodationBookingScreen extends Component {
                       <TextInput
                         style={styles.inputStyle1}
                         value={item.data.accommodation}
-                        onValueText={text=>{
+                        onChangeText={(text) => {
                           let accommodation = [...this.state.accommodation];
-                          let item = { ...accommodation[tem] };
+                          let item = { ...accommodation[index] };
                           let data = { ...item["data"] };
                           data.accommodation = text;
                           item["data"] = data;
-                          accommodation[tem] = item;
-                          this.setState({ accommodation: accommodation,tem:-1  });
+                          accommodation[index] = item;
+                          this.setState({ accommodation: accommodation });
                         }}
                         placeholder="ที่พัก (จังหวัด ชื่อโรงแรม)"
                       ></TextInput>
@@ -491,7 +611,7 @@ export default class AccommodationBookingScreen extends Component {
                     <TouchableOpacity
                       style={styles.btnDelaccommodationStyle}
                       onPress={() =>
-                        this.deleteaccommodation(index, this.state.accommodation)
+                        this.deleteAccommodation(index)
                       }
                     >
                       <Text style={{ color: "white" }}>ลบเที่ยวบิน</Text>
@@ -536,7 +656,10 @@ export default class AccommodationBookingScreen extends Component {
             }}
           >
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.btnConfirmStyle}>
+              <TouchableOpacity
+                style={styles.btnConfirmStyle}
+                onPress={() => this.onPressSend()}
+              >
                 <Text style={{ color: "white" }}>ยืนยัน</Text>
               </TouchableOpacity>
             </View>
