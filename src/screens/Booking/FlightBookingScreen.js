@@ -9,6 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
   AsyncStorage,
+  Alert,
 } from "react-native";
 import { Divider, Avatar } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -16,6 +17,7 @@ import { httpClient } from "../../core/HttpClient";
 import { CheckBox } from "react-native-elements";
 import { Picker } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
+import FormData from "form-data";
 
 const HEIGHT = Dimensions.get("window").height;
 
@@ -24,12 +26,14 @@ export default class FlightBookingScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      user_id: "",
       lang: "",
       lang_id: "",
       firstname: "",
       lastname: "",
       position: "",
       dept: "",
+      firstflight: "",
       startDate: "DD/MM/YYYY",
       endDate: "DD/MM/YYYY",
       startTime: "00:00",
@@ -44,10 +48,13 @@ export default class FlightBookingScreen extends Component {
       select_2: [],
       isTimePickerVisible: false,
       isStartTime: false,
-      formFlight: "",
-      toFlight: "",
+      froms: "",
+      froms_id: "",
+      tos: "",
+      tos_id: "",
       purpose: "",
       purposeEtc: "",
+      baggage: "",
       airportCheck: false,
       checkBaggage: false,
       flight: [],
@@ -72,6 +79,7 @@ export default class FlightBookingScreen extends Component {
 
   async componentDidMount() {
     let id = await AsyncStorage.getItem("userId");
+    this.setState({ user_id: id });
 
     const res = await AsyncStorage.getItem("language");
     if (res === "EN") {
@@ -210,17 +218,7 @@ export default class FlightBookingScreen extends Component {
 
     return [day, month, year].join("/");
   };
-  formatDatetotal = (date) => {
-    let d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
 
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [month, day, year].join("/");
-  };
   showDatePicker = (props) => {
     this.setState({ isDatePickerVisible: true });
     if (props == "start") {
@@ -236,10 +234,9 @@ export default class FlightBookingScreen extends Component {
   };
   handleConfirm = (dates) => {
     var datess = this.formatDate(dates);
-    var dates = this.formatDatetotal(dates);
 
     if (this.state.isStart) {
-      this.setState({ startDate: datess, startcul: dates, isStart: false });
+      this.setState({ startDate: datess, isStart: false });
     } else {
       if (this.state.tem > -1) {
         let tem = this.state.tem;
@@ -257,20 +254,6 @@ export default class FlightBookingScreen extends Component {
     this.hideDatePicker();
   };
 
-  culDate = (startcul, endcul) => {
-    let date1 = new Date(startcul);
-    let date2 = new Date(endcul);
-    this.setState({
-      total: "0",
-    });
-    if (date2 >= date1) {
-      let diffInMs = Math.abs(date2 - date1);
-      let totals = diffInMs / (1000 * 60 * 60 * 24) + 1;
-      this.setState({
-        total: totals.toString(),
-      });
-    }
-  };
   deleteFlight(index, courseItem) {
     let itemCopy = [...courseItem];
     itemCopy.splice(index, 1);
@@ -278,6 +261,238 @@ export default class FlightBookingScreen extends Component {
       flight: itemCopy,
     });
   }
+  //บันทึกข้อมูล
+  onPressSend = () => {
+    try {
+      const {
+        user_id,
+        purpose,
+        purposeEtc,
+        province,
+        startDate,
+        startTime,
+        endTime,
+        froms_id,
+        froms,
+        tos,
+        tos_id,
+        firstflight,
+        baggage,
+        checkBaggage,
+        flight,
+      } = this.state;
+      if (
+        (purpose == "" && purpose != 3) ||
+        (purposeEtc == "" && purpose == 3)
+      ) {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a travel purpose.")
+          : Alert.alert("กรุณาเลือกเลือกวัตถุประสงค์ในการเดินทาง");
+      } else if (startDate == "DD/MM/YYYY") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a departure date")
+          : Alert.alert("กรุณาเลือกวันเดินทาง");
+      } else if (startTime == "00:00") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a travel time")
+          : Alert.alert("กรุณาเลือกเวลาเดินทาง");
+      } else if (endTime == "00:00") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select an end time")
+          : Alert.alert("กรุณาเลือกเวลาสิ้นสุดการเดินทาง");
+      } else if (froms_id == "" && froms == "") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a departure flight.")
+          : Alert.alert("โปรดเลือกเที่ยวบินต้นทาง");
+      } else if (tos_id == "" && tos == "") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select destination flight")
+          : Alert.alert("โปรดเลือกเที่ยวบินปลายทาง");
+      } else if (firstflight == "") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please enter your flight")
+          : Alert.alert("กรุณาใส่เที่ยวบินของคุณ");
+      } else if (checkBaggage == true && baggage == "") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please enter your baggage weight.")
+          : Alert.alert("กรุณาป้อนน้ำหนักสัมภาระของคุณ");
+      } else {
+        var endi = flight.length - 1;
+        var error = false;
+        if (flight.length > 0) {
+          var index = 0;
+          do {
+            error = true;
+            var param = flight[index].data;
+            if (param.dates == "DD/MM/YYYY") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select a departure date" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาเลือกวันเดินทาง" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.startTime == "00:00") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select a travel time" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาเลือกเวลาเดินทาง" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.endTime == "00:00") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select an end time" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาเลือกเวลาสิ้นสุดการเดินทาง" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.froms_id == "" && param.froms == "") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select a departure flight" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "โปรดเลือกเที่ยวบินต้นทาง" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.tos_id == "" && param.tos == "") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select destination flight" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "โปรดเลือกเที่ยวบินปลายทาง" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.flight == "") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please enter your flight" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาใส่เที่ยวบินของคุณ" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.checkBaggage == true && param.baggage == "") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please enter your baggage weight" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาป้อนน้ำหนักสัมภาระของคุณ" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else {
+              error = !error;
+            }
+            index++;
+          } while (index <= endi && error != true);
+         
+        }
+        if ((error != true && flight.length > 0)||flight.length <1) {
+          const params = {
+            user_id: user_id,
+            startDate,
+            startTime,
+            endTime,
+            froms,
+            froms_id,
+            tos,
+            tos_id,
+            firstflight,
+            baggage,
+            purpose: purpose,
+            purpose_etc: purposeEtc,
+            flight: flight,
+          };
+          
+          const datas = params
+          // const datas = new FormData();
+          // Object.keys(params).forEach(key=>datas.append(key,params[key]))
+      //  console.log(datas);
+          // const data=params
+          Alert.alert(
+            this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+            this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+            [
+              {
+                text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel",
+              },
+              ,
+                { text: this.state.lang === 'EN' ? 'OK' : 'ตกลง', onPress: () =>  {
+                httpClient
+                  .post(`/Training/InsertFlightBooking`, datas)
+                  .then(response => {
+                    const result = response.datas;
+           
+                    if (result === true) {
+                      Alert.alert(
+                        this.state.lang === 'EN' ? 'Alert' : 'แจ้งเตือน',
+                        this.state.lang === 'EN' ? 'Problem reported' : 'บันทึกเที่ยวบินสำเร็จ',
+                        [
+                          { text: this.state.lang === 'EN' ? 'OK' : 'ตกลง', onPress: () =>  this.reset() }
+                        ],
+                        { cancelable: false }
+                      );
+                    }else{
+                      Alert.alert(this.state.lang === 'EN' ? `Can't save FlightBooking` : 'ไม่สามารถบันทึกเที่ยวบินได้')
+                    }
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+                }
+              }
+            ]
+          );
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   render() {
     return (
@@ -341,7 +556,9 @@ export default class FlightBookingScreen extends Component {
               placeholderStyle={{ color: "#bfc6ea" }}
               placeholderIconColor="#007aff"
               selectedValue={this.state.purpose}
-              onValueChange={(text) => this.setState({ purpose: text })}
+              onValueChange={(text) =>
+                this.setState({ purpose: text, purposeEtc: "" })
+              }
               textStyle={{ fontSize: 14 }}
             >
               <Picker.Item
@@ -455,9 +672,9 @@ export default class FlightBookingScreen extends Component {
                     placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
                     placeholderStyle={{ color: "#bfc6ea" }}
                     placeholderIconColor="#007aff"
-                    selectedValue={this.state.formFlight}
+                    selectedValue={this.state.froms_id}
                     onValueChange={(text) =>
-                      this.setState({ formFlight: text })
+                      this.setState({ froms_id: text, froms: "" })
                     }
                     textStyle={{ fontSize: 14 }}
                   >
@@ -501,6 +718,10 @@ export default class FlightBookingScreen extends Component {
                         ? "Please enter the departure flight"
                         : "กรุณากรอกเที่ยวบินต้นทาง"
                     }
+                    value={this.state.froms}
+                    onChangeText={(text) =>
+                      this.setState({ froms: text, froms_id: "" })
+                    }
                   ></TextInput>
                 </View>
               )}
@@ -522,15 +743,15 @@ export default class FlightBookingScreen extends Component {
                     placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
                     placeholderStyle={{ color: "#bfc6ea" }}
                     placeholderIconColor="#007aff"
-                    selectedValue={this.state.toFlight}
-                    onValueChange={(text) => this.setState({ toFlight: text })}
+                    selectedValue={this.state.tos_id}
+                    onValueChange={(text) => this.setState({ tos_id: text })}
                     textStyle={{ fontSize: 14 }}
                   >
                     <Picker.Item
                       label={
                         this.state.lang === "EN"
-                          ? "Please select a source"
-                          : "กรุณาเลือกต้นทาง"
+                          ? "Please select destination flight"
+                          : "กรุณาเลือกปลายทาง"
                       }
                       value=""
                     />
@@ -565,6 +786,8 @@ export default class FlightBookingScreen extends Component {
                         ? "Please enter destination flight"
                         : "กรุณากรอกเที่ยวบินปลายทาง"
                     }
+                    value={this.state.tos}
+                    onChangeText={(text) => this.setState({ tos: text })}
                   ></TextInput>
                 </View>
               )}
@@ -576,7 +799,13 @@ export default class FlightBookingScreen extends Component {
                 <CheckBox
                   checked={this.state.airportCheck}
                   onPress={() => {
-                    this.setState({ airportCheck: !this.state.airportCheck });
+                    this.setState({
+                      airportCheck: !this.state.airportCheck,
+                      tos_id: "",
+                      tos: "",
+                      froms_id: "",
+                      froms_id: "",
+                    });
                   }}
                   style={styles.checkbox}
                   title={this.state.lang === "EN" ? "Baggage" : "อื่นๆ"}
@@ -589,6 +818,8 @@ export default class FlightBookingScreen extends Component {
               <TextInput
                 style={styles.inputStyle1}
                 placeholder="กรุณากรอกเที่ยวบิน"
+                value={this.state.firstflight}
+                onChangeText={(text) => this.setState({ firstflight: text })}
               ></TextInput>
 
               <Text>Baggage:</Text>
@@ -598,7 +829,10 @@ export default class FlightBookingScreen extends Component {
                 <CheckBox
                   checked={this.state.checkBaggage}
                   onPress={() => {
-                    this.setState({ checkBaggage: !this.state.checkBaggage });
+                    this.setState({
+                      checkBaggage: !this.state.checkBaggage,
+                      baggage: "",
+                    });
                   }}
                   style={styles.checkbox}
                   title={this.state.lang === "EN" ? "Baggage" : "สัมภาระ"}
@@ -612,6 +846,8 @@ export default class FlightBookingScreen extends Component {
                   <TextInput
                     style={styles.inputStyle1}
                     placeholder="กรุณากรอกน้ำหนักสัมภาระ"
+                    value={this.state.baggage}
+                    onChangeText={(text) => this.setState({ baggage: text })}
                   ></TextInput>
                 </View>
               )}
@@ -723,8 +959,7 @@ export default class FlightBookingScreen extends Component {
                                       : data.airport_name +
                                         "(" +
                                         data.airport_code +
-                                        ")" +
-                                        data.id
+                                        ")"
                                   }
                                   value={data.id}
                                 />
@@ -857,6 +1092,10 @@ export default class FlightBookingScreen extends Component {
                             let item = { ...flight[index] };
                             let data = { ...item["data"] };
                             data.checkEtc = !data.checkEtc;
+                            data.froms = "";
+                            data.froms_id = "";
+                            data.tos = "";
+                            data.tos_id = "";
                             item["data"] = data;
                             flight[index] = item;
                             this.setState({ flight: flight });
@@ -897,6 +1136,7 @@ export default class FlightBookingScreen extends Component {
                             let item = { ...flight[index] };
                             let data = { ...item["data"] };
                             data.checkBaggage = !data.checkBaggage;
+                            data.baggage = "";
                             item["data"] = data;
                             flight[index] = item;
                             this.setState({ flight: flight });
@@ -995,7 +1235,10 @@ export default class FlightBookingScreen extends Component {
             }}
           >
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.btnConfirmStyle}>
+              <TouchableOpacity
+                style={styles.btnConfirmStyle}
+                onPress={() => this.onPressSend()}
+              >
                 <Text style={{ color: "white" }}>ยืนยัน</Text>
               </TouchableOpacity>
             </View>

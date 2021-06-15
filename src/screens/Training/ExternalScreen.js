@@ -1,69 +1,76 @@
+// import * as React from "react";
 import React, { Component } from "react";
 import {
-  ScrollView,
-  StyleSheet,
-  Text,
   View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TextInput,
   Dimensions,
   TouchableOpacity,
-  TextInput,
+  AsyncStorage,
+  Alert,
 } from "react-native";
-import { Picker, Tab } from "native-base";
-import { Avatar } from "react-native-paper";
-import { Divider } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Button } from "react-native-paper";
-import { set } from "react-native-reanimated";
+import { Divider, Avatar } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import HomeScreen from "../Home/HomeScreen";
-import MyProgramsScreen from "../MyProgramsScreen";
-import ProfileScreen from "../Profile/ProfileScreen";
-import { Alert } from "react-native";
 import { httpClient } from "../../core/HttpClient";
-import { AsyncStorage } from "react-native";
+import { CheckBox } from "react-native-elements";
+import { Picker } from "native-base";
+import Icon from "react-native-vector-icons/FontAwesome";
+import FormData from "form-data";
 
-let dimensions = Dimensions.get("window");
-let pickerWidth = dimensions.width - 56;
 const HEIGHT = Dimensions.get("window").height;
 
-export default class ExternalScreen extends Component {
+// เริ่ม
+export default class FlightBookingScreen extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      selectedUser: "กรุณาเลือกผู้ใช้",
-      course: "กรุณาเลือกหลักสูตร",
-      trainingNeedItem: {
-        employee_id: "",
-        data: [],
-      },
-      courseItem: {
-        courseName: "",
-        trainingProvider: "",
-        trainingPurpose: "",
-        startDate: "",
-        file: "",
-        oher: "",
-      },
-      currentDate: "dd/mm/yy",
-      isStart: false,
-      isDatePickerVisible: false,
-      trainingNeed: [],
-      select_2: [],
-      select_1: [],
+      user_id: "",
+      lang: "",
+      lang_id: "",
+      firstname: "",
+      lastname: "",
+      position: "",
+      dept: "",
+      firstflight: "",
       startDate: "DD/MM/YYYY",
+      endDate: "DD/MM/YYYY",
+      startTime: "00:00",
+      endTime: "00:00",
       isDatePickerVisible: false,
-      trainingNeed: [],
-      dateexternal: [],
-      dateexternalitem: {
+      date: new Date(),
+      identification: "",
+      phone: "",
+      birthday: "",
+      province: "",
+      select_1: [],
+      select_2: [],
+      isTimePickerVisible: false,
+      isStartTime: false,
+      froms: "",
+      froms_id: "",
+      tos: "",
+      tos_id: "",
+      purpose: "",
+      purposeEtc: "",
+      baggage: "",
+      airportCheck: false,
+      checkBaggage: false,
+      flight: [],
+      flightItem: {
         data: {
-          course: "",
-          Provider: "",
-          purpose: "",
-          purpose_id: "",
           dates: "DD/MM/YYYY",
-          cost: "",
-          other: "",
+          startTime: "00:00",
+          endTime: "00:00",
+          froms: "",
+          froms_id: "",
+          tos: "",
+          tos_id: "",
+          checkEtc: false,
+          flight: "",
+          checkBaggage: false,
+          baggage: "",
         },
       },
       tem: -1,
@@ -72,6 +79,8 @@ export default class ExternalScreen extends Component {
 
   async componentDidMount() {
     let id = await AsyncStorage.getItem("userId");
+    this.setState({ user_id: id });
+
     const res = await AsyncStorage.getItem("language");
     if (res === "EN") {
       this.setState({ lang: "EN", lang_id: 1 });
@@ -80,13 +89,26 @@ export default class ExternalScreen extends Component {
     }
     try {
       httpClient
-        .get(`/Training/EmployeeTrainingNeed/${id}`)
+        .get(`/Training/TrainingFormScreen/${id}`)
         .then((response) => {
           const result = response.data;
           if (result != null) {
-            this.setState({
-              select_2: result,
-            });
+            for (let i = 0; i < result.length; i++) {
+              var row = result[i];
+              this.setState({
+                firstname:
+                  this.state.lang === "EN" ? row.firstname_en : row.firstname,
+                lastname:
+                  this.state.lang === "EN" ? row.lastname_en : row.lastname,
+                position: row.position_title,
+                dept: row.dep_title,
+                identification: row.identification,
+                phone: row.phone,
+                birthday: row.birthday,
+                province:
+                  this.state.lang === "EN" ? row.pv_name_en : row.pv_name_th,
+              });
+            }
           }
         })
         .catch((error) => {
@@ -94,7 +116,7 @@ export default class ExternalScreen extends Component {
         });
 
       httpClient
-        .get(`/Training/TrainingNeedPurpose/`)
+        .get(`/Training/FlighBookingScreen/`)
         .then((response) => {
           const result = response.data;
           if (result != null) {
@@ -106,11 +128,85 @@ export default class ExternalScreen extends Component {
         .catch((error) => {
           console.log(error);
         });
-    } catch (error) {
-      Alert.alert(error);
-    }
+
+      httpClient
+        .get(`/Training/FlighBookingScreenPurpose/`)
+        .then((response) => {
+          const result = response.data;
+          if (result != null) {
+            this.setState({
+              select_2: result,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {}
   }
 
+  // เอก
+  formatTime = (date) => {
+    let d = new Date(date),
+      hours = d.getHours().toString(),
+      minutes = d.getMinutes().toString();
+
+    hours.length < 2 ? (hours = "0" + hours) : null;
+    minutes.length < 2 ? (minutes = "0" + minutes) : null;
+
+    return [hours, minutes].join(":");
+  };
+
+  showTimePicker = (props, index) => {
+    this.setState({ isTimePickerVisible: true });
+    if (props == "start" && index == null) {
+      this.setState({ isStartTime: true });
+    } else if (props == "start" && index >= 0) {
+      this.setState({ isStartTime: true, tem: index });
+    } else if (props >= 0) {
+      this.setState({ tem: props });
+    }
+  };
+
+  hideTimePicker = () => {
+    this.setState({ isTimePickerVisible: false });
+  };
+
+  handleTimePicker = (date) => {
+    date = this.formatTime(date);
+
+    if (this.state.isStartTime && this.state.tem == -1) {
+      this.setState({ startTime: date, isStartTime: false, tem: -1 });
+    } else if (this.state.isStartTime && this.state.tem >= 0) {
+      if (this.state.tem >= 0) {
+        let tem = this.state.tem;
+        let flight = [...this.state.flight];
+        let item = { ...flight[tem] };
+        let data = { ...item["data"] };
+        data.startTime = date;
+        item["data"] = data;
+        flight[tem] = item;
+        this.setState({ flight: flight, tem: -1, isStartTime: false });
+      }
+    } else if (this.state.tem >= 0) {
+      if (this.state.tem >= 0) {
+        let tem = this.state.tem;
+        let flight = [...this.state.flight];
+        let item = { ...flight[tem] };
+        let data = { ...item["data"] };
+        data.endTime = date;
+        item["data"] = data;
+        flight[tem] = item;
+        this.setState({ flight: flight, tem: -1 });
+      }
+    } else {
+      this.setState({ endTime: date });
+    }
+    this.hideTimePicker();
+  };
+  // เวลา
+
+  // วันที่
   formatDate = (date) => {
     let d = new Date(date),
       month = "" + (d.getMonth() + 1),
@@ -121,18 +217,6 @@ export default class ExternalScreen extends Component {
     if (day.length < 2) day = "0" + day;
 
     return [day, month, year].join("/");
-  };
-
-  formatDatetotal = (date) => {
-    let d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [month, day, year].join("/");
   };
 
   showDatePicker = (props) => {
@@ -148,64 +232,385 @@ export default class ExternalScreen extends Component {
   hideDatePicker = () => {
     this.setState({ isDatePickerVisible: false });
   };
-
   handleConfirm = (dates) => {
     var datess = this.formatDate(dates);
-    var dates = this.formatDatetotal(dates);
 
     if (this.state.isStart) {
-      this.setState({ startDate: datess, startcul: dates, isStart: false });
+      this.setState({ startDate: datess, isStart: false });
     } else {
       if (this.state.tem > -1) {
         let tem = this.state.tem;
-        let dateexternal = [...this.state.dateexternal];
-        let item = { ...dateexternal[tem] };
+        let flight = [...this.state.flight];
+        let item = { ...flight[tem] };
         let data = { ...item["data"] };
         data.dates = datess;
         item["data"] = data;
-        dateexternal[tem] = item;
-        this.setState({ dateexternal: dateexternal });
-        console.log(dateexternal);
+        flight[tem] = item;
+        this.setState({ flight: flight });
+        console.log(flight);
       }
     }
+
     this.hideDatePicker();
   };
 
-  culDate = (startcul, endcul) => {
-    let date1 = new Date(startcul);
-    let date2 = new Date(endcul);
-    this.setState({
-      total: "0",
-    });
-    if (date2 >= date1) {
-      let diffInMs = Math.abs(date2 - date1);
-      let totals = diffInMs / (1000 * 60 * 60 * 24) + 1;
-      this.setState({
-        total: totals.toString(),
-      });
-    }
-  };
-
-  deleteCourse(index, courseItem) {
+  deleteFlight(index, courseItem) {
     let itemCopy = [...courseItem];
     itemCopy.splice(index, 1);
-    this.setState({ courseItem: itemCopy });
+    this.setState({
+      flight: itemCopy,
+    });
   }
+  //บันทึกข้อมูล
+  onPressSend = () => {
+    try {
+      const {
+        user_id,
+        purpose,
+        purposeEtc,
+        province,
+        startDate,
+        startTime,
+        endTime,
+        froms_id,
+        froms,
+        tos,
+        tos_id,
+        firstflight,
+        baggage,
+        checkBaggage,
+        flight,
+      } = this.state;
+      if (
+        (purpose == "" && purpose != 3) ||
+        (purposeEtc == "" && purpose == 3)
+      ) {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a travel purpose.")
+          : Alert.alert("กรุณาเลือกเลือกวัตถุประสงค์ในการเดินทาง");
+      } else if (startDate == "DD/MM/YYYY") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a departure date")
+          : Alert.alert("กรุณาเลือกวันเดินทาง");
+      } else if (startTime == "00:00") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a travel time")
+          : Alert.alert("กรุณาเลือกเวลาเดินทาง");
+      } else if (endTime == "00:00") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select an end time")
+          : Alert.alert("กรุณาเลือกเวลาสิ้นสุดการเดินทาง");
+      } else if (froms_id == "" && froms == "") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a departure flight.")
+          : Alert.alert("โปรดเลือกเที่ยวบินต้นทาง");
+      } else if (tos_id == "" && tos == "") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select destination flight")
+          : Alert.alert("โปรดเลือกเที่ยวบินปลายทาง");
+      } else if (firstflight == "") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please enter your flight")
+          : Alert.alert("กรุณาใส่เที่ยวบินของคุณ");
+      } else if (checkBaggage == true && baggage == "") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please enter your baggage weight.")
+          : Alert.alert("กรุณาป้อนน้ำหนักสัมภาระของคุณ");
+      } else {
+        var endi = flight.length - 1;
+        var error = false;
+        if (flight.length > 0) {
+          var index = 0;
+          do {
+            error = true;
+            var param = flight[index].data;
+            if (param.dates == "DD/MM/YYYY") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select a departure date" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาเลือกวันเดินทาง" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.startTime == "00:00") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select a travel time" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาเลือกเวลาเดินทาง" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.endTime == "00:00") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select an end time" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาเลือกเวลาสิ้นสุดการเดินทาง" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.froms_id == "" && param.froms == "") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select a departure flight" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "โปรดเลือกเที่ยวบินต้นทาง" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.tos_id == "" && param.tos == "") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select destination flight" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "โปรดเลือกเที่ยวบินปลายทาง" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.flight == "") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please enter your flight" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาใส่เที่ยวบินของคุณ" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else if (param.checkBaggage == true && param.baggage == "") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please enter your baggage weight" +
+                      " (Flight field " +
+                      (index + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาป้อนน้ำหนักสัมภาระของคุณ" +
+                      " (ช่องกรอกเที่ยวบินที่  " +
+                      (index + 2) +
+                      ")"
+                  );
+            } else {
+              error = !error;
+            }
+            index++;
+          } while (index <= endi && error != true);
+         
+        }
+        if ((error != true && flight.length > 0)||flight.length <1) {
+          const params = {
+            user_id: user_id,
+            startDate,
+            startTime,
+            endTime,
+            froms,
+            froms_id,
+            tos,
+            tos_id,
+            firstflight,
+            baggage,
+            purpose: purpose,
+            purpose_etc: purposeEtc,
+            flight: flight,
+          };
+          
+          const datas = params
+          // const datas = new FormData();
+          // Object.keys(params).forEach(key=>datas.append(key,params[key]))
+      //  console.log(datas);
+          // const data=params
+          Alert.alert(
+            this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+            this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+            [
+              {
+                text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel",
+              },
+              ,
+                { text: this.state.lang === 'EN' ? 'OK' : 'ตกลง', onPress: () =>  {
+                httpClient
+                  .post(`/Training/InsertFlightBooking`, datas)
+                  .then(response => {
+                    const result = response.datas;
+           
+                    if (result === true) {
+                      Alert.alert(
+                        this.state.lang === 'EN' ? 'Alert' : 'แจ้งเตือน',
+                        this.state.lang === 'EN' ? 'Problem reported' : 'บันทึกเที่ยวบินสำเร็จ',
+                        [
+                          { text: this.state.lang === 'EN' ? 'OK' : 'ตกลง', onPress: () =>  this.reset() }
+                        ],
+                        { cancelable: false }
+                      );
+                    }else{
+                      Alert.alert(this.state.lang === 'EN' ? `Can't save FlightBooking` : 'ไม่สามารถบันทึกเที่ยวบินได้')
+                    }
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+                }
+              }
+            ]
+          );
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   render() {
     return (
       <View style={styles.background}>
         <ScrollView>
-          <View style={styles.textHeader}>
-            <Text style={{ color: "#333333", fontSize: "24" }}>
-            Training Needs - In house
-            </Text>
-          </View>
+          {/* Start flight booking form section 1 */}
+          <View style={styles.containerSec1}>
+            <View style={styles.textHeader}>
+              <Text style={{ color: "#398DDD", fontSize: 20 }}>
+                บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด
+              </Text>
+              <Text style={{ paddingTop: 16, fontSize: 18 }}>Flight</Text>
+            </View>
 
-          {/* <Divider style={{ paddingBottom: 1, marginTop: 15 }} /> */}
+            <Divider style={{ paddingBottom: 1, marginTop: 5 }} />
+
+            {/* ส่วนที่1 */}
+            <Text style={{ marginTop: 10 }}>Name:</Text>
+            <Text style={styles.textInput}>ชื่อ</Text>
+            <TextInput style={styles.inputStyle} value={this.state.firstname} />
+
+            <Text>Last Name:</Text>
+            <Text style={styles.textInput}>นามสกุล</Text>
+            <TextInput style={styles.inputStyle} value={this.state.lastname} />
+
+            <Text>ID No:</Text>
+            <Text style={styles.textInput}>เลขบัตรประชาชน</Text>
+            <TextInput
+              style={styles.inputStyle}
+              value={this.state.identification}
+            />
+
+            <Text>Phone No:</Text>
+            <Text style={styles.textInput}>เบอร์โทรศัพท์</Text>
+            <TextInput style={styles.inputStyle} value={this.state.phone} />
+
+            <Text>Birthday:</Text>
+            <Text style={styles.textInput}>วันเกิด</Text>
+            <TextInput
+              style={styles.inputStyle}
+              // value={this.state.birthday}
+              value={this.formatDate(this.state.birthday)}
+            />
+
+            <Text>Province:</Text>
+            <Text style={styles.textInput}>จังหวัด</Text>
+            <TextInput style={styles.inputStyle} value={this.state.province} />
+
+            <Text>Purpose:</Text>
+            <Text style={styles.textInput}>วัตถุประสงค์ในการเดินทาง</Text>
+            <Picker
+              mode="dropdown"
+              iosIcon={
+                <Icon
+                  name="angle-down"
+                  style={{ width: "8%", paddingHorizontal: 2 }}
+                />
+              }
+              style={styles.inputLightStyle}
+              placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
+              placeholderStyle={{ color: "#bfc6ea" }}
+              placeholderIconColor="#007aff"
+              selectedValue={this.state.purpose}
+              onValueChange={(text) =>
+                this.setState({ purpose: text, purposeEtc: "" })
+              }
+              textStyle={{ fontSize: 14 }}
+            >
+              <Picker.Item
+                label={
+                  this.state.lang === "EN"
+                    ? "Please select your travel purpose"
+                    : "กรุณาเลือกวัตถุประสงค์ในการเดินทาง"
+                }
+                value=""
+              />
+              {this.state.select_2.map((data) => {
+                return (
+                  <Picker.Item
+                    label={
+                      this.state.lang === "EN"
+                        ? data.purpose_travel_en
+                        : data.purpose_travel_th
+                    }
+                    value={data.id}
+                  />
+                );
+              })}
+            </Picker>
+
+            {/* กรณีเลือกอื่นๆ */}
+
+            {this.state.purpose == 3 && (
+              <View>
+                <Text>Purpose:</Text>
+                <Text style={styles.textInput}>
+                  กรุณาระบุวัตถุประสงค์ อื่นๆ
+                </Text>
+                <TextInput
+                  style={styles.inputStyle1}
+                  placeholder={
+                    this.state.lang === "EN"
+                      ? "Please enter purpose"
+                      : "กรุณากรอกวัตถุประสงค์"
+                  }
+                  value={this.state.purposeEtc}
+                  onChangeText={(text) => this.setState({ purposeEtc: text })}
+                ></TextInput>
+              </View>
+            )}
+
+            {/* กรณีเลือกอื่นๆ */}
+          </View>
+          {/* จบส่วนที่1 */}
+
           <View
             style={{
-              marginVertical: 20,
+              marginVertical: 40,
               flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
@@ -220,36 +625,297 @@ export default class ExternalScreen extends Component {
             <Divider style={{ paddingBottom: 1, flex: 1 }} />
           </View>
 
-          {/* Start Card by aek*/}
-          {/* จะทำการแสดงพนักงาน */}
-          {this.state.trainingNeed.map((item, index) => {
-            console.log(item);
-            return (
-              <View>
-                <ScrollView>
-                  <View style={styles.containerSec2}>
-                    <View style={styles.contentInSec}>
-                      <View
-                        style={{
-                          flexDirection: "column",
-                          justifyContent: "space-around",
-                          paddingHorizontal: 8,
-                          marginBottom: 8,
-                        }}
-                      >
-                        <Text style={styles.textStyle1}>
-                          {this.state.lang === "EN"
-                            ? "Employee Name"
-                            : "ชื่อพนักงาน"}
-                        </Text>
+          {/* ส่วนที่2 */}
+          <View style={styles.containerSec2}>
+            <View style={styles.contentInSec2}>
+              <Text>Date:</Text>
+              <Text style={styles.textInput}>วันออกเดินทาง</Text>
+              <TouchableOpacity onPress={() => this.showDatePicker("start")}>
+                <View style={styles.inputDate}>
+                  <Text style={{ color: "#bfc6ea" }}>
+                    {this.state.startDate}
+                  </Text>
+                </View>
+              </TouchableOpacity>
 
+              <Text>Time:</Text>
+              <Text style={styles.textInput}>เวลาเดินทาง</Text>
+              <TouchableOpacity onPress={() => this.showTimePicker("start")}>
+                <View style={styles.inputDate}>
+                  <Text style={{ color: "#bfc6ea" }}>
+                    {this.state.startTime}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
+              <Text>Time:</Text>
+              <Text style={styles.textInput}>สิ้นสุดเดินทาง</Text>
+              <TouchableOpacity onPress={() => this.showTimePicker()}>
+                <View style={styles.inputDate}>
+                  <Text style={{ color: "#bfc6ea" }}>{this.state.endTime}</Text>
+                </View>
+              </TouchableOpacity>
+
+              <Text>From:</Text>
+              <Text style={styles.textInput}>ต้นทาง</Text>
+              {this.state.airportCheck == false && (
+                <View>
+                  <Picker
+                    mode="dropdown"
+                    iosIcon={
+                      <Icon
+                        name="angle-down"
+                        style={{ width: "8%", paddingHorizontal: 2 }}
+                      />
+                    }
+                    style={styles.inputLightStyle}
+                    placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
+                    placeholderStyle={{ color: "#bfc6ea" }}
+                    placeholderIconColor="#007aff"
+                    selectedValue={this.state.froms_id}
+                    onValueChange={(text) =>
+                      this.setState({ froms_id: text, froms: "" })
+                    }
+                    textStyle={{ fontSize: 14 }}
+                  >
+                    <Picker.Item
+                      label={
+                        this.state.lang === "EN"
+                          ? "Please select a source"
+                          : "กรุณาเลือกต้นทาง"
+                      }
+                      value=""
+                    />
+
+                    {this.state.select_1.map((data) => {
+                      return (
+                        <Picker.Item
+                          label={
+                            this.state.lang === "EN"
+                              ? data.airport_name_en +
+                                "(" +
+                                data.airport_code +
+                                ")"
+                              : data.airport_name +
+                                "(" +
+                                data.airport_code +
+                                ")"
+                          }
+                          value={data.id}
+                        />
+                      );
+                    })}
+                  </Picker>
+                </View>
+              )}
+              {/* กรณีติ๊ก Checkbox */}
+              {this.state.airportCheck == true && (
+                <View>
+                  <TextInput
+                    style={styles.inputStyle1}
+                    placeholder={
+                      this.state.lang === "EN"
+                        ? "Please enter the departure flight"
+                        : "กรุณากรอกเที่ยวบินต้นทาง"
+                    }
+                    value={this.state.froms}
+                    onChangeText={(text) =>
+                      this.setState({ froms: text, froms_id: "" })
+                    }
+                  ></TextInput>
+                </View>
+              )}
+              {/* กรณีติ๊ก Checkbox */}
+
+              <Text>To:</Text>
+              <Text style={styles.textInput}>ปลายทาง</Text>
+              {this.state.airportCheck == false && (
+                <View>
+                  <Picker
+                    mode="dropdown"
+                    iosIcon={
+                      <Icon
+                        name="angle-down"
+                        style={{ width: "8%", paddingHorizontal: 2 }}
+                      />
+                    }
+                    style={styles.inputLightStyle}
+                    placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
+                    placeholderStyle={{ color: "#bfc6ea" }}
+                    placeholderIconColor="#007aff"
+                    selectedValue={this.state.tos_id}
+                    onValueChange={(text) => this.setState({ tos_id: text })}
+                    textStyle={{ fontSize: 14 }}
+                  >
+                    <Picker.Item
+                      label={
+                        this.state.lang === "EN"
+                          ? "Please select destination flight"
+                          : "กรุณาเลือกปลายทาง"
+                      }
+                      value=""
+                    />
+                    {this.state.select_1.map((data) => {
+                      return (
+                        <Picker.Item
+                          label={
+                            this.state.lang === "EN"
+                              ? data.airport_name_en +
+                                "(" +
+                                data.airport_code +
+                                ")"
+                              : data.airport_name +
+                                "(" +
+                                data.airport_code +
+                                ")"
+                          }
+                          value={data.id}
+                        />
+                      );
+                    })}
+                  </Picker>
+                </View>
+              )}
+              {/* กรณีติ๊ก Checkbox */}
+              {this.state.airportCheck == true && (
+                <View>
+                  <TextInput
+                    style={styles.inputStyle1}
+                    placeholder={
+                      this.state.lang === "EN"
+                        ? "Please enter destination flight"
+                        : "กรุณากรอกเที่ยวบินปลายทาง"
+                    }
+                    value={this.state.tos}
+                    onChangeText={(text) => this.setState({ tos: text })}
+                  ></TextInput>
+                </View>
+              )}
+
+              {/* กรณีติ๊ก Checkbox */}
+
+              {/* Checkbox */}
+              <View style={styles.checkboxContainer}>
+                <CheckBox
+                  checked={this.state.airportCheck}
+                  onPress={() => {
+                    this.setState({
+                      airportCheck: !this.state.airportCheck,
+                      tos_id: "",
+                      tos: "",
+                      froms_id: "",
+                      froms_id: "",
+                    });
+                  }}
+                  style={styles.checkbox}
+                  title={this.state.lang === "EN" ? "Baggage" : "อื่นๆ"}
+                />
+              </View>
+              {/* Checkbox */}
+
+              <Text>Flight:</Text>
+              <Text style={styles.textInput}>เที่ยวบิน</Text>
+              <TextInput
+                style={styles.inputStyle1}
+                placeholder="กรุณากรอกเที่ยวบิน"
+                value={this.state.firstflight}
+                onChangeText={(text) => this.setState({ firstflight: text })}
+              ></TextInput>
+
+              <Text>Baggage:</Text>
+              <Text style={styles.textInput}>สัมภาระ</Text>
+              {/* Checkbox */}
+              <View style={styles.checkboxContainer}>
+                <CheckBox
+                  checked={this.state.checkBaggage}
+                  onPress={() => {
+                    this.setState({
+                      checkBaggage: !this.state.checkBaggage,
+                      baggage: "",
+                    });
+                  }}
+                  style={styles.checkbox}
+                  title={this.state.lang === "EN" ? "Baggage" : "สัมภาระ"}
+                />
+              </View>
+              {/* Checkbox */}
+
+              {/* กรณีติ๊ก checkbox */}
+              {this.state.checkBaggage == true && (
+                <View>
+                  <TextInput
+                    style={styles.inputStyle1}
+                    placeholder="กรุณากรอกน้ำหนักสัมภาระ"
+                    value={this.state.baggage}
+                    onChangeText={(text) => this.setState({ baggage: text })}
+                  ></TextInput>
+                </View>
+              )}
+              {/* กรณีติ๊ก checkbox */}
+
+              <DateTimePickerModal
+                // isVisible={isTimePickerVisible}
+                mode="time"
+                // onConfirm={handleTimePicker}
+                // onCancel={hideTimePicker}
+              />
+            </View>
+          </View>
+          {/* จบส่วนที่2 */}
+
+          {/* เพิ่มเที่ยวบิน */}
+          <View style={{ marginBottom: 12, marginTop: 12 }}>
+            {this.state.flight.map((item, index) => {
+              return (
+                <View>
+                  <View style={styles.containerSec2}>
+                    <View style={styles.contentInSec2}>
+                      <Text>Date:</Text>
+                      <Text style={styles.textInput}>วันออกเดินทาง</Text>
+                      <TouchableOpacity
+                        onPress={() => this.showDatePicker(index)}
+                      >
+                        <View style={styles.inputDate}>
+                          <Text style={{ color: "#bfc6ea" }}>
+                            {item.data.dates}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <Text>Time:</Text>
+                      <Text style={styles.textInput}>เวลาเดินทาง</Text>
+                      <TouchableOpacity
+                        onPress={() => this.showTimePicker("start", index)}
+                      >
+                        <View style={styles.inputDate}>
+                          <Text style={{ color: "#bfc6ea" }}>
+                            {item.data.startTime}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <Text>Time:</Text>
+                      <Text style={styles.textInput}>สิ้นสุดเดินทาง</Text>
+                      <TouchableOpacity
+                        onPress={() => this.showTimePicker(index)}
+                      >
+                        <View style={styles.inputDate}>
+                          <Text style={{ color: "#bfc6ea" }}>
+                            {item.data.endTime}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <Text>From:</Text>
+                      <Text style={styles.textInput}>ต้นทาง</Text>
+                      {item.data.checkEtc == false && (
                         <View>
                           <Picker
                             mode="dropdown"
                             iosIcon={
                               <Icon
                                 name="angle-down"
-                                style={{ width: "8%", paddingHorizontal: 2}}
+                                style={{ width: "8%", paddingHorizontal: 2 }}
                               />
                             }
                             style={styles.inputLightStyle}
@@ -258,295 +924,321 @@ export default class ExternalScreen extends Component {
                             }
                             placeholderStyle={{ color: "#bfc6ea" }}
                             placeholderIconColor="#007aff"
-                            // selectedValue={this.state.purpose}
-                            // onValueChange={(text) =>
-                            //   this.setState({ purpose: text })
-                            // }
+                            selectedValue={item.data.froms_id}
+                            onValueChange={(text) => {
+                              let flight = [...this.state.flight];
+                              let item = { ...flight[index] };
+                              let data = { ...item["data"] };
+                              data.froms = "";
+                              data.froms_id = text;
+                              item["data"] = data;
+                              flight[index] = item;
+                              this.setState({ flight: flight });
+                              console.log(this.state.flight);
+                            }}
                             textStyle={{ fontSize: 14 }}
                           >
                             <Picker.Item
                               label={
                                 this.state.lang === "EN"
-                                  ? "Please select "
-                                  : "กรุณาเลือก"
+                                  ? "Please select a source"
+                                  : "กรุณาเลือกต้นทาง"
                               }
                               value=""
                             />
-                            {this.state.select_2.map((data) => {
+
+                            {this.state.select_1.map((data) => {
                               return (
                                 <Picker.Item
                                   label={
                                     this.state.lang === "EN"
-                                      ? data.firstname_en +
+                                      ? data.airport_name_en +
                                         "(" +
-                                        data.lastname_en +
+                                        data.airport_code +
                                         ")"
-                                      : data.firstname +
+                                      : data.airport_name +
                                         "(" +
-                                        data.lastname +
+                                        data.airport_code +
                                         ")"
                                   }
-                                  value={data.user_id}
+                                  value={data.id}
                                 />
                               );
                             })}
                           </Picker>
                         </View>
-                      </View>
-
-                      <Divider style={{ paddingBottom: 1, marginTop: 10 }} />
-
-                      {/* Start กรอบใน */}
-                      <View style={{ marginTop: 24 }}>
-                        <View style={styles.containerSec3}>
-                          <View
-                            style={{
-                              flexDirection: "column",
-                              justifyContent: "space-around",
-                              paddingHorizontal: 10,
-                              // marginBottom: 8,
+                      )}
+                      {/* กรณีติ๊ก Checkbox */}
+                      {item.data.checkEtc == true && (
+                        <View>
+                          <TextInput
+                            style={styles.inputStyle1}
+                            placeholder={
+                              this.state.lang === "EN"
+                                ? "Please enter the departure flight"
+                                : "กรุณากรอกเที่ยวบินต้นทาง"
+                            }
+                            onChangeText={(text) => {
+                              let flight = [...this.state.flight];
+                              let item = { ...flight[index] };
+                              let data = { ...item["data"] };
+                              data.froms = text;
+                              data.froms_id = "";
+                              item["data"] = data;
+                              flight[index] = item;
+                              this.setState({ flight: flight });
+                              console.log(this.state.flight);
                             }}
+                          ></TextInput>
+                        </View>
+                      )}
+                      {/* กรณีติ๊ก Checkbox */}
+
+                      <Text>To:</Text>
+                      <Text style={styles.textInput}>ปลายทาง</Text>
+                      {item.data.checkEtc == false && (
+                        <View>
+                          <Picker
+                            mode="dropdown"
+                            iosIcon={
+                              <Icon
+                                name="angle-down"
+                                style={{ width: "8%", paddingHorizontal: 2 }}
+                              />
+                            }
+                            style={styles.inputLightStyle}
+                            placeholder={
+                              this.state.lang === "EN" ? "Selecte" : "เลือก"
+                            }
+                            placeholderStyle={{ color: "#bfc6ea" }}
+                            placeholderIconColor="#007aff"
+                            selectedValue={item.data.tos_id}
+                            onValueChange={(text) => {
+                              let flight = [...this.state.flight];
+                              let item = { ...flight[index] };
+                              let data = { ...item["data"] };
+                              data.tos = "";
+                              data.tos_id = text;
+                              item["data"] = data;
+                              flight[index] = item;
+                              this.setState({ flight: flight });
+                              console.log(this.state.flight);
+                            }}
+                            textStyle={{ fontSize: 14 }}
                           >
-                            <TextInput
-                              style={styles.inputStyle4}
-                              placeholder={
+                            <Picker.Item
+                              label={
                                 this.state.lang === "EN"
-                                  ? "Course Name"
-                                  : "ชื่อหลักสูตร"
+                                  ? "Please select a source"
+                                  : "กรุณาเลือกต้นทาง"
                               }
-                            ></TextInput>
-
-                            <TextInput
-                              style={styles.inputStyle4}
-                              placeholder={
-                                this.state.lang === "EN"
-                                  ? "Training Provider"
-                                  : "ผู้ให้บริการฝึกอบรม"
-                              }
-                            ></TextInput>
-
-                            <View>
-                              <Picker
-                                mode="dropdown"
-                                iosIcon={
-                                  <Icon
-                                    name="angle-down"
-                                    style={{
-                                      width: "8%",
-                                      paddingHorizontal: 2,
-                                    }}
-                                  />
-                                }
-                                style={styles.inputLightStyle}
-                                placeholder={
-                                  this.state.lang === "EN"
-                                    ? "Selecte a purpose"
-                                    : "เลือกจุดประสงค์"
-                                }
-                                placeholderStyle={{ color: "#bfc6ea" }}
-                                placeholderIconColor="#007aff"
-                                // selectedValue={this.state.toFlight}
-                                // onValueChange={(text) =>
-                                //   this.setState({ toFlight: text })
-                                // }
-                                textStyle={{ fontSize: 14 }}
-                              >
+                              value=""
+                            />
+                            {this.state.select_1.map((data) => {
+                              return (
                                 <Picker.Item
                                   label={
                                     this.state.lang === "EN"
-                                      ? "Please select a purpose"
-                                      : "กรุณาเลือกจุดประสงค์"
+                                      ? data.airport_name_en +
+                                        "(" +
+                                        data.airport_code +
+                                        ")"
+                                      : data.airport_name +
+                                        "(" +
+                                        data.airport_code +
+                                        ")"
                                   }
-                                  value=""
+                                  value={data.id}
                                 />
-                                {this.state.select_1.map((data) => {
-                                  return (
-                                    <Picker.Item
-                                      label={
-                                        this.state.lang === "EN"
-                                          ? data.purpose_en
-                                          : data.purpose_th
-                                      }
-                                      value={data.id}
-                                    />
-                                  );
-                                })}
-                              </Picker>
-                            </View>
-
-                            <View>
-                              <TouchableOpacity
-                                onPress={() => this.showDatePicker("start")}
-                              >
-                                <View style={styles.inputStyle5}>
-                                  <Text style={{ color: "#bfc6ea" }}>
-                                    {this.state.startDate}
-                                  </Text>
-                                </View>
-                              </TouchableOpacity>
-                            </View>
-
-                            <TextInput
-                              style={styles.inputStyle4}
-                              placeholder={
-                                this.state.lang === "EN"
-                                  ? "Training Cost"
-                                  : "ราคา"
-                              }
-                            ></TextInput>
-
-                            <TextInput
-                              style={styles.inputStyle4}
-                              placeholder={
-                                this.state.lang === "EN" ? "Other" : "อื่นๆ"
-                              }
-                            ></TextInput>
-
-                            <Text
-                              style={{
-                                paddingHorizontal: 8,
-                                paddingVertical: 15,
-                              }}
-                            >
-                              {this.state.lang === "EN"
-                                ? "Attach File"
-                                : "แนบไฟล์"}
-                            </Text>
-                            <TouchableOpacity
-                              style={{
-                                backgroundColor: "#4392de",
-                                width: "40%",
-                                height: "8%",
-                                marginTop: 5,
-                                marginBottom: 15,
-                                marginLeft: 4,
-                                borderRadius: 10,
-                              }}
-                            >
-                              <View
-                                style={{
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                  flex: 1,
-                                }}
-                              >
-                                <Text
-                                  style={{
-                                    marginLeft: 10,
-                                    marginRight: 10,
-                                    color: "white",
-                                  }}
-                                >
-                                  {this.state.lang === "EN" ? "File" : "ไฟล์"}
-                                </Text>
-                              </View>
-                            </TouchableOpacity>
-
-                            <Divider
-                              style={{
-                                paddingBottom: 1,
-
-                                marginBottom: 4,
-                                marginTop: 10,
-                              }}
-                            />
-                          </View>
-
-                          <DateTimePickerModal
-                            isVisible={this.state.isDatePickerVisible}
-                            mode="date"
-                            onConfirm={this.handleConfirm}
-                            onCancel={this.hideDatePicker}
-                          />
-
-                          <View style={styles.pickerContainer2}>
-                            <TouchableOpacity
-                              style={styles.addButton}
-                              // onPress={() => setCards([...cards, "1"])}
-                            >
-                              <Text style={styles.addButtonText}>+</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                              style={styles.deleteButton}
-                              // onPress={() => deleteCourse(cardIndex, card, setCard)}
-                            >
-                              <Text style={styles.addButtonText}>-</Text>
-                            </TouchableOpacity>
-                          </View>
+                              );
+                            })}
+                          </Picker>
                         </View>
-                      </View>
-                    </View>
+                      )}
+                      {/* กรณีติ๊ก Checkbox */}
+                      {item.data.checkEtc == true && (
+                        <View>
+                          <TextInput
+                            style={styles.inputStyle1}
+                            placeholder={
+                              this.state.lang === "EN"
+                                ? "Please enter destination flight"
+                                : "กรุณากรอกเที่ยวบินปลายทาง"
+                            }
+                            value={item.data.tos}
+                            onChangeText={(text) => {
+                              let flight = [...this.state.flight];
+                              let item = { ...flight[index] };
+                              let data = { ...item["data"] };
+                              data.tos = text;
+                              data.tos_id = "";
+                              item["data"] = data;
+                              flight[index] = item;
+                              this.setState({ flight: flight });
+                              console.log(this.state.flight);
+                            }}
+                          ></TextInput>
+                        </View>
+                      )}
 
-                    <Button
-                      mode="contained"
-                      style={styles.btnDelCard}
-                      onPress={() => deleteCourse(cardIndex, card, setCard)}
-                      >
-                        <Icon name="trash" color="#fff" size="26" />
-                        <Text
-                          style={{
-                            color: "#fff",
-                            fontSize: 16,
+                      {/* กรณีติ๊ก Checkbox */}
+
+                      {/* Checkbox */}
+                      <View style={styles.checkboxContainer}>
+                        <CheckBox
+                          checked={item.data.checkEtc}
+                          onPress={() => {
+                            let flight = [...this.state.flight];
+                            let item = { ...flight[index] };
+                            let data = { ...item["data"] };
+                            data.checkEtc = !data.checkEtc;
+                            data.froms = "";
+                            data.froms_id = "";
+                            data.tos = "";
+                            data.tos_id = "";
+                            item["data"] = data;
+                            flight[index] = item;
+                            this.setState({ flight: flight });
+                            console.log(this.state.flight);
                           }}
-                        >
-                          {this.state.lang === "EN"
-                            ? "Delete Employee"
-                            : "ลบพนักงาน"}
-                        </Text>
-                    </Button>
-                  </View>
-                  {/* End กรอบนอก&กรอบใน */}
-                </ScrollView>
-              </View>
-            );
-          })}
+                          style={styles.checkbox}
+                          title={this.state.lang === "EN" ? "Baggage" : "อื่นๆ"}
+                        />
+                      </View>
+                      {/* Checkbox */}
 
-          {/* <Button style={styles.submitButton}>
-            <Text style={{ color: "#fff" }}>Submit</Text>
-          </Button> */}
-           <View>
-            {/* เมื่อกดปุ่มนี้จะทำการเพิ่มพนักงาน */}
-            <Button
-              style={styles.btnStyle1}
-              onPress={() => {
-                let trainingNeedItem = this.state.trainingNeedItem;
-                trainingNeedItem["data"] = [
-                  ...trainingNeedItem["data"],
-                  this.state.courseItem,
-                ];
-                let trainingNeed = [
-                  ...this.state.trainingNeed,
-                  trainingNeedItem,
-                ];
-                this.setState({
-                  trainingNeed: trainingNeed,
-                });
-              }}
-            >
-              <Icon name="user-plus" color="#fff" size="26" />
-              <Text
-                style={{
-                  color: "#fff",
-                  fontSize: 16,
-                }}
-              >
-                {this.state.lang === "EN" ? "Add Employee" : "เพิ่มพนักงาน"}
-              </Text>
-            </Button>
+                      <Text>Flight:</Text>
+                      <Text style={styles.textInput}>เที่ยวบิน</Text>
+                      <TextInput
+                        style={styles.inputStyle1}
+                        placeholder="กรุณากรอกเที่ยวบิน"
+                        value={item.data.flight}
+                        onChangeText={(text) => {
+                          let flight = [...this.state.flight];
+                          let item = { ...flight[index] };
+                          let data = { ...item["data"] };
+                          data.flight = text;
+                          item["data"] = data;
+                          flight[index] = item;
+                          this.setState({ flight: flight });
+                          console.log(this.state.flight);
+                        }}
+                      ></TextInput>
+
+                      <Text>Baggage:</Text>
+                      <Text style={styles.textInput}>สัมภาระ</Text>
+                      {/* Checkbox */}
+                      <View style={styles.checkboxContainer}>
+                        <CheckBox
+                          checked={item.data.checkBaggage}
+                          onPress={() => {
+                            let flight = [...this.state.flight];
+                            let item = { ...flight[index] };
+                            let data = { ...item["data"] };
+                            data.checkBaggage = !data.checkBaggage;
+                            data.baggage = "";
+                            item["data"] = data;
+                            flight[index] = item;
+                            this.setState({ flight: flight });
+                            console.log(this.state.flight);
+                          }}
+                          style={styles.checkbox}
+                          title={
+                            this.state.lang === "EN" ? "Baggage" : "สัมภาระ"
+                          }
+                        />
+                      </View>
+                      {/* Checkbox */}
+
+                      {/* กรณีติ๊ก checkbox */}
+                      {item.data.checkBaggage == true && (
+                        <View>
+                          <TextInput
+                            style={styles.inputStyle1}
+                            placeholder="กรุณากรอกน้ำหนักสัมภาระ"
+                            value={item.data.baggage}
+                            onChangeText={(text) => {
+                              let flight = [...this.state.flight];
+                              let item = { ...flight[index] };
+                              let data = { ...item["data"] };
+                              data.baggage = text;
+                              item["data"] = data;
+                              flight[index] = item;
+                              this.setState({ flight: flight });
+                              console.log(this.state.flight);
+                            }}
+                          ></TextInput>
+                        </View>
+                      )}
+                      {/* กรณีติ๊ก checkbox */}
+
+                      <DateTimePickerModal
+                        // isVisible={isTimePickerVisible}
+                        mode="time"
+                        // onConfirm={handleTimePicker}
+                        // onCancel={hideTimePicker}
+                      />
+                    </View>
+                  </View>
+
+                  <View style={styles.buttonContainer1}>
+                    <TouchableOpacity
+                      style={styles.btnDelFlightStyle}
+                      onPress={() =>
+                        this.deleteFlight(index, this.state.flight)
+                      }
+                    >
+                      <Text style={{ color: "white" }}>ลบเที่ยวบิน</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            })}
           </View>
-          
+          {/* เพิ่มเที่ยวบิน */}
+
+          {/* โชว์ DateTimePickerModal*/}
+          <DateTimePickerModal
+            isVisible={this.state.isDatePickerVisible}
+            mode="date"
+            onConfirm={this.handleConfirm}
+            onCancel={this.hideDatePicker}
+          />
+
+          <DateTimePickerModal
+            isVisible={this.state.isTimePickerVisible}
+            mode="time"
+            onConfirm={this.handleTimePicker}
+            onCancel={this.hideTimePicker}
+          />
+
+          {/* Action Button */}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.btnAddFlightStyle}
+              onPress={() =>
+                this.setState({
+                  flight: [...this.state.flight, this.state.flightItem],
+                })
+              }
+            >
+              <Text style={{ color: "white" }}>เพิ่มเที่ยวบิน</Text>
+            </TouchableOpacity>
+          </View>
+
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-around",
-              paddingVertical: 12,
-              paddingHorizontal: 24,
+              paddingVertical: 24,
               marginBottom: 40,
             }}
           >
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.btnConfirmStyle}>
+              <TouchableOpacity
+                style={styles.btnConfirmStyle}
+                onPress={() => this.onPressSend()}
+              >
                 <Text style={{ color: "white" }}>ยืนยัน</Text>
               </TouchableOpacity>
             </View>
@@ -562,196 +1254,78 @@ export default class ExternalScreen extends Component {
     );
   }
 }
+
+//จบ
+
 const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "white",
   },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    width: 500,
-  },
-  //กรอบข้อมูล
-  containerSec2: {
-    marginTop: 16,
+  containerSec1: {
+    borderWidth: 1,
+    padding: 12,
     borderRadius: 8,
-    borderWidth: 2,
-    borderColor: "#999999",
-    marginHorizontal: 10,
-    marginBottom: 50,
+    marginHorizontal: 20,
+    marginTop: 18,
   },
   textHeader: {
     alignItems: "center",
-    padding: 15,
+    padding: 12,
   },
-  //ชื่อหัวข้อ
-  textStyle1: {
-    marginTop: 12,
-    marginBottom: 12,
-    paddingHorizontal: 6,
-  },
-  cardStyle: {
-    marginVertical: 100,
-    //marginTop: 12,
-  },
-  /// picker styles
-  userPickerStyles: {
-    width: pickerWidth,
-    borderWidth: 1,
-    borderColor: "#B1B1B1",
-    marginTop: 24,
-    marginBottom: 24,
-    marginLeft: 14,
-    // marginVertical: 24,
-    height: 60,
-  },
-  coursePickerStyles: {
-    //height: 10,
-    width: pickerWidth - 56,
-    borderWidth: 1,
-    borderColor: "#B1B1B1",
-    marginHorizontal: 16,
-  },
-  ///กรอบเพิ่มข้อมูล
-  pickerContainer: {
-    flexDirection: "row",
-    marginVertical: 1,
-    marginTop: 5,
-    marginBottom: 12,
-    marginLeft: 1,
-    marginRight: -95,
-  },
-  pickerContainer2: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginVertical: 5,
-    marginBottom: 12,
-  },
-  addButtonText: {
-    color: "white",
-    fontSize: 30,
-    fontWeight: "700",
-    marginBottom: 5,
-    marginTop: -2,
-    marginLeft: 1,
-  },
-  /// add button
-  addButton: {
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#4392de",
-    width: 36,
-    height: 36,
-    marginLeft: 10,
-    marginRight: 8,
-    marginTop: 5,
-  },
-  /// del button
-  deleteButton: {
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "red",
-    width: 36,
-    height: 36,
-    marginLeft: 8,
-    marginRight: 2,
-    marginTop: 5,
-  },
-  containerSec1: {
-    marginHorizontal: 20,
-  },
-  containerSec3: {
-    // width: "95%",
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#999999",
-    marginHorizontal: 10,
-    // marginRight: 8,
-    // marginLeft: 10,
-  },
-  contentInSec: {
-    padding: 2,
-  },
-  btnStyle1: {
-    height: 40,
-    backgroundColor: "#F0AD4E",
-    marginLeft: 12,
-    marginRight: 12,
-    marginTop: 12,
-  },
-  submitButton: {
-    alignSelf: "center",
-    marginVertical: 8,
-    backgroundColor: "#3BB54A",
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  input: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderRadius: 4,
-    height: 44,
-    marginHorizontal: 8,
-    marginTop: 18,
+  inputStyle: {
+    backgroundColor: "#DCDCDC",
+    borderRadius: 15,
+    height: HEIGHT / 20,
+    marginTop: 10,
+    paddingLeft: 10,
     marginBottom: 10,
-    flex: 1,
-    justifyContent: "center",
   },
-  input1: {
-    backgroundColor: "#fff",
+  inputStyle1: {
+    borderRadius: 15,
+    borderColor: "#007aff",
     borderWidth: 1,
-    borderRadius: 4,
-    height: 44,
-    marginHorizontal: 8,
+    height: HEIGHT / 20,
+    marginTop: 10,
+    paddingLeft: 10,
     marginBottom: 10,
-    flex: 1,
-    justifyContent: "center",
   },
-  inputDate: {
-    borderWidth: 1,
-    borderRadius: 4,
-    height: 44,
-    marginHorizontal: 8,
-    marginBottom: 10,
-    flex: 1,
-    justifyContent: "center",
-  },
-  btnDelCard: {
-    marginTop: 1,
-    marginVertical: 18,
-    marginHorizontal: 10,
-    backgroundColor: "red",
+  textInput: {
+    color: "grey",
   },
   inputLightStyle: {
     borderWidth: 1,
     borderRadius: 10,
-    height: HEIGHT / 20,
+    // height: HEIGHT / 15,
+    height: HEIGHT / 18,
     width: "100%",
-    marginTop: 15,
-    marginBottom: 2,
+    marginTop: 10,
+    // paddingLeft: 10,
+    marginBottom: 10,
     borderColor: "#007aff",
   },
-  inputStyle4: {
-    borderRadius: 15,
+  inputLightStyle1: {
     borderWidth: 1,
-    borderColor: "#007aff",
-    height: HEIGHT / 20,
-    marginTop: 15,
+    borderRadius: 10,
+    // height: HEIGHT / 15,
+    height: HEIGHT / 18,
+    width: "100%",
+    marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 2,
+    marginBottom: 10,
+    borderColor: "#007aff",
   },
-  inputStyle5: {
-    borderRadius: 15,
+  arrowDownStyle: {
+    backgroundColor: "#F4F4F4",
+  },
+  containerSec2: {
+    marginHorizontal: 20,
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#007aff",
-    height: HEIGHT / 20,
-    marginTop: 15,
-    paddingLeft: 10,
-    marginBottom: 2,
-    justifyContent: "center",
+    borderColor: "#999999",
+  },
+  contentInSec2: {
+    padding: 12,
   },
   buttonContainer: {
     alignSelf: "center",
@@ -770,7 +1344,18 @@ const styles = StyleSheet.create({
     marginTop: 2,
     marginBottom: 18,
   },
-
+  btnAddFlightStyle: {
+    backgroundColor: "#0097fc",
+    padding: 8,
+    alignItems: "center",
+    borderRadius: 4,
+  },
+  btnDelFlightStyle: {
+    backgroundColor: "red",
+    padding: 8,
+    alignItems: "center",
+    borderRadius: 4,
+  },
   btnConfirmStyle: {
     backgroundColor: "#449D44",
     padding: 8,
@@ -782,5 +1367,32 @@ const styles = StyleSheet.create({
     padding: 8,
     alignItems: "center",
     borderRadius: 16,
+  },
+  inputDate: {
+    borderWidth: 1,
+    borderRadius: 10,
+    height: HEIGHT / 18,
+    marginTop: 10,
+    paddingLeft: 10,
+    marginBottom: 10,
+    flex: 1,
+    justifyContent: "center",
+    borderColor: "#007aff",
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    margin: 5,
+    justifyContent: "flex-start",
+  },
+  checkbox: {
+    alignSelf: "center",
+    borderRadius: 1,
+    height: HEIGHT / 40,
+    width: "6%",
+    // padding: 20,
+    margin: 8,
+  },
+  label: {
+    margin: 12,
   },
 });

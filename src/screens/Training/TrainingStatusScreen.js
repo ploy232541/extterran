@@ -36,15 +36,6 @@ export default class TrainingStatusScreen extends Component {
       optionsPerPage: [2, 3, 4],
       itemsPerPage: "",
       training_request_status: [],
-      firstname: "",
-      lastname: "",
-      position: "",
-      dept: "",
-      identification: "",
-      phone: "",
-      birthday: "",
-      province: "",
-      statusDetail: [],
       status: {
         th: {
           0: "รอการอนุมัติ",
@@ -87,28 +78,23 @@ export default class TrainingStatusScreen extends Component {
           console.log(error);
         });
 
-    } catch (error) {
-      Alert.alert(error);
-    }
-  }
-
-  getRequestDetail=(request_id)=>{
-    this.setModalVisible(true)
-    try {
-      httpClient
-        .get(`/Training/TrainingRequestDetail/${request_id}`)
+        httpClient
+        .get(`/Training/TrainingRequestStatusData/${id}`)
         .then((response) => {
           const result = response.data;
-          if (result != null) {
 
-           this.setState({statusDetail: result})
+          if (result != null) {
+            this.setState({
+              training_request_status: result,
+            });
           }
         })
         .catch((error) => {
           console.log(error);
         });
+
     } catch (error) {
-      console.log(error);
+      Alert.alert(error);
     }
   }
   checkStatus = (status) => {
@@ -124,12 +110,8 @@ export default class TrainingStatusScreen extends Component {
   // มี 3 ช่อง ลายเซ็น
   showdialog() {
     const { modalVisible } = this.state;
-    
-    let item = this.state.statusDetail[0]
-    
-      if(item){
-        return (
-        <View style={stylesdialog.centeredView}>
+    return (
+      <View style={stylesdialog.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -169,8 +151,11 @@ export default class TrainingStatusScreen extends Component {
                       // marginBottom: 20,
                     }}
                   >
-                    <Text>{this.state.lang === "EN" ? "First Name:" : "ชื่อ:"}</Text>
-                    <TextInput style={styles.inputStyle} value={""} />
+                    <Text>
+                      {" "}
+                      {this.state.lang === "EN" ? "First Name:" : "ชื่อ:"}{" "}
+                    </Text>
+                    <TextInput style={styles.inputStyle}></TextInput>
 
                     <Text>
                       {" "}
@@ -178,13 +163,13 @@ export default class TrainingStatusScreen extends Component {
                         ? "Last Name:"
                         : "นามสกุล:"}{" "}
                     </Text>
-                    <TextInput style={styles.inputStyle} value={this.state.lastname} />
+                    <TextInput style={styles.inputStyle}></TextInput>
 
                     <Text>
                       {" "}
                       {this.state.lang === "EN" ? "Position:" : "ตำแหน่ง:"}{" "}
                     </Text>
-                    <TextInput style={styles.inputStyle} value={this.state.position} />
+                    <TextInput style={styles.inputStyle}></TextInput>
 
                     <Text>
                       {" "}
@@ -384,11 +369,7 @@ export default class TrainingStatusScreen extends Component {
           </ScrollView>
         </Modal>
       </View>
-      )}else{
-        Alert.alert("ไม่มีข้อมูล")
-      }
-      
-    
+    );
   }
   // มี 3 ช่อง ลายเซ็น
 
@@ -1322,55 +1303,94 @@ export default class TrainingStatusScreen extends Component {
                       borderRadius: "20",
                     }}
                   >
-                    <DataTable.Header>
+                    <DataTable.Header> 
                       {/* <DataTable.Title sortDirection='descending'> */}
                       {/* <DataTable.Title>No</DataTable.Title> */}
-                      <DataTable.Title style={{ flex: 6 }}>
+                      <DataTable.Title style={{
+                      flex: 2.8,
+                      justifyContent:"flex-start",
+                    }}>
                         {this.state.lang === "EN" ? "Course" : "หลักสูตร"}
                       </DataTable.Title>
-                      <DataTable.Title style={{ flex: 4.5 }}>
+
+                      <DataTable.Title style={{
+                       flex: 2.4,
+                       justifyContent:"center",
+                    }}>
                         {this.state.lang === "EN" ? "Detail" : "ติดตามสถานะ"}
                       </DataTable.Title>
-                      <DataTable.Title style={{ flex: 4.8 }}>
+
+                      <DataTable.Title style={{
+                      flex: 2.9,
+                      justifyContent:"center",
+                    }}>
                         {this.state.lang === "EN"
                           ? "Approval status"
                           : "สถานะการอนุมัติ"}
                       </DataTable.Title>
-                      <DataTable.Title style={{ flex: 3}}>
-                        {this.state.lang === "EN" ? "Print" : "หมายเหตุ"}
+
+                      <DataTable.Title style={{
+                      flex: 1.8,
+                      justifyContent:"center",
+                    }}>
+                        {this.state.lang === "EN" ? "Note" : "หมายเหตุ"}
                       </DataTable.Title>
-                      <DataTable.Title style={{ flex: 1.5 }}>
+
+                      <DataTable.Title style={{
+                      flex: 1.3,
+                      justifyContent:"center",
+                    }}>
                         {this.state.lang === "EN" ? "Print" : "พิมพ์"}
                       </DataTable.Title>
+
                     </DataTable.Header>
                     {this.state.training_request_status.map((data, index) => {
                       return (
                         <DataTable.Row>
                           {/* <DataTable.Cell>{index + 1}</DataTable.Cell> */}
-                          <DataTable.Cell style={{ flex: 9 }}>
+                          <DataTable.Cell style={{
+                      flex: 8.6,
+                      justifyContent:"flex-start",
+                    }}>
                             {data.course_title}
                           </DataTable.Cell>
-                          <DataTable.Cell style={{ flex: 7 }}>
+
+                          <DataTable.Cell style={{
+                      flex: 7.4,
+                      justifyContent:"flex-start",
+                    }}>
                             <IconButton
                               icon="menu"
                               color={Colors.green500}
                               size={40}
                               // onPress={(index) => }
-                              onPress={() => this.getRequestDetail(data.request_id)}
+                              onPress={(index) => this.setModalVisible(true)}
                             />
                           </DataTable.Cell>
-                          <DataTable.Cell style={{ flex:7 }}>
+
+                          <DataTable.Cell style={{
+                      flex: 9,
+                      justifyContent:"center",
+                    }}>
                             {this.checkStatus(data.request_status)}
                           </DataTable.Cell>
-                          <DataTable.Cell style={{ flex: 4 }}>
+
+                          <DataTable.Cell style={{
+                      flex: 5.4,
+                      justifyContent:"flex-start",
+                    }}>
                             <IconButton
-                              icon="printer"
+                              icon="menu"
                               color={Colors.red500}
                               size={30}
                               onPress={() => Alert.alert("อยู่ระหว่างการพัฒนา")}
                             />
                           </DataTable.Cell>
-                          <DataTable.Cell style={{ flex: 3 }}>
+
+                          <DataTable.Cell style={{
+                      flex: 4.4,
+                      justifyContent:"center",
+                    }}>
                             <IconButton
                               icon="printer"
                               color={Colors.red500}
@@ -1412,18 +1432,30 @@ export default class TrainingStatusScreen extends Component {
                     }}>
                     <DataTable.Header>
                     {/* <DataTable.Title>No</DataTable.Title> */}
-                      <DataTable.Title style={{ flex: 7 }}>
+                      <DataTable.Title style={{
+                      flex: 7,
+                      justifyContent:"flex-start",
+                    }}>
                         {this.state.lang === "EN" ? "Course" : "ประเภท"}
                       </DataTable.Title>
-                      <DataTable.Title style={{ flex: 5 }}>
+                      <DataTable.Title style={{
+                      flex: 4.5,
+                      justifyContent:"center",
+                    }}>
                         {this.state.lang === "EN" ? "Detail" : "ติดตามสถานะ"}
                       </DataTable.Title>
-                      <DataTable.Title style={{ flex: 6 }}>
+                      <DataTable.Title style={{
+                      flex: 6,
+                      justifyContent:"center",
+                    }}>
                         {this.state.lang === "EN"
                           ? "Approval status"
                           : "สถานะการอนุมัติ"}
                       </DataTable.Title>
-                      <DataTable.Title style={{ flex: 3}}>
+                      <DataTable.Title style={{
+                      flex: 3.4,
+                      justifyContent:"center",
+                    }}>
                         {this.state.lang === "EN" ? "Print" : "หมายเหตุ"}
                       </DataTable.Title>
                     </DataTable.Header>
@@ -1432,10 +1464,16 @@ export default class TrainingStatusScreen extends Component {
                       return (
                         <DataTable.Row>
                           {/* <DataTable.Cell>{index + 1}</DataTable.Cell> */}
-                          <DataTable.Cell style={{ flex: 5.5 }}>
+                          <DataTable.Cell style={{
+                      flex: 6.5,
+                      justifyContent: "flex-start",
+                    }}>
                             {data.course_title}
                           </DataTable.Cell>
-                          <DataTable.Cell style={{ flex: 4.2 }}>
+                          <DataTable.Cell style={{
+                      flex: 4.5,
+                      justifyContent: "flex-start",
+                    }}>
                             <IconButton
                               icon="menu"
                               color={Colors.green500}
@@ -1443,11 +1481,16 @@ export default class TrainingStatusScreen extends Component {
                               onPress={() => Alert.alert("อยู่ระหว่างการพัฒนา")}
                             />
                           </DataTable.Cell>
-                          <DataTable.Cell style={{ flex: 4.2 }}>
+                          <DataTable.Cell style={{
+                      flex: 5,
+                      justifyContent: "flex-start",
+                    }}>
                             {this.checkStatus(data.request_status)}
                           </DataTable.Cell>
-                          <DataTable.Cell style={{ flex: 3 }}>
-                            {" "}
+                          <DataTable.Cell style={{
+                      flex: 3,
+                      justifyContent:"center",
+                    }}>
                             <IconButton
                               icon="printer"
                               color={Colors.red500}
@@ -1477,7 +1520,6 @@ export default class TrainingStatusScreen extends Component {
           </View>
           {/* ส่วน showdialog */}
           <View>{this.showdialog()}</View>
-          
           {/* จบส่วน showdialog*/}
         </ScrollView>
       </View>
@@ -1662,3 +1704,4 @@ const stylesdialog = StyleSheet.create({
     fontSize: 18,
   },
 });
+
