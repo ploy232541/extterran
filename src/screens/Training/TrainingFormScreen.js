@@ -264,23 +264,7 @@ export default class TrainingFormScreen extends Component {
             </View>
           </View>
         </Modal>
-        <Pressable
-          style={[stylesdialog.button, stylesdialog.buttonOpen]}
-          onPress={() => this.setModalVisible(true)}
-        >
-          <Text style={styles.textStyle}>
-            {this.state.lang === "EN" ? "Accept" : "ยอมรับเงื่อนไข"}
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[styles.button, styles.buttonCancel]}
-          onPress={() => this.setModalVisible(true)}
-          onPress={() => this.clearFunc("ok")}
-        >
-          <Text style={styles.textStyle1}>
-            {this.state.lang === "EN" ? "Cancel" : "ยกเลิก"}
-          </Text>
-        </Pressable>
+        
       </View>
     );
   }
@@ -2033,6 +2017,33 @@ export default class TrainingFormScreen extends Component {
           )}
           {/* จบส่วนที่7 */}
 
+       {/* ทำต่อ */}
+        <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              // paddingVertical: 5,
+              marginBottom: 10,
+            }}
+          >
+               <Pressable
+          style={[stylesdialog.button, stylesdialog.buttonOpen]}
+          onPress= ""
+        >
+          <Text style={styles.textStyle}>
+            {this.state.lang === "EN" ? "Accept" : "ยืนยัน"}
+          </Text>
+        </Pressable>
+        <Pressable
+          style={[styles.button, styles.buttonCancel]}
+          onPress=""
+        >
+           <Text style={styles.textStyle}>
+            {this.state.lang === "EN" ? "Cancel" : "ยกเลิก"}
+          </Text>
+        </Pressable>
+          </View>
+
           {/* ส่วนที่8 */}
           <View>{this.showdialog()}</View>
           {/* จบส่วนที่8*/}
@@ -2358,8 +2369,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   button: {
-    borderRadius: 20,
-    padding: 10,
+    borderRadius: 15,
+    padding: 15,
     elevation: 2,
   },
   buttonOpen: {
@@ -2423,12 +2434,13 @@ const stylesdialog = StyleSheet.create({
     elevation: 5,
   },
   button: {
-    borderRadius: 20,
-    padding: 10,
+    borderRadius: 15,
+    padding: 15,
     elevation: 2,
+    // margin:5
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: "green",
   },
   buttonClose: {
     backgroundColor: "#2196F3",
