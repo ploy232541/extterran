@@ -277,6 +277,7 @@ export default class FlightBookingScreen extends Component {
         tos,
         tos_id,
         firstflight,
+        airportCheck,
         baggage,
         checkBaggage,
         flight,
@@ -431,7 +432,7 @@ export default class FlightBookingScreen extends Component {
         }
         if ((error != true && flight.length > 0)||flight.length <1) {
           const params = {
-            user_id: user_id,
+            user_id,
             startDate,
             startTime,
             endTime,
@@ -440,10 +441,12 @@ export default class FlightBookingScreen extends Component {
             tos,
             tos_id,
             firstflight,
+            province,
             baggage,
-            purpose: purpose,
+            airportCheck,
+            purpose,
             purpose_etc: purposeEtc,
-            flight: flight,
+            flight,
           };
           
           const datas = params
@@ -465,7 +468,7 @@ export default class FlightBookingScreen extends Component {
                 httpClient
                   .post(`/Training/InsertFlightBooking`, datas)
                   .then(response => {
-                    const result = response.datas;
+                    const result = response.data;
            
                     if (result === true) {
                       Alert.alert(
@@ -493,6 +496,27 @@ export default class FlightBookingScreen extends Component {
       console.log(error);
     }
   };
+  reset=()=>{
+    this.setState({
+      startDate: "DD/MM/YYYY",
+      endDate: "DD/MM/YYYY",
+      startTime: "00:00",
+      endTime: "00:00",
+      isDatePickerVisible: false,
+      isTimePickerVisible: false,
+      isStartTime: false,
+      froms: "",
+      froms_id: "",
+      tos: "",
+      tos_id: "",
+      purpose: "",
+      purposeEtc: "",
+      baggage: "",
+      airportCheck: false,
+      checkBaggage: false,
+      flight: [],
+    })
+  }
 
   render() {
     return (
