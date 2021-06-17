@@ -7,6 +7,7 @@ import {
 import ButtonCard from "../../shared/ButtonCard";
 
 
+
 function TrainingScreen() {
   const formatDataList = (dataList, numberColumns) => {
     const totalRows = Math.floor(dataList.length / numberColumns);
@@ -24,14 +25,16 @@ function TrainingScreen() {
       id: 1,
       title: "ใบคำขอฝึกอบรม",
       //imgSource: "https://picsum.photos/700",
-      icon: "clipboard-check",
+      icon: "edit",
+     
       to: "TrainingFormScreen",
     },
     {
       id: 2,
       title: "สถานะการอนุมัติ",
       //imgSource: "https://picsum.photos/700",
-      icon: "check-double",
+      icon: "user",
+      
       to: "TrainingStatusScreen",
     },
     {
@@ -39,20 +42,21 @@ function TrainingScreen() {
       title: "สถานะการอนุมัติทีมงาน",
       //imgSource: "https://picsum.photos/700",
       icon: "users",
+     
       to: "TrainingStaffStatusScreen",
     },
     {
       id: 4,
       title: "Training Need",
       //imgSource: "https://picsum.photos/700",
-      icon: "search",
+      icon: "newspaper",
       to: "TrainingNeedScreen",
     },
     {
       id: 5,
       title: "Booking",
       //imgSource: "https://picsum.photos/700",
-      icon: "bookmark",
+      icon: "address-book",
       to: "BookingScreen",
     },
   ];
@@ -61,12 +65,12 @@ function TrainingScreen() {
     if (item.empty) {
       return (
         <View
-          style={{ flex: 1, margin: 12, backgroundColor: "transparent" }}
+          style={{ flex: 1, margin: 12, backgroundColor: "transparent"                                                                                         }}
         ></View>
       );
     }
     return (
-      <View style={{ flex: 1, marginTop: 12 , marginBottom: 12, marginLeft: 10, marginRight: 10,}}>
+      <View style={{ flex: 1, marginTop: 22 , marginLeft: 10, marginRight: 10,}}>
         <ButtonCard title={item.title} to={item.to} src={item.imgSource} icon={item.icon} />
       </View>
     );

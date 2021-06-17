@@ -31,7 +31,7 @@ function MyProgramsScreen() {
             id: 3,
             title: "หลักสูตรทั่วไป",
             //imgSrc: 'http://smartxlearning.com/themes/template/img/book.png',
-            icon: "chalkboard",
+            icon: "book",
             to: "5",
         },
     ]
@@ -62,13 +62,19 @@ function MyProgramsScreen() {
         return (
             <View style={styles.buttonCard}>
                 <TouchableOpacity onPress={() => navigation.navigate("CourseCategory", {type: item.to})}>
-                    <Card>
+                    {/* <Card> */}
                         {/* <Card.Cover style={styles.imageStyle} source={{ uri: item.imgSrc }} /> */}
-                        <Icons name = {item.icon} size = {75} color = {"#999"} style = {{ textAlign: 'center', marginTop: 24,}}/>
-                        <Card.Actions style={{alignSelf: 'center'}}>
-                        <Button>{item.title}</Button>
-                        </Card.Actions>
-                    </Card>
+                        <View  style={{borderColor: "#00bfff",borderWidth: 2,borderRadius: 20,}}>
+        <View  style={{backgroundColor: '#003263',borderColor: 'white',borderWidth: 6,borderRadius: 20,}}>
+                        <Icons name = {item.icon} size = {75} color = {"white"} style = {{ textAlign: 'center', marginTop: 24,}}/>
+                        {/* <Card.Actions style={{alignSelf: 'center'}}> */}
+                        {/* <Button>{item.title}</Button> */}
+                        <Text style = {{ color :'white',flex: 1, marginTop: 12 , marginBottom: 20, marginLeft: 10, marginRight: 10,textAlign: 'center'}}>{item.title}</Text>
+                        {/* </Card.Actions> */}
+
+                        </View>
+                        </View>
+                    {/* </Card> */}
                 </TouchableOpacity>
             </View>
         )

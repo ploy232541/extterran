@@ -32,7 +32,7 @@ function StaffScreen() {
       id:2,
       title:'หลักสูตรทั่วไป',
       //imgSrc: 'https://source.unsplash.com/1024x768/?nature',
-      icon: "chalkboard",
+      icon: "book",
       to:'StaffCourseGeneralScreen'
     },
     {
@@ -46,14 +46,14 @@ function StaffScreen() {
       id:4,
       title: lang == "EN" ? "Booking" : "Booking",
       //imgSrc: 'https://source.unsplash.com/1024x768/?nature',
-      icon: "bookmark",
+      icon: "address-book",
       to:'ConfirmBookingScreen'
     },
     {
       id:5,
       title: lang == "EN" ? "Timesheet" : "Timesheet",
       //imgSrc: 'https://source.unsplash.com/1024x768/?nature',
-      icon: "table",
+      icon: "newspaper",
       to:'ConfirmBookingScreen'
     }
   ]

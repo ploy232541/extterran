@@ -144,9 +144,16 @@ function CourseCategory({route}) {
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
-          <TouchableOpacity disabled style={{borderRadius: 5,width:'40%', alignSelf:'center', alignItems:'center', height:HEIGHT*0.05, justifyContent:'center', backgroundColor:'#3b5998', marginVertical:20}}>
+          {/* <TouchableOpacity disabled style={{borderRadius: 5,width:'40%', alignSelf:'center', alignItems:'center', height:HEIGHT*0.05, justifyContent:'center', backgroundColor:'#3b5998', marginVertical:20}}>
             <Text style={{color:'white', fontSize: 16}}>{lang == "EN" ? 'Course category' : 'หมวดหมู่หลักสูตร'}</Text>
-          </TouchableOpacity>
+         </TouchableOpacity> */}
+
+          <View style={styles.container_title}>
+                        <View style={styles.line} />
+                        <Text style={styles.title}>{lang == "EN" ? 'Course category' : 'หมวดหมู่หลักสูตร'}</Text>
+                        <View style={styles.line} />
+                    </View>
+
             <View>
                 <FlatList
                     data={formatDataList(myProgramData, numberColumns)}
@@ -224,6 +231,22 @@ const styles = StyleSheet.create({
     btnText: {
         color: '#FFFFFF',
         fontWeight: 'bold',
+    },
+    container_title: {
+        marginHorizontal: 24,
+        flexDirection: "row",
+        marginVertical:24,
+    },
+    line: {
+        backgroundColor: "#0097fc",
+        height: 2,
+        flex: 1,
+        alignSelf: "center",
+    },
+    title: {
+        fontSize: 24,
+        paddingHorizontal: 5,
+        fontWeight: "bold"
     },
 })
 

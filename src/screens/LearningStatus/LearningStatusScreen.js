@@ -1,5 +1,12 @@
 import * as React from "react";
-import { View, FlatList, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  Text
+} from "react-native";
 import ButtonCard from "../../shared/ButtonCard";
 import { useNavigation } from "@react-navigation/native";
 import { Button, Card } from "react-native-paper";
@@ -40,7 +47,7 @@ function LearningStatusScreen() {
       id: 3,
       title: "หลักสูตรทั่วไป",
       //imgSource: "http://smartxlearning.com/themes/template/img/book.png",
-      icon: "chalkboard",
+      icon: "book",
       to: "5",
     },
   ];
@@ -55,16 +62,37 @@ function LearningStatusScreen() {
     }
     return (
       <View style={styles.buttonCard}>
-        <TouchableOpacity 
-        onPress={() => navigation.navigate('LearningStatusListScreen', {type: item.to})}
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("LearningStatusListScreen", { type: item.to })
+          }
         >
-          <Card>
-            {/* <Card.Cover style={styles.imageStyle} source={{ uri: item.imgSource }} /> */}
-            <Icons name = {item.icon} size = {75} color = {"#999"} style = {{ textAlign: 'center', marginTop: 24 }}/>
-            <Card.Actions style={{alignSelf: 'center'}}>
-              <Button>{item.title}</Button>
-            </Card.Actions>
-          </Card>
+          {/* <Card> */}
+          {/* <Card.Cover style={styles.imageStyle} source={{ uri: item.imgSource }} /> */}
+          <View
+            style={{ borderColor: "#00bfff", borderWidth: 2, borderRadius: 20 }}
+          >
+            <View
+              style={{
+                backgroundColor: "#003263",
+                borderColor: "white",
+                borderWidth: 6,
+                borderRadius: 20,
+              }}
+            >
+              <Icons
+                name={item.icon}
+                size={75}
+                color={"white"}
+                style={{ textAlign: "center", marginTop: 24 }}
+              />
+              {/* <Card.Actions style={{alignSelf: 'center'}}> */}
+              {/* <Button>{item.title}</Button> */}
+              <Text style = {{ color :'white',flex: 1, marginTop: 12 , marginBottom: 20, marginLeft: 10, marginRight: 10,textAlign: 'center'}}>{item.title}</Text>
+              {/* </Card.Actions> */}
+            </View>
+          </View>
+          {/* </Card> */}
         </TouchableOpacity>
       </View>
     );
@@ -74,7 +102,7 @@ function LearningStatusScreen() {
 
   return (
     <View style={styles.background}>
-       <View style={{marginTop: 15}}>
+      <View style={{ marginTop: 15 }}>
         <FlatList
           data={formatDataList(TrainingHeader, trainingNumColumn)}
           renderItem={training_renderItem}
@@ -104,13 +132,12 @@ const styles = StyleSheet.create({
   buttonCard: {
     marginVertical: 5,
     marginHorizontal: 5,
-    marginTop:  12,
+    marginTop: 12,
     marginEnd: 10,
     marginStart: 10,
     marginBottom: 12,
     flex: 1,
-},
+  },
 });
 
 export default LearningStatusScreen;
-

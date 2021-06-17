@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Dimensions } from "react-native";
 import {View, Text, StyleSheet, FlatList, AsyncStorage} from 'react-native'
-import StaffCard from '../../components/StaffCard'
+import StaffCard from "../../shared/ButtonCard";
 
 const HEIGHT = Dimensions.get('window').height
 function FeedBackScreen() {
@@ -30,7 +30,7 @@ function FeedBackScreen() {
     {
       id:2,
       title:'หลักสูตรทั่วไป',
-      icon: "chalkboard",
+      icon: "book",
       to:'FeedBackCourseGeneralScreen'
     }
   ]
