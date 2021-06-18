@@ -13,8 +13,9 @@ import {
 import { Divider, Avatar } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { httpClient } from "../../core/HttpClient";
-import { CheckBox, Picker } from "native-base";
+import { Button, CheckBox, Picker } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Icons from "react-native-vector-icons/Ionicons";
 import { Alert } from "react-native";
 
 const HEIGHT = Dimensions.get("window").height;
@@ -46,6 +47,8 @@ export default class AccommodationBookingScreen extends Component {
       purpose: "",
       purpose_id: "",
       accom: "",
+      user_id: "",
+      purposeEtc: "",
       accommodationItem: {
         data: {
           //dates: "DD/MM/YYYY",
@@ -60,6 +63,7 @@ export default class AccommodationBookingScreen extends Component {
 
   async componentDidMount() {
     let id = await AsyncStorage.getItem("userId");
+    this.setState({ user_id: id });
 
     const res = await AsyncStorage.getItem("language");
     if (res === "EN") {
@@ -189,104 +193,196 @@ export default class AccommodationBookingScreen extends Component {
     });
   }
 
+  //บันทึกข้อมูล
   onPressSend = () => {
     try {
       const {
-      purpose,
-      purpose_id,
-      province_id,
-      accom,
-      startDate,
-      endDate,
-      accommodation,
-    } = this.state;
-    if (
-      (purpose_id == "" && purpose_id != 6) ||
-      (purpose == "" && purpose_id == 6)
-    ) 
-    {
-      this.state.lang === "EN"
-        ? Alert.alert("Please select a travel purpose.")
-        : Alert.alert("กรุณาเลือกเลือกวัตถุประสงค์ในการเดินทาง");
-    }
-    else if (province_id == "") {
-      this.state.lang === "EN"
-        ? Alert.alert("Please select a province")
-        : Alert.alert("กรุณาเลือกจังหวัด");
-        console.log(province_id);
-    }else if (accom == "") {
-      this.state.lang === "EN"
-        ? Alert.alert("Please enter your Accommodation")
-        : Alert.alert("กรุณาใส่ที่พัก");
-    }else if (startDate == "DD/MM/YYYY") {
-      this.state.lang === "EN"
-        ? Alert.alert("Please select a Check-in date")
-        : Alert.alert("กรุณาเลือกวันเช็คอิน");
-    }
-    else if (endDate == "DD/MM/YYYY") {
-      this.state.lang === "EN"
-        ? Alert.alert("Please select a Check-out date")
-        : Alert.alert("กรุณาเลือกวันเช็คเอาต์");
-    }
-    else{
-      var i = 0;
-      var end_i = accommodation.length - 1;
-      var err = false;
-      do {
-        err = true;
-        var item = accommodation[i].data;
-        if (item.province_id == "") {
-          this.state.lang === "EN"
-            ? Alert.alert("Please select a province"+
-            " \n (Province selection box  " +
-            (i + 2) +
-            ")")
-            : Alert.alert("กรุณาเลือกจังหวัด" +
-            " \n (ช่องเลือกจังหวัด  " +
-            (i + 2) +
-            ")");   
-        }else if (item.accommodation == "") {
+        user_id,
+        purposeEtc,
+        purpose_id,
+        province,
+        province_id,
+        district,
+        subdistrict,
+        zipcode,
+        accom,
+        startDate,
+        endDate,
+        accommodation,
+      } = this.state;
+      if (
+        (purpose_id == "" && purpose_id != 6) ||
+        (purposeEtc == "" && purpose_id == 6)
+      ) {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a travel purpose.")
+          : Alert.alert("กรุณาเลือกเลือกวัตถุประสงค์ในการเดินทาง");
+      } else if (province == "") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a province")
+          : Alert.alert("กรุณาเลือกจังหวัด");
+      } else if (accom == "") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please enter your Accommodation")
+          : Alert.alert("กรุณาใส่ที่พัก");
+      } else if (startDate == "DD/MM/YYYY") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a Check-in date")
+          : Alert.alert("กรุณาเลือกวันเช็คอิน");
+      } else if (endDate == "DD/MM/YYYY") {
+        this.state.lang === "EN"
+          ? Alert.alert("Please select a Check-out date")
+          : Alert.alert("กรุณาเลือกวันเช็คเอาต์");
+      } else {
+        var i = 0;
+        var end_i = accommodation.length - 1;
+        var err = false;
+        if (accommodation.length > 0) {
+          do {
+            err = true;
+            var item = accommodation[i].data;
+            if (item.province_id == "") {
               this.state.lang === "EN"
-                ? Alert.alert("Please enter your Accommodation" +
-                " \n (Accommodation field  " +
-                (i + 2) +
-                ")")
-                : Alert.alert("กรุณาใส่ที่พัก" +
-                " \n (ช่องกรอกที่พัก  " +
-                (i + 2) +
-                ")");
-            }else if (item.startDate == "DD/MM/YYYY") {
-                this.state.lang === "EN"
-                  ? Alert.alert("Please select a Check-in date" +
-                  " \n (Check-in box  " +
-                  (i + 2) +
-                  ")")
-                  : Alert.alert("กรุณาเลือกวันเช็คอิน" +
-                  " \n (ช่องเช็คอิน  " +
-                  (i + 2) +
-                  ")");
-              }else if (item.endDate == "DD/MM/YYYY") {
-                this.state.lang === "EN"
-                  ? Alert.alert("Please select a Check-out date" +
-                  " \n (Check-out box  " +
-                  (i + 2) +
-                  ")")
-                  : Alert.alert("กรุณาเลือกวันเช็คเอ้าต์" +
-                  " \n (ช่องเช็คเอ้าต์  " +
-                  (i + 2) +
-                  ")");
-              }
-          else {
-            err = !err;
-          }
-          i++;
-      } while (i <= end_i && err != true);
-    }
+                ? Alert.alert(
+                    "Please select a province" +
+                      " \n (Province selection box  " +
+                      (i + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาเลือกจังหวัด" +
+                      " \n (ช่องเลือกจังหวัด  " +
+                      (i + 2) +
+                      ")"
+                  );
+            } else if (item.accommodation == "") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please enter your Accommodation" +
+                      " \n (Accommodation field  " +
+                      (i + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาใส่ที่พัก" + " \n (ช่องกรอกที่พัก  " + (i + 2) + ")"
+                  );
+            } else if (item.startDate == "DD/MM/YYYY") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select a Check-in date" +
+                      " \n (Check-in box  " +
+                      (i + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาเลือกวันเช็คอิน" +
+                      " \n (ช่องเช็คอิน  " +
+                      (i + 2) +
+                      ")"
+                  );
+            } else if (item.endDate == "DD/MM/YYYY") {
+              this.state.lang === "EN"
+                ? Alert.alert(
+                    "Please select a Check-out date" +
+                      " \n (Check-out box  " +
+                      (i + 2) +
+                      ")"
+                  )
+                : Alert.alert(
+                    "กรุณาเลือกวันเช็คเอ้าต์" +
+                      " \n (ช่องเช็คเอ้าต์  " +
+                      (i + 2) +
+                      ")"
+                  );
+            } else {
+              err = !err;
+            }
+            i++;
+          } while (i <= end_i && err != true);
+        }
 
+        if (
+          (err != true && accommodation.length > 0) ||
+          accommodation.length < 1
+        ) {
+          const data = {
+            user_id,
+            purpose_etc: purposeEtc,
+            purpose_id,
+            province,
+            province_id,
+            district,
+            subdistrict,
+            zip: zipcode,
+            accom,
+            startDate,
+            endDate,
+            accommodation,
+          };
+
+          Alert.alert(
+            this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+            this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+            [
+              {
+                text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel",
+              },
+              ,
+              {
+                text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                onPress: () => {
+                  httpClient
+                    .post(`/Training/InsertAccomBooking`, data)
+                    .then((response) => {
+                      const result = response.data;
+
+                      if (result === true) {
+                        Alert.alert(
+                          this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                          this.state.lang === "EN"
+                            ? "Problem reported"
+                            : "บันทึกที่พักสำเร็จ",
+                          [
+                            {
+                              text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                              onPress: () => this.reset(),
+                            },
+                          ],
+                          { cancelable: false }
+                        );
+                      } else {
+                        Alert.alert(
+                          this.state.lang === "EN"
+                            ? `Can't save FlightBooking`
+                            : "ไม่สามารถบันทึกที่พักได้"
+                        );
+                      }
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                },
+              },
+            ]
+          );
+        }
+      }
     } catch (error) {
       console.log(error);
     }
-    
+  };
+  reset = () => {
+    this.setState({
+      startDate: "DD/MM/YYYY",
+      endDate: "DD/MM/YYYY",
+      province_id: "",
+      purpose_id: "",
+      purposeEtc: "",
+
+      accom: [],
+    });
   };
 
   render() {
@@ -364,7 +460,7 @@ export default class AccommodationBookingScreen extends Component {
               placeholderIconColor="#007aff"
               selectedValue={this.state.purpose_id}
               onValueChange={(text) => {
-                this.setState({ purpose_id: text });
+                this.setState({ purpose_id: text, purposeEtc: "" });
                 console.log(this.state.purpose_id);
               }}
               textStyle={{ fontSize: 14 }}
@@ -506,121 +602,136 @@ export default class AccommodationBookingScreen extends Component {
           {/* จบส่วนที่2 */}
 
           {/* เพิ่มที่พัก */}
-          <View style={{ marginBottom: 12, marginTop: 12 }}>
-            {this.state.accommodation.map((item, index) => {
-              return (
-                <View>
-                  <View style={styles.containerSec2}>
-                    <View style={styles.contentInSec2}>
-                      <Text>Province:</Text>
-                      <Text style={styles.textInput}>จังหวัด</Text>
-                      <Picker
-                        mode="dropdown"
-                        iosIcon={
-                          <Icon
-                            name="angle-down"
-                            style={{ width: "8%", paddingHorizontal: 2 }}
-                          />
-                        }
-                        style={styles.inputLightStyle}
-                        placeholder={
-                          this.state.lang === "EN" ? "Selecte" : "เลือก"
-                        }
-                        placeholderStyle={{ color: "#bfc6ea" }}
-                        placeholderIconColor="#007aff"
-                        selectedValue={item.data.province_id}
-                        onValueChange={(text) => {
-                          let accommodation = [...this.state.accommodation];
-                          let item = { ...accommodation[index] };
-                          let data = { ...item["data"] };
-                          data.province_id = text;
-                          item["data"] = data;
-                          accommodation[index] = item;
-                          this.setState({ accommodation: accommodation });
-                        }}
-                        textStyle={{ fontSize: 14 }}
-                      >
-                        <Picker.Item
-                          label={
-                            this.state.lang === "EN"
-                              ? "Please select your Province"
-                              : "กรุณาเลือกจังหวัด"
-                          }
-                          value=""
+          {this.state.accommodation.map((item, index) => {
+            return (
+              <View style={{ marginTop: "5%" }}>
+                <View style={styles.containerSec2}>
+                  <View style={styles.contentInSec2}>
+                    <Text>Province:</Text>
+                    <Text style={styles.textInput}>จังหวัด</Text>
+                    <Picker
+                      mode="dropdown"
+                      iosIcon={
+                        <Icon
+                          name="angle-down"
+                          style={{ width: "8%", paddingHorizontal: 2 }}
                         />
-                        {this.state.select_3.map((data) => {
-                          return (
-                            <Picker.Item
-                              label={
-                                this.state.lang === "EN"
-                                  ? data.pv_name_en
-                                  : data.pv_name_th
-                              }
-                              value={data.pv_id}
-                            />
-                          );
-                        })}
-                      </Picker>
+                      }
+                      style={styles.inputLightStyle}
+                      placeholder={
+                        this.state.lang === "EN" ? "Selecte" : "เลือก"
+                      }
+                      placeholderStyle={{ color: "#bfc6ea" }}
+                      placeholderIconColor="#007aff"
+                      selectedValue={item.data.province_id}
+                      onValueChange={(text) => {
+                        let accommodation = [...this.state.accommodation];
+                        let item = { ...accommodation[index] };
+                        let data = { ...item["data"] };
+                        data.province_id = text;
+                        item["data"] = data;
+                        accommodation[index] = item;
+                        this.setState({ accommodation: accommodation });
+                      }}
+                      textStyle={{ fontSize: 14 }}
+                    >
+                      <Picker.Item
+                        label={
+                          this.state.lang === "EN"
+                            ? "Please select your Province"
+                            : "กรุณาเลือกจังหวัด"
+                        }
+                        value=""
+                      />
+                      {this.state.select_3.map((data) => {
+                        return (
+                          <Picker.Item
+                            label={
+                              this.state.lang === "EN"
+                                ? data.pv_name_en
+                                : data.pv_name_th
+                            }
+                            value={data.pv_id}
+                          />
+                        );
+                      })}
+                    </Picker>
 
-                      <Text>Accommodation (Province, Hotel name):</Text>
-                      <Text style={styles.textInput}>
-                        ที่พัก (จังหวัด ชื่อโรงแรม)
-                      </Text>
-                      <TextInput
-                        style={styles.inputStyle1}
-                        value={item.data.accommodation}
-                        onChangeText={(text) => {
-                          let accommodation = [...this.state.accommodation];
-                          let item = { ...accommodation[index] };
-                          let data = { ...item["data"] };
-                          data.accommodation = text;
-                          item["data"] = data;
-                          accommodation[index] = item;
-                          this.setState({ accommodation: accommodation });
-                        }}
-                        placeholder="ที่พัก (จังหวัด ชื่อโรงแรม)"
-                      ></TextInput>
+                    <Text>Accommodation (Province, Hotel name):</Text>
+                    <Text style={styles.textInput}>
+                      ที่พัก (จังหวัด ชื่อโรงแรม)
+                    </Text>
+                    <TextInput
+                      style={styles.inputStyle1}
+                      value={item.data.accommodation}
+                      onChangeText={(text) => {
+                        let accommodation = [...this.state.accommodation];
+                        let item = { ...accommodation[index] };
+                        let data = { ...item["data"] };
+                        data.accommodation = text;
+                        item["data"] = data;
+                        accommodation[index] = item;
+                        this.setState({ accommodation: accommodation });
+                      }}
+                      placeholder="ที่พัก (จังหวัด ชื่อโรงแรม)"
+                    ></TextInput>
 
-                      <Text>Check in date (D/M/Y):</Text>
-                      <Text style={styles.textInput}>เช็คอิน</Text>
-                      <TouchableOpacity
-                        onPress={() => this.showDatePicker("start", index)}
+                    <Text>Check in date (D/M/Y):</Text>
+                    <Text style={styles.textInput}>เช็คอิน</Text>
+                    <TouchableOpacity
+                      onPress={() => this.showDatePicker("start", index)}
+                    >
+                      <View style={styles.inputDate}>
+                        <Text style={{ color: "#bfc6ea" }}>
+                          {item.data.startDate}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+
+                    <Text>Check out date (D/M/Y):</Text>
+                    <Text style={styles.textInput}>เช็คเอาต์</Text>
+                    <TouchableOpacity
+                      onPress={() => this.showDatePicker(index)}
+                    >
+                      <View style={styles.inputDate}>
+                        <Text style={{ color: "#bfc6ea" }}>
+                          {item.data.endDate}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+
+                    <View style={styles.buttonContainer1}>
+                      <Button
+                        iconLeft
+                        light
+                        style={styles.btnDelaccommodationStyle}
+                        onPress={() => this.deleteAccommodation(index)}
                       >
-                        <View style={styles.inputDate}>
-                          <Text style={{ color: "#bfc6ea" }}>
-                            {item.data.startDate}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-
-                      <Text>Check out date (D/M/Y):</Text>
-                      <Text style={styles.textInput}>เช็คเอาต์</Text>
-                      <TouchableOpacity
-                        onPress={() => this.showDatePicker(index)}
-                      >
-                        <View style={styles.inputDate}>
-                          <Text style={{ color: "#bfc6ea" }}>
-                            {item.data.endDate}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
+                        <Icons
+                          name="md-remove-circle"
+                          size={20}
+                          style={{
+                            marginLeft: 10,
+                            marginRight: 5,
+                            color: "white",
+                          }}
+                        />
+                        <Text
+                          style={{
+                            color: "white",
+                            marginRight: 10,
+                            fontSize: 14,
+                          }}
+                        >
+                          ลบ
+                        </Text>
+                      </Button>
                     </View>
                   </View>
-
-                  <View style={styles.buttonContainer1}>
-                    <TouchableOpacity
-                      style={styles.btnDelaccommodationStyle}
-                      onPress={() =>
-                        this.deleteAccommodation(index)
-                      }
-                    >
-                      <Text style={{ color: "white" }}>ลบเที่ยวบิน</Text>
-                    </TouchableOpacity>
-                  </View>
                 </View>
-              );
-            })}
-          </View>
+              </View>
+            );
+          })}
           {/* เพิ่มที่พัก */}
 
           {/* โชว์ DateTimePickerModal*/}
@@ -633,7 +744,7 @@ export default class AccommodationBookingScreen extends Component {
 
           {/* Action Button */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
+            <Button
               style={styles.btnAddAccommodationStyle}
               onPress={() =>
                 this.setState({
@@ -644,29 +755,37 @@ export default class AccommodationBookingScreen extends Component {
                 })
               }
             >
-              <Text style={{ color: "white" }}>เพิ่มที่พัก</Text>
-            </TouchableOpacity>
+              <Icon
+                name="plus"
+                size={20}
+                style={{ color: "white", marginLeft: 10, marginRight: 5 }}
+              />
+              <Text style={{ color: "white", marginRight: 10 }}>
+                เพิ่มที่พัก
+              </Text>
+            </Button>
           </View>
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-around",
-              paddingVertical: 40,
+              paddingVertical: 20,
               marginBottom: 40,
             }}
           >
             <View style={styles.buttonContainer}>
-              <TouchableOpacity
+              <Button
                 style={styles.btnConfirmStyle}
                 onPress={() => this.onPressSend()}
               >
                 <Text style={{ color: "white" }}>ยืนยัน</Text>
-              </TouchableOpacity>
+              </Button>
             </View>
+
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.btnCancelStyle}>
+              <Button style={styles.btnCancelStyle}>
                 <Text style={{ color: "white" }}>ยกเลิก</Text>
-              </TouchableOpacity>
+              </Button>
             </View>
           </View>
         </ScrollView>
@@ -681,11 +800,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   containerSec1: {
-    borderWidth: 1,
+    borderWidth: 2,
     padding: 12,
     borderRadius: 8,
     marginHorizontal: 20,
     marginTop: 18,
+    borderColor: "#398DDD",
   },
   textHeader: {
     alignItems: "center",
@@ -728,8 +848,8 @@ const styles = StyleSheet.create({
   containerSec2: {
     marginHorizontal: 20,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#999999",
+    borderWidth: 2,
+    borderColor: "#398DDD",
   },
   contentInSec2: {
     padding: 12,
@@ -742,37 +862,34 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   buttonContainer1: {
-    alignSelf: "center",
-    justifyContent: "center",
-    paddingTop: 20,
-    width: "30%",
-    borderRadius: 4,
-    marginTop: 2,
-    marginBottom: 18,
+    marginRight: 20,
   },
   btnAddAccommodationStyle: {
-    backgroundColor: "#0097fc",
-    padding: 8,
-    alignItems: "center",
-    borderRadius: 4,
+    justifyContent: "center",
+    alignSelf: "center",
+    backgroundColor: "#005ce6",
+    borderRadius: 10,
   },
   btnDelaccommodationStyle: {
-    backgroundColor: "red",
-    padding: 8,
-    alignItems: "center",
-    borderRadius: 4,
+    backgroundColor: "#b30000",
+    alignSelf: "flex-end",
+    marginTop: 10,
+    marginBottom: 20,
+    borderRadius: 10,
   },
   btnConfirmStyle: {
     backgroundColor: "#449D44",
-    padding: 8,
-    alignItems: "center",
-    borderRadius: 16,
+    justifyContent: "center",
+    alignSelf: "center",
+    borderRadius: 10,
+    paddingHorizontal: 32,
   },
   btnCancelStyle: {
     backgroundColor: "#5A6268",
-    padding: 8,
-    alignItems: "center",
-    borderRadius: 16,
+    justifyContent: "center",
+    alignSelf: "center",
+    borderRadius: 10,
+    paddingHorizontal: 32,
   },
   inputDate: {
     borderWidth: 1,

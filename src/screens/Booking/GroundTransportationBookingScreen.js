@@ -13,8 +13,9 @@ import {
 import { Divider, Avatar } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { httpClient } from "../../core/HttpClient";
-import { CheckBox, Picker } from "native-base";
+import { Button, CheckBox, Picker } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Icons from "react-native-vector-icons/Ionicons";
 import { Alert } from "react-native";
 
 const HEIGHT = Dimensions.get("window").height;
@@ -313,10 +314,7 @@ export default class GroundTransportationBookingScreen extends Component {
                       ")"
                   )
                 : Alert.alert(
-                    "โปรดเลือกต้นทาง" +
-                      " \n (ช่องกรอกที่  " +
-                      (index + 2) +
-                      ")"
+                    "โปรดเลือกต้นทาง" + " \n (ช่องกรอกที่  " + (index + 2) + ")"
                   );
             } else if (param.tos == "") {
               this.state.lang === "EN"
@@ -482,10 +480,9 @@ export default class GroundTransportationBookingScreen extends Component {
           {/* จบส่วนที่2 */}
 
           {/* เพิ่ม */}
-          <View style={{ marginBottom: 12, marginTop: 12 }}>
             {this.state.ground.map((item, index) => {
               return (
-                <View>
+                <View style={{ marginTop: "5%" }}>
                   <View style={styles.containerSec2}>
                     <View style={styles.contentInSec2}>
                       <Text>Date:</Text>
@@ -527,22 +524,40 @@ export default class GroundTransportationBookingScreen extends Component {
                         placeholder="กรุณากรอกปลายทาง"
                       ></TextInput>
                     </View>
-                  </View>
 
-                  <View style={styles.buttonContainer1}>
-                    <TouchableOpacity
-                      style={styles.btnDelGroundStyle}
-                      onPress={() =>
-                        this.deleteGround(index, this.state.ground)
-                      }
-                    >
-                      <Text style={{ color: "white" }}>ลบ</Text>
-                    </TouchableOpacity>
+                    <View style={styles.buttonContainer1}>
+                      <Button
+                        iconLeft
+                        light
+                        style={styles.btnDelGroundStyle}
+                        onPress={() =>
+                          this.deleteGround(index, this.state.ground)
+                        }
+                      >
+                        <Icons
+                          name="md-remove-circle"
+                          size={20}
+                          style={{
+                            marginLeft: 10,
+                            marginRight: 5,
+                            color: "white",
+                          }}
+                        />
+                        <Text
+                          style={{
+                            color: "white",
+                            marginRight: 10,
+                            fontSize: 14,
+                          }}
+                        >
+                          ลบ
+                        </Text>
+                      </Button>
+                    </View>
                   </View>
                 </View>
               );
             })}
-          </View>
           {/* เพิ่ม */}
 
           {/* โชว์ DateTimePickerModal*/}
@@ -562,7 +577,7 @@ export default class GroundTransportationBookingScreen extends Component {
 
           {/* Action Button */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
+            <Button
               style={styles.btnAddGroundStyle}
               onPress={() =>
                 this.setState({
@@ -570,30 +585,35 @@ export default class GroundTransportationBookingScreen extends Component {
                 })
               }
             >
-              <Text style={{ color: "white" }}>เพิ่ม</Text>
-            </TouchableOpacity>
+              <Icon
+                name="plus"
+                size={20}
+                style={{ color: "white", marginLeft: 10, marginRight: 5 }}
+              />
+              <Text style={{ color: "white", marginRight: 10 }}>เพิ่ม</Text>
+            </Button>
           </View>
 
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-around",
-              paddingVertical: 40,
+              paddingVertical: 20,
               marginBottom: 40,
             }}
           >
             <View style={styles.buttonContainer}>
-              <TouchableOpacity
+              <Button
                 style={styles.btnConfirmStyle}
                 onPress={() => this.onPressSend()}
               >
                 <Text style={{ color: "white" }}>ยืนยัน</Text>
-              </TouchableOpacity>
+              </Button>
             </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.btnCancelStyle}>
+              <Button style={styles.btnCancelStyle}>
                 <Text style={{ color: "white" }}>ยกเลิก</Text>
-              </TouchableOpacity>
+              </Button>
             </View>
           </View>
         </ScrollView>
@@ -608,11 +628,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   containerSec1: {
-    borderWidth: 1,
+    borderWidth: 2,
     padding: 12,
     borderRadius: 8,
     marginHorizontal: 20,
     marginTop: 18,
+    borderColor: "#398DDD",
   },
   textHeader: {
     alignItems: "center",
@@ -655,8 +676,8 @@ const styles = StyleSheet.create({
   containerSec2: {
     marginHorizontal: 20,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#999999",
+    borderWidth: 2,
+    borderColor: "#398DDD",
   },
   contentInSec2: {
     padding: 12,
@@ -669,37 +690,34 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   buttonContainer1: {
-    alignSelf: "center",
-    justifyContent: "center",
-    paddingTop: 20,
-    width: "30%",
-    borderRadius: 4,
-    marginTop: 2,
-    marginBottom: 18,
+    marginRight: 20,
   },
   btnAddGroundStyle: {
-    backgroundColor: "#0097fc",
-    padding: 8,
-    alignItems: "center",
-    borderRadius: 4,
+    justifyContent: "center",
+    alignSelf: "center",
+    backgroundColor: "#005ce6",
+    borderRadius: 10,
   },
   btnDelGroundStyle: {
-    backgroundColor: "red",
-    padding: 8,
-    alignItems: "center",
-    borderRadius: 4,
+    backgroundColor: "#b30000",
+    alignSelf: "flex-end",
+    marginTop: 10,
+    marginBottom: 20,
+    borderRadius: 10,
   },
   btnConfirmStyle: {
     backgroundColor: "#449D44",
-    padding: 8,
-    alignItems: "center",
-    borderRadius: 16,
+    justifyContent: "center",
+    alignSelf: "center",
+    borderRadius: 10,
+    paddingHorizontal: 32,
   },
   btnCancelStyle: {
     backgroundColor: "#5A6268",
-    padding: 8,
-    alignItems: "center",
-    borderRadius: 16,
+    justifyContent: "center",
+    alignSelf: "center",
+    borderRadius: 10,
+    paddingHorizontal: 32,
   },
   inputDate: {
     borderWidth: 1,
