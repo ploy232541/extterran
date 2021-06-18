@@ -25,11 +25,13 @@ export default class GroundTransportationBookingScreen extends Component {
     super(props);
 
     this.state = {
+      user_id: "",
       lang: "",
       lang_id: "",
       firstname: "",
       lastname: "",
       identification: "",
+      resident: "",
       phone: "",
       province: "",
       district: "",
@@ -56,8 +58,8 @@ export default class GroundTransportationBookingScreen extends Component {
         data: {
           dates: "DD/MM/YYYY",
           startTime: "00:00",
-          froms_id: "",
-          tos_id: "",
+          froms: "",
+          tos: "",
         },
       },
     };
@@ -65,7 +67,7 @@ export default class GroundTransportationBookingScreen extends Component {
 
   async componentDidMount() {
     let id = await AsyncStorage.getItem("userId");
-
+    this.setState({ user_id: id });
     const res = await AsyncStorage.getItem("language");
     if (res === "EN") {
       this.setState({ lang: "EN", lang_id: 1 });
@@ -99,6 +101,16 @@ export default class GroundTransportationBookingScreen extends Component {
                 address_village: row.address_village,
                 address_alley: row.address_alley,
                 address_road: row.address_road,
+                resident:
+                  row.address +
+                  " หมู่" +
+                  row.address_moo +
+                  " หมู่บ้าน" +
+                  row.address_village +
+                  " ซอย" +
+                  row.address_alley +
+                  " ถนน" +
+                  row.address_road,
               });
             }
           }
@@ -251,7 +263,19 @@ export default class GroundTransportationBookingScreen extends Component {
   //บันทึกข้อมูล
   onPressSend = () => {
     try {
-      const { startDate, startTime, froms, tos, ground } = this.state;
+      const {
+        startDate,
+        startTime,
+        froms,
+        tos,
+        user_id,
+        district,
+        subdistrict,
+        zipcode,
+        resident,
+        province,
+        ground,
+      } = this.state;
       if (startDate == "DD/MM/YYYY") {
         this.state.lang === "EN"
           ? Alert.alert("Please select a departure date")
@@ -269,12 +293,13 @@ export default class GroundTransportationBookingScreen extends Component {
           ? Alert.alert("Please select destination ")
           : Alert.alert("โปรดเลือกปลายทาง");
       } else {
-        var endi = ground.length - 1;
-        var error = false;
+        var end_i = ground.length - 1;
+        var err = false;
+
         if (ground.length > 0) {
           var index = 0;
           do {
-            error = true;
+            err = true;
             var param = ground[index].data;
 
             if (param.dates == "DD/MM/YYYY") {
@@ -330,13 +355,87 @@ export default class GroundTransportationBookingScreen extends Component {
                       (index + 2) +
                       ")"
                   );
+            } else {
+              err = !err;
             }
-          } while (condition);
+            index++;
+          } while (index <= end_i && err != true);
+        }
+        if ((err != true && ground.length > 0) || ground.length < 1) {
+          const data = {
+            user_id,
+            resident,
+            province,
+            district,
+            subdistrict,
+            zip: zipcode,
+            froms,
+            tos,
+            startDate,
+            startTime,
+            ground,
+          };
+          Alert.alert(
+            this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+            this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+            [
+              {
+                text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel",
+              },
+              ,
+              {
+                text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                onPress: () => {
+                  httpClient
+                    .post(`/Training/InsertGroundBooking`, data)
+                    .then((response) => {
+                      const result = response.data;
+
+                      if (result === true) {
+                        Alert.alert(
+                          this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                          this.state.lang === "EN"
+                            ? "Problem reported"
+                            : "บันทึกรถสำเร็จ",
+                          [
+                            {
+                              text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                              onPress: () => this.reset(),
+                            },
+                          ],
+                          { cancelable: false }
+                        );
+                      } else {
+                        Alert.alert(
+                          this.state.lang === "EN"
+                            ? `Can't save FlightBooking`
+                            : "ไม่สามารถบันทึกที่พักได้"
+                        );
+                      }
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                },
+              },
+            ]
+          );
         }
       }
     } catch (error) {
       console.log(error);
     }
+  };
+  reset = () => {
+    // this.setState({
+    //   froms: "",
+    //   tos: "",
+    //   startDate: "DD/MM/YYYY",
+    //   startTime: "00:00",
+    //   ground: [],
+    // });
   };
 
   render() {
@@ -385,8 +484,7 @@ export default class GroundTransportationBookingScreen extends Component {
                 " ซอย" +
                 this.state.address_alley +
                 " ถนน" +
-                this.state.address_road +
-                " "
+                this.state.address_road
               }
             />
 
@@ -480,84 +578,102 @@ export default class GroundTransportationBookingScreen extends Component {
           {/* จบส่วนที่2 */}
 
           {/* เพิ่ม */}
-            {this.state.ground.map((item, index) => {
-              return (
-                <View style={{ marginTop: "5%" }}>
-                  <View style={styles.containerSec2}>
-                    <View style={styles.contentInSec2}>
-                      <Text>Date:</Text>
-                      <Text style={styles.textInput}>วันออกเดินทาง</Text>
-                      <TouchableOpacity
-                        onPress={() => this.showDatePicker(index)}
-                      >
-                        <View style={styles.inputDate}>
-                          <Text style={{ color: "#bfc6ea" }}>
-                            {item.data.dates}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-
-                      <Text>Time:</Text>
-                      <Text style={styles.textInput}>เวลาเดินทาง</Text>
-                      <TouchableOpacity
-                        // onPress={() => this.showTimePicker("start", index)}
-                        onPress={() => this.showTimePicker("start", index)}
-                      >
-                        <View style={styles.inputDate}>
-                          <Text style={{ color: "#bfc6ea" }}>
-                            {item.data.startTime}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-
-                      <Text>From:</Text>
-                      <Text style={styles.textInput}>ต้นทาง</Text>
-                      <TextInput
-                        style={styles.inputStyle1}
-                        placeholder="กรุณากรอกต้นทาง"
-                      ></TextInput>
-
-                      <Text>To:</Text>
-                      <Text style={styles.textInput}>ปลายทาง</Text>
-                      <TextInput
-                        style={styles.inputStyle1}
-                        placeholder="กรุณากรอกปลายทาง"
-                      ></TextInput>
-                    </View>
-
-                    <View style={styles.buttonContainer1}>
-                      <Button
-                        iconLeft
-                        light
-                        style={styles.btnDelGroundStyle}
-                        onPress={() =>
-                          this.deleteGround(index, this.state.ground)
-                        }
-                      >
-                        <Icons
-                          name="md-remove-circle"
-                          size={20}
-                          style={{
-                            marginLeft: 10,
-                            marginRight: 5,
-                            color: "white",
-                          }}
-                        />
-                        <Text
-                          style={{
-                            color: "white",
-                            marginRight: 10,
-                            fontSize: 14,
-                          }}
-                        >
-                          ลบ
+          {this.state.ground.map((item, index) => {
+            return (
+              <View style={{ marginTop: "5%" }}>
+                <View style={styles.containerSec2}>
+                  <View style={styles.contentInSec2}>
+                    <Text>Date:</Text>
+                    <Text style={styles.textInput}>วันออกเดินทาง</Text>
+                    <TouchableOpacity
+                      onPress={() => this.showDatePicker(index)}
+                    >
+                      <View style={styles.inputDate}>
+                        <Text style={{ color: "#bfc6ea" }}>
+                          {item.data.dates}
                         </Text>
-                      </Button>
-                    </View>
+                      </View>
+                    </TouchableOpacity>
+
+                    <Text>Time:</Text>
+                    <Text style={styles.textInput}>เวลาเดินทาง</Text>
+                    <TouchableOpacity
+                      // onPress={() => this.showTimePicker("start", index)}
+                      onPress={() => this.showTimePicker("start", index)}
+                    >
+                      <View style={styles.inputDate}>
+                        <Text style={{ color: "#bfc6ea" }}>
+                          {item.data.startTime}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+
+                    <Text>From:</Text>
+                    <Text style={styles.textInput}>ต้นทาง</Text>
+                    <TextInput
+                      style={styles.inputStyle1}
+                      placeholder="กรุณากรอกต้นทาง"
+                      onChangeText={(text) => {
+                        let ground = [...this.state.ground];
+                        let item = { ...ground[index] };
+                        let data = { ...item["data"] };
+                        data.froms = text;
+                        item["data"] = data;
+                        ground[index] = item;
+                        this.setState({ ground: ground });
+                      }}
+                    ></TextInput>
+
+                    <Text>To:</Text>
+                    <Text style={styles.textInput}>ปลายทาง</Text>
+                    <TextInput
+                      style={styles.inputStyle1}
+                      placeholder="กรุณากรอกปลายทาง"
+                      onChangeText={(text) => {
+                        let ground = [...this.state.ground];
+                        let item = { ...ground[index] };
+                        let data = { ...item["data"] };
+                        data.tos = text;
+                        item["data"] = data;
+                        ground[index] = item;
+                        this.setState({ ground: ground });
+                      }}
+                    ></TextInput>
+                  </View>
+
+                  <View style={styles.buttonContainer1}>
+                    <Button
+                      iconLeft
+                      light
+                      style={styles.btnDelGroundStyle}
+                      onPress={() =>
+                        this.deleteGround(index, this.state.ground)
+                      }
+                    >
+                      <Icons
+                        name="md-remove-circle"
+                        size={20}
+                        style={{
+                          marginLeft: 10,
+                          marginRight: 5,
+                          color: "white",
+                        }}
+                      />
+                      <Text
+                        style={{
+                          color: "white",
+                          marginRight: 10,
+                          fontSize: 14,
+                        }}
+                      >
+                        ลบ
+                      </Text>
+                    </Button>
                   </View>
                 </View>
-              );
-            })}
+              </View>
+            );
+          })}
           {/* เพิ่ม */}
 
           {/* โชว์ DateTimePickerModal*/}
