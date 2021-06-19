@@ -264,7 +264,6 @@ export default class TrainingFormScreen extends Component {
             </View>
           </View>
         </Modal>
-        
       </View>
     );
   }
@@ -511,10 +510,12 @@ export default class TrainingFormScreen extends Component {
   };
   //aek
   onPickerValueChange = (value, index) => {
+
     this.setState({
       expense: null,
       course: value,
       course_id: value,
+      courseselect:""
     });
     if (value == "") {
       this.setState({
@@ -813,10 +814,10 @@ export default class TrainingFormScreen extends Component {
       this.setState({ upload_file: result });
     }
   }
-  onValueChangess = (text) => {
-    this.setState({ expense: text });
-    this.checkcourse(Number(text));
-  };
+  // onValueChangess = (text) => {
+  //   this.setState({ expense: text });
+  //   this.checkcourse(Number(text));
+  // };
   checkcourse = (expensecourse) => {
     let condition = 0;
     if (expensecourse >= 35000) {
@@ -1051,18 +1052,14 @@ export default class TrainingFormScreen extends Component {
                   <Text style={styles.textInputThai}>
                     ค่าใช้จ่ายต่อบุคคล (ไม่รวมภาษี)
                   </Text>
-                  <SafeAreaView>
-                    <DelayInput
-                      value={this.state.expense}
-                      //style={styles.inputStyle}
-                      minLength={1}
-                      inputRef={this.state.inputRef}
-                      onChangeText={this.onValueChangess}
-                      placeholder="กรุณากรอกจำนวนเงิน"
-                      delayTimeout={500}
-                      style={styles.inputStyle1}
-                    />
-                  </SafeAreaView>
+
+                  <TextInput
+                    style={styles.inputStyle1}
+                    placeholder="กรุณากรอกจำนวนเงิน"
+                    value={this.state.expense}
+                    onChangeText={text=>this.setState({expense:text})}
+                    onBlur={(e) => this.checkcourse(Number(this.state.expense))}
+                  />
                 </View>
               )}
 
@@ -1208,7 +1205,7 @@ export default class TrainingFormScreen extends Component {
                     //   height: 30,
                     // }}
                   >
-                    <Text style={{marginHorizontal: 8, color: "white"}}>
+                    <Text style={{ marginHorizontal: 8, color: "white" }}>
                       {this.state.lang == "EN" ? "Choose File" : "เลือกไฟล์"}
                     </Text>
                   </Button>
@@ -1835,8 +1832,9 @@ export default class TrainingFormScreen extends Component {
 
                 <View style={{ marginBottom: 12 }}>
                   <Text style={styles.textInputThai5}>
-                  <Text style={{ fontWeight: "bold" }}>
-                    For and on behalf of Exterran (Thailand) Ltd.</Text> 
+                    <Text style={{ fontWeight: "bold" }}>
+                      For and on behalf of Exterran (Thailand) Ltd.
+                    </Text>
                     {"\n"}ผู้แทนบริษัทเอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด:
                   </Text>
                 </View>
@@ -1893,11 +1891,11 @@ export default class TrainingFormScreen extends Component {
                 </View>
 
                 <View style={{ marginBottom: 12 }}>
-                <Text style={styles.textInputThai5}>
-                <Text style={{ fontWeight: "bold" }}>
-                  In the presence of Witness พยาน:
+                  <Text style={styles.textInputThai5}>
+                    <Text style={{ fontWeight: "bold" }}>
+                      In the presence of Witness พยาน:
+                    </Text>
                   </Text>
-                </Text>
                 </View>
 
                 <View style={styles.pickerContainer2}>
@@ -1954,11 +1952,11 @@ export default class TrainingFormScreen extends Component {
                 </View>
 
                 <View style={{ marginBottom: 12 }}>
-                <Text style={styles.textInputThai5}>
-                <Text style={{ fontWeight: "bold" }}>
-                  In the presence of Witness พยาน:
+                  <Text style={styles.textInputThai5}>
+                    <Text style={{ fontWeight: "bold" }}>
+                      In the presence of Witness พยาน:
+                    </Text>
                   </Text>
-                </Text>
                 </View>
 
                 <View style={styles.pickerContainer2}>
@@ -2011,14 +2009,13 @@ export default class TrainingFormScreen extends Component {
                     {this.state.signPurpose[0].purpose_position_en}
                   </Text>
                 </View>
-
               </View>
             </View>
           )}
           {/* จบส่วนที่7 */}
 
-       {/* ทำต่อ */}
-        <View
+          {/* ทำต่อ */}
+          <View
             style={{
               flexDirection: "row",
               justifyContent: "space-evenly",
@@ -2026,22 +2023,19 @@ export default class TrainingFormScreen extends Component {
               marginBottom: 10,
             }}
           >
-               <Pressable
-          style={[stylesdialog.button, stylesdialog.buttonOpen]}
-          onPress= ""
-        >
-          <Text style={styles.textStyle}>
-            {this.state.lang === "EN" ? "Accept" : "ยืนยัน"}
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[styles.button, styles.buttonCancel]}
-          onPress=""
-        >
-           <Text style={styles.textStyle}>
-            {this.state.lang === "EN" ? "Cancel" : "ยกเลิก"}
-          </Text>
-        </Pressable>
+            <Pressable
+              style={[stylesdialog.button, stylesdialog.buttonOpen]}
+              onPress=""
+            >
+              <Text style={styles.textStyle}>
+                {this.state.lang === "EN" ? "Accept" : "ยืนยัน"}
+              </Text>
+            </Pressable>
+            <Pressable style={[styles.button, styles.buttonCancel]} onPress="">
+              <Text style={styles.textStyle}>
+                {this.state.lang === "EN" ? "Cancel" : "ยกเลิก"}
+              </Text>
+            </Pressable>
           </View>
 
           {/* ส่วนที่8 */}
