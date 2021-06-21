@@ -3,8 +3,9 @@ import { StyleSheet } from 'react-native';
 export const colors = {
     black: '#1a1917',
     gray: '#888888',
-    background1: '#B721FF',
-    background2: '#21D4FD'
+    background1: '#003263',
+    background2: '#21D4FD',
+    white: 'white',
 };
 
 export default StyleSheet.create({
@@ -14,7 +15,7 @@ export default StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: colors.background1
+        backgroundColor: colors.white
     },
     gradient: {
         ...StyleSheet.absoluteFillObject

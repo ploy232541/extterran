@@ -7,27 +7,30 @@ const bookFunctionList = [
   {
     id: 1,
     funcType: "Flight",
-    src: "https://picsum.photos/700",
+    src: require('../../asset/booking-1.png'),
     to: "FlightBookingScreen",
   },
   {
     id: 2,
     funcType: "Accomodation",
-    src: "https://picsum.photos/700",
+    src: require('../../asset/booking-2.png'),
     to: "AccommodationBookingScreen",
   },
   {
     id: 3,
     funcType: "Ground Transportation",
-    src: "https://picsum.photos/700",
+    src: require('../../asset/booking-3.png'),
     to: "GroundTransportationBookingScreen",
   },
+ 
 ];
+
 
 const _renderItem = ({ item }) => {
   return (
     <View style={{ paddingTop: 12 }}>
       <BookingCard funcType={item.funcType} src={item.src} to={item.to} />
+    
     </View>
   );
 };
@@ -50,7 +53,9 @@ function BookingScreen() {
 const styles = StyleSheet.create({
   background: {
     backgroundColor: "white",
-    flex: 1,
+    // flex: 1,
+    width: "100%",
+    height: "100%",
   },
 });
 

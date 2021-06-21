@@ -380,8 +380,8 @@ export default class AccommodationBookingScreen extends Component {
       province_id: "",
       purpose_id: "",
       purposeEtc: "",
-
-      accom: [],
+      accom: "",
+      accommodation: [],
     });
   };
 

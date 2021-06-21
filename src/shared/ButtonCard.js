@@ -4,7 +4,6 @@ import { useNavigation } from "@react-navigation/native";
 import { Button, Card } from "react-native-paper";
 import Icons from "react-native-vector-icons/FontAwesome5";
 
-
 const HEIGHT = Dimensions.get("window").height;
 
 const ButtonCard = ({ title, to, src, icon }) => {

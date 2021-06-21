@@ -429,13 +429,13 @@ export default class GroundTransportationBookingScreen extends Component {
     }
   };
   reset = () => {
-    // this.setState({
-    //   froms: "",
-    //   tos: "",
-    //   startDate: "DD/MM/YYYY",
-    //   startTime: "00:00",
-    //   ground: [],
-    // });
+    this.setState({
+      froms: "",
+      tos: "",
+      startDate: "DD/MM/YYYY",
+      startTime: "00:00",
+      ground: [],
+    });
   };
 
   render() {

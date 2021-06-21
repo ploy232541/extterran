@@ -15,8 +15,9 @@ import { Divider, Avatar } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { httpClient } from "../../core/HttpClient";
 import { CheckBox } from "react-native-elements";
-import { Picker } from "native-base";
+import { Button, Picker } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Icons from "react-native-vector-icons/Ionicons";
 import FormData from "form-data";
 
 const HEIGHT = Dimensions.get("window").height;
@@ -261,6 +262,7 @@ export default class FlightBookingScreen extends Component {
       flight: itemCopy,
     });
   }
+  
   //บันทึกข้อมูล
   onPressSend = () => {
     try {
@@ -428,9 +430,8 @@ export default class FlightBookingScreen extends Component {
             }
             index++;
           } while (index <= endi && error != true);
-         
         }
-        if ((error != true && flight.length > 0)||flight.length <1) {
+        if ((error != true && flight.length > 0) || flight.length < 1) {
           const params = {
             user_id,
             startDate,
@@ -448,11 +449,11 @@ export default class FlightBookingScreen extends Component {
             purpose_etc: purposeEtc,
             flight,
           };
-          
-          const datas = params
+
+          const datas = params;
           // const datas = new FormData();
           // Object.keys(params).forEach(key=>datas.append(key,params[key]))
-      //  console.log(datas);
+          //  console.log(datas);
           // const data=params
           Alert.alert(
             this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
@@ -464,30 +465,41 @@ export default class FlightBookingScreen extends Component {
                 style: "cancel",
               },
               ,
-                { text: this.state.lang === 'EN' ? 'OK' : 'ตกลง', onPress: () =>  {
-                httpClient
-                  .post(`/Training/InsertFlightBooking`, datas)
-                  .then(response => {
-                    const result = response.data;
-           
-                    if (result === true) {
-                      Alert.alert(
-                        this.state.lang === 'EN' ? 'Alert' : 'แจ้งเตือน',
-                        this.state.lang === 'EN' ? 'Problem reported' : 'บันทึกเที่ยวบินสำเร็จ',
-                        [
-                          { text: this.state.lang === 'EN' ? 'OK' : 'ตกลง', onPress: () =>  this.reset() }
-                        ],
-                        { cancelable: false }
-                      );
-                    }else{
-                      Alert.alert(this.state.lang === 'EN' ? `Can't save FlightBooking` : 'ไม่สามารถบันทึกเที่ยวบินได้')
-                    }
-                  })
-                  .catch(error => {
-                    console.log(error);
-                  });
-                }
-              }
+              {
+                text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                onPress: () => {
+                  httpClient
+                    .post(`/Training/InsertFlightBooking`, datas)
+                    .then((response) => {
+                      const result = response.data;
+
+                      if (result === true) {
+                        Alert.alert(
+                          this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                          this.state.lang === "EN"
+                            ? "Problem reported"
+                            : "บันทึกเที่ยวบินสำเร็จ",
+                          [
+                            {
+                              text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                              onPress: () => this.reset(),
+                            },
+                          ],
+                          { cancelable: false }
+                        );
+                      } else {
+                        Alert.alert(
+                          this.state.lang === "EN"
+                            ? `Can't save FlightBooking`
+                            : "ไม่สามารถบันทึกเที่ยวบินได้"
+                        );
+                      }
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                },
+              },
             ]
           );
         }
@@ -496,7 +508,7 @@ export default class FlightBookingScreen extends Component {
       console.log(error);
     }
   };
-  reset=()=>{
+  reset = () => {
     this.setState({
       startDate: "DD/MM/YYYY",
       endDate: "DD/MM/YYYY",
@@ -511,12 +523,13 @@ export default class FlightBookingScreen extends Component {
       tos_id: "",
       purpose: "",
       purposeEtc: "",
+      firstflight: "",
       baggage: "",
       airportCheck: false,
       checkBaggage: false,
       flight: [],
-    })
-  }
+    });
+  };
 
   render() {
     return (
@@ -627,7 +640,6 @@ export default class FlightBookingScreen extends Component {
               </View>
             )}
             {/* กรณีเลือกอื่นๆ */}
-
           </View>
           {/* จบส่วนที่1 */}
 
@@ -887,337 +899,353 @@ export default class FlightBookingScreen extends Component {
           {/* จบส่วนที่2 */}
 
           {/* เพิ่มเที่ยวบิน */}
-          <View style={{ marginBottom: 12, marginTop: 12 }}>
-            {this.state.flight.map((item, index) => {
-              return (
-                <View>
-                  <View style={styles.containerSec2}>
-                    <View style={styles.contentInSec2}>
-                      <Text>Date:</Text>
-                      <Text style={styles.textInput}>วันออกเดินทาง</Text>
-                      <TouchableOpacity
-                        onPress={() => this.showDatePicker(index)}
-                      >
-                        <View style={styles.inputDate}>
-                          <Text style={{ color: "#bfc6ea" }}>
-                            {item.data.dates}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
+          {this.state.flight.map((item, index) => {
+            return (
+              <View style={{ marginTop: "5%" }}>
+                <View style={styles.containerSec2}>
+                  <View style={styles.contentInSec2}>
+                    <Text>Date:</Text>
+                    <Text style={styles.textInput}>วันออกเดินทาง</Text>
+                    <TouchableOpacity
+                      onPress={() => this.showDatePicker(index)}
+                    >
+                      <View style={styles.inputDate}>
+                        <Text style={{ color: "#bfc6ea" }}>
+                          {item.data.dates}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
 
-                      <Text>Time:</Text>
-                      <Text style={styles.textInput}>เวลาเดินทาง</Text>
-                      <TouchableOpacity
-                        onPress={() => this.showTimePicker("start", index)}
-                      >
-                        <View style={styles.inputDate}>
-                          <Text style={{ color: "#bfc6ea" }}>
-                            {item.data.startTime}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
+                    <Text>Time:</Text>
+                    <Text style={styles.textInput}>เวลาเดินทาง</Text>
+                    <TouchableOpacity
+                      onPress={() => this.showTimePicker("start", index)}
+                    >
+                      <View style={styles.inputDate}>
+                        <Text style={{ color: "#bfc6ea" }}>
+                          {item.data.startTime}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
 
-                      <Text>Time:</Text>
-                      <Text style={styles.textInput}>สิ้นสุดเดินทาง</Text>
-                      <TouchableOpacity
-                        onPress={() => this.showTimePicker(index)}
-                      >
-                        <View style={styles.inputDate}>
-                          <Text style={{ color: "#bfc6ea" }}>
-                            {item.data.endTime}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
+                    <Text>Time:</Text>
+                    <Text style={styles.textInput}>สิ้นสุดเดินทาง</Text>
+                    <TouchableOpacity
+                      onPress={() => this.showTimePicker(index)}
+                    >
+                      <View style={styles.inputDate}>
+                        <Text style={{ color: "#bfc6ea" }}>
+                          {item.data.endTime}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
 
-                      <Text>From:</Text>
-                      <Text style={styles.textInput}>ต้นทาง</Text>
-                      {item.data.checkEtc == false && (
-                        <View>
-                          <Picker
-                            mode="dropdown"
-                            iosIcon={
-                              <Icon
-                                name="angle-down"
-                                style={{ width: "8%", paddingHorizontal: 2 }}
-                              />
-                            }
-                            style={styles.inputLightStyle}
-                            placeholder={
-                              this.state.lang === "EN" ? "Selecte" : "เลือก"
-                            }
-                            placeholderStyle={{ color: "#bfc6ea" }}
-                            placeholderIconColor="#007aff"
-                            selectedValue={item.data.froms_id}
-                            onValueChange={(text) => {
-                              let flight = [...this.state.flight];
-                              let item = { ...flight[index] };
-                              let data = { ...item["data"] };
-                              data.froms = "";
-                              data.froms_id = text;
-                              item["data"] = data;
-                              flight[index] = item;
-                              this.setState({ flight: flight });
-                              console.log(this.state.flight);
-                            }}
-                            textStyle={{ fontSize: 14 }}
-                          >
-                            <Picker.Item
-                              label={
-                                this.state.lang === "EN"
-                                  ? "Please select a source"
-                                  : "กรุณาเลือกต้นทาง"
-                              }
-                              value=""
+                    <Text>From:</Text>
+                    <Text style={styles.textInput}>ต้นทาง</Text>
+                    {item.data.checkEtc == false && (
+                      <View>
+                        <Picker
+                          mode="dropdown"
+                          iosIcon={
+                            <Icon
+                              name="angle-down"
+                              style={{ width: "8%", paddingHorizontal: 2 }}
                             />
-
-                            {this.state.select_1.map((data) => {
-                              return (
-                                <Picker.Item
-                                  label={
-                                    this.state.lang === "EN"
-                                      ? data.airport_name_en +
-                                        "(" +
-                                        data.airport_code +
-                                        ")"
-                                      : data.airport_name +
-                                        "(" +
-                                        data.airport_code +
-                                        ")"
-                                  }
-                                  value={data.id}
-                                />
-                              );
-                            })}
-                          </Picker>
-                        </View>
-                      )}
-                      {/* กรณีติ๊ก Checkbox */}
-                      {item.data.checkEtc == true && (
-                        <View>
-                          <TextInput
-                            style={styles.inputStyle1}
-                            placeholder={
-                              this.state.lang === "EN"
-                                ? "Please enter the departure flight"
-                                : "กรุณากรอกเที่ยวบินต้นทาง"
-                            }
-                            onChangeText={(text) => {
-                              let flight = [...this.state.flight];
-                              let item = { ...flight[index] };
-                              let data = { ...item["data"] };
-                              data.froms = text;
-                              data.froms_id = "";
-                              item["data"] = data;
-                              flight[index] = item;
-                              this.setState({ flight: flight });
-                              console.log(this.state.flight);
-                            }}
-                          ></TextInput>
-                        </View>
-                      )}
-                      {/* กรณีติ๊ก Checkbox */}
-
-                      <Text>To:</Text>
-                      <Text style={styles.textInput}>ปลายทาง</Text>
-                      {item.data.checkEtc == false && (
-                        <View>
-                          <Picker
-                            mode="dropdown"
-                            iosIcon={
-                              <Icon
-                                name="angle-down"
-                                style={{ width: "8%", paddingHorizontal: 2 }}
-                              />
-                            }
-                            style={styles.inputLightStyle}
-                            placeholder={
-                              this.state.lang === "EN" ? "Selecte" : "เลือก"
-                            }
-                            placeholderStyle={{ color: "#bfc6ea" }}
-                            placeholderIconColor="#007aff"
-                            selectedValue={item.data.tos_id}
-                            onValueChange={(text) => {
-                              let flight = [...this.state.flight];
-                              let item = { ...flight[index] };
-                              let data = { ...item["data"] };
-                              data.tos = "";
-                              data.tos_id = text;
-                              item["data"] = data;
-                              flight[index] = item;
-                              this.setState({ flight: flight });
-                              console.log(this.state.flight);
-                            }}
-                            textStyle={{ fontSize: 14 }}
-                          >
-                            <Picker.Item
-                              label={
-                                this.state.lang === "EN"
-                                  ? "Please select a source"
-                                  : "กรุณาเลือกต้นทาง"
-                              }
-                              value=""
-                            />
-                            {this.state.select_1.map((data) => {
-                              return (
-                                <Picker.Item
-                                  label={
-                                    this.state.lang === "EN"
-                                      ? data.airport_name_en +
-                                        "(" +
-                                        data.airport_code +
-                                        ")"
-                                      : data.airport_name +
-                                        "(" +
-                                        data.airport_code +
-                                        ")"
-                                  }
-                                  value={data.id}
-                                />
-                              );
-                            })}
-                          </Picker>
-                        </View>
-                      )}
-                      {/* กรณีติ๊ก Checkbox */}
-                      {item.data.checkEtc == true && (
-                        <View>
-                          <TextInput
-                            style={styles.inputStyle1}
-                            placeholder={
-                              this.state.lang === "EN"
-                                ? "Please enter destination flight"
-                                : "กรุณากรอกเที่ยวบินปลายทาง"
-                            }
-                            value={item.data.tos}
-                            onChangeText={(text) => {
-                              let flight = [...this.state.flight];
-                              let item = { ...flight[index] };
-                              let data = { ...item["data"] };
-                              data.tos = text;
-                              data.tos_id = "";
-                              item["data"] = data;
-                              flight[index] = item;
-                              this.setState({ flight: flight });
-                              console.log(this.state.flight);
-                            }}
-                          ></TextInput>
-                        </View>
-                      )}
-
-                      {/* กรณีติ๊ก Checkbox */}
-
-                      {/* Checkbox */}
-                      <View style={styles.checkboxContainer}>
-                        <CheckBox
-                          checked={item.data.checkEtc}
-                          onPress={() => {
+                          }
+                          style={styles.inputLightStyle}
+                          placeholder={
+                            this.state.lang === "EN" ? "Selecte" : "เลือก"
+                          }
+                          placeholderStyle={{ color: "#bfc6ea" }}
+                          placeholderIconColor="#007aff"
+                          selectedValue={item.data.froms_id}
+                          onValueChange={(text) => {
                             let flight = [...this.state.flight];
                             let item = { ...flight[index] };
                             let data = { ...item["data"] };
-                            data.checkEtc = !data.checkEtc;
                             data.froms = "";
+                            data.froms_id = text;
+                            item["data"] = data;
+                            flight[index] = item;
+                            this.setState({ flight: flight });
+                            console.log(this.state.flight);
+                          }}
+                          textStyle={{ fontSize: 14 }}
+                        >
+                          <Picker.Item
+                            label={
+                              this.state.lang === "EN"
+                                ? "Please select a source"
+                                : "กรุณาเลือกต้นทาง"
+                            }
+                            value=""
+                          />
+
+                          {this.state.select_1.map((data) => {
+                            return (
+                              <Picker.Item
+                                label={
+                                  this.state.lang === "EN"
+                                    ? data.airport_name_en +
+                                      "(" +
+                                      data.airport_code +
+                                      ")"
+                                    : data.airport_name +
+                                      "(" +
+                                      data.airport_code +
+                                      ")"
+                                }
+                                value={data.id}
+                              />
+                            );
+                          })}
+                        </Picker>
+                      </View>
+                    )}
+                    {/* กรณีติ๊ก Checkbox */}
+                    {item.data.checkEtc == true && (
+                      <View>
+                        <TextInput
+                          style={styles.inputStyle1}
+                          placeholder={
+                            this.state.lang === "EN"
+                              ? "Please enter the departure flight"
+                              : "กรุณากรอกเที่ยวบินต้นทาง"
+                          }
+                          onChangeText={(text) => {
+                            let flight = [...this.state.flight];
+                            let item = { ...flight[index] };
+                            let data = { ...item["data"] };
+                            data.froms = text;
                             data.froms_id = "";
+                            item["data"] = data;
+                            flight[index] = item;
+                            this.setState({ flight: flight });
+                            console.log(this.state.flight);
+                          }}
+                        ></TextInput>
+                      </View>
+                    )}
+                    {/* กรณีติ๊ก Checkbox */}
+
+                    <Text>To:</Text>
+                    <Text style={styles.textInput}>ปลายทาง</Text>
+                    {item.data.checkEtc == false && (
+                      <View>
+                        <Picker
+                          mode="dropdown"
+                          iosIcon={
+                            <Icon
+                              name="angle-down"
+                              style={{ width: "8%", paddingHorizontal: 2 }}
+                            />
+                          }
+                          style={styles.inputLightStyle}
+                          placeholder={
+                            this.state.lang === "EN" ? "Selecte" : "เลือก"
+                          }
+                          placeholderStyle={{ color: "#bfc6ea" }}
+                          placeholderIconColor="#007aff"
+                          selectedValue={item.data.tos_id}
+                          onValueChange={(text) => {
+                            let flight = [...this.state.flight];
+                            let item = { ...flight[index] };
+                            let data = { ...item["data"] };
                             data.tos = "";
+                            data.tos_id = text;
+                            item["data"] = data;
+                            flight[index] = item;
+                            this.setState({ flight: flight });
+                            console.log(this.state.flight);
+                          }}
+                          textStyle={{ fontSize: 14 }}
+                        >
+                          <Picker.Item
+                            label={
+                              this.state.lang === "EN"
+                                ? "Please select a source"
+                                : "กรุณาเลือกต้นทาง"
+                            }
+                            value=""
+                          />
+                          {this.state.select_1.map((data) => {
+                            return (
+                              <Picker.Item
+                                label={
+                                  this.state.lang === "EN"
+                                    ? data.airport_name_en +
+                                      "(" +
+                                      data.airport_code +
+                                      ")"
+                                    : data.airport_name +
+                                      "(" +
+                                      data.airport_code +
+                                      ")"
+                                }
+                                value={data.id}
+                              />
+                            );
+                          })}
+                        </Picker>
+                      </View>
+                    )}
+                    {/* กรณีติ๊ก Checkbox */}
+                    {item.data.checkEtc == true && (
+                      <View>
+                        <TextInput
+                          style={styles.inputStyle1}
+                          placeholder={
+                            this.state.lang === "EN"
+                              ? "Please enter destination flight"
+                              : "กรุณากรอกเที่ยวบินปลายทาง"
+                          }
+                          value={item.data.tos}
+                          onChangeText={(text) => {
+                            let flight = [...this.state.flight];
+                            let item = { ...flight[index] };
+                            let data = { ...item["data"] };
+                            data.tos = text;
                             data.tos_id = "";
                             item["data"] = data;
                             flight[index] = item;
                             this.setState({ flight: flight });
                             console.log(this.state.flight);
                           }}
-                          style={styles.checkbox}
-                          title={this.state.lang === "EN" ? "Baggage" : "อื่นๆ"}
-                        />
+                        ></TextInput>
                       </View>
-                      {/* Checkbox */}
+                    )}
 
-                      <Text>Flight:</Text>
-                      <Text style={styles.textInput}>เที่ยวบิน</Text>
-                      <TextInput
-                        style={styles.inputStyle1}
-                        placeholder="กรุณากรอกเที่ยวบิน"
-                        value={item.data.flight}
-                        onChangeText={(text) => {
+                    {/* กรณีติ๊ก Checkbox */}
+
+                    {/* Checkbox */}
+                    <View style={styles.checkboxContainer}>
+                      <CheckBox
+                        checked={item.data.checkEtc}
+                        onPress={() => {
                           let flight = [...this.state.flight];
                           let item = { ...flight[index] };
                           let data = { ...item["data"] };
-                          data.flight = text;
+                          data.checkEtc = !data.checkEtc;
+                          data.froms = "";
+                          data.froms_id = "";
+                          data.tos = "";
+                          data.tos_id = "";
                           item["data"] = data;
                           flight[index] = item;
                           this.setState({ flight: flight });
                           console.log(this.state.flight);
                         }}
-                      ></TextInput>
+                        style={styles.checkbox}
+                        title={this.state.lang === "EN" ? "Baggage" : "อื่นๆ"}
+                      />
+                    </View>
+                    {/* Checkbox */}
 
-                      <Text>Baggage:</Text>
-                      <Text style={styles.textInput}>สัมภาระ</Text>
-                      {/* Checkbox */}
-                      <View style={styles.checkboxContainer}>
-                        <CheckBox
-                          checked={item.data.checkBaggage}
-                          onPress={() => {
+                    <Text>Flight:</Text>
+                    <Text style={styles.textInput}>เที่ยวบิน</Text>
+                    <TextInput
+                      style={styles.inputStyle1}
+                      placeholder="กรุณากรอกเที่ยวบิน"
+                      value={item.data.flight}
+                      onChangeText={(text) => {
+                        let flight = [...this.state.flight];
+                        let item = { ...flight[index] };
+                        let data = { ...item["data"] };
+                        data.flight = text;
+                        item["data"] = data;
+                        flight[index] = item;
+                        this.setState({ flight: flight });
+                        console.log(this.state.flight);
+                      }}
+                    ></TextInput>
+
+                    <Text>Baggage:</Text>
+                    <Text style={styles.textInput}>สัมภาระ</Text>
+                    {/* Checkbox */}
+                    <View style={styles.checkboxContainer}>
+                      <CheckBox
+                        checked={item.data.checkBaggage}
+                        onPress={() => {
+                          let flight = [...this.state.flight];
+                          let item = { ...flight[index] };
+                          let data = { ...item["data"] };
+                          data.checkBaggage = !data.checkBaggage;
+                          data.baggage = "";
+                          item["data"] = data;
+                          flight[index] = item;
+                          this.setState({ flight: flight });
+                          console.log(this.state.flight);
+                        }}
+                        style={styles.checkbox}
+                        title={this.state.lang === "EN" ? "Baggage" : "สัมภาระ"}
+                      />
+                    </View>
+                    {/* Checkbox */}
+
+                    {/* กรณีติ๊ก checkbox */}
+                    {item.data.checkBaggage == true && (
+                      <View>
+                        <TextInput
+                          style={styles.inputStyle1}
+                          placeholder="กรุณากรอกน้ำหนักสัมภาระ"
+                          value={item.data.baggage}
+                          onChangeText={(text) => {
                             let flight = [...this.state.flight];
                             let item = { ...flight[index] };
                             let data = { ...item["data"] };
-                            data.checkBaggage = !data.checkBaggage;
-                            data.baggage = "";
+                            data.baggage = text;
                             item["data"] = data;
                             flight[index] = item;
                             this.setState({ flight: flight });
                             console.log(this.state.flight);
                           }}
-                          style={styles.checkbox}
-                          title={
-                            this.state.lang === "EN" ? "Baggage" : "สัมภาระ"
-                          }
-                        />
+                        ></TextInput>
                       </View>
-                      {/* Checkbox */}
+                    )}
+                    {/* กรณีติ๊ก checkbox */}
 
-                      {/* กรณีติ๊ก checkbox */}
-                      {item.data.checkBaggage == true && (
-                        <View>
-                          <TextInput
-                            style={styles.inputStyle1}
-                            placeholder="กรุณากรอกน้ำหนักสัมภาระ"
-                            value={item.data.baggage}
-                            onChangeText={(text) => {
-                              let flight = [...this.state.flight];
-                              let item = { ...flight[index] };
-                              let data = { ...item["data"] };
-                              data.baggage = text;
-                              item["data"] = data;
-                              flight[index] = item;
-                              this.setState({ flight: flight });
-                              console.log(this.state.flight);
-                            }}
-                          ></TextInput>
-                        </View>
-                      )}
-                      {/* กรณีติ๊ก checkbox */}
-
-                      <DateTimePickerModal
-                        // isVisible={isTimePickerVisible}
-                        mode="time"
-                        // onConfirm={handleTimePicker}
-                        // onCancel={hideTimePicker}
-                      />
+                    <View style={{ marginRight: 20 }}>
+                      <Button
+                        iconLeft
+                        light
+                        style={styles.btnDelFlightStyle}
+                        onPress={() =>
+                          this.deleteFlight(index, this.state.flight)
+                        }
+                      >
+                        <Icons
+                          name="md-remove-circle"
+                          size={20}
+                          style={{
+                            marginLeft: 10,
+                            marginRight: 5,
+                            color: "white",
+                          }}
+                        />
+                        <Text
+                          style={{
+                            color: "white",
+                            marginRight: 10,
+                            fontSize: 14,
+                          }}
+                        >
+                          ลบ
+                        </Text>
+                      </Button>
                     </View>
-                  </View>
 
-                  <View style={styles.buttonContainer1}>
-                    <TouchableOpacity
-                      style={styles.btnDelFlightStyle}
-                      onPress={() =>
-                        this.deleteFlight(index, this.state.flight)
-                      }
-                    >
-                      <Text style={{ color: "white" }}>ลบเที่ยวบิน</Text>
-                    </TouchableOpacity>
+                    <DateTimePickerModal
+                      // isVisible={isTimePickerVisible}
+                      mode="time"
+                      // onConfirm={handleTimePicker}
+                      // onCancel={hideTimePicker}
+                    />
                   </View>
                 </View>
-              );
-            })}
-          </View>
+              </View>
+            );
+          })}
+
           {/* เพิ่มเที่ยวบิน */}
 
           {/* โชว์ DateTimePickerModal*/}
@@ -1237,7 +1265,7 @@ export default class FlightBookingScreen extends Component {
 
           {/* Action Button */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
+            <Button
               style={styles.btnAddFlightStyle}
               onPress={() =>
                 this.setState({
@@ -1245,31 +1273,38 @@ export default class FlightBookingScreen extends Component {
                 })
               }
             >
-              <Text style={{ color: "white" }}>เพิ่มเที่ยวบิน</Text>
-            </TouchableOpacity>
+              <Icon
+                name="plus"
+                size={20}
+                style={{ color: "white", marginLeft: 10, marginRight: 5 }}
+              />
+              <Text style={{ color: "white", marginRight: 10 }}>
+                เพิ่มเที่ยวบิน
+              </Text>
+            </Button>
           </View>
 
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-around",
-              paddingVertical: 24,
+              paddingVertical: 20,
               marginBottom: 40,
             }}
           >
             <View style={styles.buttonContainer}>
-              <TouchableOpacity
+              <Button
                 style={styles.btnConfirmStyle}
                 onPress={() => this.onPressSend()}
               >
                 <Text style={{ color: "white" }}>ยืนยัน</Text>
-              </TouchableOpacity>
+              </Button>
             </View>
 
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.btnCancelStyle}>
+              <Button style={styles.btnCancelStyle}>
                 <Text style={{ color: "white" }}>ยกเลิก</Text>
-              </TouchableOpacity>
+              </Button>
             </View>
           </View>
         </ScrollView>
@@ -1286,11 +1321,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   containerSec1: {
-    borderWidth: 1,
+    borderWidth: 2,
     padding: 12,
     borderRadius: 8,
     marginHorizontal: 20,
     marginTop: 18,
+    borderColor: "#398DDD",
   },
   textHeader: {
     alignItems: "center",
@@ -1344,8 +1380,8 @@ const styles = StyleSheet.create({
   containerSec2: {
     marginHorizontal: 20,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#999999",
+    borderWidth: 2,
+    borderColor: "#398DDD",
   },
   contentInSec2: {
     padding: 12,
@@ -1356,7 +1392,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     width: "30%",
     borderRadius: 4,
-    marginTop: 2,
   },
   buttonContainer1: {
     alignSelf: "center",
@@ -1368,28 +1403,31 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   btnAddFlightStyle: {
-    backgroundColor: "#0097fc",
-    padding: 8,
-    alignItems: "center",
-    borderRadius: 4,
+    justifyContent: "center",
+    alignSelf: "center",
+    backgroundColor: "#005ce6",
+    borderRadius: 10,
   },
   btnDelFlightStyle: {
-    backgroundColor: "red",
-    padding: 8,
-    alignItems: "center",
-    borderRadius: 4,
+    backgroundColor: "#b30000",
+    alignSelf: "flex-end",
+    marginTop: 10,
+    marginBottom: 20,
+    borderRadius: 10,
   },
   btnConfirmStyle: {
     backgroundColor: "#449D44",
-    padding: 8,
-    alignItems: "center",
-    borderRadius: 16,
+    justifyContent: "center",
+    alignSelf: "center",
+    borderRadius: 10,
+    paddingHorizontal: 32,
   },
   btnCancelStyle: {
     backgroundColor: "#5A6268",
-    padding: 8,
-    alignItems: "center",
-    borderRadius: 16,
+    justifyContent: "center",
+    alignSelf: "center",
+    borderRadius: 10,
+    paddingHorizontal: 32,
   },
   inputDate: {
     borderWidth: 1,
