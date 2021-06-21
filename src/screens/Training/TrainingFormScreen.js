@@ -28,6 +28,7 @@ import DelayInput from "react-native-debounce-input";
 import HTML from "react-native-render-html";
 import { Rows, Table } from "react-native-table-component";
 import DashedLine from "react-native-dashed-line";
+import { Alert } from "react-native";
 
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
@@ -86,6 +87,7 @@ export default class TrainingFormScreen extends Component {
       profile: [],
       culMonths: "",
       courseComfrom: [],
+
       tableData: [
         [
           "Training / Seminar / Education Costs (THB) \nค่าใช้จ่ายการฝึกอบรม/การศึกษา (บาท)",
@@ -108,7 +110,7 @@ export default class TrainingFormScreen extends Component {
       countMonthThai: "",
       dateTimeNow: "",
       signPurpose: [],
-      preRequist: "",
+      preRequist: [],
       expected: "",
     };
   }
@@ -320,7 +322,8 @@ export default class TrainingFormScreen extends Component {
         countMonthEng: "",
         countMonthThai: "",
         dateTimeNow: "",
-
+        pre_requerse: "",
+        pre_requerse2: "",
         preRequist: "",
         expected: "",
       });
@@ -509,13 +512,11 @@ export default class TrainingFormScreen extends Component {
     }
   };
   //aek
-  onPickerValueChange = (value, index) => {
-
+  onPickerValueChange = (value) => {
     this.setState({
       expense: null,
       course: value,
       course_id: value,
-      courseselect:""
     });
     if (value == "") {
       this.setState({
@@ -557,7 +558,7 @@ export default class TrainingFormScreen extends Component {
     this.setState({
       courseComfrom: result,
     });
-    // console.log(result);
+
     if (this.state.course != "0" && this.state.course != null) {
       this.setState({
         courseComfrom: result,
@@ -814,10 +815,7 @@ export default class TrainingFormScreen extends Component {
       this.setState({ upload_file: result });
     }
   }
-  // onValueChangess = (text) => {
-  //   this.setState({ expense: text });
-  //   this.checkcourse(Number(text));
-  // };
+
   checkcourse = (expensecourse) => {
     let condition = 0;
     if (expensecourse >= 35000) {
@@ -833,7 +831,6 @@ export default class TrainingFormScreen extends Component {
                 });
                 this.setModalVisible(true);
                 break;
-                // console.log("เข้าเงื่อนไขที่ 1 "+this.state.form_month);
               }
             }
           } else {
@@ -848,7 +845,6 @@ export default class TrainingFormScreen extends Component {
                   form_month: data.form_month,
                 });
 
-                // console.log("เข้าเงื่อนไขที่ 2 " + this.state.form_month);
                 this.setModalVisible(true);
                 break;
               }
@@ -864,12 +860,14 @@ export default class TrainingFormScreen extends Component {
     this.dateCount();
   };
   placeFunc = (k) => {
-    // console.log(this.state.select_3);
+    // จะทำต่อ
     this.setState({ place: k });
     let result = this.state.select_3.find((member) => {
       return member.id === k;
     });
-    this.setState({ nameplace: result.place_th });
+    this.setState({
+      nameplace: this.state.lang === "EN" ? result.place_en : result.place_th,
+    });
     this.dateCount();
   };
   dateCount = () => {
@@ -1000,10 +998,6 @@ export default class TrainingFormScreen extends Component {
                       placeholderStyle={{ color: "#bfc6ea" }}
                       placeholderIconColor="#007aff"
                       selectedValue={this.state.courseselect}
-                      // onValueChange={(text) =>
-                      //   this.setState({ courseselect: text })
-                      // }
-
                       onValueChange={this.onPickerValueChanges}
                       // this.setState({ course: text })}
                       textStyle={{ fontSize: 14 }}
@@ -1016,6 +1010,7 @@ export default class TrainingFormScreen extends Component {
                         }
                         value=""
                       />
+
                       {this.state.select_1.map((data) => {
                         return (
                           <Picker.Item
@@ -1055,10 +1050,11 @@ export default class TrainingFormScreen extends Component {
 
                   <TextInput
                     style={styles.inputStyle1}
+                    keyboardType={"numeric"}
+                    onChangeText={(text) => this.setState({ expense: text })}
                     placeholder="กรุณากรอกจำนวนเงิน"
                     value={this.state.expense}
-                    onChangeText={text=>this.setState({expense:text})}
-                    onBlur={(e) => this.checkcourse(Number(this.state.expense))}
+                    onBlur={(e) => this.checkcourse(this.state.expense)}
                   />
                 </View>
               )}
@@ -1094,7 +1090,7 @@ export default class TrainingFormScreen extends Component {
               <Text style={styles.textInputEng}>
                 Start Date :<Text style={{ color: "red" }}>*</Text>
               </Text>
-              <Text style={styles.textInputThai}>วันที่เริ่มฝึกอบรบ</Text>
+              <Text style={styles.textInputThai}>วันที่เริ่มฝึกอบรม</Text>
               <TouchableOpacity onPress={() => this.showDatePicker("start")}>
                 <View style={styles.inputDate}>
                   <Text style={{ paddingLeft: 10 }}>
@@ -1146,9 +1142,6 @@ export default class TrainingFormScreen extends Component {
                   placeholderIconColor="#007aff"
                   selectedValue={this.state.place}
                   onValueChange={this.placeFunc}
-                  //ทำตรงนี้
-                  //  onValueChange={this.onPickerValueChanges}
-                  // this.setState({ course: text })}
                   textStyle={{ fontSize: 14 }}
                 >
                   <Picker.Item
@@ -1178,7 +1171,6 @@ export default class TrainingFormScreen extends Component {
                   keyboardType="text"
                   value={this.state.nameplace}
                   style={styles.inputStyle1}
-                  inputRef={this.state.inputRef}
                   onChangeText={this.changPlace}
                   placeholder="กรุณากรอกสถานที่"
                 />
@@ -1200,10 +1192,6 @@ export default class TrainingFormScreen extends Component {
                       borderColor: "#4392de",
                     }}
                     onPress={this.uploadFile.bind(this)}
-                    // style={{
-                    //   backgroundColor: "#DCDCDC",
-                    //   height: 30,
-                    // }}
                   >
                     <Text style={{ marginHorizontal: 8, color: "white" }}>
                       {this.state.lang == "EN" ? "Choose File" : "เลือกไฟล์"}
@@ -1259,7 +1247,12 @@ export default class TrainingFormScreen extends Component {
                   marginBottom: 2,
                 }}
               >
-                <TextInput keyboardType="text" style={styles.inputStyle2} />
+                <TextInput
+                  keyboardType="text"
+                  style={styles.inputStyle2}
+                  value={this.state.pre_requerse}
+                  onChangeText={(text) => this.setState({ pre_requerse: text })}
+                />
                 <View
                   style={{
                     flexDirection: "column",
@@ -1286,7 +1279,7 @@ export default class TrainingFormScreen extends Component {
 
               <View style={{ marginBottom: 1 }}>
                 {this.state.courseItem.map((item, index) => {
-                  console.log(item);
+                 
                   return (
                     <View
                       style={{
@@ -1301,7 +1294,14 @@ export default class TrainingFormScreen extends Component {
                         keyboardType="text"
                         style={styles.inputStyle2}
                         name={index}
-                        // value={(index+2)+". "+item}
+                        value={item}
+                        onChangeText={(text) => {
+                          let courseItem = [...this.state.courseItem];
+                          let item = { ...courseItem[index] };
+                          item = text;
+                          courseItem[index] = item;
+                          this.setState({ courseItem: courseItem });
+                        }}
                       />
                       <View
                         style={{
@@ -1342,7 +1342,8 @@ export default class TrainingFormScreen extends Component {
                 <TextInput
                   keyboardType="text"
                   style={styles.inputStyle2}
-                  // value={this.state.total}
+                  value={this.state.pre_requerse2}
+                  onChangeText={(text) => this.setState({ pre_requerse2: text })}
                 />
                 <View
                   style={{
@@ -1370,6 +1371,7 @@ export default class TrainingFormScreen extends Component {
 
               <View style={{ marginBottom: 1 }}>
                 {this.state.courseItem2.map((item, index) => {
+                  console.log(item);
                   return (
                     <View
                       style={{
@@ -1383,7 +1385,15 @@ export default class TrainingFormScreen extends Component {
                       <TextInput
                         keyboardType="text"
                         style={styles.inputStyle2}
-                        // value={this.state.total}
+                 
+                        value={item}
+                        onChangeText={(text) => {
+                          let courseItem2 = [...this.state.courseItem2];
+                          let item = { ...courseItem2[index] };
+                          item = text;
+                          courseItem2[index] = item;
+                          this.setState({ courseItem2: courseItem2 });
+                        }}
                       />
                       <View
                         style={{
@@ -1392,12 +1402,14 @@ export default class TrainingFormScreen extends Component {
                           marginBottom: 4,
                         }}
                       >
+                        
                         <TouchableOpacity
                           style={styles.deleteButton}
                           onPress={() =>
                             this.deleteCourse2(index, this.state.courseItem2)
                           }
                         >
+                          
                           <Text style={styles.addButtonText}>-</Text>
                         </TouchableOpacity>
                       </View>
