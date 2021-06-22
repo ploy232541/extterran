@@ -215,16 +215,16 @@ export default class AccommodationBookingScreen extends Component {
         (purposeEtc == "" && purpose_id == 6)
       ) {
         this.state.lang === "EN"
-          ? Alert.alert("Please select a travel purpose.")
-          : Alert.alert("กรุณาเลือกเลือกวัตถุประสงค์ในการเดินทาง");
-      } else if (province == "") {
+          ? Alert.alert("Please select a booking accommodations purpose.")
+          : Alert.alert("กรุณาเลือกวัตถุประสงค์ในการจองที่พัก");
+      } else if (province_id == "") {
         this.state.lang === "EN"
           ? Alert.alert("Please select a province")
           : Alert.alert("กรุณาเลือกจังหวัด");
       } else if (accom == "") {
         this.state.lang === "EN"
-          ? Alert.alert("Please enter your Accommodation")
-          : Alert.alert("กรุณาใส่ที่พัก");
+          ? Alert.alert("Please enter your accommodations")
+          : Alert.alert("กรุณากรอกที่พัก");
       } else if (startDate == "DD/MM/YYYY") {
         this.state.lang === "EN"
           ? Alert.alert("Please select a Check-in date")
@@ -258,13 +258,13 @@ export default class AccommodationBookingScreen extends Component {
             } else if (item.accommodation == "") {
               this.state.lang === "EN"
                 ? Alert.alert(
-                    "Please enter your Accommodation" +
+                    "Please enter your accommodations" +
                       " \n (Accommodation field  " +
                       (i + 2) +
                       ")"
                   )
                 : Alert.alert(
-                    "กรุณาใส่ที่พัก" + " \n (ช่องกรอกที่พัก  " + (i + 2) + ")"
+                    "กรุณากรอกที่พัก" + " \n (ช่องกรอกที่พัก  " + (i + 2) + ")"
                   );
             } else if (item.startDate == "DD/MM/YYYY") {
               this.state.lang === "EN"

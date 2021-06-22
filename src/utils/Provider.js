@@ -324,7 +324,7 @@ export function accordionListScreen(type, subtype, title = null) {
                           mode="contained"
                           onPress={() => Linking.openURL(item.url_print)}
                           // style={indexStyle.buttonPrintStyle}
-                          style={{marginTop:18,marginBottom:15,width:"25%",alignSelf:"center"}}
+                          style={{marginTop:18,marginBottom:15,width:"50%",alignSelf:"center"}}
                         >
                           <View>
                             <Text
