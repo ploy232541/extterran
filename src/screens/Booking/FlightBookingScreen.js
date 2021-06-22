@@ -290,7 +290,7 @@ export default class FlightBookingScreen extends Component {
       ) {
         this.state.lang === "EN"
           ? Alert.alert("Please select a travel purpose.")
-          : Alert.alert("กรุณาเลือกเลือกวัตถุประสงค์ในการเดินทาง");
+          : Alert.alert("กรุณาเลือกวัตถุประสงค์ในการเดินทาง");
       } else if (startDate == "DD/MM/YYYY") {
         this.state.lang === "EN"
           ? Alert.alert("Please select a departure date")
@@ -314,7 +314,7 @@ export default class FlightBookingScreen extends Component {
       } else if (firstflight == "") {
         this.state.lang === "EN"
           ? Alert.alert("Please enter your flight")
-          : Alert.alert("กรุณาใส่เที่ยวบินของคุณ");
+          : Alert.alert("กรุณากรอกเที่ยวบินของคุณ");
       } else if (checkBaggage == true && baggage == "") {
         this.state.lang === "EN"
           ? Alert.alert("Please enter your baggage weight.")
@@ -1229,7 +1229,7 @@ export default class FlightBookingScreen extends Component {
                             fontSize: 14,
                           }}
                         >
-                          ลบ
+                         {this.state.lang === "EN" ? "Delete" : "ลบ"}
                         </Text>
                       </Button>
                     </View>
@@ -1279,7 +1279,7 @@ export default class FlightBookingScreen extends Component {
                 style={{ color: "white", marginLeft: 10, marginRight: 5 }}
               />
               <Text style={{ color: "white", marginRight: 10 }}>
-                เพิ่มเที่ยวบิน
+                {this.state.lang === "EN" ? "Add Flight" : "เพิ่มเที่ยวบิน"}
               </Text>
             </Button>
           </View>
@@ -1297,13 +1297,13 @@ export default class FlightBookingScreen extends Component {
                 style={styles.btnConfirmStyle}
                 onPress={() => this.onPressSend()}
               >
-                <Text style={{ color: "white" }}>ยืนยัน</Text>
+                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Submit" : "ยืนยัน"}</Text>
               </Button>
             </View>
 
             <View style={styles.buttonContainer}>
               <Button style={styles.btnCancelStyle}>
-                <Text style={{ color: "white" }}>ยกเลิก</Text>
+                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}</Text>
               </Button>
             </View>
           </View>

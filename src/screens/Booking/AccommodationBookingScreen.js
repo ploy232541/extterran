@@ -723,7 +723,7 @@ export default class AccommodationBookingScreen extends Component {
                             fontSize: 14,
                           }}
                         >
-                          ลบ
+                         {this.state.lang === "EN" ? "Delete" : "ลบ"}
                         </Text>
                       </Button>
                     </View>
@@ -761,7 +761,7 @@ export default class AccommodationBookingScreen extends Component {
                 style={{ color: "white", marginLeft: 10, marginRight: 5 }}
               />
               <Text style={{ color: "white", marginRight: 10 }}>
-                เพิ่มที่พัก
+              {this.state.lang === "EN" ? "Add Accommodation" : "เพิ่มที่พัก"}
               </Text>
             </Button>
           </View>
@@ -778,13 +778,13 @@ export default class AccommodationBookingScreen extends Component {
                 style={styles.btnConfirmStyle}
                 onPress={() => this.onPressSend()}
               >
-                <Text style={{ color: "white" }}>ยืนยัน</Text>
+                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Submit" : "ยืนยัน"}</Text>
               </Button>
             </View>
 
             <View style={styles.buttonContainer}>
               <Button style={styles.btnCancelStyle}>
-                <Text style={{ color: "white" }}>ยกเลิก</Text>
+                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}</Text>
               </Button>
             </View>
           </View>

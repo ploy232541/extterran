@@ -651,23 +651,23 @@ export default class GroundTransportationBookingScreen extends Component {
                       }
                     >
                       <Icons
-                        name="md-remove-circle"
-                        size={20}
-                        style={{
-                          marginLeft: 10,
-                          marginRight: 5,
-                          color: "white",
-                        }}
-                      />
-                      <Text
-                        style={{
-                          color: "white",
-                          marginRight: 10,
-                          fontSize: 14,
-                        }}
-                      >
-                        ลบ
-                      </Text>
+                          name="md-remove-circle"
+                          size={20}
+                          style={{
+                            marginLeft: 10,
+                            marginRight: 5,
+                            color: "white",
+                          }}
+                        />
+                        <Text
+                          style={{
+                            color: "white",
+                            marginRight: 10,
+                            fontSize: 14,
+                          }}
+                        >
+                         {this.state.lang === "EN" ? "Delete" : "ลบ"}
+                        </Text>
                     </Button>
                   </View>
                 </View>
@@ -706,7 +706,7 @@ export default class GroundTransportationBookingScreen extends Component {
                 size={20}
                 style={{ color: "white", marginLeft: 10, marginRight: 5 }}
               />
-              <Text style={{ color: "white", marginRight: 10 }}>เพิ่ม</Text>
+              <Text style={{ color: "white", marginRight: 10 }}>{this.state.lang === "EN" ? "Add" : "เพิ่ม"}</Text>
             </Button>
           </View>
 
@@ -723,12 +723,12 @@ export default class GroundTransportationBookingScreen extends Component {
                 style={styles.btnConfirmStyle}
                 onPress={() => this.onPressSend()}
               >
-                <Text style={{ color: "white" }}>ยืนยัน</Text>
+                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Submit" : "ยืนยัน"}</Text>
               </Button>
             </View>
             <View style={styles.buttonContainer}>
               <Button style={styles.btnCancelStyle}>
-                <Text style={{ color: "white" }}>ยกเลิก</Text>
+                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}</Text>
               </Button>
             </View>
           </View>
