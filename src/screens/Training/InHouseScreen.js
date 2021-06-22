@@ -1,5 +1,4 @@
-import { Picker } from "native-base";
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -8,254 +7,265 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { Avatar, Divider } from "react-native-paper";
+import { Picker } from "native-base";
+import { Avatar, Card } from "react-native-paper";
+import { Divider } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { Button } from "react-native-paper";
+import { set } from "react-native-reanimated";
+import { Table } from "react-native-table-component";
+import { DataTable } from 'react-native-paper';
 
 let dimensions = Dimensions.get("window");
 let pickerWidth = dimensions.width - 56;
-const HEIGHT = Dimensions.get("window").height;
 
-export default class componentName extends Component {
-  constructor(props) {
-    super(props);
+function deleteCourse(index, courseItem, setCourseItem) {
+  let itemCopy = [...courseItem];
+  itemCopy.splice(index, 1);
+  setCourseItem(itemCopy);
+}
 
-    this.state = {};
-  }
-
-  async componentDidMount() {
-    let id = await AsyncStorage.getItem("userId");
-    const res = await AsyncStorage.getItem("language");
-    if (res === "EN") {
-      this.setState({ lang: "EN", lang_id: 1 });
-    } else {
-      this.setState({ lang: "TH", lang_id: 2 });
-    }
-    try {
-      httpClient
-        .get(`/Training/EmployeeTrainingNeed/${id}`)
-        .then((response) => {
-          const result = response.data;
-          if (result != null) {
-            this.setState({
-              select_2: result,
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      Alert.alert(error);
-    }
-  }
-
-  render() {
-    return (
-      <View style={styles.background}>
-        <ScrollView>
-          <View style={styles.textHeader}>
-            <Text style={{ color: "#333333", fontSize: "24" }}>
-              Training Needs - External
-            </Text>
-          </View>
-          <View
-            style={{
-              marginVertical: 20,
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Divider style={{ paddingBottom: 1, flex: 1 }} />
-            <Avatar.Icon
-              icon="arrow-down"
-              size={30}
-              style={styles.arrowDownStyle}
-            />
-            <Divider style={{ paddingBottom: 1, flex: 1 }} />
-          </View>
-
-          {/* ในกรอบ */}
+function courseCard(
+  courseItem,
+  setCourseItem,
+  course,
+  setCourse,
+  selectedUser,
+  setSelectedUser,
+  cardIndex,
+  card,
+  setCard
+) {
+  return (
+    <ScrollView>
+      <View style={styles.containerSec2}>
+        <View style={styles.contentInSec}>
+          <Text style={styles.textStyle1}>Employee Name</Text>
           <View>
-            <ScrollView>
-              <View style={styles.containerSec2}>
-                <View style={styles.contentInSec}>
-                  <View
-                    style={{
-                      flexDirection: "column",
-                      justifyContent: "space-around",
-                      paddingHorizontal: 8,
-                      marginBottom: 8,
-                    }}
-                  >
-                    <Text style={styles.textStyle1}>Employee Name</Text>
-
-                    {/* Start User Picker */}
-                    <View>
-                      <Picker
-                        mode="dropdown"
-                        iosIcon={
-                          <Icon
-                            name="angle-down"
-                            style={{ width: "8%", paddingHorizontal: 2 }}
-                          />
-                        }
-                        style={styles.inputLightStyle}
-                        placeholder={
-                          this.state.lang === "EN" ? "Selecte" : "เลือก"
-                        }
-                        placeholderStyle={{ color: "#bfc6ea" }}
-                        placeholderIconColor="#007aff"
-                        textStyle={{ fontSize: 14 }}
-                        // selectedValue={selectedUser}
-                        // onValueChange={(itemValue, index) => setSelectedUser(itemValue)}
-                      >
-                        <Picker.Item
-                          label={
-                            this.state.lang === "EN"
-                              ? "Please select"
-                              : "กรุณาเลือก"
-                          }
-                          value=""
-                        />
-                        {/* {this.state.select_1.map((data) => {
-                                  return (
-                                    <Picker.Item
-                                      label={
-                                        this.state.lang === "EN"
-                                          ? data.purpose_en
-                                          : data.purpose_th
-                                      }
-                                      value={data.id}
-                                    />
-                                  );
-                                })} */}
-                      </Picker>
-                    </View>
-                    {/* End User Picker */}
-                  </View>
-
-                  <Divider style={{ paddingBottom: 1, marginTop: 10 }} />
-
-                  <View style={{ marginTop: 24, marginBottom: 24 }}>
-                    <View style={styles.containerSec3}>
-
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            justifyContent: "space-around",
-                             paddingVertical: 24,
-                            padding: 62,
-
-                            //  marginHorizontal: 10,
-                          }}
-                        >
-                          {/* Start Course Picker */}
-                          <View>
-                            <Picker
-                              mode="dropdown"
-                              iosIcon={
-                                <Icon
-                                  name="angle-down"
-                                  style={{ width: "18%", paddingHorizontal: 2, }}
-                                />
-                              }
-                              style={styles.inputLightStyle1}
-                              placeholder={
-                                this.state.lang === "EN" ? "Selecte" : "เลือก"
-                              }
-                              placeholderStyle={{ color: "#bfc6ea" }}
-                              placeholderIconColor="#007aff"
-                              textStyle={{ fontSize: 14 }}
-                              // selectedValue={selectedUser}
-                              // onValueChange={(itemValue, index) => setSelectedUser(itemValue)}
-                            >
-                              <Picker.Item
-                                label={
-                                  this.state.lang === "EN"
-                                    ? "Please select"
-                                    : "กรุณาเลือก"
-                                }
-                                value=""
-                              />
-                              {/* {this.state.select_1.map((data) => {
-                                  return (
-                                    <Picker.Item
-                                      label={
-                                        this.state.lang === "EN"
-                                          ? data.purpose_en
-                                          : data.purpose_th
-                                      }
-                                      value={data.id}
-                                    />
-                                  );
-                                })} */}
-                            </Picker>
-                          </View>
-                          {/* End Course Picker */}
-
-                          <TouchableOpacity
-                            style={styles.addButton}
-                            onPress={() =>
-                              setCourseItem([...courseItem, course])
-                            }
-                          >
-                            <Text style={styles.addButtonText}>+</Text>
-                          </TouchableOpacity>
-                        </View>
-
-                      </View>
-                    </View>
-
-                </View>
-              </View>
-            </ScrollView>
+            {/* Start User Picker */}
+            <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="angle-down" style={{ width: "8%" }} />}
+              style={{
+                width: "97%",
+                borderWidth: 1,
+                borderColor: "#d9d9d9",
+                marginBottom: 5,
+                marginHorizontal: 5,
+                marginVertical: 5,
+              }}
+              placeholderStyle={{ color: "#bfc6ea" }}
+              placeholderIconColor="#007aff"
+              textStyle={{ fontSize: 14 }}
+              // selectedValue={selectedUser}
+              // onValueChange={(itemValue, index) => setSelectedUser(itemValue)}
+            >
+              <Picker.Item label={"SelectEmployee"} />
+              {/* <Picker.Item label={"User 1"} value={"User1"} />
+            <Picker.Item label={"User 2"} value={"User2"} />
+            <Picker.Item label={"User 3"} value={"User3"} /> */}
+            </Picker>
           </View>
-          {/* ในกรอบ */}
-        </ScrollView>
+          {/* End User Picker */}
+
+          <Divider style={{ paddingBottom: 1, marginTop: 15 }} />
+
+          {/* Start Selectable Course Picker */}
+          <View style={{ marginTop: 15 }}>
+            <View style={styles.pickerContainer1}>
+            
+            <DataTable.Row>
+              <DataTable.Cell style={styles.padRight1} >
+              <Picker
+                mode="dropdown"
+                iosIcon={<Icon name="angle-down" style={{ width: "8%" }} />}
+                style={{
+                  width: "100%",
+                  borderWidth: 1,
+                  borderColor: "#d9d9d9",
+                  marginHorizontal: 5,
+                  marginBottom: 5,
+                }}
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                textStyle={{ fontSize: 14 }}
+                // selectedValue={course}
+                // onValueChange={(itemValue, itemIndex) => setCourse(itemValue)}
+              >
+                <Picker.Item label={"SelectCourse"} />
+                {/* <Picker.Item label="Course 1" value="Course1" />
+              <Picker.Item label="Course 2" value="Course2" />
+              <Picker.Item label="Course 3" value="Course3" /> */}
+              </Picker>
+              </DataTable.Cell>
+             
+             
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => setCourseItem([...courseItem, course,])}
+              >
+                <Text style={styles.addButtonText1}>+</Text>
+              </TouchableOpacity>
+           
+            </DataTable.Row>
+  
+            </View>
+              {/* SelectCourse */}
+            <View>
+              {courseItem.map((item, index) => {
+                return (
+                  
+                  <View style={styles.pickerContainer} key={index}>
+                  <DataTable.Row>
+              <DataTable.Cell style={styles.padRight2} >
+                    <Picker
+                      mode="dropdown"
+                      iosIcon={<Icon name="angle-down" style={{ width: "8%" }} />}
+                      style={{
+                        width: "100%",
+                        borderWidth: 1,
+                        borderColor: "#d9d9d9",
+                        marginHorizontal: 5,
+                        marginBottom: 5,
+                      }}
+                      placeholderStyle={{ color: "#bfc6ea" }}
+                      placeholderIconColor="#007aff"
+                      textStyle={{ fontSize: 14 }}
+                      // selectedValue={item}
+                      // enabled={false}
+                    >
+                      {/* <Picker.Item label={item} value={item} /> */}
+                    
+                      <Picker.Item label={"SelectCourse1"} />
+                    </Picker>
+                    </DataTable.Cell>
+                   
+                   <View >
+                    <TouchableOpacity
+                      style={styles.deleteButton}
+                      onPress={() =>
+                        deleteCourse(index, courseItem, setCourseItem)
+                      }
+                    >
+                      <Text style={styles.addButtonText}>-</Text>
+                    </TouchableOpacity>
+               </View>
+                    </DataTable.Row>
+                  </View>
+                );
+              })}
+    
+              <Button
+                mode="contained"
+                style={{
+                  margin: 8,
+                  backgroundColor: "red",
+                }}
+                onPress={() => deleteCourse(cardIndex, card, setCard)}
+              >
+                Delete Form
+              </Button>
+           
+              {/* End */}
+            </View>
+          </View>
+        </View>
       </View>
-    );
-  }
+    </ScrollView>
+  );
+}
+
+function InHouseScreen() {
+  const [selectedUser, setSelectedUser] = useState("กรุณาเลือกผู้ใช้");
+  const [course, setCourse] = useState("กรุณาเลือกหลักสูตร");
+  const [courseItem, setCourseItem] = useState([]);
+  const [card, setCard] = useState([]);
+
+  return (
+    <View style={styles.background}>
+      <ScrollView>
+        <View style={styles.textHeader}>
+          <Text style={{ color: "#333333", fontSize: "24" }}>
+            Training Needs - In house
+          </Text>
+        </View>
+
+        <View>
+          <Button
+            style={styles.btnStyle1}
+            onPress={() => setCard([...card, "1"])}
+          >
+            <Icon name="user-plus" color="#fff" size="26" />
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 16,
+              }}
+            >
+              Add Employee
+            </Text>
+          </Button>
+        </View>
+
+        {/* <Divider style={{ paddingBottom: 1, marginTop: 15 }} /> */}
+        <View
+          style={{
+            marginVertical: 25,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Divider style={{ paddingBottom: 1, flex: 1 }} />
+          <Avatar.Icon
+            icon="arrow-down"
+            size={30}
+            style={styles.arrowDownStyle}
+          />
+          <Divider style={{ paddingBottom: 1, flex: 1 }} />
+        </View>
+
+        {/* Start */}
+        {card.map((item, cardIndex) => {
+          return (
+            <View>
+              {courseCard(
+                courseItem,
+                setCourseItem,
+                course,
+                setCourse,
+                selectedUser,
+                setSelectedUser,
+                cardIndex,
+                card,
+                setCard
+              )}
+            </View>
+          );
+        })}
+
+        <Button style={styles.submitButton}>
+          <Text style={{ color: "#fff" }}>Submit</Text>
+        </Button>
+      </ScrollView>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   background: {
-    flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#fff",
+    width: "100%",
+    height: "100%",
   },
   container: {
     flex: 1,
     alignItems: "center",
     width: 500,
   },
-  //กรอบข้อมูล
-  containerSec2: {
-    marginTop: 16,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: "#999999",
-    marginHorizontal: 10,
-    marginBottom: 50,
-  },
-  containerSec3: {
-    // width: "95%",
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#999999",
-    marginHorizontal: 10,
-    // marginRight: 8,
-    // marginLeft: 10,
-  },
   textHeader: {
     alignItems: "center",
-    padding: 15,
-  },
-  //ชื่อหัวข้อ
-  textStyle1: {
-    marginTop: 12,
-    marginBottom: 12,
-    paddingHorizontal: 6,
+    padding: 20,
   },
   //btn Add Card
   btnStyle1: {
@@ -264,6 +274,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#F0AD4E",
     marginVertical: 2,
     marginHorizontal: 12,
+  },
+  //กรอบข้อมูลรอบนอก
+  containerSec2: {
+    marginTop: 18,
+    marginRight: 12,
+    marginLeft: 12,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: "#999999",
+  },
+  //ชื่อหัวข้อ
+  textStyle1: {
+    marginTop: 12,
+    marginBottom: 12,
+    paddingHorizontal: 6,
+    fontSize: 18,
   },
   cardStyle: {
     marginVertical: "100%",
@@ -294,7 +320,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 12,
     marginLeft: 1,
-    marginRight: -95,
+    marginRight: "-280%",
   },
   addButtonText: {
     color: "white",
@@ -310,9 +336,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#4392de",
-    height: HEIGHT / 20,
-    width: 50,
-    // marginHorizontal: 10
+    width: 36,
+    height: 36,
+    marginLeft: "-55%",
+    marginTop: 5,
   },
   /// del button
   deleteButton: {
@@ -322,11 +349,12 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     width: 36,
     height: 36,
-    marginLeft: -145,
+    marginLeft: "-80%",
+    
     marginTop: 5,
   },
   contentInSec: {
-    padding: 2,
+    padding: "5%",
   },
   submitButton: {
     alignSelf: "center",
@@ -335,22 +363,16 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 20,
   },
-  inputLightStyle: {
-    borderWidth: 1,
-    borderRadius: 10,
-    height: HEIGHT / 20,
-    width: "100%",
-    marginTop: 15,
-    marginBottom: 2,
-    borderColor: "#007aff",
+  padRight1:{
+    paddingRight:"60%",
   },
-  inputLightStyle1: {
-    borderWidth: 1,
-    borderRadius: 10,
-    height: HEIGHT / 20,
-    width: "76%",
-    marginBottom: 2,
-    borderColor: "#007aff",
-    // marginHorizontal: 24,
+  padRight2:{
+  
+    paddingRight:"20%",
+    
   },
+ 
 });
+
+export default InHouseScreen;
+
