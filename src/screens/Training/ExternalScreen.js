@@ -212,7 +212,7 @@ export default class ExternalScreen extends Component {
               alignItems: "center",
             }}
           >
-            <Divider style={{ paddingBottom: 1, flex: 1 }} />
+            <Divider style={{ paddingBottom: 1, flex: 1 ,}} />
             <Avatar.Icon
               icon="arrow-down"
               size={30}
@@ -295,7 +295,7 @@ export default class ExternalScreen extends Component {
                         </View>
                       </View>
 
-                      <Divider style={{ paddingBottom: 1, marginTop: 10 }} />
+                      <Divider style={{ paddingBottom: 1, marginTop: 10 ,backgroundColor: "#398DDD", }} />
 
                       {/* Start กรอบใน */}
                       <View style={{ marginTop: 24 }}>
@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: "#999999",
+    borderColor: "#398DDD",
     marginHorizontal: 10,
     marginBottom: 24,
   },
@@ -690,7 +690,7 @@ const styles = StyleSheet.create({
   },
   btnStyle1: {
     height: 45,
-    backgroundColor: "#F0AD4E",
+    backgroundColor: "#4392de",
     marginLeft: 12,
     marginRight: 12,
     // marginTop: 5,
