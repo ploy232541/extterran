@@ -29,6 +29,7 @@ import HTML from "react-native-render-html";
 import { Rows, Table } from "react-native-table-component";
 import DashedLine from "react-native-dashed-line";
 import { Alert } from "react-native";
+import FormData from "form-data";
 
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
@@ -81,6 +82,7 @@ export default class TrainingFormScreen extends Component {
       total: "0",
       place: "",
       nameplace: "",
+      nameplace_etc: "",
       courseItem: [],
       courseItem2: [],
       upload_file: null,
@@ -111,7 +113,7 @@ export default class TrainingFormScreen extends Component {
       dateTimeNow: "",
       signPurpose: [],
       preRequist: [],
-      expected: "",
+      expected: [],
     };
   }
 
@@ -297,6 +299,7 @@ export default class TrainingFormScreen extends Component {
         total: "0",
         place: "",
         nameplace: "",
+        nameplace_etc: "",
         courseItem: [],
         courseItem2: [],
         upload_file: null,
@@ -351,164 +354,148 @@ export default class TrainingFormScreen extends Component {
   onPressSend = () => {
     try {
       const {
-        firstname,
-        lastname,
-        phone,
-        email,
-        massages,
-        problem_type,
         course,
-        uploadPhoto,
+        courseselect,
+        nameCourse,
+        expense,
+        startDate,
+        endDate,
+        total,
+        place,
+        upload_file,
+        nameplace_etc,
+        pre_requerse,
+        pre_requerse2,
+        courseItem,
+        courseItem2,
       } = this.state;
 
-      if (firstname === "") {
-        this.state.lang === "EN"
-          ? Alert.alert("Please enter firstname")
-          : Alert.alert("กรุณาใส่ชื่อ");
-        var error = true;
-      } else if (lastname === "") {
-        this.state.lang === "EN"
-          ? Alert.alert("Please enter lastname")
-          : Alert.alert("กรุณาใส่นามสกุล");
-        var error = true;
-      } else if (email === "") {
-        this.state.lang === "EN"
-          ? Alert.alert("Please enter email")
-          : Alert.alert("กรุณาใส่อีเมล");
-        var error = true;
-      } else if (massages === "") {
-        this.state.lang === "EN"
-          ? Alert.alert("Please enter massages")
-          : Alert.alert("กรุณาใส่ข้อความ");
-        var error = true;
-      }
-
-      if (error != true) {
-        const params = {
-          firstname: firstname,
-          lastname: lastname,
-          phone: phone,
-          email: email,
-          massages: massages,
-          problem_type: problem_type,
-          course: course,
-        };
-
-        if (uploadPhoto != null) {
-          const data = new FormData();
-          data.append("image", {
-            name: "_image_",
-            type: uploadPhoto.type,
-            uri: uploadPhoto.uri,
-          });
-
-          Object.keys(params).forEach((key) => data.append(key, params[key]));
-
-          Alert.alert(
-            this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-            this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
-            [
-              {
-                text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel",
-              },
-              {
-                text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                onPress: () => {
-                  httpClient
-                    .post(`/ReportProblem/InsertReportProblem_haveImage`, data)
-                    .then((response) => {
-                      const result = response.data;
-                      if (result === true) {
-                        Alert.alert(
-                          this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                          this.state.lang === "EN"
-                            ? "Problem reported"
-                            : "แจ้งปัญหาเรียบร้อย",
-                          [
-                            {
-                              text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                              onPress: () => this.reset(),
-                            },
-                          ],
-                          { cancelable: false }
-                        );
-                      } else {
-                        Alert.alert(
-                          this.state.lang === "EN"
-                            ? `I can't report the problem`
-                            : "แจ้งปัญหาไม่ได้"
-                        );
-                      }
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                    });
-                },
-              },
-            ],
-            { cancelable: false }
-          );
-        } else {
-          const params = {
-            firstname: firstname,
-            lastname: lastname,
-            phone: phone,
-            problem_type: problem_type,
-            course: course,
+      if (course == "") {
+        Alert.alert(
+          this.state.lang === "EN"
+            ? "Please select a course type"
+            : "กรุณาเลือกประเภทหลักสูตร"
+        );
+      } else if (
+        courseselect == "" ||
+        (courseselect == "0" && nameCourse == "")
+      ) {
+        Alert.alert(
+          this.state.lang === "EN"
+            ? "Please select a course"
+            : "กรุณาเลือกหลักสูตร"
+        );
+      } else if (expense == "") {
+        Alert.alert(
+          this.state.lang === "EN"
+            ? "Please specify cost"
+            : "โปรดระบุค่าใช้จ่าย"
+        );
+      } else if (startDate == "DD/MM/YYYY") {
+        Alert.alert(
+          this.state.lang === "EN"
+            ? "Please enter the start date of the training"
+            : "กรุณากรอกวันที่เริ่มการฝึกอบรม"
+        );
+      } else if (endDate == "DD/MM/YYYY") {
+        Alert.alert(
+          this.state.lang === "EN"
+            ? "Please enter the training end date"
+            : "กรุณากรอกวันที่สิ้นสุดการฝึกอบรม"
+        );
+      } else if (
+        place == "" &&
+        (nameplace_etc == "" || nameplace_etc == null)
+      ) {
+        Alert.alert(
+          this.state.lang === "EN"
+            ? "Please specify the training location"
+            : "โปรดระบุสถานที่อบรม"
+        );
+      } else if (pre_requerse == "" || pre_requerse == null) {
+        Alert.alert(
+          this.state.lang === "EN"
+            ? "Please specify training qualifications"
+            : "กรุณาระบุคุณสมบัติในการฝึกอบรม"
+        );
+      } else if (pre_requerse2 == "" || pre_requerse2 == null) {
+        Alert.alert(
+          this.state.lang === "EN"
+            ? "Please specify expected training results"
+            : "กรุณาระบุผลที่คาดว่าจะได้รับในการฝึกอบรม"
+        );
+      } else if (
+        (upload_file == "" || upload_file == null) &&
+        (this.state.course == 3 || this.state.course == 4)
+      ) {
+        Alert.alert(
+          this.state.lang === "EN" ? "Please attach the file" : "กรุณาแนปไฟล์"
+        );
+      } else {
+        let error;
+        if (courseItem.length > 0) {
+          let index = 0;
+          do {
+            error = courseItem[index].length > 0 ? false : true;
+            if (error == true) {
+              Alert.alert(
+                this.state.lang === "EN"
+                  ? "Please specify training qualifications"
+                  : "กรุณาระบุคุณสมบัติในการฝึกอบรม"
+              );
+            }
+            index++;
+          } while (index <= courseItem.length - 1 && error == false);
+        }
+        if (courseItem2.length > 0 && error == false) {
+          let index = 0;
+          do {
+            error = courseItem2[index].length > 0 ? false : true;
+            if (error == true) {
+              Alert.alert(
+                this.state.lang === "EN"
+                  ? "Please specify expected training results"
+                  : "กรุณาระบุผลที่คาดว่าจะได้รับในการฝึกอบรม"
+              );
+            }
+            index++;
+          } while (index <= courseItem2.length - 1 && error == false);
+        }
+        if (
+          error == false ||
+          courseItem.length <= 0 ||
+          courseItem.length2.length <= 0
+        ) {
+          const param = {
+            course,
+            courseselect,
+            nameCourse,
+            expense,
+            startDate,
+            endDate,
+            total,
+            place,
+            upload_file,
+            nameplace_etc,
+            pre_requerse,
+            pre_requerse2,
+            courseItem,
+            courseItem2,
           };
-
-          Alert.alert(
-            this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-            this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
-            [
-              {
-                text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel",
-              },
-              {
-                text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                onPress: () => {
-                  httpClient
-                    .post(`/ReportProblem/InsertReportProblem_notImage`, params)
-                    .then((response) => {
-                      const result = response.data;
-                      if (result === true) {
-                        Alert.alert(
-                          this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                          this.state.lang === "EN"
-                            ? "Problem reported"
-                            : "แจ้งปัญหาเรียบร้อย",
-                          [
-                            {
-                              text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                              onPress: () => this.reset(),
-                            },
-                          ],
-                          { cancelable: false }
-                        );
-                      } else {
-                        Alert.alert(
-                          this.state.lang === "EN"
-                            ? `I can't report the problem`
-                            : "แจ้งปัญหาไม่ได้"
-                        );
-                      }
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                    });
-                },
-              },
-            ],
-            { cancelable: false }
-          );
+          if (upload_file != null) {
+            const data = new FormData();
+            data.append("file", {
+              name: "_file_",
+              type: upload_file.type,
+              uri: upload_file.uri,
+            });
+          }
+          Object.keys(param).forEach((key) => data.append(key, param[key]));
+          console.log("data" + param + " jjh" + data);
         }
       }
     } catch (err) {
-      Alert.alert(err);
+      console.log(err);
     }
   };
   //aek
@@ -516,6 +503,7 @@ export default class TrainingFormScreen extends Component {
     this.setState({
       expense: null,
       course: value,
+      courseselect: "",
       course_id: value,
     });
     if (value == "") {
@@ -548,38 +536,40 @@ export default class TrainingFormScreen extends Component {
     }
   };
   onPickerValueChanges = (v) => {
-    this.setState({ courseselect: v, nameplace: "" });
-    let result = this.state.select_1.find((member) => {
-      return member.course_id === v;
-    });
+    this.setState({ courseselect: v, nameplace_etc: "" });
+    if (v != "") {
+      let result = this.state.select_1.find((member) => {
+        return member.course_id === v;
+      });
 
-    var nf = new Intl.NumberFormat();
-    var data = nf.format(result.course_fee);
-    this.setState({
-      courseComfrom: result,
-    });
-
-    if (this.state.course != "0" && this.state.course != null) {
+      var nf = new Intl.NumberFormat();
+      var data = nf.format(result.course_fee);
       this.setState({
         courseComfrom: result,
-        nameCourse: "",
       });
-    } else {
-      this.setState({
-        courseComfrom: [],
-      });
+
+      if (this.state.course != "0" && this.state.course != null) {
+        this.setState({
+          courseComfrom: result,
+          nameCourse: "",
+        });
+      } else {
+        this.setState({
+          courseComfrom: [],
+        });
+      }
+      if (this.state.course == 3 || this.state.course == 4) {
+        this.setState({
+          expense: data,
+        });
+      } else {
+        this.setState({
+          expense: "",
+        });
+      }
+      this.checkcourse(Number(result.course_fee));
+      this.getplace(v);
     }
-    if (this.state.course == 3 || this.state.course == 4) {
-      this.setState({
-        expense: data,
-      });
-    } else {
-      this.setState({
-        expense: "",
-      });
-    }
-    this.checkcourse(result.course_fee);
-    this.getplace(v);
   };
   //เอก
   getplace = (v) => {
@@ -804,7 +794,9 @@ export default class TrainingFormScreen extends Component {
   };
   changPlace = (text) => {
     this.setState({
-      nameplace: text,
+      nameplace_etc: text,
+      place: "",
+      nameplace: "",
     });
     this.dateCount();
   };
@@ -860,13 +852,16 @@ export default class TrainingFormScreen extends Component {
     this.dateCount();
   };
   placeFunc = (k) => {
-    // จะทำต่อ
-    this.setState({ place: k });
+    this.setState({ place: k, nameplace_etc: "" });
     let result = this.state.select_3.find((member) => {
       return member.id === k;
     });
     this.setState({
-      nameplace: this.state.lang === "EN" ? result.place_en : result.place_th,
+      nameplace: k
+        ? this.state.lang === "EN"
+          ? result.place_en
+          : result.place_th
+        : "",
     });
     this.dateCount();
   };
@@ -1169,7 +1164,7 @@ export default class TrainingFormScreen extends Component {
               {this.state.showinputExpense && (
                 <TextInput
                   keyboardType="text"
-                  value={this.state.nameplace}
+                  value={this.state.nameplace_etc}
                   style={styles.inputStyle1}
                   onChangeText={this.changPlace}
                   placeholder="กรุณากรอกสถานที่"
@@ -1279,7 +1274,6 @@ export default class TrainingFormScreen extends Component {
 
               <View style={{ marginBottom: 1 }}>
                 {this.state.courseItem.map((item, index) => {
-                 
                   return (
                     <View
                       style={{
@@ -1343,7 +1337,9 @@ export default class TrainingFormScreen extends Component {
                   keyboardType="text"
                   style={styles.inputStyle2}
                   value={this.state.pre_requerse2}
-                  onChangeText={(text) => this.setState({ pre_requerse2: text })}
+                  onChangeText={(text) =>
+                    this.setState({ pre_requerse2: text })
+                  }
                 />
                 <View
                   style={{
@@ -1371,7 +1367,6 @@ export default class TrainingFormScreen extends Component {
 
               <View style={{ marginBottom: 1 }}>
                 {this.state.courseItem2.map((item, index) => {
-                  console.log(item);
                   return (
                     <View
                       style={{
@@ -1385,7 +1380,6 @@ export default class TrainingFormScreen extends Component {
                       <TextInput
                         keyboardType="text"
                         style={styles.inputStyle2}
-                 
                         value={item}
                         onChangeText={(text) => {
                           let courseItem2 = [...this.state.courseItem2];
@@ -1402,14 +1396,12 @@ export default class TrainingFormScreen extends Component {
                           marginBottom: 4,
                         }}
                       >
-                        
                         <TouchableOpacity
                           style={styles.deleteButton}
                           onPress={() =>
                             this.deleteCourse2(index, this.state.courseItem2)
                           }
                         >
-                          
                           <Text style={styles.addButtonText}>-</Text>
                         </TouchableOpacity>
                       </View>
@@ -1628,17 +1620,29 @@ export default class TrainingFormScreen extends Component {
                     "
                     {this.state.course != "0"
                       ? this.state.courseComfrom.course_title
-                      : this.state.nameCourse}
+                      : this.state.nameCourse
+                      ? this.state.nameCourse
+                      : "............."}
                     "
                   </Text>{" "}
                   at
                   <Text style={{ fontWeight: "bold" }}>
                     {" "}
-                    {this.state.nameplace}
+                    {this.state.nameplace
+                      ? this.state.nameplace
+                      : this.state.nameplace_etc
+                      ? this.state.nameplace_etc
+                      : "............."}
                   </Text>{" "}
                   which will be conducted on{" "}
                   <Text style={{ fontWeight: "bold" }}>
-                    {this.state.startdateeng} - {this.state.enddateeng}{" "}
+                    {this.state.startdateeng
+                      ? this.state.startdateeng
+                      : "............."}{" "}
+                    -{" "}
+                    {this.state.enddateeng
+                      ? this.state.enddateeng
+                      : "............."}{" "}
                   </Text>{" "}
                   {"\n"}จัดให้พนักงานเข้ารับการฝึกอบรม
                   สัมมนาหรือการศึกษาหลักสูตร{" "}
@@ -1647,11 +1651,22 @@ export default class TrainingFormScreen extends Component {
                     {this.state.course != "0"
                       ? this.state.courseComfrom.course_title
                       : this.state.nameCourse}
-                    " ณ {this.state.nameplace}
+                    " ณ{" "}
+                    {this.state.nameplace
+                      ? this.state.nameplace
+                      : this.state.nameplace_etc
+                      ? this.state.nameplace_etc
+                      : "............."}
                   </Text>{" "}
                   ซึ่งจัดขึ้นระหว่างวันที่{" "}
                   <Text style={{ fontWeight: "bold" }}>
-                    {this.state.startdatethai} - {this.state.enddatethai}
+                    {this.state.startdatethai
+                      ? this.state.startdatethai
+                      : "............."}{" "}
+                    -{" "}
+                    {this.state.enddatethai
+                      ? this.state.enddatethai
+                      : "............."}
                   </Text>
                 </Text>
 
@@ -1696,14 +1711,18 @@ export default class TrainingFormScreen extends Component {
                   หรือการศึกษาดังกล่าว แบะพนักงานตกลงว่าหลังจากสำเร็จการฝึกอบรม
                   หรือการศึกษา นักงานจำทำงานให้แก่บริษัทฯ มีกำหนดระยะเวลา{" "}
                   <Text style={{ fontWeight: "bold" }}>
-                    {this.state.form_month}
+                    {this.state.form_month
+                      ? this.state.form_month + " "
+                      : "..........."}
                     เดือน ต่อหลักสูตร โดยเริ่มนับหลังจากเสร็จสิ้นการฝึกอบรม{" "}
                   </Text>{" "}
                   คือวันที่{" "}
                   <Text style={{ fontWeight: "bold" }}>
-                    {this.state.countMonthThai}
-                  </Text>{" "}
-                  (ซึ่งในสัญญานี้เรียกว่า “ระยะเวลาใช้ทุนคืน”)
+                    {this.state.countMonthThai
+                      ? this.state.countMonthThai + " "
+                      : ".........."}
+                  </Text>
+                  {`(ซึ่งในสัญญานี้เรียกว่า “ระยะเวลาใช้ทุนคืน”)`}
                 </Text>
 
                 <View
@@ -2037,7 +2056,7 @@ export default class TrainingFormScreen extends Component {
           >
             <Pressable
               style={[stylesdialog.button, stylesdialog.buttonOpen]}
-              onPress=""
+              onPress={() => this.onPressSend()}
             >
               <Text style={styles.textStyle}>
                 {this.state.lang === "EN" ? "Accept" : "ยืนยัน"}
