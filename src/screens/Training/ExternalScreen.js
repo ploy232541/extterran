@@ -21,6 +21,7 @@ import ProfileScreen from "../Profile/ProfileScreen";
 import { Alert } from "react-native";
 import { httpClient } from "../../core/HttpClient";
 import { AsyncStorage } from "react-native";
+import Icons from "react-native-vector-icons/Ionicons";
 
 let dimensions = Dimensions.get("window");
 let pickerWidth = dimensions.width - 56;
@@ -198,7 +199,7 @@ export default class ExternalScreen extends Component {
         <ScrollView>
           <View style={styles.textHeader}>
             <Text style={{ color: "#333333", fontSize: "24" }}>
-            Training Needs - In house
+            Training Needs - External
             </Text>
           </View>
 
@@ -405,25 +406,28 @@ export default class ExternalScreen extends Component {
                             <Text
                               style={{
                                 paddingHorizontal: 8,
-                                paddingVertical: 15,
+                                // paddingVertical: 12,
+                                marginTop: 15,
                               }}
                             >
                               {this.state.lang === "EN"
                                 ? "Attach File"
                                 : "แนบไฟล์"}
                             </Text>
-                            <TouchableOpacity
+                            <Button
                               style={{
-                                backgroundColor: "#4392de",
-                                width: "40%",
-                                height: "8%",
-                                marginTop: 5,
-                                marginBottom: 15,
-                                marginLeft: 4,
-                                borderRadius: 10,
+                                borderWidth: 1,
+                      borderRadius: 10,
+                      backgroundColor: "#4392de",
+                      height: HEIGHT / 20,
+                      // width: "20%",
+                      marginTop: 10,
+                      marginBottom: 10,
+                      borderColor: "#4392de",
+                      alignSelf: "flex-start",
                               }}
                             >
-                              <View
+                         <View
                                 style={{
                                   justifyContent: "center",
                                   alignItems: "center",
@@ -432,15 +436,15 @@ export default class ExternalScreen extends Component {
                               >
                                 <Text
                                   style={{
-                                    marginLeft: 10,
-                                    marginRight: 10,
                                     color: "white",
+                                    // marginRight: 10,
+                                    fontSize: 14,
                                   }}
                                 >
-                                  {this.state.lang === "EN" ? "File" : "ไฟล์"}
+                                  {this.state.lang === "EN" ? "ChooseFile" : "เลือกไฟล์"}
                                 </Text>
                               </View>
-                            </TouchableOpacity>
+                            </Button>
 
                             <Divider
                               style={{
@@ -462,14 +466,14 @@ export default class ExternalScreen extends Component {
                           <View style={styles.pickerContainer2}>
                             <TouchableOpacity
                               style={styles.addButton}
-                              // onPress={() => setCards([...cards, "1"])}
+                             onPress={() => setCards([...cards, "1"])}
                             >
                               <Text style={styles.addButtonText}>+</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                               style={styles.deleteButton}
-                              // onPress={() => deleteCourse(cardIndex, card, setCard)}
+                              onPress={() => deleteCourse(cardIndex, card, setCard)}
                             >
                               <Text style={styles.addButtonText}>-</Text>
                             </TouchableOpacity>
@@ -483,16 +487,25 @@ export default class ExternalScreen extends Component {
                       style={styles.btnDelCard}
                       onPress={() => deleteCourse(cardIndex, card, setCard)}
                       >
-                        <Icon name="trash" color="#fff" size="26" />
-                        <Text
+                        <Icons
+                          name="md-remove-circle"
+                          size={20}
                           style={{
-                            color: "#fff",
-                            fontSize: 16,
+                            marginLeft: 10,
+                            marginRight: 5,
+                            color: "white",
+                          }}
+                        />
+                       <Text
+                          style={{
+                            color: "white",
+                            marginRight: 10,
+                            fontSize: 14,
                           }}
                         >
                           {this.state.lang === "EN"
-                            ? "Delete Employee"
-                            : "ลบพนักงาน"}
+                            ? "Delete"
+                            : "ลบ"}
                         </Text>
                     </Button>
                   </View>
@@ -574,12 +587,12 @@ const styles = StyleSheet.create({
   },
   //กรอบข้อมูล
   containerSec2: {
-    marginTop: 16,
+    marginTop: 2,
     borderRadius: 8,
     borderWidth: 2,
     borderColor: "#999999",
     marginHorizontal: 10,
-    marginBottom: 50,
+    marginBottom: 24,
   },
   textHeader: {
     alignItems: "center",
@@ -676,11 +689,14 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   btnStyle1: {
-    height: 40,
+    height: 45,
     backgroundColor: "#F0AD4E",
     marginLeft: 12,
     marginRight: 12,
-    marginTop: 12,
+    // marginTop: 5,
+    width: "36%",
+    alignSelf: "center",
+    borderRadius: 10,
   },
   submitButton: {
     alignSelf: "center",
@@ -720,10 +736,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   btnDelCard: {
-    marginTop: 1,
-    marginVertical: 18,
-    marginHorizontal: 10,
-    backgroundColor: "red",
+    backgroundColor: "#b30000",
+    alignSelf: "flex-end",
+    marginRight: 12,
+    marginTop: 10,
+    marginBottom: 20,
+    borderRadius: 10,
   },
   inputLightStyle: {
     borderWidth: 1,
@@ -757,7 +775,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
     paddingTop: 20,
-    width: "30%",
+    width: "20%",
     borderRadius: 4,
     marginTop: 2,
   },
@@ -765,7 +783,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
     paddingTop: 20,
-    width: "30%",
+    width: "20%",
     borderRadius: 4,
     marginTop: 2,
     marginBottom: 18,
@@ -773,14 +791,16 @@ const styles = StyleSheet.create({
 
   btnConfirmStyle: {
     backgroundColor: "#449D44",
-    padding: 8,
+    padding: 12,
     alignItems: "center",
-    borderRadius: 16,
+    borderRadius: 10,
+    height: 45,
   },
   btnCancelStyle: {
     backgroundColor: "#5A6268",
-    padding: 8,
+    padding: 12,
     alignItems: "center",
-    borderRadius: 16,
+    borderRadius: 10,
+    height: 45,
   },
 });

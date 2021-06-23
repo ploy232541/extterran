@@ -7,13 +7,13 @@ const needList = [
   {
     id: 1,
     funcType: "In House",
-    src: "https://picsum.photos/700",
+    src: require('../../asset/booking-1.png'),
     to: "InHouseScreen",
   },
   {
     id: 2,
     funcType: "External",
-    src: "https://picsum.photos/700",
+    src: require('../../asset/booking-1.png'),
     to: "ExternalScreen",
   },
 ];
