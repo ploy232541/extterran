@@ -29,26 +29,27 @@ export default class SafetyBootsScreen extends Component {
       boots: false,
       shoes: false,
       select_1: [],
-      select_boots: true,
-      sizeBoots: "",
-      sizeShoes: "",
+      select_boots: false,
       user_id: "",
       lang: "",
-      boots: [],
+      boots_id: "",
+      boots_type: "",
+      boots_name: "",
+      boots_size: "",
+      month:"",
     };
   }
+
   async componentDidMount() {
     let id = await AsyncStorage.getItem("userId");
-    this.setState({user_id: id});
+   
     let n = new Date().getMonth();
-    if (n <= 10) {
-      this.setState({ select_boots: false });
-    }
+ this.setState({ user_id: id,month:n });
     const res = await AsyncStorage.getItem("language");
     if (res === "EN") {
-      this.setState({ lang: "EN"});
+      this.setState({ lang: "EN" });
     } else {
-      this.setState({ lang: "TH"});
+      this.setState({ lang: "TH" });
     }
     try {
       httpClient
@@ -70,80 +71,138 @@ export default class SafetyBootsScreen extends Component {
         .catch((error) => {
           console.log(error);
         });
-        httpClient
-        .get(`/Training/getBoots/${2}`)
+     
+      httpClient
+        .get(`/Training/getBoots/${this.state.user_id}`)
         .then((response) => {
           const result = response.data;
-console.log(result);
           if (result != null) {
-            this.setState({boots:result})
+            let size= this.state.select_1.find((member) => {
+              return member.name == result[0].boots_size;
+            });
+            this.setState({
+              boots_id: result[0].boots_id,
+              boots_type: result[0].boots_type,
+              boots_name: result[0].boots_name,
+              boots_size: size.id,
+            });
+            if (result[0].boots_type == 1) {
+              this.setState({ boots: true });
+            } else if (result[0].boots_type == 2) {
+              this.setState({ shoes: true });
+            }
+          }
+          
+          if (this.state.month <= 10 || result != null) {
+            this.setState({ select_boots: true });
           }
         })
         .catch((error) => {
           console.log(error);
-        }); 
+        });
     } catch (error) {}
   }
 
   onPressSend = () => {
-    const { sizeBoots, sizeShoes, user_id,} = this.state;
-    if ((sizeBoots==null||sizeBoots=="")&&(sizeShoes==null||sizeShoes=="")) {
-        this.state.lang === "EN"
-          ? Alert.alert("Please select a shoe size.")
-          : Alert.alert("กรุณาเลือก SIZE รองเท้า");
-    }else{
-     const params = {
-      sizeBoots, sizeShoes, user_id,
-     }
-     Alert.alert(
-      this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-      this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
-      [
-        {
-          text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        ,
-        {
-          text: this.state.lang === "EN" ? "OK" : "ตกลง",
-          onPress: () => {
-            httpClient
-              .post(`/Training/InsertSafetyBoots`, params)
-              .then((response) => {
-                const result = response.data;
-
-                if (result === true) {
-                  Alert.alert(
-                    this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                    this.state.lang === "EN"
-                      ? "Success"
-                      : "บันทึกสำเร็จ",
-                    [
-                      {
-                        text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                        onPress: () => this.reset(),
-                      },
-                    ],
-                    { cancelable: false }
-                  );
-                } else {
-                  Alert.alert(
-                    this.state.lang === "EN"
-                      ? `Can't save SizeBoots`
-                      : "ไม่สามารถบันทึกไซต์รองเท้าได้"
-                  );
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+    const { user_id,boots_id, boots_type, boots_name, boots_size } = this.state;
+    if (boots_size == null || boots_size == "") {
+      this.state.lang === "EN"
+        ? Alert.alert("Please select a shoe size.")
+        : Alert.alert("กรุณาเลือก SIZE รองเท้า");
+    } else {
+      let result = this.state.select_1.find((member) => {
+        return member.id === this.state.boots_size;
+      });
+      const params = {
+        boots_id,
+        user_id,
+        boots_type,
+        boots_name,
+        boots_size: result.name,
+      };
+ 
+      Alert.alert(
+        this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+        this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+        [
+          {
+            text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
           },
-        },
-      ]
-    );
+          ,
+          {
+            text: this.state.lang === "EN" ? "OK" : "ตกลง",
+            onPress: () => {
+              httpClient
+                .post(`/Training/InsertSafetyBoots`, params)
+                .then((response) => {
+                  const result = response.data;
+
+                  if (result === true) {
+                    Alert.alert(
+                      this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                      this.state.lang === "EN" ? "Success" : "บันทึกสำเร็จ",
+                      [
+                        {
+                          text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                          onPress: () => this.reset(),
+                        },
+                      ],
+                      { cancelable: false }
+                    );
+                  } else {
+                    Alert.alert(
+                      this.state.lang === "EN"
+                        ? `Can't save SizeBoots`
+                        : "ไม่สามารถบันทึกไซต์รองเท้าได้"
+                    );
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            },
+          },
+        ]
+      );
     }
   };
+   reset=async()=>{
+    let id = await AsyncStorage.getItem("userId");
+    try {
+      httpClient
+      .get(`/Training/getBoots/${this.state.user_id}`)
+      .then((response) => {
+        const result = response.data;
+        if (result != null) {
+          let size= this.state.select_1.find((member) => {
+            return member.name == result[0].boots_size;
+          });
+          this.setState({
+            boots_id: result[0].boots_id,
+            boots_type: result[0].boots_type,
+            boots_name: result[0].boots_name,
+            boots_size: size.id,
+          });
+          if (result[0].boots_type == 1) {
+            this.setState({ boots: true });
+          } else if (result[0].boots_type == 2) {
+            this.setState({ shoes: true });
+          }
+        }
+        
+        if (this.state.month <= 10 || result != null) {
+          this.setState({ select_boots: true });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   render() {
     return (
@@ -170,7 +229,13 @@ console.log(result);
                     <Button
                       mode="contained"
                       disabled={this.state.select_boots}
-                      onPress={() => this.setState({ boots: false })}
+                      onPress={() =>
+                        this.setState({
+                          boots: false,
+                          boots_type: "",
+                          boots_size:"",
+                        })
+                      }
                     >
                       {" "}
                       <Icons
@@ -212,9 +277,9 @@ console.log(result);
                         style={styles.selectableInputStyle}
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholderIconColor="#007aff"
-                        selectedValue={this.state.sizeBoots}
+                        selectedValue={this.state.boots_size}
                         onValueChange={(text) =>
-                          this.setState({ sizeBoots: text })
+                          this.setState({ boots_size: text })
                         }
                         textStyle={{ fontSize: 14 }}
                       >
@@ -239,7 +304,15 @@ console.log(result);
                   <Button
                     mode="contained"
                     disabled={this.state.select_boots}
-                    onPress={() => this.setState({ boots: true,})}
+                    onPress={() =>
+                      this.setState({
+                        boots: true,
+                        shoes: false,
+                        boots_type: 1,
+                        boots_size:"",
+                        boots_name: "Safety Boots",
+                      })
+                    }
                   >
                     Safety Boots
                   </Button>
@@ -259,7 +332,13 @@ console.log(result);
                     <Button
                       mode="contained"
                       disabled={this.state.select_boots}
-                      onPress={() => this.setState({ shoes: false })}
+                      onPress={() =>
+                        this.setState({
+                          shoes: false,
+                          boots_type: "",
+                          boots_size:"",
+                        })
+                      }
                     >
                       <Icons
                         name="check"
@@ -299,9 +378,9 @@ console.log(result);
                         style={styles.selectableInputStyle}
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholderIconColor="#007aff"
-                        selectedValue={this.state.sizeShoes}
+                        selectedValue={this.state.boots_size}
                         onValueChange={(text) =>
-                          this.setState({ sizeShoes: text })
+                          this.setState({ boots_size: text ,})
                         }
                         textStyle={{ fontSize: 14 }}
                       >
@@ -326,7 +405,15 @@ console.log(result);
                   <Button
                     mode="contained"
                     disabled={this.state.select_boots}
-                    onPress={() => this.setState({ shoes: true,})}
+                    onPress={() =>
+                      this.setState({
+                        shoes: true,
+                        boots: false,
+                        boots_type: 2,
+                        boots_size:"",
+                        boots_name: "Safety Shoes",
+                      })
+                    }
                   >
                     Safety Shoes
                   </Button>
@@ -335,7 +422,7 @@ console.log(result);
             </Card>
 
             <Button
-            disabled={this.state.select_boots}
+              disabled={this.state.select_boots}
               onPress={() => this.onPressSend()}
               mode="contained"
               style={styles.submitButton}

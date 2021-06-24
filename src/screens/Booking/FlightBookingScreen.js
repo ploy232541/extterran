@@ -451,10 +451,7 @@ export default class FlightBookingScreen extends Component {
           };
 
           const datas = params;
-          // const datas = new FormData();
-          // Object.keys(params).forEach(key=>datas.append(key,params[key]))
-          //  console.log(datas);
-          // const data=params
+
           Alert.alert(
             this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
             this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
