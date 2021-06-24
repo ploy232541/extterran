@@ -6,6 +6,7 @@ import {
   Dimensions,
   Text,
   Image,
+  Alert,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
@@ -13,6 +14,7 @@ import { Picker, Tab } from "native-base";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { AsyncStorage } from "react-native";
 import Icons from "react-native-vector-icons/FontAwesome";
+import { httpClient } from "../../core/HttpClient";
 
 const HEIGHT = Dimensions.get("window").height;
 
@@ -27,9 +29,14 @@ export default class SafetyBootsScreen extends Component {
       boots: false,
       shoes: false,
       select_1: [],
+      select_boots:true
     };
   }
   async componentDidMount() {
+    let n=new Date().getMonth()
+    if (n>=10) {
+      this.setState({select_boots:false})
+    }
     const res = await AsyncStorage.getItem("language");
     if (res === "EN") {
       this.setState({ lang: "EN", lang_id: 1 });
@@ -41,10 +48,18 @@ export default class SafetyBootsScreen extends Component {
       .get(`/Training/SizeBoots`)
       .then((response) => {
         const result = response.data;
-        console.log(result);
+        
         if (result != null) {
+          let data=[]
+         
+          for(var i in result){ 
+            
+            data[i]={id:i,name:result[i]}
+            
+          }
+          console.log(data);
           this.setState({
-            select_1: result,
+            select_1: data,
           });
         }
       })
@@ -55,9 +70,13 @@ export default class SafetyBootsScreen extends Component {
     } catch (error) {}
   }
 
+  
+
+
   render() {
     return (
       <View style={styles.background}>
+
         <ScrollView>
           <View style={styles.textHeader}>
             <Text style={{ color: "#009bdc", fontSize: "24" }}>
@@ -74,10 +93,13 @@ export default class SafetyBootsScreen extends Component {
                   style={styles.cardImage}
                   source={require("../../asset/boots_image/safety.png")}
                 />
+                
                 {this.state.boots ? (
                   <ScrollView>
                     <Button
                       mode="contained"
+                      disabled={this.state.select_boots}
+                      
                       onPress={() => this.setState({ boots: false })}
                     >
                       {" "}
@@ -100,6 +122,7 @@ export default class SafetyBootsScreen extends Component {
                           : "ขนาดรองเท้า (US)"}
                       </Text>
                       <Picker
+                      enabled={!this.state.select_boots}
                         mode="dropdown"
                         placeholder={
                           this.state.lang === "EN"
@@ -134,22 +157,24 @@ export default class SafetyBootsScreen extends Component {
                           value=""
                         />
                         {/* ยังแก้ไม่เสร็จ */}
-                        {this.state.select_1.map((data,index) => {
+                        {this.state.select_1.map((item) => {
                               return (
                                 <Picker.Item
                                   label={
-                                    data
+                                    item.name
                                   }
-                                  value={data.index}
+                                  value={item.id}
                                 />
                               );
                             })}
                       </Picker>
                     </View>
+                   
                   </ScrollView>
                 ) : (
                   <Button
                     mode="contained"
+                    disabled={this.state.select_boots}
                     onPress={() => this.setState({ boots: true, shoes: false })}
                   >
                     Safety Boots
@@ -168,6 +193,7 @@ export default class SafetyBootsScreen extends Component {
                 {this.state.shoes ? (
                   <ScrollView>
                     <Button mode="contained"
+                    disabled={this.state.select_boots}
                      onPress={() => this.setState({ shoes: false })}
                      >
                       <Icons
@@ -188,6 +214,7 @@ export default class SafetyBootsScreen extends Component {
                           : "ขนาดรองเท้า (US)"}
                       </Text>
                       <Picker
+                      enabled={!this.state.select_boots}
                         mode="dropdown"
                         placeholder={
                           this.state.lang === "EN"
@@ -222,29 +249,22 @@ export default class SafetyBootsScreen extends Component {
                           value=""
                         />
                         {/* ยังแก้ไม่เสร็จ */}
-                        {/* {this.state.select_2.map((data) => {
+                        {this.state.select_1.map((item) => {
                               return (
                                 <Picker.Item
                                   label={
-                                    this.state.lang === "EN"
-                                      ? data.firstname_en +
-                                        "(" +
-                                        data.lastname_en +
-                                        ")"
-                                      : data.firstname +
-                                        "(" +
-                                        data.lastname +
-                                        ")"
+                                    item.name
                                   }
-                                  value={data.user_id}
+                                  value={item.id}
                                 />
                               );
-                            })} */}
+                            })}
                       </Picker>
                     </View>
                   </ScrollView>
                 ) : (
                   <Button mode="contained"
+                  disabled={this.state.select_boots}
                   onPress={() => this.setState({ shoes: true, boots: false })}
                   >Safety Shoes</Button>
                 )}
