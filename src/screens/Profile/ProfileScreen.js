@@ -1,6 +1,7 @@
 import * as React from "react";
 import { View, StyleSheet, FlatList } from "react-native";
-import ButtonCard from "../../shared/ButtonCard";
+import { ScrollView } from "react-native-gesture-handler";
+import ButtonCard_Profile from "../../shared/ButtonCard_Profile";
 
 function ProfileScreen() {
   const formatDataList = (dataList, numberColumns) => {
@@ -18,25 +19,25 @@ function ProfileScreen() {
     {
       id: 1,
       title: "ชุด",
-      imgSource: "https://picsum.photos/700",
+      src: require('../../asset/dashboardIcon/uniform.png'),
       to: "OutfitScreen",
     },
     {
       id: 2,
       title: "รองเท้าเซฟตี้",
-      imgSource: "https://picsum.photos/700",
+      src: require("../../asset/dashboardIcon/safetyb.png"),
       to: "SafetyBootsScreen",
     },
     {
       id: 3,
       title: "Medical Checkups",
-      imgSource: "https://picsum.photos/700",
+      src: {uri: "https://upload.wikimedia.org/wikipedia/id/7/7d/Bliss.png"},
       to: "MedicalCheckupsScreen",
     },
     {
       id: 4,
       title: "ข้อมูลส่วนตัว",
-      imgSource: "https://picsum.photos/700",
+      src: "https://picsum.photos/700",
       to: "MainProfileScreen",
     },
   ];
@@ -45,13 +46,14 @@ function ProfileScreen() {
     if (item.empty) {
       return (
         <View
-          style={{ flex: 1, margin: 15, backgroundColor: "transparent" }}
+          style={{ flex: 1, marginVertical: 5,
+            marginHorizontal: 5, backgroundColor: "transparent" }}
         ></View>
       );
     }
     return (
-      <View style={{ flex: 1, margin: 15 }}>
-        <ButtonCard title={item.title} to={item.to} src={item.imgSource} />
+      <View style={{ flex: 1, marginTop:24, marginHorizontal: 10 }}>
+        <ButtonCard_Profile title={item.title} to={item.to} src={item.src} />
       </View>
     );
   };
@@ -59,6 +61,7 @@ function ProfileScreen() {
   const profileNumColumn = 2;
 
   return (
+    <ScrollView style={{backgroundColor: "white"}}>
     <View>
       <FlatList
         data={formatDataList(ProfileHeader, profileNumColumn)}
@@ -67,6 +70,7 @@ function ProfileScreen() {
         numColumns={profileNumColumn}
       />
     </View>
+    </ScrollView>
   );
 }
 
