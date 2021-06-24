@@ -22,7 +22,7 @@ const ButtonCard = ({ title, to, src, icon }) => {
         }}/>
        
         {/* <Card.Actions style={{alignSelf: 'center'}}> */}
-          <Text style = {{ color :'white',flex: 1, marginTop: 12 , marginBottom: 20, marginLeft: 10, marginRight: 10,textAlign: 'center'}}>{title}</Text>
+          <Text style = {{ color :'white',flex: 1, marginTop: 12 , marginBottom: 20, textAlign: 'center'}}>{title}</Text>
           </View>
           </View>
         {/* </Card.Actions> */}

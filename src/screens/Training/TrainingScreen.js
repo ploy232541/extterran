@@ -79,7 +79,7 @@ function TrainingScreen() {
   const trainingNumColumn = 2;
 
   return (
-    <View>
+    <View style={{backgroundColor:"white", height: "200%"}}>
       <FlatList
         data={formatDataList(TrainingHeader, trainingNumColumn)}
         renderItem={training_renderItem}

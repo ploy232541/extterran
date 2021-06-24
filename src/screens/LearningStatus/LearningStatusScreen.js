@@ -88,7 +88,7 @@ function LearningStatusScreen() {
               />
               {/* <Card.Actions style={{alignSelf: 'center'}}> */}
               {/* <Button>{item.title}</Button> */}
-              <Text style = {{ color :'white',flex: 1, marginTop: 12 , marginBottom: 20, marginLeft: 10, marginRight: 10,textAlign: 'center'}}>{item.title}</Text>
+              <Text style = {{ color :'white',flex: 1, marginTop: 12 , marginBottom: 20, textAlign: 'center'}}>{item.title}</Text>
               {/* </Card.Actions> */}
             </View>
           </View>
