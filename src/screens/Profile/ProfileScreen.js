@@ -31,13 +31,15 @@ function ProfileScreen() {
     {
       id: 3,
       title: "Medical Checkups",
-      src: {uri: "https://upload.wikimedia.org/wikipedia/id/7/7d/Bliss.png"},
+      // src: {uri: "https://upload.wikimedia.org/wikipedia/id/7/7d/Bliss.png"},
+      src: require("../../asset/dashboardIcon/medical.png"),
       to: "MedicalCheckupsScreen",
     },
     {
       id: 4,
       title: "ข้อมูลส่วนตัว",
-      src: "https://picsum.photos/700",
+      // src: "https://picsum.photos/700",
+      src: require("../../asset/dashboardIcon/infomation.png"),
       to: "MainProfileScreen",
     },
   ];
