@@ -49,6 +49,7 @@ export default class TrainingFormScreen extends Component {
     super(props);
 
     this.state = {
+      user_id:"",
       lang: "",
       firstname: "",
       position: "",
@@ -119,7 +120,9 @@ export default class TrainingFormScreen extends Component {
 
   async componentDidMount() {
     let id = await AsyncStorage.getItem("userId");
+  
     this.setState({
+      user_id:id,
       dateNow: this.formatDate(now()),
       dateTimeNow: this.formatDateTime(now()),
       dateThai: this.formatThai(now()),
@@ -352,8 +355,10 @@ export default class TrainingFormScreen extends Component {
   }
 
   onPressSend = () => {
+    
     try {
       const {
+        user_id,
         course,
         courseselect,
         nameCourse,
@@ -467,6 +472,7 @@ export default class TrainingFormScreen extends Component {
           courseItem.length2.length <= 0
         ) {
           const params = {
+            user_id,
             course,
             courseselect,
             nameCourse,
@@ -639,6 +645,7 @@ export default class TrainingFormScreen extends Component {
   };
   async sub_course(value) {
     let user_id = await AsyncStorage.getItem("userId");
+ 
     try {
       httpClient
         .get(
