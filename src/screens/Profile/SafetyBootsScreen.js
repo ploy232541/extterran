@@ -36,15 +36,18 @@ export default class SafetyBootsScreen extends Component {
       boots_type: "",
       boots_name: "",
       boots_size: "",
-      month:"",
+      month: "",
     };
   }
 
   async componentDidMount() {
     let id = await AsyncStorage.getItem("userId");
-   
+
     let n = new Date().getMonth();
- this.setState({ user_id: id,month:n });
+    this.setState({ user_id: id, month: n });
+    if (this.state.month < 10) {
+      this.setState({ select_boots: true });
+    }
     const res = await AsyncStorage.getItem("language");
     if (res === "EN") {
       this.setState({ lang: "EN" });
@@ -71,13 +74,13 @@ export default class SafetyBootsScreen extends Component {
         .catch((error) => {
           console.log(error);
         });
-     
+
       httpClient
         .get(`/Training/getBoots/${this.state.user_id}`)
         .then((response) => {
           const result = response.data;
           if (result != null) {
-            let size= this.state.select_1.find((member) => {
+            let size = this.state.select_1.find((member) => {
               return member.name == result[0].boots_size;
             });
             this.setState({
@@ -85,16 +88,13 @@ export default class SafetyBootsScreen extends Component {
               boots_type: result[0].boots_type,
               boots_name: result[0].boots_name,
               boots_size: size.id,
+              select_boots: true,
             });
             if (result[0].boots_type == 1) {
               this.setState({ boots: true });
             } else if (result[0].boots_type == 2) {
               this.setState({ shoes: true });
             }
-          }
-          
-          if (this.state.month <= 10 || result != null) {
-            this.setState({ select_boots: true });
           }
         })
         .catch((error) => {
@@ -104,7 +104,8 @@ export default class SafetyBootsScreen extends Component {
   }
 
   onPressSend = () => {
-    const { user_id,boots_id, boots_type, boots_name, boots_size } = this.state;
+    const { user_id, boots_id, boots_type, boots_name, boots_size } =
+      this.state;
     if (boots_size == null || boots_size == "") {
       this.state.lang === "EN"
         ? Alert.alert("Please select a shoe size.")
@@ -120,7 +121,7 @@ export default class SafetyBootsScreen extends Component {
         boots_name,
         boots_size: result.name,
       };
- 
+
       Alert.alert(
         this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
         this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
@@ -168,41 +169,41 @@ export default class SafetyBootsScreen extends Component {
       );
     }
   };
-   reset=async()=>{
-    let id = await AsyncStorage.getItem("userId");
+  reset = async () => {
+    if (this.state.month <10 ) {
+      this.setState({ select_boots: true });
+    }
     try {
       httpClient
-      .get(`/Training/getBoots/${this.state.user_id}`)
-      .then((response) => {
-        const result = response.data;
-        if (result != null) {
-          let size= this.state.select_1.find((member) => {
-            return member.name == result[0].boots_size;
-          });
-          this.setState({
-            boots_id: result[0].boots_id,
-            boots_type: result[0].boots_type,
-            boots_name: result[0].boots_name,
-            boots_size: size.id,
-          });
-          if (result[0].boots_type == 1) {
-            this.setState({ boots: true });
-          } else if (result[0].boots_type == 2) {
-            this.setState({ shoes: true });
+        .get(`/Training/getBoots/${this.state.user_id}`)
+        .then((response) => {
+          const result = response.data;
+          if (result != null) {
+            let size = this.state.select_1.find((member) => {
+              return member.name == result[0].boots_size;
+            });
+            this.setState({
+              boots_id: result[0].boots_id,
+              boots_type: result[0].boots_type,
+              boots_name: result[0].boots_name,
+              boots_size: size.id,
+              select_boots: true,
+            });
+            if (result[0].boots_type == 1) {
+              this.setState({ boots: true });
+            } else if (result[0].boots_type == 2) {
+              this.setState({ shoes: true });
+            }
           }
-        }
         
-        if (this.state.month <= 10 || result != null) {
-          this.setState({ select_boots: true });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   render() {
     return (
@@ -233,7 +234,7 @@ export default class SafetyBootsScreen extends Component {
                         this.setState({
                           boots: false,
                           boots_type: "",
-                          boots_size:"",
+                          boots_size: "",
                         })
                       }
                     >
@@ -309,7 +310,7 @@ export default class SafetyBootsScreen extends Component {
                         boots: true,
                         shoes: false,
                         boots_type: 1,
-                        boots_size:"",
+                        boots_size: "",
                         boots_name: "Safety Boots",
                       })
                     }
@@ -336,7 +337,7 @@ export default class SafetyBootsScreen extends Component {
                         this.setState({
                           shoes: false,
                           boots_type: "",
-                          boots_size:"",
+                          boots_size: "",
                         })
                       }
                     >
@@ -380,7 +381,7 @@ export default class SafetyBootsScreen extends Component {
                         placeholderIconColor="#007aff"
                         selectedValue={this.state.boots_size}
                         onValueChange={(text) =>
-                          this.setState({ boots_size: text ,})
+                          this.setState({ boots_size: text })
                         }
                         textStyle={{ fontSize: 14 }}
                       >
@@ -410,7 +411,7 @@ export default class SafetyBootsScreen extends Component {
                         shoes: true,
                         boots: false,
                         boots_type: 2,
-                        boots_size:"",
+                        boots_size: "",
                         boots_name: "Safety Shoes",
                       })
                     }
