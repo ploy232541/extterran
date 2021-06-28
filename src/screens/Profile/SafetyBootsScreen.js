@@ -228,6 +228,7 @@ export default class SafetyBootsScreen extends Component {
                 {this.state.boots ? (
                   <ScrollView>
                     <Button
+                    style={{backgroundColor: "red"}}
                       mode="contained"
                       disabled={this.state.select_boots}
                       onPress={() =>
@@ -292,7 +293,6 @@ export default class SafetyBootsScreen extends Component {
                           }
                           value=""
                         />
-                        {/* ยังแก้ไม่เสร็จ */}
                         {this.state.select_1.map((item) => {
                           return (
                             <Picker.Item label={item.name} value={item.id} />
@@ -331,6 +331,7 @@ export default class SafetyBootsScreen extends Component {
                 {this.state.shoes ? (
                   <ScrollView>
                     <Button
+                    style={{backgroundColor: "red"}}
                       mode="contained"
                       disabled={this.state.select_boots}
                       onPress={() =>
@@ -393,7 +394,6 @@ export default class SafetyBootsScreen extends Component {
                           }
                           value=""
                         />
-                        {/* ยังแก้ไม่เสร็จ */}
                         {this.state.select_1.map((item) => {
                           return (
                             <Picker.Item label={item.name} value={item.id} />
