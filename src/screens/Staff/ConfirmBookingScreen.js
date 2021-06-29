@@ -8,6 +8,7 @@ import { Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const HEIGHT = Dimensions.get("window").height;
+const word = [[],[]];
 const ConfirmBookingScreen = (props) => {
   const navigation = useNavigation();
   let title = props.route.params.title;
@@ -30,36 +31,41 @@ const ConfirmBookingScreen = (props) => {
                     </View>
                 </View> */}
         <DataTable style={{ marginTop: 20, borderBottomWidth: 1 }}>
-          <DataTable.Row style={{ borderWidth: 1 }}>
-            <DataTable.Cell>นาย XXX XXXXXXXXX</DataTable.Cell>
-            <DataTable.Cell
-              style={{
-                right: 0,
-                position: "absolute",
-                alignSelf: "center",
-                flex: 1,
-              }}
-            >
-              <TouchableOpacity onPress={() => navigation.navigate('StaffForm')}>
-                <View
-                  style={{
-                    alignSelf: "center",
-                    backgroundColor: "#398DDD",
-                    width: "100%",
-                    height: HEIGHT * 0.03,
-                    justifyContent: "center",
-                    borderRadius: 5,
-                    padding: 5,
-                  }}
-                >
-                  <Text style={{ color: "white" }}>รายละเอียด</Text>
-                </View>
-              </TouchableOpacity>
-            </DataTable.Cell>
-          </DataTable.Row>
+          {word.map((item)=>{
+            return(<DataTable.Row style={{ borderWidth: 1 }}>
+           <DataTable.Cell>นาย XXX XXXXXXXXX</DataTable.Cell>
+           <DataTable.Cell
+             style={{
+               right: 0,
+               position: "absolute",
+               alignSelf: "center",
+               flex: 1,
+             }}
+           >
+             <TouchableOpacity onPress={() => navigation.navigate('StaffForm')}>
+               <View
+                 style={{
+                   alignSelf: "center",
+                   backgroundColor: "#398DDD",
+                   width: "100%",
+                   height: HEIGHT * 0.03,
+                   justifyContent: "center",
+                   borderRadius: 5,
+                   padding: 5,
+                 }}
+               >
+                 <Text style={{ color: "white" }}>รายละเอียด</Text>
+               </View>
+             </TouchableOpacity>
+           </DataTable.Cell>
+         </DataTable.Row>)
+           
+          })}
+          
+
         </DataTable>
 
-        <DataTable style={{ borderBottomWidth: 1 }}>
+        {/* <DataTable style={{ borderBottomWidth: 1 }}>
           <DataTable.Row style={{ borderWidth: 1 }}>
             <DataTable.Cell>นาย XXX XXXXXXXXX</DataTable.Cell>
             <DataTable.Cell
@@ -87,7 +93,7 @@ const ConfirmBookingScreen = (props) => {
               </TouchableOpacity>
             </DataTable.Cell>
           </DataTable.Row>
-        </DataTable>
+        </DataTable> */}
       </View>
     </ScrollView>
   );
