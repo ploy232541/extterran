@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Dimensions } from "react-native";
 import {View, Text, StyleSheet, FlatList, AsyncStorage} from 'react-native'
-import StaffCard from "../../shared/ButtonCard";
+import StaffCard from '../../components/StaffCard'
 
 const HEIGHT = Dimensions.get('window').height
 function FeedBackScreen() {
