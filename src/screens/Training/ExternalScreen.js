@@ -54,7 +54,6 @@ export default class ExternalScreen extends Component {
       select_1: [],
       startDate: "DD/MM/YYYY",
       isDatePickerVisible: false,
-      trainingNeed: [],
       dateexternal: [],
       dateexternalitem: {
         data: {
@@ -68,6 +67,7 @@ export default class ExternalScreen extends Component {
         },
       },
       tem: -1,
+      a:0,
     };
   }
 
@@ -166,7 +166,7 @@ export default class ExternalScreen extends Component {
         item["data"] = data;
         dateexternal[tem] = item;
         this.setState({ dateexternal: dateexternal });
-        console.log(dateexternal);
+        // console.log(dateexternal);
       }
     }
     this.hideDatePicker();
@@ -187,19 +187,89 @@ export default class ExternalScreen extends Component {
     }
   };
 
-  deleteCourse(index, courseItem) {
-    let itemCopy = [...courseItem];
-    itemCopy.splice(index, 1);
-    this.setState({ courseItem: itemCopy });
+  deleteCourse(index, i) {
+    let trainingNeed = [...this.state.trainingNeed];
+    let item = { ...trainingNeed[index] };
+    let data = item["data"];
+    data.splice(i, 1);
+    item["data"] = data;
+    trainingNeed[index] = item;
+    this.setState({ trainingNeed: trainingNeed });
   }
 
+  deleteEmployee(index) {
+    let itemCopy = [...this.state.trainingNeed];
+    itemCopy.splice(index, 1);
+    this.setState({ trainingNeed: itemCopy });
+  }
+  addCourse(index) {
+    let trainingNeed = [...this.state.trainingNeed];
+    let item = { ...trainingNeed[index] };
+
+    let data = [...item["data"], this.state.courseItem];
+    item["data"] = data;
+    trainingNeed[index] = item;
+
+    this.setState({ trainingNeed: trainingNeed });
+  }
+  goss(element,index){
+let selected=true
+    for (let i = 0; i < this.state.trainingNeed.length; i++) {
+      const param = this.state.trainingNeed[i];
+    if (param.employee_id==element.user_id) {
+      selected=false
+      break
+    }
+
+    }
+    if (selected==false) {
+      return (
+        <Picker.Item
+          label={
+            this.state.lang === "EN"
+              ? element.firstname_en +
+                " " +
+                element.lastname_en 
+              : element.firstname +
+                " " +
+                element.lastname +" (เลือกแล้ว)"
+          }
+          value={element.user_id}
+       
+        />
+        
+      )
+    }else{
+      {
+        return (
+          <Picker.Item
+            label={
+              this.state.lang === "EN"
+                ? element.firstname_en +
+                  " " +
+                  element.lastname_en 
+                : element.firstname +
+                  " " +
+                  element.lastname 
+            }
+            value={element.user_id}
+           
+         
+          />
+          
+        )
+      }
+    }
+      
+  
+  }
   render() {
     return (
       <View style={styles.background}>
         <ScrollView>
           <View style={styles.textHeader}>
             <Text style={{ color: "#333333", fontSize: "24" }}>
-            Training Needs - External
+              Training Needs - External
             </Text>
           </View>
 
@@ -212,7 +282,7 @@ export default class ExternalScreen extends Component {
               alignItems: "center",
             }}
           >
-            <Divider style={{ paddingBottom: 1, flex: 1 ,}} />
+            <Divider style={{ paddingBottom: 1, flex: 1 }} />
             <Avatar.Icon
               icon="arrow-down"
               size={30}
@@ -223,8 +293,7 @@ export default class ExternalScreen extends Component {
 
           {/* Start Card by aek*/}
           {/* จะทำการแสดงพนักงาน */}
-          {this.state.trainingNeed.map((item, index) => {
-            console.log(item);
+          {this.state.trainingNeed.map((Item, index) => {
             return (
               <View>
                 <ScrollView>
@@ -245,24 +314,44 @@ export default class ExternalScreen extends Component {
                         </Text>
 
                         <View>
+                          
                           <Picker
                             mode="dropdown"
                             iosIcon={
                               <Icon
                                 name="angle-down"
-                                style={{ width: "8%", paddingHorizontal: 2}}
+                                style={{ width: "8%", paddingHorizontal: 2 }}
                               />
                             }
                             style={styles.inputLightStyle}
                             placeholder={
-                              this.state.lang === "EN" ? "Selecte" : "เลือก"
+                              this.state.lang === "EN"
+                                ? "Selecte"
+                                : "เลือกพนักงาน"
                             }
                             placeholderStyle={{ color: "#bfc6ea" }}
                             placeholderIconColor="#007aff"
-                            // selectedValue={this.state.purpose}
-                            // onValueChange={(text) =>
-                            //   this.setState({ purpose: text })
-                            // }
+                            selectedValue={Item.employee_id?Item.employee_id:""}
+                            onValueChange={(text) => {
+                              let selected=true
+                              for (let i = 0; i < this.state.trainingNeed.length; i++) {
+                                const param = this.state.trainingNeed[i];
+                              if (text==param.employee_id) {
+                                selected=false
+                                break
+                              }
+                          
+                              }
+                              if (selected==true) {
+                                  let trainingNeed = [...this.state.trainingNeed];
+                              let item = { ...trainingNeed[index] };
+                              item.employee_id = text;
+                              trainingNeed[index] = item;
+                              this.setState({ trainingNeed: trainingNeed });
+                              }else{
+                                Alert.alert( "กรุณาเลือกใหม่")
+                              }
+                            }}
                             textStyle={{ fontSize: 14 }}
                           >
                             <Picker.Item
@@ -273,240 +362,256 @@ export default class ExternalScreen extends Component {
                               }
                               value=""
                             />
-                            {this.state.select_2.map((data) => {
-                              return (
-                                <Picker.Item
-                                  label={
-                                    this.state.lang === "EN"
-                                      ? data.firstname_en +
-                                        "(" +
-                                        data.lastname_en +
-                                        ")"
-                                      : data.firstname +
-                                        "(" +
-                                        data.lastname +
-                                        ")"
-                                  }
-                                  value={data.user_id}
-                                />
-                              );
-                            })}
+                            
+                     {
+                     this.state.select_2.map((element,l) => {
+                         return this.goss(element,l)
+
+                            }
+                            )
+                            } 
                           </Picker>
                         </View>
                       </View>
 
-                      <Divider style={{ paddingBottom: 1, marginTop: 10 ,backgroundColor: "#398DDD", }} />
-
+                      <Divider
+                        style={{
+                          paddingBottom: 1,
+                          marginTop: 10,
+                          backgroundColor: "#398DDD",
+                        }}
+                      />
                       {/* Start กรอบใน */}
-                      <View style={{ marginTop: 24 }}>
-                        <View style={styles.containerSec3}>
-                          <View
-                            style={{
-                              flexDirection: "column",
-                              justifyContent: "space-around",
-                              paddingHorizontal: 10,
-                              // marginBottom: 8,
-                            }}
-                          >
-                            <TextInput
-                              style={styles.inputStyle4}
-                              placeholder={
-                                this.state.lang === "EN"
-                                  ? "Course Name"
-                                  : "ชื่อหลักสูตร"
-                              }
-                            ></TextInput>
 
-                            <TextInput
-                              style={styles.inputStyle4}
-                              placeholder={
-                                this.state.lang === "EN"
-                                  ? "Training Provider"
-                                  : "ผู้ให้บริการฝึกอบรม"
-                              }
-                            ></TextInput>
-
-                            <View>
-                              <Picker
-                                mode="dropdown"
-                                iosIcon={
-                                  <Icon
-                                    name="angle-down"
-                                    style={{
-                                      width: "8%",
-                                      paddingHorizontal: 2,
-                                    }}
-                                  />
-                                }
-                                style={styles.inputLightStyle}
-                                placeholder={
-                                  this.state.lang === "EN"
-                                    ? "Selecte a purpose"
-                                    : "เลือกจุดประสงค์"
-                                }
-                                placeholderStyle={{ color: "#bfc6ea" }}
-                                placeholderIconColor="#007aff"
-                                // selectedValue={this.state.toFlight}
-                                // onValueChange={(text) =>
-                                //   this.setState({ toFlight: text })
-                                // }
-                                textStyle={{ fontSize: 14 }}
+                      {Item.data.map((param, i) => {
+                        return (
+                          <View style={{ marginTop: 24 }}>
+                            <View style={styles.containerSec3}>
+                              <View
+                                style={{
+                                  flexDirection: "column",
+                                  justifyContent: "space-around",
+                                  paddingHorizontal: 10,
+                                  // marginBottom: 8,
+                                }}
                               >
-                                <Picker.Item
-                                  label={
+                                <TextInput
+                                  style={styles.inputStyle4}
+                                  placeholder={
                                     this.state.lang === "EN"
-                                      ? "Please select a purpose"
-                                      : "กรุณาเลือกจุดประสงค์"
+                                      ? "Course Name"
+                                      : "ชื่อหลักสูตร"
                                   }
-                                  value=""
-                                />
-                                {this.state.select_1.map((data) => {
-                                  return (
+                                  onChangeText={(text) => {
+                                    let trainingNeed = [
+                                      ...this.state.trainingNeed,
+                                    ];
+                                    let item = { ...trainingNeed[index] };
+                                    let data = { ...item["data"] };
+                                    let param = { ...data[i] };
+                                    param.courseName = text;
+                                    data[i] = param;
+                                    item["data"] = data;
+                                    trainingNeed[index] = item;
+                                    this.setState({
+                                      trainingNeed: trainingNeed,
+                                    });
+                                  }}
+                                ></TextInput>
+
+                                <TextInput
+                                  style={styles.inputStyle4}
+                                  placeholder={
+                                    this.state.lang === "EN"
+                                      ? "Training Provider"
+                                      : "ผู้ให้บริการฝึกอบรม"
+                                  }
+                                ></TextInput>
+
+                                <View>
+                                  <Picker
+                                    mode="dropdown"
+                                    iosIcon={
+                                      <Icon
+                                        name="angle-down"
+                                        style={{
+                                          width: "8%",
+                                          paddingHorizontal: 2,
+                                        }}
+                                      />
+                                    }
+                                    style={styles.inputLightStyle}
+                                    placeholder={
+                                      this.state.lang === "EN"
+                                        ? "Selecte a purpose"
+                                        : "เลือกจุดประสงค์"
+                                    }
+                                    placeholderStyle={{ color: "#bfc6ea" }}
+                                    placeholderIconColor="#007aff"
+                                    // selectedValue={this.state.toFlight}
+                                    // onValueChange={(text) =>
+                                    //   this.setState({ toFlight: text })
+                                    // }
+                                    textStyle={{ fontSize: 14 }}
+                                  >
                                     <Picker.Item
                                       label={
                                         this.state.lang === "EN"
-                                          ? data.purpose_en
-                                          : data.purpose_th
+                                          ? "Please select a purpose"
+                                          : "กรุณาเลือกจุดประสงค์"
                                       }
-                                      value={data.id}
+                                      value=""
                                     />
-                                  );
-                                })}
-                              </Picker>
-                            </View>
-
-                            <View>
-                              <TouchableOpacity
-                                onPress={() => this.showDatePicker("start")}
-                              >
-                                <View style={styles.inputStyle5}>
-                                  <Text style={{ color: "#bfc6ea" }}>
-                                    {this.state.startDate}
-                                  </Text>
+                                    {this.state.select_1.map((data) => {
+                                      return (
+                                        <Picker.Item
+                                          label={
+                                            this.state.lang === "EN"
+                                              ? data.purpose_en
+                                              : data.purpose_th
+                                          }
+                                          value={data.id}
+                                        />
+                                      );
+                                    })}
+                                  </Picker>
                                 </View>
-                              </TouchableOpacity>
-                            </View>
 
-                            <TextInput
-                              style={styles.inputStyle4}
-                              placeholder={
-                                this.state.lang === "EN"
-                                  ? "Training Cost"
-                                  : "ราคา"
-                              }
-                            ></TextInput>
+                                <View>
+                                  <TouchableOpacity
+                                    onPress={() => this.showDatePicker("start")}
+                                  >
+                                    <View style={styles.inputStyle5}>
+                                      <Text style={{ color: "#bfc6ea" }}>
+                                        {this.state.startDate}
+                                      </Text>
+                                    </View>
+                                  </TouchableOpacity>
+                                </View>
 
-                            <TextInput
-                              style={styles.inputStyle4}
-                              placeholder={
-                                this.state.lang === "EN" ? "Other" : "อื่นๆ"
-                              }
-                            ></TextInput>
+                                <TextInput
+                                  style={styles.inputStyle4}
+                                  placeholder={
+                                    this.state.lang === "EN"
+                                      ? "Training Cost"
+                                      : "ราคา"
+                                  }
+                                ></TextInput>
 
-                            <Text
-                              style={{
-                                paddingHorizontal: 8,
-                                // paddingVertical: 12,
-                                marginTop: 15,
-                              }}
-                            >
-                              {this.state.lang === "EN"
-                                ? "Attach File"
-                                : "แนบไฟล์"}
-                            </Text>
-                            <Button
-                              style={{
-                                borderWidth: 1,
-                      borderRadius: 10,
-                      backgroundColor: "#4392de",
-                      height: HEIGHT / 20,
-                      // width: "20%",
-                      marginTop: 10,
-                      marginBottom: 10,
-                      borderColor: "#4392de",
-                      alignSelf: "flex-start",
-                              }}
-                            >
-                         <View
-                                style={{
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                  flex: 1,
-                                }}
-                              >
+                                <TextInput
+                                  style={styles.inputStyle4}
+                                  placeholder={
+                                    this.state.lang === "EN" ? "Other" : "อื่นๆ"
+                                  }
+                                ></TextInput>
+
                                 <Text
                                   style={{
-                                    color: "white",
-                                    // marginRight: 10,
-                                    fontSize: 14,
+                                    paddingHorizontal: 8,
+                                    // paddingVertical: 12,
+                                    marginTop: 15,
                                   }}
                                 >
-                                  {this.state.lang === "EN" ? "ChooseFile" : "เลือกไฟล์"}
+                                  {this.state.lang === "EN"
+                                    ? "Attach File"
+                                    : "แนบไฟล์"}
                                 </Text>
+                                <Button
+                                  style={{
+                                    borderWidth: 1,
+                                    borderRadius: 10,
+                                    backgroundColor: "#4392de",
+                                    height: HEIGHT / 20,
+                                    // width: "20%",
+                                    marginTop: 10,
+                                    marginBottom: 10,
+                                    borderColor: "#4392de",
+                                    alignSelf: "flex-start",
+                                  }}
+                                >
+                                  <View
+                                    style={{
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      flex: 1,
+                                    }}
+                                  >
+                                    <Text
+                                      style={{
+                                        color: "white",
+                                        // marginRight: 10,
+                                        fontSize: 14,
+                                      }}
+                                    >
+                                      {this.state.lang === "EN"
+                                        ? "ChooseFile"
+                                        : "เลือกไฟล์"}
+                                    </Text>
+                                  </View>
+                                </Button>
+
+                                <Divider
+                                  style={{
+                                    paddingBottom: 1,
+
+                                    marginBottom: 4,
+                                    marginTop: 10,
+                                  }}
+                                />
                               </View>
-                            </Button>
 
-                            <Divider
-                              style={{
-                                paddingBottom: 1,
+                              <DateTimePickerModal
+                                isVisible={this.state.isDatePickerVisible}
+                                mode="date"
+                                onConfirm={this.handleConfirm}
+                                onCancel={this.hideDatePicker}
+                              />
 
-                                marginBottom: 4,
-                                marginTop: 10,
-                              }}
-                            />
+                              <View style={styles.pickerContainer2}>
+                                <TouchableOpacity
+                                  style={styles.addButton}
+                                  onPress={() => this.addCourse(index)}
+                                >
+                                  <Text style={styles.addButtonText}>+</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                  style={styles.deleteButton}
+                                  onPress={() => this.deleteCourse(index, i)}
+                                >
+                                  <Text style={styles.addButtonText}>-</Text>
+                                </TouchableOpacity>
+                              </View>
+                            </View>
                           </View>
-
-                          <DateTimePickerModal
-                            isVisible={this.state.isDatePickerVisible}
-                            mode="date"
-                            onConfirm={this.handleConfirm}
-                            onCancel={this.hideDatePicker}
-                          />
-
-                          <View style={styles.pickerContainer2}>
-                            <TouchableOpacity
-                              style={styles.addButton}
-                             onPress={() => setCards([...cards, "1"])}
-                            >
-                              <Text style={styles.addButtonText}>+</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                              style={styles.deleteButton}
-                              onPress={() => deleteCourse(cardIndex, card, setCard)}
-                            >
-                              <Text style={styles.addButtonText}>-</Text>
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </View>
+                        );
+                      })}
+                      {/* จบกรอบใน */}
                     </View>
 
                     <Button
                       mode="contained"
                       style={styles.btnDelCard}
-                      onPress={() => deleteCourse(cardIndex, card, setCard)}
+                      onPress={() => this.deleteEmployee(index)}
+                    >
+                      <Icons
+                        name="md-remove-circle"
+                        size={20}
+                        style={{
+                          marginLeft: 10,
+                          marginRight: 5,
+                          color: "white",
+                        }}
+                      />
+                      <Text
+                        style={{
+                          color: "white",
+                          marginRight: 10,
+                          fontSize: 14,
+                        }}
                       >
-                        <Icons
-                          name="md-remove-circle"
-                          size={20}
-                          style={{
-                            marginLeft: 10,
-                            marginRight: 5,
-                            color: "white",
-                          }}
-                        />
-                       <Text
-                          style={{
-                            color: "white",
-                            marginRight: 10,
-                            fontSize: 14,
-                          }}
-                        >
-                          {this.state.lang === "EN"
-                            ? "Delete"
-                            : "ลบ"}
-                        </Text>
+                        {this.state.lang === "EN" ? "Delete" : "ลบ"}
+                      </Text>
                     </Button>
                   </View>
                   {/* End กรอบนอก&กรอบใน */}
@@ -518,15 +623,21 @@ export default class ExternalScreen extends Component {
           {/* <Button style={styles.submitButton}>
             <Text style={{ color: "#fff" }}>Submit</Text>
           </Button> */}
-           <View>
+          <View>
             {/* เมื่อกดปุ่มนี้จะทำการเพิ่มพนักงาน */}
             <Button
               style={styles.btnStyle1}
               onPress={() => {
                 let trainingNeedItem = this.state.trainingNeedItem;
                 trainingNeedItem["data"] = [
-                  ...trainingNeedItem["data"],
-                  this.state.courseItem,
+                  {
+                    courseName: "",
+                    trainingProvider: "",
+                    trainingPurpose: "",
+                    startDate: "",
+                    file: "",
+                    oher: "",
+                  },
                 ];
                 let trainingNeed = [
                   ...this.state.trainingNeed,
@@ -548,7 +659,7 @@ export default class ExternalScreen extends Component {
               </Text>
             </Button>
           </View>
-          
+
           <View
             style={{
               flexDirection: "row",
@@ -680,7 +791,7 @@ const styles = StyleSheet.create({
     // width: "95%",
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#999999",
+    borderColor: "#999998",
     marginHorizontal: 10,
     // marginRight: 8,
     // marginLeft: 10,
