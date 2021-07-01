@@ -42,8 +42,8 @@ export default class ExternalScreen extends Component {
         courseName: "",
         trainingProvider: "",
         trainingPurpose: "",
-        startDate: "",
-        file: "",
+        startDate: "DD/MM/YYYY",
+        price: "",
         oher: "",
       },
       currentDate: "dd/mm/yy",
@@ -67,7 +67,8 @@ export default class ExternalScreen extends Component {
         },
       },
       tem: -1,
-      a:0,
+      dateIndex: -1,
+      dateI: -1,
     };
   }
 
@@ -124,51 +125,34 @@ export default class ExternalScreen extends Component {
     return [day, month, year].join("/");
   };
 
-  formatDatetotal = (date) => {
-    let d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
-
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [month, day, year].join("/");
-  };
-
-  showDatePicker = (props) => {
-    this.setState({ isDatePickerVisible: true });
-    if (props == "start") {
-      this.setState({ isStart: true });
-    }
-    if (props != "start" && props >= 0) {
-      this.setState({ tem: props });
-    }
+  showDatePicker = (index, i) => {
+    this.setState({ isDatePickerVisible: true, dateIndex: index, dateI: i });
   };
 
   hideDatePicker = () => {
     this.setState({ isDatePickerVisible: false });
   };
 
-  handleConfirm = (dates) => {
-    var datess = this.formatDate(dates);
-    var dates = this.formatDatetotal(dates);
+  handleConfirm = (date) => {
+    var date = this.formatDate(date);
+    let trainingNeed = [...this.state.trainingNeed];
 
-    if (this.state.isStart) {
-      this.setState({ startDate: datess, startcul: dates, isStart: false });
-    } else {
-      if (this.state.tem > -1) {
-        let tem = this.state.tem;
-        let dateexternal = [...this.state.dateexternal];
-        let item = { ...dateexternal[tem] };
-        let data = { ...item["data"] };
-        data.dates = datess;
-        item["data"] = data;
-        dateexternal[tem] = item;
-        this.setState({ dateexternal: dateexternal });
-        // console.log(dateexternal);
-      }
-    }
+    let item = { ...trainingNeed[this.state.dateIndex] };
+    let data = { ...item["data"] };
+    let param = data[this.state.dateI];
+    param.startDate = date;
+    data[this.state.dateI] = param;
+    trainingNeed[this.state.dateIndex] = item;
+    var id = "Id of subbrands to remove: ";
+    //ลบ key ส่วนเกินออก
+    trainingNeed.forEach(function (o) {
+      o.data = o.data.filter((s) => s.id != id);
+    });
+
+    this.setState({
+      trainingNeed: trainingNeed,
+    });
+
     this.hideDatePicker();
   };
 
@@ -212,56 +196,40 @@ export default class ExternalScreen extends Component {
 
     this.setState({ trainingNeed: trainingNeed });
   }
-  goss(element,index){
-let selected=true
+  goss(element, index) {
+    let selected = true;
     for (let i = 0; i < this.state.trainingNeed.length; i++) {
       const param = this.state.trainingNeed[i];
-    if (param.employee_id==element.user_id) {
-      selected=false
-      break
+      if (param.employee_id == element.user_id) {
+        selected = false;
+        break;
+      }
     }
-
-    }
-    if (selected==false) {
+    if (selected == false) {
       return (
         <Picker.Item
           label={
             this.state.lang === "EN"
-              ? element.firstname_en +
-                " " +
-                element.lastname_en 
-              : element.firstname +
-                " " +
-                element.lastname +" (เลือกแล้ว)"
+              ? element.firstname_en + " " + element.lastname_en
+              : element.firstname + " " + element.lastname + " (เลือกแล้ว)"
           }
           value={element.user_id}
-       
         />
-        
-      )
-    }else{
+      );
+    } else {
       {
         return (
           <Picker.Item
             label={
               this.state.lang === "EN"
-                ? element.firstname_en +
-                  " " +
-                  element.lastname_en 
-                : element.firstname +
-                  " " +
-                  element.lastname 
+                ? element.firstname_en + " " + element.lastname_en
+                : element.firstname + " " + element.lastname
             }
             value={element.user_id}
-           
-         
           />
-          
-        )
+        );
       }
     }
-      
-  
   }
   render() {
     return (
@@ -314,7 +282,6 @@ let selected=true
                         </Text>
 
                         <View>
-                          
                           <Picker
                             mode="dropdown"
                             iosIcon={
@@ -331,25 +298,30 @@ let selected=true
                             }
                             placeholderStyle={{ color: "#bfc6ea" }}
                             placeholderIconColor="#007aff"
-                            selectedValue={Item.employee_id?Item.employee_id:""}
+                            selectedValue={
+                              Item.employee_id ? Item.employee_id : ""
+                            }
                             onValueChange={(text) => {
-                              let selected=true
-                              for (let i = 0; i < this.state.trainingNeed.length; i++) {
+                              let selected = true;
+                              for (
+                                let i = 0;
+                                i < this.state.trainingNeed.length;
+                                i++
+                              ) {
                                 const param = this.state.trainingNeed[i];
-                              if (text==param.employee_id) {
-                                selected=false
-                                break
+                                if (text == param.employee_id) {
+                                  selected = false;
+                                  break;
+                                }
                               }
-                          
-                              }
-                              if (selected==true) {
-                                  let trainingNeed = [...this.state.trainingNeed];
-                              let item = { ...trainingNeed[index] };
-                              item.employee_id = text;
-                              trainingNeed[index] = item;
-                              this.setState({ trainingNeed: trainingNeed });
-                              }else{
-                                Alert.alert( "กรุณาเลือกใหม่")
+                              if (selected == true) {
+                                let trainingNeed = [...this.state.trainingNeed];
+                                let item = { ...trainingNeed[index] };
+                                item.employee_id = text;
+                                trainingNeed[index] = item;
+                                this.setState({ trainingNeed: trainingNeed });
+                              } else {
+                                Alert.alert("กรุณาเลือกใหม่");
                               }
                             }}
                             textStyle={{ fontSize: 14 }}
@@ -362,14 +334,10 @@ let selected=true
                               }
                               value=""
                             />
-                            
-                     {
-                     this.state.select_2.map((element,l) => {
-                         return this.goss(element,l)
 
-                            }
-                            )
-                            } 
+                            {this.state.select_2.map((element, l) => {
+                              return this.goss(element, l);
+                            })}
                           </Picker>
                         </View>
                       </View>
@@ -384,6 +352,7 @@ let selected=true
                       {/* Start กรอบใน */}
 
                       {Item.data.map((param, i) => {
+                        console.log(Item.data);
                         return (
                           <View style={{ marginTop: 24 }}>
                             <View style={styles.containerSec3}>
@@ -402,17 +371,24 @@ let selected=true
                                       ? "Course Name"
                                       : "ชื่อหลักสูตร"
                                   }
+                                  value={param.courseName}
                                   onChangeText={(text) => {
                                     let trainingNeed = [
                                       ...this.state.trainingNeed,
                                     ];
+
                                     let item = { ...trainingNeed[index] };
                                     let data = { ...item["data"] };
-                                    let param = { ...data[i] };
+                                    let param = data[i];
                                     param.courseName = text;
                                     data[i] = param;
-                                    item["data"] = data;
                                     trainingNeed[index] = item;
+                                    var id = "Id of subbrands to remove: ";
+                                    //ลบ key ส่วนเกินออก
+                                    trainingNeed.forEach(function (o) {
+                                      o.data = o.data.filter((s) => s.id != id);
+                                    });
+
                                     this.setState({
                                       trainingNeed: trainingNeed,
                                     });
@@ -426,6 +402,28 @@ let selected=true
                                       ? "Training Provider"
                                       : "ผู้ให้บริการฝึกอบรม"
                                   }
+                                  value={param.trainingProvider}
+                                  onChangeText={(text) => {
+                                    let trainingNeed = [
+                                      ...this.state.trainingNeed,
+                                    ];
+
+                                    let item = { ...trainingNeed[index] };
+                                    let data = { ...item["data"] };
+                                    let param = data[i];
+                                    param.trainingProvider = text;
+                                    data[i] = param;
+                                    trainingNeed[index] = item;
+                                    var id = "Id of subbrands to remove: ";
+                                    //ลบ key ส่วนเกินออก
+                                    trainingNeed.forEach(function (o) {
+                                      o.data = o.data.filter((s) => s.id != id);
+                                    });
+
+                                    this.setState({
+                                      trainingNeed: trainingNeed,
+                                    });
+                                  }}
                                 ></TextInput>
 
                                 <View>
@@ -448,10 +446,30 @@ let selected=true
                                     }
                                     placeholderStyle={{ color: "#bfc6ea" }}
                                     placeholderIconColor="#007aff"
-                                    // selectedValue={this.state.toFlight}
-                                    // onValueChange={(text) =>
-                                    //   this.setState({ toFlight: text })
-                                    // }
+                                    selectedValue={param.trainingPurpose}
+                                    onValueChange={(text) => {
+                                      let trainingNeed = [
+                                        ...this.state.trainingNeed
+                                      ];
+
+                                      let item = { ...trainingNeed[index] };
+                                      let data = { ...item["data"] };
+                                      let param = data[i];
+                                      param.trainingPurpose = text;
+                                      data[i] = param;
+                                      trainingNeed[index] = item;
+                                      var id = "Id of subbrands to remove: ";
+                                      //ลบ key ส่วนเกินออก
+                                      trainingNeed.forEach(function (o) {
+                                        o.data = o.data.filter(
+                                          (s) => s.id != id
+                                        );
+                                      });
+
+                                      this.setState({
+                                        trainingNeed: trainingNeed,
+                                      });
+                                    }}
                                     textStyle={{ fontSize: 14 }}
                                   >
                                     <Picker.Item
@@ -479,11 +497,13 @@ let selected=true
 
                                 <View>
                                   <TouchableOpacity
-                                    onPress={() => this.showDatePicker("start")}
+                                    onPress={() =>
+                                      this.showDatePicker(index, i)
+                                    }
                                   >
                                     <View style={styles.inputStyle5}>
                                       <Text style={{ color: "#bfc6ea" }}>
-                                        {this.state.startDate}
+                                        {param.startDate}
                                       </Text>
                                     </View>
                                   </TouchableOpacity>
@@ -496,6 +516,28 @@ let selected=true
                                       ? "Training Cost"
                                       : "ราคา"
                                   }
+                                  value={param.price}
+                                  onChangeText={(text) => {
+                                    let trainingNeed = [
+                                      ...this.state.trainingNeed
+                                    ];
+
+                                    let item = { ...trainingNeed[index] };
+                                    let data = { ...item["data"] };
+                                    let param = data[i];
+                                    param.price = text;
+                                    data[i] = param;
+                                    trainingNeed[index] = item;
+                                    var id = "Id of subbrands to remove: ";
+                                    //ลบ key ส่วนเกินออก
+                                    trainingNeed.forEach(function (o) {
+                                      o.data = o.data.filter((s) => s.id != id);
+                                    });
+
+                                    this.setState({
+                                      trainingNeed: trainingNeed,
+                                    });
+                                  }}
                                 ></TextInput>
 
                                 <TextInput
@@ -503,6 +545,28 @@ let selected=true
                                   placeholder={
                                     this.state.lang === "EN" ? "Other" : "อื่นๆ"
                                   }
+                                  value={param.oher}
+                                  onChangeText={(text) => {
+                                    let trainingNeed = [
+                                      ...this.state.trainingNeed
+                                    ];
+
+                                    let item = { ...trainingNeed[index] };
+                                    let data = { ...item["data"] };
+                                    let param = data[i];
+                                    param.oher = text;
+                                    data[i] = param;
+                                    trainingNeed[index] = item;
+                                    var id = "Id of subbrands to remove: ";
+                                    //ลบ key ส่วนเกินออก
+                                    trainingNeed.forEach(function (o) {
+                                      o.data = o.data.filter((s) => s.id != id);
+                                    });
+
+                                    this.setState({
+                                      trainingNeed: trainingNeed,
+                                    });
+                                  }}
                                 ></TextInput>
 
                                 <Text
@@ -634,8 +698,8 @@ let selected=true
                     courseName: "",
                     trainingProvider: "",
                     trainingPurpose: "",
-                    startDate: "",
-                    file: "",
+                    startDate: "DD/MM/YYYY",
+                    price: "",
                     oher: "",
                   },
                 ];
