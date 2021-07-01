@@ -210,7 +210,7 @@ export default class ExternalScreen extends Component {
         <Picker.Item
           label={
             this.state.lang === "EN"
-              ? element.firstname_en + " " + element.lastname_en
+              ? element.firstname_en + " " + element.lastname_en + " (Selected)"
               : element.firstname + " " + element.lastname + " (เลือกแล้ว)"
           }
           value={element.user_id}
@@ -321,7 +321,9 @@ export default class ExternalScreen extends Component {
                                 trainingNeed[index] = item;
                                 this.setState({ trainingNeed: trainingNeed });
                               } else {
-                                Alert.alert("กรุณาเลือกใหม่");
+                                this.state.lang === "EN"
+          ? Alert.alert("Please select again.")
+          : Alert.alert("กรุณาเลือกใหม่อีกครั้ง");
                               }
                             }}
                             textStyle={{ fontSize: 14 }}
@@ -869,7 +871,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     marginRight: 12,
     // marginTop: 5,
-    width: "36%",
+    width: "60%",
     alignSelf: "center",
     borderRadius: 10,
   },
