@@ -177,19 +177,18 @@ export default class InHouseScreen extends Component {
             {/* End User Picker */}
 
             <Divider style={{ paddingBottom: 1, marginTop: 14 }} />
-            {/* แก้ */}
-            {/* Start Selectable Course Picker */}
+
+            {/* เริ่มจุดนี้ ที่ทำให้อยู่แถวเดียวกัน */}
             <View style={{ marginTop: 15 }}>
               <View
                 style={{
                   flexDirection: "row",
                   marginTop: 5,
                   marginBottom: 12,
-                  borderColor: "red",
-                  borderWidth: 2,
                   width: "100%"
                 }}
               >
+                {/* dropdown */}
                 <Picker
                   mode="dropdown"
                   iosIcon={
@@ -202,6 +201,7 @@ export default class InHouseScreen extends Component {
                     // width: "80%",
                     borderWidth: 1,
                     borderColor: "#d9d9d9",
+                    marginHorizontal: 4
                   }}
                   placeholderStyle={{ color: "#bfc6ea" }}
                   placeholder="SelectCourse"
@@ -222,8 +222,8 @@ export default class InHouseScreen extends Component {
                     );
                   })}
                 </Picker>
-
-                <View style={{ borderColor: "orange", borderWidth: 1 }}>
+ {/* ปุ่มเพิ่ม dropdown */}
+                <View>
                   <TouchableOpacity onPress={() => this.addInput(cardIndex)}>
                     <Icons
                       name="md-add-circle"
@@ -232,24 +232,24 @@ export default class InHouseScreen extends Component {
                         color: "blue",
                       }}
                     />
-                    {/* <Text style={styles.addButtonText}>+</Text> */}
                   </TouchableOpacity>
                 </View>
               </View>
+{/* จบการทำงานรอบแรก */}
 
               <View>
                 {card[cardIndex].course.map((item, index) => {
                   return (
+                  //  ทำให้อยู่แถวเดียวกัน เวลาเพิ่ม
                     <View
                       style={{
                         flexDirection: "row",
                         marginTop: 5,
                         marginBottom: 12,
-                        borderColor: "red",
-                        borderWidth: 2,
                       }}
                       key={index}
                     >
+                      {/* ปุ่มเพิ่ม dropdown ถ้ากดเพิ่ม */}
                       <Picker
                         mode="dropdown"
                         iosIcon={
@@ -258,17 +258,10 @@ export default class InHouseScreen extends Component {
                             style={{ width: "7%", marginLeft: 2 }}
                           />
                         }
-                        // style={{
-                        //   width: "65%",
-                        //   borderWidth: 1,
-                        //   borderColor: "#d9d9d9",
-                        //   marginHorizontal: 5,
-                        //   marginBottom: 5,
-                        // }}
                         style={{
-                          // width: "50%",
                           borderWidth: 1,
                           borderColor: "#d9d9d9",
+                          marginHorizontal: 4
                         }}
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholder="SelectCourse"
@@ -290,7 +283,8 @@ export default class InHouseScreen extends Component {
                         })}
                       </Picker>
 
-                      <View style={{ borderColor: "orange", borderWidth: 1 }}>
+ {/* ปุ่มลบ dropdown */}
+                      <View>
                   <TouchableOpacity 
                   onPress={() => this.deleteCourse(index, cardIndex)}
                   >
@@ -307,16 +301,6 @@ export default class InHouseScreen extends Component {
                     </View>
                   );
                 })}
-                {/* <Button
-                  mode="contained"
-                  style={{
-                    margin: 8,
-                    backgroundColor: "red",
-                  }}
-                  onPress={() => this.deleteCard(cardIndex)}
-                >
-                  Delete Form
-                </Button> */}
 
                 <Button
                   mode="contained"

@@ -282,6 +282,7 @@ export default class ExternalScreen extends Component {
                             : "ชื่อพนักงาน"}
                         </Text>
 
+{/* เลือกคนไม่ซ้ำทำได้แล้ว แต่อยากให้รายชื่อคนที่เลือกแล้วหายไป หรือ ทำให้กดซ้ำอีกไม่ได้ */}
                         <View>
                           <Picker
                             mode="dropdown"
@@ -571,7 +572,7 @@ export default class ExternalScreen extends Component {
                                     });
                                   }}
                                 ></TextInput>
-
+{/* แนบไฟล์ยังไม่ได้ทำอะไร */}
                                 <Text
                                   style={{
                                     paddingHorizontal: 8,
