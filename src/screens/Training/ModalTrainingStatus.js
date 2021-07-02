@@ -17,13 +17,15 @@ import AntIcon from "react-native-vector-icons/AntDesign";
 import { Dimensions } from "react-native";
 import HTML from "react-native-render-html";
 import Modal from "react-native-modal";
-import { httpClient } from "../../utils/Provider";
+
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
-const ModalTrainingStatus = (props) => {
-  // props.request_id
 
+ const ModalTrainingStatus = (props) => {
+  // props.request_id
+   let lang =  AsyncStorage.getItem("language");
+console.log(props.modelData);
   return (
     <Modal visible={props.chkVisible} onBackdropPress={props.closeModal}>
       <ScrollView
@@ -269,9 +271,7 @@ const ModalTrainingStatus = (props) => {
 
                     <View style={styles.confirmStyle}>
                       <Text style={{ textAlign: "center" }}>
-                        {item.country_manager != null
-                          ? item.country_manager
-                          : ""}
+                      {lang=='EN'?"Wichit Sophitanontrat":"วิชิต โสภิตานนท์รัตน์"}
                       </Text>
                       <Divider
                         style={{ paddingBottom: 1, backgroundColor: "blue" }}

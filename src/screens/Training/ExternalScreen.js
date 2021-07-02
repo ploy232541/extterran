@@ -231,6 +231,7 @@ export default class ExternalScreen extends Component {
       }
     }
   }
+
   render() {
     return (
       <View style={styles.background}>
@@ -322,8 +323,8 @@ export default class ExternalScreen extends Component {
                                 this.setState({ trainingNeed: trainingNeed });
                               } else {
                                 this.state.lang === "EN"
-          ? Alert.alert("Please select again.")
-          : Alert.alert("กรุณาเลือกใหม่อีกครั้ง");
+                                  ? Alert.alert("Please select again.")
+                                  : Alert.alert("กรุณาเลือกใหม่อีกครั้ง");
                               }
                             }}
                             textStyle={{ fontSize: 14 }}
@@ -451,7 +452,7 @@ export default class ExternalScreen extends Component {
                                     selectedValue={param.trainingPurpose}
                                     onValueChange={(text) => {
                                       let trainingNeed = [
-                                        ...this.state.trainingNeed
+                                        ...this.state.trainingNeed,
                                       ];
 
                                       let item = { ...trainingNeed[index] };
@@ -521,7 +522,7 @@ export default class ExternalScreen extends Component {
                                   value={param.price}
                                   onChangeText={(text) => {
                                     let trainingNeed = [
-                                      ...this.state.trainingNeed
+                                      ...this.state.trainingNeed,
                                     ];
 
                                     let item = { ...trainingNeed[index] };
@@ -550,7 +551,7 @@ export default class ExternalScreen extends Component {
                                   value={param.oher}
                                   onChangeText={(text) => {
                                     let trainingNeed = [
-                                      ...this.state.trainingNeed
+                                      ...this.state.trainingNeed,
                                     ];
 
                                     let item = { ...trainingNeed[index] };
@@ -730,21 +731,23 @@ export default class ExternalScreen extends Component {
             style={{
               flexDirection: "row",
               justifyContent: "space-around",
-              paddingVertical: 12,
-              paddingHorizontal: 24,
+              paddingVertical: 20,
               marginBottom: 40,
             }}
           >
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.btnConfirmStyle}>
-                <Text style={{ color: "white" }}>ยืนยัน</Text>
-              </TouchableOpacity>
+              <Button 
+              style={styles.btnConfirmStyle}
+              onPress={() => this.onPressSend()}
+              >
+                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Submit" : "ยืนยัน"}</Text>
+              </Button>
             </View>
 
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.btnCancelStyle}>
-                <Text style={{ color: "white" }}>ยกเลิก</Text>
-              </TouchableOpacity>
+              <Button style={styles.btnCancelStyle}>
+                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}</Text>
+              </Button>
             </View>
           </View>
         </ScrollView>
@@ -952,9 +955,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
     paddingTop: 20,
-    width: "20%",
+    width: "30%",
     borderRadius: 4,
-    marginTop: 2,
   },
   buttonContainer1: {
     alignSelf: "center",
@@ -965,19 +967,18 @@ const styles = StyleSheet.create({
     marginTop: 2,
     marginBottom: 18,
   },
-
   btnConfirmStyle: {
     backgroundColor: "#449D44",
-    padding: 12,
-    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
     borderRadius: 10,
-    height: 45,
+    // paddingHorizontal: 32,
   },
   btnCancelStyle: {
     backgroundColor: "#5A6268",
-    padding: 12,
-    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
     borderRadius: 10,
-    height: 45,
+    // paddingHorizontal: 32,
   },
 });
