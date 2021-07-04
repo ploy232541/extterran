@@ -38,6 +38,7 @@ import MediaControls, {PLAYER_STATES} from 'react-native-media-controls';
 
 import SliderEntry from './SliderEntry';
 import { sliderWidth, itemWidth } from '../../styles/SliderEntry.style';
+import { constructStyles } from 'react-native-render-html';
 // import styless, { colors } from '../../../styles/index.style';
 // import DeviceInfo from 'react-native-device-info';
 // import Orientation from 'react-native-orientation-locker';
@@ -49,12 +50,12 @@ const HEIGHT = Dimensions.get('window').height;
 
 var maxPlayPosition = 0.0;
 var isResettingTime = false 
-var seeking = false;
 var asyncStorageKey = ""
 var saveStorageCount = 0
 var isFirstTimePlayingVideo = true
 
 var SLIDER_1_FIRST_ITEM = 0;
+var isSettingPosition = false
 
 class Vdo extends Component {
   player;
@@ -114,6 +115,9 @@ class Vdo extends Component {
   }
 
   async componentDidMount() {
+    isResettingTime = false 
+    isFirstTimePlayingVideo = true
+    maxPlayPosition = 0
     try {
     const lesson_id = this.props.route.params.lesson_id
     const file_id = this.props.route.params.file_id
@@ -406,20 +410,32 @@ class Vdo extends Component {
   //   this.JWPlayer.seekTo(parseInt(item.image_slide_time));
   //   this.JWPlayer.pause()
   // }
-  
+
   handlePlaybackStatusUpdate = (e, status, item) => {
+    // console.log(e)
+    // if(isSettingPosition)return
+
     // if(status != 's'){
       if(isFirstTimePlayingVideo){
-        AsyncStorage.get(asyncStorageKey).then((lastMaxVideoViewMills)=> {
+        AsyncStorage.getItem(asyncStorageKey).then((lastMaxVideoViewMills)=> {
           if(lastMaxVideoViewMills !== null){
-            setTimeout(()=>{
-                this.player.setPositionAsync(lastMaxVideoViewMills).then(()=>{
+            maxPlayPosition = parseInt(lastMaxVideoViewMills)
+            isResettingTime = true
+              setTimeout(()=>{
+                this.player.pauseAsync().then(()=> {
+                  this.player.setPositionAsync(maxPlayPosition).then(()=>{
+                    this.player.playAsync(maxPlayPosition).then(()=>{
+                      isResettingTime = false
+                    })
+                  })
                 })
-            },1000);
+               
+              },1000);
           }
         })
         isFirstTimePlayingVideo = false
       }
+      
       // console.log(maxPlayPosition)
       if(e.isPlaying == true && e.positionMillis > maxPlayPosition ){
         if(e.positionMillis - maxPlayPosition < 2000){
@@ -428,7 +444,11 @@ class Vdo extends Component {
           // 
           saveStorageCount ++
           if(saveStorageCount >= 20){
-            AsyncStorage.setItem(asyncStorageKey, maxPlayPosition)
+            console.log("Save");
+            console.log(asyncStorageKey);
+            console.log(maxPlayPosition);
+            
+            AsyncStorage.setItem(asyncStorageKey, "" + maxPlayPosition)
             saveStorageCount = 0
           }
         }
@@ -437,22 +457,16 @@ class Vdo extends Component {
         if (e.positionMillis > maxPlayPosition) {
           if(!isResettingTime){
             isResettingTime = true
-            // this.player.pauseAsync().then(()=> {
-            //   console.log("paused");
               setTimeout(()=>{
                 this.player.pauseAsync().then(()=> {
                   this.player.setPositionAsync(maxPlayPosition).then(()=>{
-                    isResettingTime = false
-                    // this.player.playAsync().then(()=>{
-                    //   isResettingTime = false
-                    // })
+                    this.player.playAsync(maxPlayPosition).then(()=>{
+                      isResettingTime = false
+                    })
                   })
                 })
                
               },1000);
-             
-            
-            // })
           }
           
            
