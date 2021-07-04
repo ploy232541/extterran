@@ -10,26 +10,22 @@ import {
   Modal,
   SafeAreaView,
   Image,
+  Alert,
 } from "react-native";
 import React, { Component, createRef } from "react";
-import DropDownPicker from "react-native-dropdown-picker";
 import { Avatar } from "react-native-paper";
 import { CheckBox, Divider } from "react-native-elements";
 import { Button, Label, Picker, Row } from "native-base";
 import { httpClient } from "../../core/HttpClient";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import DateTimePicker from "react-native-modal-datetime-picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import moment, { now } from "moment";
-import { Dropdown } from "react-native-material-dropdown";
+import { now } from "moment";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as DocumentPicker from "expo-document-picker";
-import DelayInput from "react-native-debounce-input";
 import HTML from "react-native-render-html";
 import { Rows, Table } from "react-native-table-component";
-import DashedLine from "react-native-dashed-line";
-import { Alert } from "react-native";
 import FormData from "form-data";
+import { number } from "prop-types";
 
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
@@ -49,7 +45,7 @@ export default class TrainingFormScreen extends Component {
     super(props);
 
     this.state = {
-      user_id:"",
+      user_id: "",
       lang: "",
       firstname: "",
       position: "",
@@ -120,9 +116,9 @@ export default class TrainingFormScreen extends Component {
 
   async componentDidMount() {
     let id = await AsyncStorage.getItem("userId");
-  
+
     this.setState({
-      user_id:id,
+      user_id: id,
       dateNow: this.formatDate(now()),
       dateTimeNow: this.formatDateTime(now()),
       dateThai: this.formatThai(now()),
@@ -256,9 +252,9 @@ export default class TrainingFormScreen extends Component {
         >
           <View style={stylesdialog.centeredView}>
             <View style={stylesdialog.modalView}>
-              <Text style={stylesdialog.modalText}>
-                <HTML html={this.state.condition} />
-              </Text>
+      
+                <HTML html={this.state.condition}  />
+        
               <Pressable
                 style={[stylesdialog.button, stylesdialog.buttonClose]}
                 onPress={() => this.setModalVisible(!modalVisible)}
@@ -353,9 +349,27 @@ export default class TrainingFormScreen extends Component {
       courseItem2: itemCopy,
     });
   }
+  reset(){
+    this.setState({
+      form_month: null,
+      course:"",
+      courseselect:"",
+      nameCourse:"",
+      expense:"",
+      startDate:"",
+      endDate:"",
+      total:"",
+      place:"",
+      upload_file:"",
+      nameplace_etc:"",
+      pre_requerse:"",
+      pre_requerse2:"",
+      courseItem:[],
+      courseItem2:[],
+    })
+  }
 
   onPressSend = () => {
-    
     try {
       const {
         user_id,
@@ -382,8 +396,8 @@ export default class TrainingFormScreen extends Component {
             : "กรุณาเลือกประเภทหลักสูตร"
         );
       } else if (
-        (courseselect == "" ||
-        courseselect == "0" )&& nameCourse == ""
+        (courseselect == "" || courseselect == "0") &&
+        nameCourse == ""
       ) {
         Alert.alert(
           this.state.lang === "EN"
@@ -481,71 +495,72 @@ export default class TrainingFormScreen extends Component {
             endDate,
             total,
             place,
-            upload_file,
+            // upload_file,
             nameplace_etc,
             pre_requerse,
             pre_requerse2,
             courseItem,
             courseItem2,
           };
-         
-          const data = new FormData();
-                                data.append('file', {
-                                  name: upload_file.name,
-                                  uri: upload_file.uri,
-                                });
-                    
-                              Object.keys(params).forEach(key => data.append(key, params[key]));
+          const data = new FormData()
+          if (upload_file == null || upload_file != "") {
+           
+            data.append("file", {
+              name: upload_file.name,
+              uri: upload_file.uri,
+            });
+            Object.keys(params).forEach((key) => data.append(key, params[key]));
+          }else{
+            data=params
+          }
+
           console.log(data);
-            Alert.alert(
-              this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-              this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
-              [
-                {
-                  text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
-                },
-                ,
-                {
-                  text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                  onPress: () => {
-                    httpClient
-                      .post(`/Training/InsertTrainingRequest`, params)
-                      .then((response) => {
-                        const result = response.data;
-  
-                        if (result === true) {
-                          Alert.alert(
-                            this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                            this.state.lang === "EN"
+          Alert.alert(
+            this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+            this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+            [
+              {
+                text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel",
+              },
+              ,
+              {
+                text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                onPress: () => {
+                  httpClient
+                    .post('/Training/InsertTrainingRequest', data)
+                    .then((response) => {
+                      const result = response.data
+                      if (result === true) {
+                        Alert.alert(
+                          this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                          this.state.lang === "EN"
                             ? "Training request sent"
                             : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
-                            [
-                              {
-                                text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                                onPress: () => this.reset(),
-                              },
-                            ],
-                            { cancelable: false }
-                          );
-                        } else {
-                          Alert.alert(
-                            this.state.lang === "EN"
+                          [
+                            {
+                              text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                              onPress: () => this.reset(),
+                            },
+                          ],
+                          { cancelable: false }
+                        );
+                      } else {
+                        Alert.alert(
+                          this.state.lang === "EN"
                             ? `Training request failed`
                             : "ไม่สามารถส่งคำร้องขอฝึกอบรมได้"
-                          );
-                        }
-                      })
-                      .catch((error) => {
-                        console.log(error);
-                      });
-                  },
+                        );
+                      }
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
                 },
-              ]
-            );
-          
-          
+              },
+            ]
+          );
         }
       }
     } catch (err) {
@@ -596,8 +611,8 @@ export default class TrainingFormScreen extends Component {
         return member.course_id === v;
       });
 
-      var nf = new Intl.NumberFormat();
-      var data = nf.format(result.course_fee);
+      // var nf = new Intl.NumberFormat();
+      var data = number(result.course_fee);
       this.setState({
         courseComfrom: result,
       });
@@ -645,7 +660,7 @@ export default class TrainingFormScreen extends Component {
   };
   async sub_course(value) {
     let user_id = await AsyncStorage.getItem("userId");
- 
+
     try {
       httpClient
         .get(
@@ -862,7 +877,6 @@ export default class TrainingFormScreen extends Component {
       this.setState({ upload_file: result });
     }
   }
-  
 
   checkcourse = (expensecourse) => {
     let condition = 0;
@@ -1009,7 +1023,7 @@ export default class TrainingFormScreen extends Component {
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.course}
-                onValueChange={this.onPickerValueChange}
+                onValueChange={(t)=>this.onPickerValueChange(t)}
                 textStyle={{ fontSize: 14 }}
               >
                 <Picker.Item
@@ -1151,6 +1165,8 @@ export default class TrainingFormScreen extends Component {
               </TouchableOpacity>
 
               <DateTimePickerModal
+            
+                 locale="th_TH"
                 isVisible={this.state.isDatePickerVisible}
                 mode="date"
                 onConfirm={this.handleConfirm}

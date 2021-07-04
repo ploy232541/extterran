@@ -263,6 +263,20 @@ export default class ExternalScreen extends Component {
           {/* Start Card by aek*/}
           {/* จะทำการแสดงพนักงาน */}
           {this.state.trainingNeed.map((Item, index) => {
+            console.log();
+        let emp=this.state.select_2.flatMap(({src}) => {
+        console.log(src);
+          let shows=true
+          for (let i = 0; i < this.state.trainingNeed.length; i++) {
+            const param = this.state.trainingNeed[i];
+            if (param.employee_id == src.user_id) {
+              shows=!shows
+            }}
+        
+        return shows=true?[]:src
+        })
+          
+            
             return (
               <View>
                 <ScrollView>
@@ -282,7 +296,6 @@ export default class ExternalScreen extends Component {
                             : "ชื่อพนักงาน"}
                         </Text>
 
-{/* เลือกคนไม่ซ้ำทำได้แล้ว แต่อยากให้รายชื่อคนที่เลือกแล้วหายไป หรือ ทำให้กดซ้ำอีกไม่ได้ */}
                         <View>
                           <Picker
                             mode="dropdown"
@@ -340,7 +353,26 @@ export default class ExternalScreen extends Component {
                             />
 
                             {this.state.select_2.map((element, l) => {
-                              return this.goss(element, l);
+                               let selected = true;
+                               for (let i = 0; i < this.state.trainingNeed.length; i++) {
+                                 const param = this.state.trainingNeed[i];
+                                 if (param.employee_id == element.user_id) {
+                                   selected = false;
+                                   break;
+                                 }
+                               }
+                                   return (
+                                     <Picker.Item
+                                       label={
+                                         this.state.lang === "EN"
+                                           ? element.firstname_en + " " + element.lastname_en
+                                           : element.firstname + " " + element.lastname
+                                       }
+                                       value={element.user_id}
+                                     />
+                                   );
+                                 
+                          
                             })}
                           </Picker>
                         </View>
@@ -572,7 +604,7 @@ export default class ExternalScreen extends Component {
                                     });
                                   }}
                                 ></TextInput>
-{/* แนบไฟล์ยังไม่ได้ทำอะไร */}
+
                                 <Text
                                   style={{
                                     paddingHorizontal: 8,
@@ -983,3 +1015,4 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 32,
   },
 });
+
