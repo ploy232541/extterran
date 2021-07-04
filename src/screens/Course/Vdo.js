@@ -50,6 +50,9 @@ const HEIGHT = Dimensions.get('window').height;
 var maxPlayPosition = 0.0;
 var isResettingTime = false 
 var seeking = false;
+var asyncStorageKey = ""
+var saveStorageCount = 0
+var isFirstTimePlayingVideo = true
 
 var SLIDER_1_FIRST_ITEM = 0;
 
@@ -115,6 +118,8 @@ class Vdo extends Component {
     const lesson_id = this.props.route.params.lesson_id
     const file_id = this.props.route.params.file_id
     const user_id = await AsyncStorage.getItem('userId');
+      // Set Async Strage KEY 
+    asyncStorageKey = "MAX_VIEW_TIME_MILLI_" + lesson_id
     this.setState({user_id: user_id});
     const res = await AsyncStorage.getItem('language');
     if (res === 'EN') {
@@ -401,14 +406,31 @@ class Vdo extends Component {
   //   this.JWPlayer.seekTo(parseInt(item.image_slide_time));
   //   this.JWPlayer.pause()
   // }
-
+  
   handlePlaybackStatusUpdate = (e, status, item) => {
     // if(status != 's'){
-      
+      if(isFirstTimePlayingVideo){
+        AsyncStorage.get(asyncStorageKey).then((lastMaxVideoViewMills)=> {
+          if(lastMaxVideoViewMills !== null){
+            setTimeout(()=>{
+                this.player.setPositionAsync(lastMaxVideoViewMills).then(()=>{
+                })
+            },1000);
+          }
+        })
+        isFirstTimePlayingVideo = false
+      }
       // console.log(maxPlayPosition)
       if(e.isPlaying == true && e.positionMillis > maxPlayPosition ){
         if(e.positionMillis - maxPlayPosition < 2000){
+          // Save Max position every 500 millisecs 
           maxPlayPosition = e.positionMillis
+          // 
+          saveStorageCount ++
+          if(saveStorageCount >= 20){
+            AsyncStorage.setItem(asyncStorageKey, maxPlayPosition)
+            saveStorageCount = 0
+          }
         }
       }
       if(e.isPlaying == false ){
