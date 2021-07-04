@@ -140,39 +140,37 @@ export default class InHouseScreen extends Component {
         <View style={styles.containerSec2}>
           <View style={styles.contentInSec}>
             <Text style={styles.textStyle1}>Employee Name</Text>
-            <View>
-              {/* Start User Picker */}
-              <Picker
-                mode="dropdown"
-                iosIcon={<Icon name="angle-down" style={{ width: "8%" }} />}
-                style={{
-                  width: "97%",
-                  borderWidth: 1,
-                  borderColor: "#d9d9d9",
-                  marginBottom: 5,
-                  marginHorizontal: 5,
-                  marginVertical: 5,
-                }}
-                placeholderStyle={{ color: "#bfc6ea" }}
-                placeholder="SelectEmployee"
-                placeholderIconColor="#007aff"
-                textStyle={{ fontSize: 14 }}
-                selectedValue={this.state.card[cardIndex].selected}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.onChangeSelect(cardIndex, itemValue)
-                }
-              >
-                {/* <Picker.Item label={"SelectEmployee"} /> */}
-                {this.state.selectEmp.map((item, index) => {
-                  return (
-                    <Picker.Item
-                      label={item.firstname + " " + item.lastname}
-                      value={item.user_id}
-                      key={index}
-                    />
-                  );
-                })}
-              </Picker>
+            <View style={{ flexDirection: "row" }}>
+              <View style={{ flex: 1 }}></View>
+              <View style={{ flex: 80 }}>
+                {/* Start User Picker */}
+                <Picker
+                  mode="dropdown"
+                  iosIcon={<Icon name="angle-down" style={{ width: "8%" }} />}
+                  style={styles.bdPicker}
+                  placeholderStyle={{ color: "#bfc6ea" }}
+                  placeholder="SelectEmployee"
+                  placeholderIconColor="#007aff"
+                  textStyle={{ fontSize: 14 }}
+                  selectedValue={this.state.card[cardIndex].selected}
+                  onValueChange={(itemValue, itemIndex) =>
+                    this.onChangeSelect(cardIndex, itemValue)
+                  }
+                >
+                  {/* <Picker.Item label={"SelectEmployee"} /> */}
+                  {this.state.selectEmp.map((item, index) => {
+                    return (
+                      <Picker.Item
+                        label={item.firstname + " " + item.lastname}
+                        value={item.user_id}
+                        key={index}
+                      />
+                    );
+                  })}
+                </Picker>
+              </View>
+
+              <View style={{ flex: 1 }}></View>
             </View>
             {/* End User Picker */}
 
@@ -180,50 +178,35 @@ export default class InHouseScreen extends Component {
 
             {/* เริ่มจุดนี้ ที่ทำให้อยู่แถวเดียวกัน */}
             <View style={{ marginTop: 15 }}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  marginTop: 5,
-                  marginBottom: 12,
-                  width: "100%"
-                }}
-              >
+              <View style={styles.pickerContainer}>
                 {/* dropdown */}
-                <Picker
-                  mode="dropdown"
-                  iosIcon={
-                    <Icon
-                      name="angle-down"
-                      style={{ width: "7%", marginLeft: 2 }}
-                    />
-                  }
-                  style={{
-                    // width: "80%",
-                    borderWidth: 1,
-                    borderColor: "#d9d9d9",
-                    marginHorizontal: 4
-                  }}
-                  placeholderStyle={{ color: "#bfc6ea" }}
-                  placeholder="SelectCourse"
-                  placeholderIconColor="#007aff"
-                  textStyle={{ fontSize: 14, marginRight: "45%" }}
-                  selectedValue={card[cardIndex].course}
-                  onValueChange={(itemValue, itemIndex) =>
-                    this.onChangeCourse(cardIndex, itemIndex, itemValue)
-                  }
-                >
-                  {this.state.selectCourse.map((item, index) => {
-                    return (
-                      <Picker.Item
-                        label={item.course_title}
-                        value={item.course_id}
-                        key={index}
-                      />
-                    );
-                  })}
-                </Picker>
- {/* ปุ่มเพิ่ม dropdown */}
-                <View>
+                <View style={styles.scFlex}>
+                  <Picker
+                    mode="dropdown"
+                    iosIcon={<Icon name="angle-down" style={{ width: "8%" }} />}
+                    style={styles.bdPicker1}
+                    placeholderStyle={{ color: "#bfc6ea" }}
+                    placeholder="SelectCourse"
+                    placeholderIconColor="#007aff"
+                    textStyle={{ fontSize: 14, marginRight: "45%" }}
+                    selectedValue={card[cardIndex].course}
+                    onValueChange={(itemValue, itemIndex) =>
+                      this.onChangeCourse(cardIndex, itemIndex, itemValue)
+                    }
+                  >
+                    {this.state.selectCourse.map((item, index) => {
+                      return (
+                        <Picker.Item
+                          label={item.course_title}
+                          value={item.course_id}
+                          key={index}
+                        />
+                      );
+                    })}
+                  </Picker>
+                </View>
+                {/* ปุ่มเพิ่ม dropdown */}
+                <View style={styles.scFlex1}>
                   <TouchableOpacity onPress={() => this.addInput(cardIndex)}>
                     <Icons
                       name="md-add-circle"
@@ -235,69 +218,56 @@ export default class InHouseScreen extends Component {
                   </TouchableOpacity>
                 </View>
               </View>
-{/* จบการทำงานรอบแรก */}
+              {/* จบการทำงานรอบแรก */}
 
               <View>
                 {card[cardIndex].course.map((item, index) => {
                   return (
-                  //  ทำให้อยู่แถวเดียวกัน เวลาเพิ่ม
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        marginTop: 5,
-                        marginBottom: 12,
-                      }}
-                      key={index}
-                    >
+                    //  ทำให้อยู่แถวเดียวกัน เวลาเพิ่ม
+                    <View style={styles.pickerContainer} key={index}>
                       {/* ปุ่มเพิ่ม dropdown ถ้ากดเพิ่ม */}
-                      <Picker
-                        mode="dropdown"
-                        iosIcon={
-                          <Icon
-                            name="angle-down"
-                            style={{ width: "7%", marginLeft: 2 }}
+                      <View style={styles.scFlex}>
+                        <Picker
+                          mode="dropdown"
+                          iosIcon={
+                            <Icon name="angle-down" style={{ width: "8%" }} />
+                          }
+                          style={styles.bdPicker1}
+                          placeholderStyle={{ color: "#bfc6ea" }}
+                          placeholder="SelectCourse"
+                          placeholderIconColor="#007aff"
+                          textStyle={{ fontSize: 14, marginRight: "45%" }}
+                          selectedValue={card[cardIndex].course}
+                          onValueChange={(itemValue, itemIndex) =>
+                            this.onChangeCourse(cardIndex, itemIndex, itemValue)
+                          }
+                        >
+                          {this.state.selectCourse.map((item, index) => {
+                            return (
+                              <Picker.Item
+                                label={item.course_title}
+                                value={item.course_id}
+                                key={index}
+                              />
+                            );
+                          })}
+                        </Picker>
+                      </View>
+                      {/* ปุ่มลบ dropdown */}
+                      <View style={styles.scFlex1}>
+                        <TouchableOpacity
+                          onPress={() => this.deleteCourse(index, cardIndex)}
+                        >
+                          <Icons
+                            name="md-remove-circle"
+                            size={40}
+                            style={{
+                              color: "red",
+                            }}
                           />
-                        }
-                        style={{
-                          borderWidth: 1,
-                          borderColor: "#d9d9d9",
-                          marginHorizontal: 4
-                        }}
-                        placeholderStyle={{ color: "#bfc6ea" }}
-                        placeholder="SelectCourse"
-                        placeholderIconColor="#007aff"
-                        textStyle={{ fontSize: 14, marginRight: "45%" }}
-                        selectedValue={card[cardIndex].course}
-                        onValueChange={(itemValue, itemIndex) =>
-                          this.onChangeCourse(cardIndex, itemIndex, itemValue)
-                        }
-                      >
-                        {this.state.selectCourse.map((item, index) => {
-                          return (
-                            <Picker.Item
-                              label={item.course_title}
-                              value={item.course_id}
-                              key={index}
-                            />
-                          );
-                        })}
-                      </Picker>
-
- {/* ปุ่มลบ dropdown */}
-                      <View>
-                  <TouchableOpacity 
-                  onPress={() => this.deleteCourse(index, cardIndex)}
-                  >
-                    <Icons
-                      name="md-remove-circle"
-                      size={40}
-                      style={{
-                        color: "red",
-                      }}
-                    />
-                    {/* <Text style={styles.addButtonText}>+</Text> */}
-                  </TouchableOpacity>
-                </View>
+                          {/* <Text style={styles.addButtonText}>+</Text> */}
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   );
                 })}
@@ -406,22 +376,28 @@ export default class InHouseScreen extends Component {
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-around",
+              // justifyContent: "space-around",
               paddingVertical: 12,
               paddingHorizontal: 24,
               marginBottom: 40,
             }}
           >
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.btnConfirmStyle}>
-                <Text style={{ color: "white" }}>ยืนยัน</Text>
-              </TouchableOpacity>
+            <View style={{ flex: 4 }}>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.btnConfirmStyle}>
+                  <Text style={{ color: "white" }}>ยืนยัน</Text>
+                </TouchableOpacity>
+              </View>
             </View>
 
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.btnCancelStyle}>
-                <Text style={{ color: "white" }}>ยกเลิก</Text>
-              </TouchableOpacity>
+            <View style={{ flex: 1 }}></View>
+
+            <View style={{ flex: 4 }}>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.btnCancelStyle}>
+                  <Text style={{ color: "white" }}>ยกเลิก</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </ScrollView>
@@ -453,7 +429,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     marginRight: 12,
     // marginTop: 5,
-    width: "60%",
+    // width: "60%",
     alignSelf: "center",
     borderRadius: 10,
   },
@@ -498,13 +474,8 @@ const styles = StyleSheet.create({
   ///กรอบเพิ่มข้อมูล
   pickerContainer: {
     flexDirection: "row",
-    // marginVertical: 1,
     marginTop: 5,
     marginBottom: 12,
-    // marginLeft: 1,
-    // marginRight: -95,
-    borderColor: "red",
-    borderWidth: 2,
   },
   /// add button
   addButton: {
@@ -546,9 +517,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
     paddingTop: 20,
-    width: "20%",
     borderRadius: 4,
     marginTop: 2,
+    width: "50%"
   },
   btnConfirmStyle: {
     backgroundColor: "#449D44",
@@ -571,5 +542,27 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20,
     borderRadius: 10,
+  },
+  scFlex: {
+    flex: 5,
+  },
+  scFlex1: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  bdPicker: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#d9d9d9",
+    marginBottom: 5,
+    // marginHorizontal: 5,
+    marginVertical: 5,
+  },
+  bdPicker1: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#d9d9d9",
+    marginHorizontal: 4,
   },
 });
