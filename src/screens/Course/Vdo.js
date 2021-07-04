@@ -102,6 +102,10 @@ class Vdo extends Component {
       screenType: 'content',    
       //////new video expo////
 
+      lastPlayPosition: 0,
+      maxPlayPosition: 0,
+
+
     };
   }
 
@@ -399,11 +403,17 @@ class Vdo extends Component {
 
   handlePlaybackStatusUpdate = (e, status, item) => {
     console.log(e)
-    if(status != 's'){
-      if(e.isPlaying){
-        if(e.positionMillis == 0){
-          console.log('=======save L=======')
+    // if(status != 's'){
+      if(e.isPlaying == true && e.positionMillis > maxPlayPosition ){
+        maxPlayPosition = e.positionMillis
+      }
+      if(e.isPlaying == false ){
+        if (e.positionMillis > maxPlayPosition) {
+          maxPlayPosition=e.positionMillis
+          this.player.setPositionAsync(maxPlayPosition)
+          console.log(maxPlayPosition);
         }
+         
       }
 
 
@@ -420,7 +430,7 @@ class Vdo extends Component {
       // if(e.didJustFinish){
       //   console.log('====End video====')
       // }
-    }
+    // }
     
   };
 
