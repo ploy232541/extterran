@@ -10,6 +10,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   Platform,
+  Dimensions
 } from 'react-native';
 import {Button, Text, Item, Label, Input, Icon} from 'native-base';
 // import {IMAGE} from '../../constants/Image';
@@ -17,7 +18,8 @@ import {StackActions} from '@react-navigation/native';
 import {Card} from 'react-native-elements';
 import {httpClient} from '../core/HttpClient';
 import { useNavigation } from "@react-navigation/native"
-
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import HTML from "react-native-render-html";
   function LoginScreen() {
     const navigation = useNavigation()
     const [lang, setLang] = useState('TH');
@@ -25,7 +27,7 @@ import { useNavigation } from "@react-navigation/native"
     const [password, setPassword] = useState('');
     const [icon, setIcon] = useState('eye-off');
     const [showPassword, setShowPassword] = useState(true);
-
+    const WIDTH = Dimensions.get("window").width;
     _changeIcon = () => {
       setIcon(icon === 'eye' ? 'eye-off' : 'eye');
       setShowPassword(!showPassword);
@@ -86,113 +88,61 @@ import { useNavigation } from "@react-navigation/native"
 
     return (
       <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}>
-            <View
-              style={{
-                position: 'absolute',
-                left: '75%',
-                top: '8%',
-                backgroundColor: '#e6e6e6',
-                borderRadius: 5,
-              }}>
-              <View style={{flexDirection: 'row', padding: 5}}>
-                <TouchableOpacity onPress={onPressTH}>
-                  <Text
-                    style={
-                      lang === 'TH' ? styles.active : styles.noActive
-                    }>
-                    TH
-                  </Text>
-                </TouchableOpacity>
-                <Text style={{fontSize: 18}}> / </Text>
-                <TouchableOpacity onPress={onPressEN}>
-                  <Text
-                    style={
-                      lang === 'EN' ? styles.active : styles.noActive
-                    }>
-                    EN
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <Card
-              containerStyle={{
-                overflow: 'hidden',
-                flexDirection: 'column',
-                marginTop: 20,
-                marginLeft: 20,
-                marginRight: 20,
-                marginBottom: 20,
-                borderRadius: 10,
-                padding: 20,
-                backgroundColor: '#fff'
-              }}>
-              {/* <Image
-                source={{uri: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/62/Exterran_logo.svg/1200px-Exterran_logo.svg.png'}}
-                resizeMode={'stretch'}
-                style={styles.logo}
-              /> */}
-              <Text style={styles.text1}>
-                {lang === 'EN' ? 'Login' : 'เข้าสู่ระบบ'}
-              </Text>
-
-              <View style={{paddingLeft: 15, paddingRight: 15}}>
-                <Item floatingLabel style={{marginBottom: 10}}>
-                  <Label style={{fontSize: 14}}>
-                    {lang === 'EN'
-                      ? 'Employee code'
-                      : 'รหัสพนักงาน'}
-                  </Label>
-                  <Input
-                    onChangeText={(text) => setUsername(text)}
-                    autoCapitalize={'none'}
-                    autoCorrect={false}
-                  />
-                </Item>
-
-                <Item floatingLabel>
-                  <Label style={{fontSize: 14}}>
-                    {lang === 'EN' ? 'Password' : 'รหัสผ่าน'}
-                  </Label>
-                  <Input
-                    secureTextEntry={showPassword}
-                    onChangeText={text => setPassword(text)}
-                  />
-                  <Icon
-                    name={icon}
-                    onPress={_changeIcon} 
-                  />
-                </Item>
-              </View>
-
-              <TouchableOpacity
-                onPress={() => navigation.navigate('ForgotPasswordScreen')}
-                underlayColor={'#d9d9d9'}
-                style={styles.forgotPassword}>
-                <Text style={styles.forgotPasswordButtonText}>
-                  {lang === 'EN' ? 'Forgot password' : 'ลืมรหัสผ่าน'}
-                </Text>
-              </TouchableOpacity>
-
-              <Button
-                onPress={onLoginPressed}
-                style={styles.loginButton}>
-                <Text style={styles.loginButtonText}>
-                  {lang === 'EN' ? 'Login' : 'เข้าสู่ระบบ'}
-                </Text>
-              </Button>
-
-            </Card>
-          </View>
+            <DateTimePickerModal
+            locale="th_TH"
+                isVisible={true}
+                mode="date"
+                onConfirm={() =>  false}
+                onCancel={() =>  false}
+              />
       </View>
     );
   }
 
+  const stylesdialog = StyleSheet.create({
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22,
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+    },
+    button: {
+      borderRadius: 15,
+      padding: 15,
+      elevation: 2,
+      // margin:5
+    },
+    buttonOpen: {
+      backgroundColor: "green",
+    },
+    buttonClose: {
+      backgroundColor: "#2196F3",
+    },
+    textStyle: {
+      color: "white",
+      fontWeight: "bold",
+      textAlign: "center",
+    },
+    modalText: {
+      marginBottom: 15,
+      textAlign: "center",
+    },
+  });
 const styles = StyleSheet.create({
   active: {
     fontSize: 18,

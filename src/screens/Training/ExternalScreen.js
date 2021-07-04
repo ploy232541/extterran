@@ -263,18 +263,24 @@ export default class ExternalScreen extends Component {
           {/* Start Card by aek*/}
           {/* จะทำการแสดงพนักงาน */}
           {this.state.trainingNeed.map((Item, index) => {
-            console.log();
-        let emp=this.state.select_2.flatMap(({src}) => {
-        console.log(src);
-          let shows=true
-          for (let i = 0; i < this.state.trainingNeed.length; i++) {
-            const param = this.state.trainingNeed[i];
-            if (param.employee_id == src.user_id) {
-              shows=!shows
-            }}
+            let excludeEmployees = []
+             for (let i = 0; i < index; i++) {
+              excludeEmployees.push (this.state.trainingNeed[i])
+             }
+             let listEmployees = [];
+             for (let i = 0 ; i > this.state.select_2.length ; i ++){
+               let employee = this.state.select_2[i]
+               let employeeId = employee.user_id 
+               if(excludeEmployees.includes(employeeId)){
+
+               }else{
+                listEmployees.push(employee)
+               }
+              
+             }
+
+            //
         
-        return shows=true?[]:src
-        })
           
             
             return (
@@ -352,7 +358,7 @@ export default class ExternalScreen extends Component {
                               value=""
                             />
 
-                            {this.state.select_2.map((element, l) => {
+                            {listEmployees.map((element, l) => {
                                let selected = true;
                                for (let i = 0; i < this.state.trainingNeed.length; i++) {
                                  const param = this.state.trainingNeed[i];
