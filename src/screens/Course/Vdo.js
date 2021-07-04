@@ -413,18 +413,20 @@ class Vdo extends Component {
       }
       if(e.isPlaying == false ){
         if (e.positionMillis > maxPlayPosition) {
-          if(!isResettingTime && !e.isBuffering){
+          if(!isResettingTime){
             isResettingTime = true
             // this.player.pauseAsync().then(()=> {
             //   console.log("paused");
               setTimeout(()=>{
-                this.player.setPositionAsync(maxPlayPosition).then(()=>{
-                  console.log("set position " + maxPlayPosition);
-                  isResettingTime = false
-                  // this.player.playAsync().then(()=>{
-                  //   isResettingTime = false
-                  // })
+                this.player.pauseAsync().then(()=> {
+                  this.player.setPositionAsync(maxPlayPosition).then(()=>{
+                    isResettingTime = false
+                    // this.player.playAsync().then(()=>{
+                    //   isResettingTime = false
+                    // })
+                  })
                 })
+               
               },1000);
              
             
