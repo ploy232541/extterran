@@ -36,6 +36,7 @@ export default class ExternalScreen extends Component {
       course: "กรุณาเลือกหลักสูตร",
       trainingNeedItem: {
         employee_id: "",
+        employee_name: "กรุณาเลือกพนักงาน",
         data: [],
       },
       courseItem: {
@@ -263,26 +264,21 @@ export default class ExternalScreen extends Component {
           {/* Start Card by aek*/}
           {/* จะทำการแสดงพนักงาน */}
           {this.state.trainingNeed.map((Item, index) => {
-            let excludeEmployees = []
-             for (let i = 0; i < index; i++) {
-              excludeEmployees.push (this.state.trainingNeed[i])
-             }
-             let listEmployees = [];
-             for (let i = 0 ; i > this.state.select_2.length ; i ++){
-               let employee = this.state.select_2[i]
-               let employeeId = employee.user_id 
-               if(excludeEmployees.includes(employeeId)){
+            let excludeEmployees = [];
+            for (let i = 0; i < this.state.trainingNeed.length; i++) {
+              if (i != index) {
+                excludeEmployees.push(this.state.trainingNeed[i].employee_id);
+              }
+            }
+            let listEmployees = [];
+            for (let i = 0; i < this.state.select_2.length; i++) {
+              let employee = this.state.select_2[i];
+              let employeeId = employee.user_id;
+              if (!excludeEmployees.includes(employeeId)) {
+                listEmployees.push(employee);
+              }
+            }
 
-               }else{
-                listEmployees.push(employee)
-               }
-              
-             }
-
-            //
-        
-          
-            
             return (
               <View>
                 <ScrollView>
@@ -322,6 +318,12 @@ export default class ExternalScreen extends Component {
                             selectedValue={
                               Item.employee_id ? Item.employee_id : ""
                             }
+                            onBlur={() => {
+                              // this.updateEmployees()
+                              this.setState({
+                                trainingNeed: this.state.trainingNeed,
+                              });
+                            }}
                             onValueChange={(text) => {
                               let selected = true;
                               for (
@@ -359,26 +361,20 @@ export default class ExternalScreen extends Component {
                             />
 
                             {listEmployees.map((element, l) => {
-                               let selected = true;
-                               for (let i = 0; i < this.state.trainingNeed.length; i++) {
-                                 const param = this.state.trainingNeed[i];
-                                 if (param.employee_id == element.user_id) {
-                                   selected = false;
-                                   break;
-                                 }
-                               }
-                                   return (
-                                     <Picker.Item
-                                       label={
-                                         this.state.lang === "EN"
-                                           ? element.firstname_en + " " + element.lastname_en
-                                           : element.firstname + " " + element.lastname
-                                       }
-                                       value={element.user_id}
-                                     />
-                                   );
-                                 
-                          
+                              return (
+                                <Picker.Item
+                                  label={
+                                    this.state.lang === "EN"
+                                      ? element.firstname_en +
+                                        " " +
+                                        element.lastname_en
+                                      : element.firstname +
+                                        " " +
+                                        element.lastname
+                                  }
+                                  value={element.user_id}
+                                />
+                              );
                             })}
                           </Picker>
                         </View>
@@ -775,17 +771,21 @@ export default class ExternalScreen extends Component {
             }}
           >
             <View style={styles.buttonContainer}>
-              <Button 
-              style={styles.btnConfirmStyle}
-              onPress={() => this.onPressSend()}
+              <Button
+                style={styles.btnConfirmStyle}
+                onPress={() => this.onPressSend()}
               >
-                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Submit" : "ยืนยัน"}</Text>
+                <Text style={{ color: "white" }}>
+                  {this.state.lang === "EN" ? "Submit" : "ยืนยัน"}
+                </Text>
               </Button>
             </View>
 
             <View style={styles.buttonContainer}>
               <Button style={styles.btnCancelStyle}>
-                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}</Text>
+                <Text style={{ color: "white" }}>
+                  {this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}
+                </Text>
               </Button>
             </View>
           </View>
@@ -1021,4 +1021,3 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 32,
   },
 });
-
