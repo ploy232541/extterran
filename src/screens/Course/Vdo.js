@@ -48,6 +48,7 @@ const BannerHeight = 200;
 const HEIGHT = Dimensions.get('window').height;
 
 var maxPlayPosition = 0.0;
+var isResettingTime = false 
 var seeking = false;
 
 var SLIDER_1_FIRST_ITEM = 0;
@@ -402,16 +403,35 @@ class Vdo extends Component {
   // }
 
   handlePlaybackStatusUpdate = (e, status, item) => {
-    console.log(e)
     // if(status != 's'){
+      
+      // console.log(maxPlayPosition)
       if(e.isPlaying == true && e.positionMillis > maxPlayPosition ){
-        maxPlayPosition = e.positionMillis
+        if(e.positionMillis - maxPlayPosition < 2000){
+          maxPlayPosition = e.positionMillis
+        }
       }
       if(e.isPlaying == false ){
         if (e.positionMillis > maxPlayPosition) {
-          maxPlayPosition=e.positionMillis
-          this.player.setPositionAsync(maxPlayPosition)
-          console.log(maxPlayPosition);
+          if(!isResettingTime && !e.isBuffering){
+            isResettingTime = true
+            // this.player.pauseAsync().then(()=> {
+            //   console.log("paused");
+              setTimeout(()=>{
+                this.player.setPositionAsync(maxPlayPosition).then(()=>{
+                  console.log("set position " + maxPlayPosition);
+                  isResettingTime = false
+                  // this.player.playAsync().then(()=>{
+                  //   isResettingTime = false
+                  // })
+                })
+              },1000);
+             
+            
+            // })
+          }
+          
+           
         }
          
       }
