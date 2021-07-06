@@ -1,99 +1,204 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  AsyncStorage,
+  ActivityIndicator,
+  SafeAreaView,
+} from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import PeopleIcon from "react-native-vector-icons/Ionicons";
 import { DataTable } from "react-native-paper";
 import ArrowDownIcon from "react-native-vector-icons/AntDesign";
 import { Dimensions } from "react-native";
+import { Accordion, Button } from "native-base";
+import Icon from "react-native-vector-icons/AntDesign";
+import Icon2 from "react-native-vector-icons/FontAwesome";
+import { httpClient } from "../../core/HttpClient";
+import ModalFeedBack from "./ModalFeedBack";
 import { useNavigation } from "@react-navigation/native";
 
 const HEIGHT = Dimensions.get("window").height;
-const word = [[],[]];
 const ConfirmBookingScreen = (props) => {
   const navigation = useNavigation();
   let title = props.route.params.title;
+  const [lang, setLang] = useState("TH");
+  const [dataArray, setDataArray] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const run = async () => {
+      getData();
+    };
+    run();
+  }, []);
+
+  const getData = async () => {
+    try {
+      setLoading(true);
+      let getLang = await AsyncStorage.getItem("language");
+      let user_id = await AsyncStorage.getItem("userId");
+      setLang(getLang);
+      if (getLang == "EN") {
+        var lang_id = "1";
+      } else {
+        var lang_id = "2";
+      }
+
+      httpClient
+        .get(`Team/BookingTeam/${user_id}`)
+        .then((response) => {
+          let res = response.data;
+          if (res != null) {
+            setDataArray(res);
+            setLoading(false);
+          } else {
+            setLoading(false);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const showModalBooking = (booking_type,booking_id) => {
+    setUserId(user_id);
+    setModalVisible(true);
+    navigation.navigate("StaffForm")
+    // if (booking_type==1) {
+    //  return navigation.navigate("StaffFormFlight")
+    // }else if(booking_type==2){
+    //   return navigation.navigate("StaffFormAccom")
+    // }else if(booking_type==3){
+    //   return navigation.navigate("StaffFormGround")
+    // }
+    
+  };
+
+  const _renderHeader = (item, expanded) => {
+    let lang = AsyncStorage.getItem("language");
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          padding: 10,
+          alignItems: "center",
+          backgroundColor: "#f2f2f2",
+          borderWidth: 1,
+          borderColor: "#e6e6e6",
+        }}
+      >
+        <Icon2 style={{ color: "#cccccc" }} size={20} name="user" />
+        <Text style={{ flex: 1, marginLeft: 5, color: "#000" }}>
+          {lang == "EN"
+            ? item.firstname + " " + item.lastname
+            : item.firstname_en + " " + item.lastname_en}
+        </Text>
+        <View style={{ justifyContent: "flex-end", marginRight: 10 }}>
+          <Button
+            onPress={() =>{
+              showModalBooking(booking_id,booking_type)
+            }}
+            style={{ height: 30, backgroundColor: "#3399ff" }}
+          >
+            <Text style={{ marginLeft: 5, marginRight: 5, color: "#fff" }}>
+              รายละเอียด
+            </Text>
+          </Button>
+        </View>
+
+        <View style={{ justifyContent: "flex-end" }}>
+          {expanded ? (
+            <Icon style={{ fontSize: 16, color: "#010c65" }} name="up" />
+          ) : (
+            <Icon style={{ fontSize: 16, color: "#010c65" }} name="down" />
+          )}
+        </View>
+      </View>
+    );
+  };
+
+  const _renderContent = (item) => {
+    return (
+      <View style={{ alignSelf: "center", padding: 10 }}>
+        {item.booking_type == 1 ? (
+          <View>
+            <Text>
+              <Icon style={{ fontSize: 16, color: "#010c65" }} name="up" />
+              เครื่องบิน
+            </Text>
+          </View>
+        ) : item.booking_type == 2 ? (
+          <View>
+            <Text>
+              <Icon style={{ fontSize: 16, color: "#010c65" }} name="up" />
+              เครื่องบิน
+            </Text>
+          </View>
+        ) : item.booking_type == 3 ? (
+          <View>
+            <Text>
+              <Icon style={{ fontSize: 16, color: "#010c65" }} name="down" />
+              รถยนต์
+            </Text>
+          </View>
+        ) : (
+          ""
+        )}
+      </View>
+    );
+  };
+
+  const _closeModal = () => {
+    setModalVisible(false);
+    getData();
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <ActivityIndicator />
+        </View>
+      </SafeAreaView>
+    );
+  }
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
+      {userId ? (
+        <ModalFeedBack
+          userId={userId}
+          chkVisible={modalVisible}
+          closeModal={_closeModal}
+        />
+      ) : null}
+
       <View style={styles.container}>
         <Text style={styles.textHeader}>{title}</Text>
 
         <View style={{ flexDirection: "row", marginVertical: 20 }}>
           <PeopleIcon name="md-people" size={20} style={{ marginRight: 10 }} />
           <Text style={styles.textNumber}>
-            จำนวน <Text style={{ color: "#398DDD" }}>xxx</Text> คน
+            จำนวน <Text style={{ color: "#398DDD" }}>{dataArray.length}</Text>{" "}
+            คน
           </Text>
         </View>
 
-        {/* <View style={styles.nameStyle}>
-                    <View style={{flexDirection:'row'}}>
-                        <Text>นาย XXX XXXXXXXXX</Text>
-                        <ArrowDownIcon name='down' size={24}/>
-                    </View>
-                </View> */}
-        <DataTable style={{ marginTop: 20, borderBottomWidth: 1 }}>
-          {word.map((item)=>{
-            return(<DataTable.Row style={{ borderWidth: 1 }}>
-           <DataTable.Cell>นาย XXX XXXXXXXXX</DataTable.Cell>
-           <DataTable.Cell
-             style={{
-               right: 0,
-               position: "absolute",
-               alignSelf: "center",
-               flex: 1,
-             }}
-           >
-             <TouchableOpacity onPress={() => navigation.navigate('StaffForm')}>
-               <View
-                 style={{
-                   alignSelf: "center",
-                   backgroundColor: "#398DDD",
-                   width: "100%",
-                   height: HEIGHT * 0.03,
-                   justifyContent: "center",
-                   borderRadius: 5,
-                   padding: 5,
-                 }}
-               >
-                 <Text style={{ color: "white" }}>รายละเอียด</Text>
-               </View>
-             </TouchableOpacity>
-           </DataTable.Cell>
-         </DataTable.Row>)
-           
-          })}
-          
-
-        </DataTable>
-
-        {/* <DataTable style={{ borderBottomWidth: 1 }}>
-          <DataTable.Row style={{ borderWidth: 1 }}>
-            <DataTable.Cell>นาย XXX XXXXXXXXX</DataTable.Cell>
-            <DataTable.Cell
-              style={{
-                right: 0,
-                position: "absolute",
-                alignSelf: "center",
-                flex: 1,
-              }}
-            >
-              <TouchableOpacity onPress={() => navigation.navigate('StaffForm')}>
-                <View
-                  style={{
-                    alignSelf: "center",
-                    backgroundColor: "#398DDD",
-                    width: "100%",
-                    height: HEIGHT * 0.03,
-                    justifyContent: "center",
-                    borderRadius: 5,
-                    padding: 5,
-                  }}
-                >
-                  <Text style={{ color: "white" }}>รายละเอียด</Text>
-                </View>
-              </TouchableOpacity>
-            </DataTable.Cell>
-          </DataTable.Row>
-        </DataTable> */}
+        <Accordion
+          dataArray={dataArray}
+          animation={true}
+          expanded={true}
+          renderHeader={_renderHeader}
+          renderContent={_renderContent}
+        />
       </View>
     </ScrollView>
   );
