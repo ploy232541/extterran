@@ -68,20 +68,22 @@ const ConfirmBookingScreen = (props) => {
   };
 
   const showModalBooking = (booking_type,booking_id) => {
-    setUserId(user_id);
     setModalVisible(true);
-    navigation.navigate("StaffForm")
-    // if (booking_type==1) {
-    //  return navigation.navigate("StaffFormFlight")
-    // }else if(booking_type==2){
-    //   return navigation.navigate("StaffFormAccom")
-    // }else if(booking_type==3){
-    //   return navigation.navigate("StaffFormGround")
-    // }
+
+    // navigation.navigate("StaffForm")
+    console.log(booking_type);
+    if (booking_type==1) {
+      navigation.navigate("StaffFormFlight")
+    }else if(booking_type==2){
+       navigation.navigate("StaffFormAccom")
+    }else if(booking_type==3){
+       navigation.navigate("StaffFormGround")
+    }
     
   };
 
   const _renderHeader = (item, expanded) => {
+    console.log(item);
     let lang = AsyncStorage.getItem("language");
     return (
       <View
@@ -103,7 +105,7 @@ const ConfirmBookingScreen = (props) => {
         <View style={{ justifyContent: "flex-end", marginRight: 10 }}>
           <Button
             onPress={() =>{
-              showModalBooking(booking_id,booking_type)
+              showModalBooking(item.booking_type,item.booking_id)
             }}
             style={{ height: 30, backgroundColor: "#3399ff" }}
           >
@@ -131,14 +133,14 @@ const ConfirmBookingScreen = (props) => {
           <View>
             <Text>
               <Icon style={{ fontSize: 16, color: "#010c65" }} name="up" />
-              เครื่องบิน
+              การเดินทาง
             </Text>
           </View>
         ) : item.booking_type == 2 ? (
           <View>
             <Text>
               <Icon style={{ fontSize: 16, color: "#010c65" }} name="up" />
-              เครื่องบิน
+              ที่พัก
             </Text>
           </View>
         ) : item.booking_type == 3 ? (

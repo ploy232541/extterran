@@ -64,6 +64,9 @@ import StaffCourseGeneralScreen from '../screens/Staff/StaffCourseGeneralScreen'
 import ConfirmBookingScreen from '../screens/Staff/ConfirmBookingScreen'
 import ConfirmTrainingScreen from '../screens/Staff/ConfirmTrainingScreen'
 import StaffForm from '../screens/Staff/StaffForm'
+import StaffFormFlight from '../screens/Staff/StaffFormFlight'
+import StaffFormAccom from '../screens/Staff/StaffFormAccom'
+import StaffFormGround from '../screens/Staff/StaffFormGround'
 import FeedBackCourseInScreen from '../screens/FeedBack/FeedBackCourseInScreen'
 import FeedBackCourseGeneralScreen from '../screens/FeedBack/FeedBackCourseGeneralScreen'
 import CourseScreenDetailOut from '../screens/Course/CourseScreenDetailOut'
@@ -254,6 +257,16 @@ const routes = {
   StaffForm:{
     title:" ",
     component:StaffForm
+  },
+  StaffFormFlight:{
+    title:" ",
+    component:StaffFormFlight
+  },StaffFormAccom:{
+    title:" ",
+    component:StaffFormAccom
+  },StaffFormGround:{
+    title:" ",
+    component:StaffFormGround
   },
 
   FeedBackCourseInScreen:{
