@@ -22,6 +22,10 @@ import { Alert } from "react-native";
 import { httpClient } from "../../core/HttpClient";
 import { AsyncStorage } from "react-native";
 import Icons from "react-native-vector-icons/Ionicons";
+import * as DocumentPicker from "expo-document-picker";
+import HTML from "react-native-render-html";
+import { Rows, Table } from "react-native-table-component";
+import FormData from "form-data";
 
 let dimensions = Dimensions.get("window");
 let pickerWidth = dimensions.width - 56;
@@ -36,7 +40,6 @@ export default class ExternalScreen extends Component {
       course: "กรุณาเลือกหลักสูตร",
       trainingNeedItem: {
         employee_id: "",
-        employee_name: "กรุณาเลือกพนักงาน",
         data: [],
       },
       courseItem: {
@@ -45,28 +48,16 @@ export default class ExternalScreen extends Component {
         trainingPurpose: "",
         startDate: "DD/MM/YYYY",
         price: "",
-        oher: "",
+        other: "",
+        upload_file: null,
       },
-      currentDate: "dd/mm/yy",
-      isStart: false,
+
       isDatePickerVisible: false,
       trainingNeed: [],
-      select_2: [],
-      select_1: [],
+      empList: [],
+      purposeList: [],
       startDate: "DD/MM/YYYY",
-      isDatePickerVisible: false,
-      dateexternal: [],
-      dateexternalitem: {
-        data: {
-          course: "",
-          Provider: "",
-          purpose: "",
-          purpose_id: "",
-          dates: "DD/MM/YYYY",
-          cost: "",
-          other: "",
-        },
-      },
+
       tem: -1,
       dateIndex: -1,
       dateI: -1,
@@ -88,7 +79,7 @@ export default class ExternalScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              select_2: result,
+              empList: result,
             });
           }
         })
@@ -102,7 +93,7 @@ export default class ExternalScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              select_1: result,
+              purposeList: result,
             });
           }
         })
@@ -197,42 +188,166 @@ export default class ExternalScreen extends Component {
 
     this.setState({ trainingNeed: trainingNeed });
   }
-  goss(element, index) {
-    let selected = true;
-    for (let i = 0; i < this.state.trainingNeed.length; i++) {
-      const param = this.state.trainingNeed[i];
-      if (param.employee_id == element.user_id) {
-        selected = false;
-        break;
-      }
+
+  async uploadFile(index, i) {
+    let result = await DocumentPicker.getDocumentAsync({});
+    if (result.type == "success") {
+      let trainingNeed = [...this.state.trainingNeed];
+
+      let item = { ...trainingNeed[index] };
+      let data = { ...item["data"] };
+      let param = data[i];
+      param.upload_file = result;
+      data[i] = param;
+      trainingNeed[index] = item;
+      var id = "Id of subbrands to remove: ";
+      //ลบ key ส่วนเกินออก
+      trainingNeed.forEach(function (o) {
+        o.data = o.data.filter((s) => s.id != id);
+      });
+      console.log(trainingNeed);
+      this.setState({
+        trainingNeed: trainingNeed,
+      });
     }
-    if (selected == false) {
-      return (
-        <Picker.Item
-          label={
-            this.state.lang === "EN"
-              ? element.firstname_en + " " + element.lastname_en + " (Selected)"
-              : element.firstname + " " + element.lastname + " (เลือกแล้ว)"
-          }
-          value={element.user_id}
-        />
-      );
+  }
+  onPressSend() {
+    const { trainingNeed } = this.state;
+    if (trainingNeed.length <= 0) {
+      Alert.alert("กรุณาเพิ่มพนักงานอย่างน้อย 1 รายการ");
     } else {
-      {
-        return (
-          <Picker.Item
-            label={
-              this.state.lang === "EN"
-                ? element.firstname_en + " " + element.lastname_en
-                : element.firstname + " " + element.lastname
-            }
-            value={element.user_id}
-          />
+      let index = 0;
+      let error = false;
+      let trainingNeed = [...this.state.trainingNeed];
+
+      do {
+        let item = { ...trainingNeed[index] };
+        let data = item.data;
+        error = true;
+        if (item.employee_id == "" || item.employee_id == null) {
+          Alert.alert("กรุณาเลือกพนักงาน \n ช่องที่ " + (index + 1));
+        } else {
+          let i = 0;
+          if (data.length > 0) {
+            do {
+              error = true;
+              let param = data[i];
+              if (param.courseName == null || param.courseName == "") {
+                Alert.alert(
+                  "กรุณากรอกชื่อหลักสูตร \n ช่องที่ " +
+                    (index + 1) +
+                    "\n ลำดับที่ " +
+                    (i + 1)
+                );
+              } else if (
+                param.trainingProvider == null ||
+                param.trainingProvider == ""
+              ) {
+                Alert.alert(
+                  "กรุณาเพิ่มผู้ให้บริการฝึกอบรม \n ช่องที่ " +
+                    (index + 1) +
+                    "\n ลำดับที่ " +
+                    (i + 1)
+                );
+              } else if (
+                param.trainingPurpose == null ||
+                param.trainingPurpose == ""
+              ) {
+                Alert.alert(
+                  "กรุณาเลือกวัตถุประสงค์ \n ช่องที่ " +
+                    (index + 1) +
+                    "\n ลำดับที่ " +
+                    (i + 1)
+                );
+              } else if (param.startDate == "DD/MM/YYYY") {
+                Alert.alert(
+                  "กรุณาใส่วันที่ \n ช่องที่ " +
+                    (index + 1) +
+                    "\n ลำดับที่ " +
+                    (i + 1)
+                );
+              } else if (param.price == null || param.price == "") {
+                Alert.alert(
+                  "กรุณาเพิ่มราคา \n ช่องที่ " +
+                    (index + 1) +
+                    "\n ลำดับที่ " +
+                    (i + 1)
+                );
+              } else if (param.upload_file == null || param.upload_file == "") {
+                Alert.alert(
+                  "กรุณาแนบไฟล์ \n ช่องที่ " +
+                    (index + 1) +
+                    "\n ลำดับที่ " +
+                    (i + 1)
+                );
+              } else {
+                error = false;
+              }
+
+              i++;
+            } while (i < data.length && error == false);
+          } else {
+            Alert.alert(
+              "กรุณาเพิ่มคอสเรียนอย่างน้อย 1 รายการ ในช่องที่ " + (index + 1)
+            );
+          }
+        }
+        
+        index++;
+      } while (index < trainingNeed.length && error == false);
+      if (error == false) {
+        const data= new FormData()
+        
+        Object.keys(trainingNeed).forEach((key) => data.append(key, trainingNeed[key]));
+        Alert.alert(
+          this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+          this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+          [
+            {
+              text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+            ,
+            {
+              text: this.state.lang === "EN" ? "OK" : "ตกลง",
+              onPress: () => {
+                httpClient
+                  .post('/Training/InsertTrainingNeedsExternal', data)
+                  .then((response) => {
+                    const result = response.data
+                    if (result === true) {
+                      Alert.alert(
+                        this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                        this.state.lang === "EN"
+                          ? "Training request sent"
+                          : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
+                        [
+                          {
+                            text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                            onPress: () => this.reset(),
+                          },
+                        ],
+                        { cancelable: false }
+                      );
+                    } else {
+                      Alert.alert(
+                        this.state.lang === "EN"
+                          ? `Training request failed`
+                          : "ไม่สามารถส่งคำร้องขอฝึกอบรมได้"
+                      );
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              },
+            },
+          ]
         );
       }
     }
   }
-
   render() {
     return (
       <View style={styles.background}>
@@ -271,8 +386,8 @@ export default class ExternalScreen extends Component {
               }
             }
             let listEmployees = [];
-            for (let i = 0; i < this.state.select_2.length; i++) {
-              let employee = this.state.select_2[i];
+            for (let i = 0; i < this.state.empList.length; i++) {
+              let employee = this.state.empList[i];
               let employeeId = employee.user_id;
               if (!excludeEmployees.includes(employeeId)) {
                 listEmployees.push(employee);
@@ -295,7 +410,7 @@ export default class ExternalScreen extends Component {
                         <Text style={styles.textStyle1}>
                           {this.state.lang === "EN"
                             ? "Employee Name"
-                            : "ชื่อพนักงาน"}
+                            : "ชื่อพนักงานคนที่ " + (index + 1)}
                         </Text>
 
                         <View>
@@ -318,36 +433,18 @@ export default class ExternalScreen extends Component {
                             selectedValue={
                               Item.employee_id ? Item.employee_id : ""
                             }
-                            onBlur={() => {
-                              // this.updateEmployees()
-                              this.setState({
-                                trainingNeed: this.state.trainingNeed,
-                              });
-                            }}
+                            // onBlur={() => {
+                            //   // this.updateEmployees()
+                            //   this.setState({
+                            //     trainingNeed: this.state.trainingNeed,
+                            //   });
+                            // }}
                             onValueChange={(text) => {
-                              let selected = true;
-                              for (
-                                let i = 0;
-                                i < this.state.trainingNeed.length;
-                                i++
-                              ) {
-                                const param = this.state.trainingNeed[i];
-                                if (text == param.employee_id) {
-                                  selected = false;
-                                  break;
-                                }
-                              }
-                              if (selected == true) {
-                                let trainingNeed = [...this.state.trainingNeed];
-                                let item = { ...trainingNeed[index] };
-                                item.employee_id = text;
-                                trainingNeed[index] = item;
-                                this.setState({ trainingNeed: trainingNeed });
-                              } else {
-                                this.state.lang === "EN"
-                                  ? Alert.alert("Please select again.")
-                                  : Alert.alert("กรุณาเลือกใหม่อีกครั้ง");
-                              }
+                              let trainingNeed = [...this.state.trainingNeed];
+                              let item = { ...trainingNeed[index] };
+                              item.employee_id = text;
+                              trainingNeed[index] = item;
+                              this.setState({ trainingNeed: trainingNeed });
                             }}
                             textStyle={{ fontSize: 14 }}
                           >
@@ -402,6 +499,14 @@ export default class ExternalScreen extends Component {
                                   // marginBottom: 8,
                                 }}
                               >
+                                <Text style={styles.textStyle1}>
+                                  {this.state.lang === "EN"
+                                    ? "Employee Name"
+                                    : "พนักงานคนที่ " +
+                                      (index + 1) +
+                                      " คอสเรียนที่ " +
+                                      (i + 1)}
+                                </Text>
                                 <TextInput
                                   style={styles.inputStyle4}
                                   placeholder={
@@ -518,7 +623,7 @@ export default class ExternalScreen extends Component {
                                       }
                                       value=""
                                     />
-                                    {this.state.select_1.map((data) => {
+                                    {this.state.purposeList.map((data) => {
                                       return (
                                         <Picker.Item
                                           label={
@@ -583,7 +688,7 @@ export default class ExternalScreen extends Component {
                                   placeholder={
                                     this.state.lang === "EN" ? "Other" : "อื่นๆ"
                                   }
-                                  value={param.oher}
+                                  value={param.other}
                                   onChangeText={(text) => {
                                     let trainingNeed = [
                                       ...this.state.trainingNeed,
@@ -592,7 +697,7 @@ export default class ExternalScreen extends Component {
                                     let item = { ...trainingNeed[index] };
                                     let data = { ...item["data"] };
                                     let param = data[i];
-                                    param.oher = text;
+                                    param.other = text;
                                     data[i] = param;
                                     trainingNeed[index] = item;
                                     var id = "Id of subbrands to remove: ";
@@ -607,50 +712,60 @@ export default class ExternalScreen extends Component {
                                   }}
                                 ></TextInput>
 
-                                <Text
-                                  style={{
-                                    paddingHorizontal: 8,
-                                    // paddingVertical: 12,
-                                    marginTop: 15,
-                                  }}
-                                >
-                                  {this.state.lang === "EN"
-                                    ? "Attach File"
-                                    : "แนบไฟล์"}
-                                </Text>
-                                <Button
-                                  style={{
-                                    borderWidth: 1,
-                                    borderRadius: 10,
-                                    backgroundColor: "#4392de",
-                                    height: HEIGHT / 20,
-                                    // width: "20%",
-                                    marginTop: 10,
-                                    marginBottom: 10,
-                                    borderColor: "#4392de",
-                                    alignSelf: "flex-start",
-                                  }}
-                                >
+                                <View>
+                                  <Text style={styles.textInputEng}>
+                                    File :
+                                  </Text>
+                                  <Text style={styles.textInputThai}>
+                                    แนบไฟล์
+                                  </Text>
                                   <View
-                                    style={{
-                                      justifyContent: "center",
-                                      alignItems: "center",
-                                      flex: 1,
-                                    }}
+                                    style={{ marginTop: 5, marginBottom: 20 }}
                                   >
-                                    <Text
+                                    <Button
                                       style={{
-                                        color: "white",
-                                        // marginRight: 10,
-                                        fontSize: 14,
+                                        borderWidth: 1,
+                                        borderRadius: 10,
+                                        backgroundColor: "#4392de",
+                                        height: HEIGHT / 18,
+                                        // width: "20%",
+                                        marginTop: 10,
+                                        marginBottom: 10,
+                                        borderColor: "#4392de",
+                                      }}
+                                      onPress={this.uploadFile.bind(
+                                        this,
+                                        index,
+                                        i
+                                      )}
+                                    >
+                                      <Text
+                                        style={{
+                                          marginHorizontal: 8,
+                                          color: "white",
+                                        }}
+                                      >
+                                        {this.state.lang == "EN"
+                                          ? "Choose File"
+                                          : "เลือกไฟล์"}
+                                      </Text>
+                                    </Button>
+
+                                    <View
+                                      style={{
+                                        flex: 1,
+                                        marginTop: 20,
+                                        alignItems: "flex-start",
                                       }}
                                     >
-                                      {this.state.lang === "EN"
-                                        ? "ChooseFile"
-                                        : "เลือกไฟล์"}
-                                    </Text>
+                                      {param.upload_file ? (
+                                        <Text style={{ color: "red" }}>
+                                          {param.upload_file.name}
+                                        </Text>
+                                      ) : null}
+                                    </View>
                                   </View>
-                                </Button>
+                                </View>
 
                                 <Divider
                                   style={{
@@ -665,6 +780,7 @@ export default class ExternalScreen extends Component {
                               <DateTimePickerModal
                                 isVisible={this.state.isDatePickerVisible}
                                 mode="date"
+                                locale={this.state.lang === "EN" ? "en" : "th"}
                                 onConfirm={this.handleConfirm}
                                 onCancel={this.hideDatePicker}
                               />
@@ -738,7 +854,8 @@ export default class ExternalScreen extends Component {
                     trainingPurpose: "",
                     startDate: "DD/MM/YYYY",
                     price: "",
-                    oher: "",
+                    other: "",
+                    upload_file: null,
                   },
                 ];
                 let trainingNeed = [
@@ -782,7 +899,10 @@ export default class ExternalScreen extends Component {
             </View>
 
             <View style={styles.buttonContainer}>
-              <Button style={styles.btnCancelStyle}>
+              <Button
+                style={styles.btnCancelStyle}
+                onPress={() => this.setState({ trainingNeed: [] })}
+              >
                 <Text style={{ color: "white" }}>
                   {this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}
                 </Text>
