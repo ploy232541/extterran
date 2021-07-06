@@ -379,21 +379,26 @@ export default class ExternalScreen extends Component {
           {/* Start Card by aek*/}
           {/* จะทำการแสดงพนักงาน */}
           {this.state.trainingNeed.map((Item, index) => {
+            //เริ่มทำกอปปี้พนักงาน
+            // excludeEmployees คือก็อปปี้ไอดีพนักงาน
             let excludeEmployees = [];
+            // วนบันทึกไอดีไปเรื่อยๆ ยกเว้นไอดีของของตัวเอง
             for (let i = 0; i < this.state.trainingNeed.length; i++) {
               if (i != index) {
                 excludeEmployees.push(this.state.trainingNeed[i].employee_id);
               }
             }
+// ลูปข้อมูล พนักงาน employeeId ว่ามีไหม เครื่องหมาย ! เปลี่ยนจากเจอเป็นไม่เจอ เมื่อไม่เจอมันจะทำการใส่ employee ใน listEmployees
             let listEmployees = [];
             for (let i = 0; i < this.state.empList.length; i++) {
               let employee = this.state.empList[i];
               let employeeId = employee.user_id;
+              // เช็คว่ามี
               if (!excludeEmployees.includes(employeeId)) {
                 listEmployees.push(employee);
               }
             }
-
+// จบ การกอปปี้พนักงาน 
             return (
               <View>
                 <ScrollView>
