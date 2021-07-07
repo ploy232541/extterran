@@ -1,13 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { ScrollView} from "react-native-gesture-handler";
 import { Divider } from "react-native-elements";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import { Dimensions } from "react-native";
+import { httpClient } from "../../core/HttpClient";
 
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get("window").height;
-const StaffFormFlight = () => {
+const StaffFormFlight = ({navigation, route}) => {
+  const [loading, setLoading] = useState(false);
+  const [dataArray, setDataArray] = useState([]);
+ 
+  try {
+    setLoading(true);
+    httpClient
+    .get(`Team/confirmBookingFlight/${route.params.booking_id}`)
+    .then((response) => {
+      let res = response.data;
+      if (res != null) {
+        setDataArray(res);
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    
+} catch (e) {
+  console.log(e);
+}
+console.log(dataArray);
+  
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
       <View style={styles.container}>
@@ -26,7 +52,8 @@ const StaffFormFlight = () => {
           บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด
         </Text>
         <Text style={{ alignSelf: "center", fontSize: 16 }}>
-          Booking Request 1
+          Booking Request 1 
+          
         </Text>
 
         <View

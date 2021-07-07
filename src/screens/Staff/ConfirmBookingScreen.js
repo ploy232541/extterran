@@ -62,6 +62,22 @@ const ConfirmBookingScreen = (props) => {
         .catch((error) => {
           console.log(error);
         });
+
+        httpClient
+        .get(`Team/BookingTeam/${user_id}`)
+        .then((response) => {
+          let res = response.data;
+          if (res != null) {
+            setDataArray(res);
+            setLoading(false);
+          } else {
+            setLoading(false);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+        
     } catch (e) {
       console.log(e);
     }
@@ -73,7 +89,7 @@ const ConfirmBookingScreen = (props) => {
     // navigation.navigate("StaffForm")
     console.log(booking_type);
     if (booking_type==1) {
-      navigation.navigate("StaffFormFlight")
+      navigation.navigate({name:"StaffFormFlight", params:{booking_id:booking_id},})
     }else if(booking_type==2){
        navigation.navigate("StaffFormAccom")
     }else if(booking_type==3){
