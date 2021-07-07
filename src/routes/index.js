@@ -63,7 +63,7 @@ import StaffCourseGeneralScreen from '../screens/Staff/StaffCourseGeneralScreen'
 
 import ConfirmBookingScreen from '../screens/Staff/ConfirmBookingScreen'
 import ConfirmTrainingScreen from '../screens/Staff/ConfirmTrainingScreen'
-import StaffForm from '../screens/Staff/StaffForm'
+// import StaffForm from '../screens/Staff/StaffForm'
 import StaffFormFlight from '../screens/Staff/StaffFormFlight'
 import StaffFormAccom from '../screens/Staff/StaffFormAccom'
 import StaffFormGround from '../screens/Staff/StaffFormGround'
@@ -254,10 +254,10 @@ const routes = {
     title:" ",
     component:ConfirmBookingScreen
   },
-  StaffForm:{
-    title:" ",
-    component:StaffForm
-  },
+  // StaffForm:{
+  //   title:" ",
+  //   component:StaffForm
+  // },
   StaffFormFlight:{
     title:" ",
     component:StaffFormFlight

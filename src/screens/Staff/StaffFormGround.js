@@ -26,7 +26,7 @@ const StaffFormGround = () => {
           บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด ground
         </Text>
         <Text style={{ alignSelf: "center", fontSize: 16 }}>
-          Booking Request
+          Booking Request 3
         </Text>
 
         <View

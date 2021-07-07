@@ -26,7 +26,7 @@ const StaffFormFlight = () => {
           บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด
         </Text>
         <Text style={{ alignSelf: "center", fontSize: 16 }}>
-          Booking Request
+          Booking Request 1
         </Text>
 
         <View

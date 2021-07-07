@@ -26,7 +26,7 @@ const StaffFormAccom = () => {
           บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด accom
         </Text>
         <Text style={{ alignSelf: "center", fontSize: 16 }}>
-          Booking Request
+          Booking Request 2
         </Text>
 
         <View
