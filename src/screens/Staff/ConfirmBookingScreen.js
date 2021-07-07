@@ -63,7 +63,7 @@ const ConfirmBookingScreen = (props) => {
           console.log(error);
         });
 
-        httpClient
+      httpClient
         .get(`Team/BookingTeam/${user_id}`)
         .then((response) => {
           let res = response.data;
@@ -77,29 +77,27 @@ const ConfirmBookingScreen = (props) => {
         .catch((error) => {
           console.log(error);
         });
-        
     } catch (e) {
       console.log(e);
     }
   };
 
-  const showModalBooking = (booking_type,booking_id) => {
-    setModalVisible(true);
-
-    // navigation.navigate("StaffForm")
-    console.log(booking_type);
-    if (booking_type==1) {
-      navigation.navigate({name:"StaffFormFlight", params:{booking_id:booking_id},})
-    }else if(booking_type==2){
-       navigation.navigate("StaffFormAccom")
-    }else if(booking_type==3){
-       navigation.navigate("StaffFormGround")
+  const showModalBooking = (booking_type, booking_id) => {
+    if (booking_type == 1) {
+      navigation.navigate({
+        name: "StaffFormFlight",
+        params: { booking_id: booking_id },
+      });
+    } else if (booking_type == 2) {
+      navigation.navigate({name: "StaffFormAccom",
+      params: { booking_id: booking_id },});
+    } else if (booking_type == 3) {
+      navigation.navigate({name: "StaffFormGround",
+      params: { booking_id: booking_id },});
     }
-    
   };
 
   const _renderHeader = (item, expanded) => {
-    console.log(item);
     let lang = AsyncStorage.getItem("language");
     return (
       <View
@@ -120,8 +118,8 @@ const ConfirmBookingScreen = (props) => {
         </Text>
         <View style={{ justifyContent: "flex-end", marginRight: 10 }}>
           <Button
-            onPress={() =>{
-              showModalBooking(item.booking_type,item.booking_id)
+            onPress={() => {
+              showModalBooking(item.booking_type, item.booking_id);
             }}
             style={{ height: 30, backgroundColor: "#3399ff" }}
           >

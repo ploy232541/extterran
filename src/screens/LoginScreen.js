@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext ,useEffect} from 'react'
 import {
   StyleSheet,
   TextInput,
@@ -20,7 +20,13 @@ import {httpClient} from '../core/HttpClient';
 import { useNavigation } from "@react-navigation/native"
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import HTML from "react-native-render-html";
+import {
+  requestTrackingPermissionsAsync,
+  getTrackingPermissionsAsync,
+} from 'expo-tracking-transparency';
+
   function LoginScreen() {
+ 
     const navigation = useNavigation()
     const [lang, setLang] = useState('TH');
     const [username, setUsername] = useState('');
@@ -85,6 +91,7 @@ import HTML from "react-native-render-html";
       console.log(err);
     }
     };
+
 
     return (
       <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>

@@ -13,7 +13,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "bundleIdentifier": "com.exterran.elearning",
       "buildNumber": "1.0.1",
@@ -27,5 +29,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
+   
   }
 }

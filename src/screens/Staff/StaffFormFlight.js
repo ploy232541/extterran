@@ -9,30 +9,23 @@ import { httpClient } from "../../core/HttpClient";
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get("window").height;
 const StaffFormFlight = ({navigation, route}) => {
-  const [loading, setLoading] = useState(false);
-  const [dataArray, setDataArray] = useState([]);
- 
+  const [flight, setFlight] = useState([]);
   try {
-    setLoading(true);
+   
     httpClient
     .get(`Team/confirmBookingFlight/${route.params.booking_id}`)
     .then((response) => {
-      let res = response.data;
-      if (res != null) {
-        setDataArray(res);
-        setLoading(false);
-      } else {
-        setLoading(false);
-      }
+     setFlight(response.data)
     })
     .catch((error) => {
       console.log(error);
     });
-    
+    console.log("asdfghjxcvbn");
+    console.log(flight);
+    console.log("asdfghjxcvbn");
 } catch (e) {
   console.log(e);
 }
-console.log(dataArray);
   
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
@@ -74,7 +67,8 @@ console.log(dataArray);
               }}
             >
               <Text>ชื่อ</Text>
-              <Text>XXXXX</Text>
+              {/* ตัวอย่าง */}
+              <Text>{flight.firstname}</Text>
               <Text>นามสกุล</Text>
               <Text>XXXXX</Text>
             </View>

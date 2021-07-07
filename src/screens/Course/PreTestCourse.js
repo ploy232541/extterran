@@ -11,7 +11,7 @@ import Icon1 from 'react-native-vector-icons/FontAwesome';
 import { RadioButton} from 'react-native-paper';
 import {StackActions} from '@react-navigation/native';
 import { CheckBox } from 'react-native-elements'
-import {Dropdown} from 'react-native-material-dropdown';
+import {Dropdown} from 'react-native-material-dropdown-v2';
 import Sortable from './Sortable';
 import { useNavigation } from "@react-navigation/native"
 
