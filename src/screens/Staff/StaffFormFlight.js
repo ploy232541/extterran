@@ -46,7 +46,7 @@ const StaffFormFlight = ({ navigation, route }) => {
         .then((response) => {
           if (response.data) {
             setFlight(response.data.booking);
-            setItem(response.data.flight)
+            setItem(response.data.flight);
             setLoading(false);
           }
         })
@@ -228,112 +228,116 @@ const StaffFormFlight = ({ navigation, route }) => {
           </View>
 
           <Divider style={{ backgroundColor: "#d9d9d9" }} />
-{item.map((param)=>{
-  console.log(param);
-return(
-<ScrollView>
-<View style={{ margin: 20, marginHorizontal: 8 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                // marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "วันที่เดินทาง" : "วันที่เดินทาง"}
-              </Text>
-              <Text style={styles.textSy2}>
-                {moment(param.flight_date).format("DD/MM/YYYY")}
-              </Text>
-            </View>
+          {item.map((param) => {
+            return (
+              <ScrollView>
+                <View style={{ margin: 20, marginHorizontal: 8 }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "baseline",
+                      // marginTop: 8,
+                    }}
+                  >
+                    <Text style={styles.textSyH1}>
+                      {lang == "EN" ? "วันที่เดินทาง" : "วันที่เดินทาง"}
+                    </Text>
+                    <Text style={styles.textSy2}>
+                      {moment(param.flight_date).format("DD/MM/YYYY")}
+                    </Text>
+                  </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "เวลาเริ่ม" : "เวลาเริ่ม"}
-              </Text>
-              <Text style={styles.textSy2}>{param.time_start}</Text>
-            </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "baseline",
+                      marginTop: 8,
+                    }}
+                  >
+                    <Text style={styles.textSyH1}>
+                      {lang == "EN" ? "เวลาเริ่ม" : "เวลาเริ่ม"}
+                    </Text>
+                    <Text style={styles.textSy2}>{param.time_start}</Text>
+                  </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "เวลาสิ้นสุด" : "เวลาสิ้นสุด"}
-              </Text>
-              <Text style={styles.textSy2}>{param.time_end}</Text>
-            </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "baseline",
+                      marginTop: 8,
+                    }}
+                  >
+                    <Text style={styles.textSyH1}>
+                      {lang == "EN" ? "เวลาสิ้นสุด" : "เวลาสิ้นสุด"}
+                    </Text>
+                    <Text style={styles.textSy2}>{param.time_end}</Text>
+                  </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "from" : "ต้นทาง"}
-              </Text>
-              <Text style={styles.textSy2}>{lang == "EN" ?(param.from_name_en): (param.from_name)}{" (" +param.airport_code_from+")"}</Text>
-            </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "baseline",
+                      marginTop: 8,
+                    }}
+                  >
+                    <Text style={styles.textSyH1}>
+                      {lang == "EN" ? "from" : "ต้นทาง"}
+                    </Text>
+                    <Text style={styles.textSy2}>
+                      {lang == "EN" ? param.from_name_en : param.from_name}
+                      {" (" + param.airport_code_from + ")"}
+                    </Text>
+                  </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "to" : "ปลายทาง"}
-              </Text>
-              <Text style={styles.textSy2}>{lang == "EN" ?(param.to_name_en): (param.to_name)}{" (" +param.airport_code_to+")"}</Text>
-            </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "baseline",
+                      marginTop: 8,
+                    }}
+                  >
+                    <Text style={styles.textSyH1}>
+                      {lang == "EN" ? "to" : "ปลายทาง"}
+                    </Text>
+                    <Text style={styles.textSy2}>
+                      {lang == "EN" ? param.to_name_en : param.to_name}
+                      {" (" + param.airport_code_to + ")"}
+                    </Text>
+                  </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "เที่ยวบิน" : "เที่ยวบิน"}
-              </Text>
-              <Text style={styles.textSy2}>{param.flight}</Text>
-            </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "baseline",
+                      marginTop: 8,
+                    }}
+                  >
+                    <Text style={styles.textSyH1}>
+                      {lang == "EN" ? "เที่ยวบิน" : "เที่ยวบิน"}
+                    </Text>
+                    <Text style={styles.textSy2}>{param.flight}</Text>
+                  </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Baggage" : "สัมภาระ"}
-              </Text>
-              <Text style={styles.textSy2}>
-                {param.param_carry ? flight.flight_carry : "ไม่มีสัมภาระ"}
-              </Text>
-            </View>
-          </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "baseline",
+                      marginTop: 8,
+                    }}
+                  >
+                    <Text style={styles.textSyH1}>
+                      {lang == "EN" ? "Baggage" : "สัมภาระ"}
+                    </Text>
+                    <Text style={styles.textSy2}>
+                      {param.param_carry ? flight.flight_carry : "ไม่มีสัมภาระ"}
+                    </Text>
+                  </View>
+                </View>
 
-          <Divider style={{ backgroundColor: "#d9d9d9" }} />
-</ScrollView>
-  )
-})}
-         
+                <Divider style={{ backgroundColor: "#d9d9d9" }} />
+              </ScrollView>
+            );
+          })}
 
           <Text style={{ marginHorizontal: 10, marginTop: 15 }}>
             {lang == "EN" ? "Approved:" : "อนุมัติโดย:"}
