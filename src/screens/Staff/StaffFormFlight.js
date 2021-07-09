@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  ActivityIndicator,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Divider } from "react-native-elements";
 import AntIcon from "react-native-vector-icons/AntDesign";
@@ -13,6 +20,8 @@ const HEIGHT = Dimensions.get("window").height;
 const StaffFormFlight = ({ navigation, route }) => {
   const [lang, setLang] = useState("TH");
   const [flight, setFlight] = useState([]);
+  const [item, setItem] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const run = async () => {
@@ -23,6 +32,7 @@ const StaffFormFlight = ({ navigation, route }) => {
 
   const getData = async () => {
     try {
+      setLoading(true);
       let getLang = await AsyncStorage.getItem("language");
       setLang(getLang);
       if (getLang == "EN") {
@@ -34,19 +44,30 @@ const StaffFormFlight = ({ navigation, route }) => {
       httpClient
         .get(`Team/confirmBookingFlight/${route.params.booking_id}`)
         .then((response) => {
-          setFlight(response.data);
+          if (response.data) {
+            setFlight(response.data.booking);
+            setItem(response.data.flight)
+            setLoading(false);
+          }
         })
         .catch((error) => {
           console.log(error);
         });
-      // console.log("asdfghjxcvbn");
-      // console.log(flight);
-      // console.log("asdfghjxcvbn");
     } catch (e) {
       console.log(e);
     }
   };
-
+  if (loading) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <ActivityIndicator />
+        </View>
+      </SafeAreaView>
+    );
+  }
   return (
     <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
       <View
@@ -150,7 +171,9 @@ const StaffFormFlight = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Phone" : "เบอร์โทร"}
               </Text>
-              <Text style={styles.textSy2}>{flight.phone ? flight.phone : "-"}</Text>
+              <Text style={styles.textSy2}>
+                {flight.phone ? flight.phone : "-"}
+              </Text>
             </View>
 
             <View
@@ -178,7 +201,8 @@ const StaffFormFlight = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Province" : "จังหวัด"}
               </Text>
-              <Text style={styles.textSy2}>{lang == "EN" ? flight.pv_name_en : flight.pv_name_th}
+              <Text style={styles.textSy2}>
+                {lang == "EN" ? flight.pv_name_en : flight.pv_name_th}
               </Text>
             </View>
 
@@ -204,8 +228,11 @@ const StaffFormFlight = ({ navigation, route }) => {
           </View>
 
           <Divider style={{ backgroundColor: "#d9d9d9" }} />
-
-          <View style={{ margin: 20, marginHorizontal: 8 }}>
+{item.map((param)=>{
+  console.log(param);
+return(
+<ScrollView>
+<View style={{ margin: 20, marginHorizontal: 8 }}>
             <View
               style={{
                 flexDirection: "row",
@@ -217,7 +244,7 @@ const StaffFormFlight = ({ navigation, route }) => {
                 {lang == "EN" ? "วันที่เดินทาง" : "วันที่เดินทาง"}
               </Text>
               <Text style={styles.textSy2}>
-                {moment(flight.flight_date).format("DD/MM/YYYY")}
+                {moment(param.flight_date).format("DD/MM/YYYY")}
               </Text>
             </View>
 
@@ -231,7 +258,7 @@ const StaffFormFlight = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "เวลาเริ่ม" : "เวลาเริ่ม"}
               </Text>
-              <Text style={styles.textSy2}>{flight.time_start}</Text>
+              <Text style={styles.textSy2}>{param.time_start}</Text>
             </View>
 
             <View
@@ -244,7 +271,7 @@ const StaffFormFlight = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "เวลาสิ้นสุด" : "เวลาสิ้นสุด"}
               </Text>
-              <Text style={styles.textSy2}>{flight.time_end}</Text>
+              <Text style={styles.textSy2}>{param.time_end}</Text>
             </View>
 
             <View
@@ -255,9 +282,9 @@ const StaffFormFlight = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "ต้นทาง" : "ต้นทาง"}
+                {lang == "EN" ? "from" : "ต้นทาง"}
               </Text>
-              <Text style={styles.textSy2}>{flight.flight_from}</Text>
+              <Text style={styles.textSy2}>{lang == "EN" ?(param.from_name_en): (param.from_name)}{" (" +param.airport_code_from+")"}</Text>
             </View>
 
             <View
@@ -268,9 +295,9 @@ const StaffFormFlight = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "ปลายทาง" : "ปลายทาง"}
+                {lang == "EN" ? "to" : "ปลายทาง"}
               </Text>
-              <Text style={styles.textSy2}>{flight.flight_to}</Text>
+              <Text style={styles.textSy2}>{lang == "EN" ?(param.to_name_en): (param.to_name)}{" (" +param.airport_code_to+")"}</Text>
             </View>
 
             <View
@@ -283,7 +310,7 @@ const StaffFormFlight = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "เที่ยวบิน" : "เที่ยวบิน"}
               </Text>
-              <Text style={styles.textSy2}>{flight.flight}</Text>
+              <Text style={styles.textSy2}>{param.flight}</Text>
             </View>
 
             <View
@@ -297,12 +324,16 @@ const StaffFormFlight = ({ navigation, route }) => {
                 {lang == "EN" ? "Baggage" : "สัมภาระ"}
               </Text>
               <Text style={styles.textSy2}>
-                {flight.flight_carry ? flight.flight_carry : "ไม่มีสัมภาระ"}
+                {param.param_carry ? flight.flight_carry : "ไม่มีสัมภาระ"}
               </Text>
             </View>
           </View>
 
           <Divider style={{ backgroundColor: "#d9d9d9" }} />
+</ScrollView>
+  )
+})}
+         
 
           <Text style={{ marginHorizontal: 10, marginTop: 15 }}>
             {lang == "EN" ? "Approved:" : "อนุมัติโดย:"}
