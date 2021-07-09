@@ -15,6 +15,8 @@ import { Dimensions } from "react-native";
 import { Accordion, Button } from "native-base";
 import Icon from "react-native-vector-icons/AntDesign";
 import Icon2 from "react-native-vector-icons/FontAwesome";
+import Icons0 from "react-native-vector-icons/Entypo";
+import Icons2 from "react-native-vector-icons/Fontisto";
 import { httpClient } from "../../core/HttpClient";
 import ModalFeedBack from "./ModalFeedBack";
 import { useNavigation } from "@react-navigation/native";
@@ -39,8 +41,8 @@ const ConfirmBookingScreen = (props) => {
   const getData = async () => {
     try {
       setLoading(true);
-      let getLang = await AsyncStorage.getItem("language");
       let user_id = await AsyncStorage.getItem("userId");
+      let getLang = await AsyncStorage.getItem("language");
       setLang(getLang);
       if (getLang == "EN") {
         var lang_id = "1";
@@ -89,11 +91,15 @@ const ConfirmBookingScreen = (props) => {
         params: { booking_id: booking_id },
       });
     } else if (booking_type == 2) {
-      navigation.navigate({name: "StaffFormAccom",
-      params: { booking_id: booking_id },});
+      navigation.navigate({
+        name: "StaffFormAccom",
+        params: { booking_id: booking_id },
+      });
     } else if (booking_type == 3) {
-      navigation.navigate({name: "StaffFormGround",
-      params: { booking_id: booking_id },});
+      navigation.navigate({
+        name: "StaffFormGround",
+        params: { booking_id: booking_id },
+      });
     }
   };
 
@@ -113,8 +119,8 @@ const ConfirmBookingScreen = (props) => {
         <Icon2 style={{ color: "#cccccc" }} size={20} name="user" />
         <Text style={{ flex: 1, marginLeft: 5, color: "#000" }}>
           {lang == "EN"
-            ? item.firstname + " " + item.lastname
-            : item.firstname_en + " " + item.lastname_en}
+            ? item.firstname_en + " " + item.lastname_en
+            : item.firstname + " " + item.lastname}
         </Text>
         <View style={{ justifyContent: "flex-end", marginRight: 10 }}>
           <Button
@@ -144,24 +150,36 @@ const ConfirmBookingScreen = (props) => {
     return (
       <View style={{ alignSelf: "center", padding: 10 }}>
         {item.booking_type == 1 ? (
-          <View>
-            <Text>
-              <Icon style={{ fontSize: 16, color: "#010c65" }} name="up" />
-              การเดินทาง
+          <View style={{ flexDirection: "row" }}>
+            <Icons0
+              style={{ color: "#010c65",}}
+              name="aircraft"
+              size={25}
+            />
+            <Text style={{ fontSize: 18, marginHorizontal: 2,}}>
+              {lang == "EN" ? "Flight" : "ตั๋วเครื่องบิน"}
             </Text>
           </View>
         ) : item.booking_type == 2 ? (
-          <View>
-            <Text>
-              <Icon style={{ fontSize: 16, color: "#010c65" }} name="up" />
-              ที่พัก
+          <View style={{ flexDirection: "row" }}>
+            <Icon2
+              style={{ color: "#010c65",}}
+              name="hotel"
+              size={25}
+            />
+            <Text style={{ fontSize: 18, marginHorizontal: 2,}}>
+              {lang == "EN" ? "Accom" : "ที่พัก"}
             </Text>
           </View>
         ) : item.booking_type == 3 ? (
-          <View>
-            <Text>
-              <Icon style={{ fontSize: 16, color: "#010c65" }} name="down" />
-              รถยนต์
+          <View style={{ flexDirection: "row" }}>
+            <Icons2
+              style={{ color: "#010c65",}}
+              name="car"
+              size={25}
+            />
+            <Text style={{ fontSize: 18, marginHorizontal: 2,}}>
+              {lang == "EN" ? "Ground" : "รถยนต์"}
             </Text>
           </View>
         ) : (

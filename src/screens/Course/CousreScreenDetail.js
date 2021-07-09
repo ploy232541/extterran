@@ -161,38 +161,38 @@ class CousreScreenDetail extends Component {
               <View style={{ padding: 5}}>
                 {
                   item.alert === 'สมัครเรียนหลักสูตร' ?
-                    <Button disabled style={{ height: 30, backgroundColor: '#000080', borderRadius: 5, marginBottom: 5}} >
-                      <Text style={{fontSize: 11 ,color: '#fff', paddingLeft: 10 , paddingRight: 10}}>
+                    <Button disabled style={{ height: 35, backgroundColor: '#000080', borderRadius: 5, marginBottom: 5}} >
+                      <Text style={{fontSize: 12 ,color: '#fff', paddingLeft: 10 , paddingRight: 10}}>
                         {this.state.lang === 'EN' ? 'Register lesson' : 'สมัครเรียนหลักสูตร'}
                       </Text>
                     </Button>
                   : item.alert === 'เข้าสู่บทเรียน' ?
-                    <Button disabled style={{ height: 30, backgroundColor: '#008ae6', borderRadius: 5, marginBottom: 5}} >
-                      <Text style={{fontSize: 11 ,color: '#fff', paddingLeft: 10 , paddingRight: 10}}>
+                    <Button disabled style={{ height: 35, backgroundColor: '#008ae6', borderRadius: 5, marginBottom: 5}} >
+                      <Text style={{fontSize: 12 ,color: '#fff', paddingLeft: 10 , paddingRight: 10}}>
                         {this.state.lang === 'EN' ? 'Learn lesson' : 'เข้าสู่บทเรียน'}
                       </Text>
                     </Button>
                   : item.alert === 'คุณผ่านบทเรียนนี้แล้ว' ?
-                    <Button disabled style={{ height: 30, backgroundColor: '#00802b', borderRadius: 5, marginBottom: 5}} >
-                      <Text style={{fontSize: 11 ,color: '#fff', paddingLeft: 10 , paddingRight: 10}}>
+                    <Button disabled style={{ height: 35, backgroundColor: '#00802b', borderRadius: 5, marginBottom: 5}} >
+                      <Text style={{fontSize: 12 ,color: '#fff', paddingLeft: 10 , paddingRight: 10}}>
                         {this.state.lang === 'EN' ? 'Pass' : 'คุณผ่านบทเรียนนี้แล้ว'}
                       </Text>
                     </Button>
                   : item.alert === 'หลักสูตรหมดอายุ' ?
-                    <Button disabled style={{ height: 30, backgroundColor: '#800000', borderRadius: 5, marginBottom: 5}} >
-                        <Text style={{fontSize: 11 ,color: '#fff', paddingLeft: 10 , paddingRight: 10}}>
+                    <Button disabled style={{ height: 35, backgroundColor: '#800000', borderRadius: 5, marginBottom: 5}} >
+                        <Text style={{fontSize: 12 ,color: '#fff', paddingLeft: 10 , paddingRight: 10}}>
                           {this.state.lang === 'EN' ? 'Timeout lesson' : 'หลักสูตรหมดอายุ'}
                         </Text>
                     </Button>
                   : item.alert === 'คุณหมดเวลาในการเข้าเรียน' ?
-                    <Button disabled style={{ height: 30, backgroundColor: '#e65c00', borderRadius: 5, marginBottom: 5}} >
-                        <Text style={{fontSize: 11 ,color: '#fff', paddingLeft: 10 , paddingRight: 10}}>
+                    <Button disabled style={{ height: 35, backgroundColor: '#e65c00', borderRadius: 5, marginBottom: 5}} >
+                        <Text style={{fontSize: 12 ,color: '#fff', paddingLeft: 10 , paddingRight: 10}}>
                           {this.state.lang === 'EN' ? 'You run out of time to attend classes.' : 'คุณหมดเวลาในการเข้าเรียน'}
                         </Text>
                     </Button>
                   : item.alert === 'หลักสูตรยังไม่เปิด' ?
-                    <Button disabled style={{ height: 30, backgroundColor: '#b3b300', borderRadius: 5, marginBottom: 5}} >
-                        <Text style={{fontSize: 11 ,color: '#fff', paddingLeft: 10 , paddingRight: 10}}>
+                    <Button disabled style={{ height: 35, backgroundColor: '#b3b300', borderRadius: 5, marginBottom: 5}} >
+                        <Text style={{fontSize: 12 ,color: '#fff', paddingLeft: 10 , paddingRight: 10}}>
                           {this.state.lang === 'EN' ? 'Course not yet open' : 'หลักสูตรยังไม่เปิด'}
                         </Text>
                     </Button>
@@ -211,12 +211,18 @@ class CousreScreenDetail extends Component {
         const {title} = this.props.route.params;
         return (
           <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-            <View style={{alignSelf: 'center'}}>
+            {/* <View style={{alignSelf: 'center'}}>
               <Button disabled style={styles.button}>
               <Text numberOfLines={1} style={styles.text}>{this.state.lang === 'EN' ? 'Cousre' : 'หมวดหลักสูตร'} {title}</Text>
               </Button>
+            </View> */}
+            <View style={styles.container_title}>
+            <View style={styles.line} />
+              <Text numberOfLines={1} style={styles.title}>{this.state.lang === 'EN' ? 'Cousre' : 'หมวดหลักสูตร'} {title}</Text>
+              <View style={styles.line} />
             </View>
-            <View style={{flex: 1, marginLeft: 10, marginRight: 10, marginTop: 20}}>
+
+            <View style={{flex: 1, marginLeft: 10, marginRight: 10, }}>
               <FlatList
                 data={this.formatData(this.state.cousreList, numColumns)}
                 renderItem={this._reanderItem}
@@ -345,6 +351,24 @@ class CousreScreenDetail extends Component {
         color: '#FFFFFF',
         fontWeight: 'bold',
       },
+
+      container_title: {
+        marginHorizontal: 24,
+        flexDirection: "row",
+        marginVertical:24,
+    },
+    line: {
+        backgroundColor: "#0097fc",
+        height: 2,
+        flex: 1,
+        alignSelf: "center",
+    },
+    title: {
+        fontSize: 24,
+        paddingHorizontal: 5,
+        fontWeight: "bold",
+        justifyContent: "center"
+    },
       
     });
 

@@ -377,35 +377,35 @@ class TabCourse extends Component {
               borderColor: '#d9d9d9',
             }}>
             {expanded ? (
-              <Icon style={{fontSize: 16, color: '#fff'}} name="minus" />
+              <Icon style={{flex: 0.1, fontSize: 16, color: '#fff'}} name="minus" />
             ) : (
-              <Icon style={{fontSize: 16, color: '#fff'}} name="plus" />
+              <Icon style={{flex: 0.1, fontSize: 16, color: '#fff'}} name="plus" />
             )}
 
              {
               item.lesson.image != null ?
-              <View>
+              <View style={{flex: 0.2, }}>
                 <Image source={{uri: item.lesson.image}} resizeMode='stretch'
-                      style={{ flex: 1, width: 40, height: 20, borderRadius: 3, marginLeft: 5 }}/>
+                      style={{ flex: 1, width: 40, height: 20, borderRadius: 3,  }}/>
               </View>
               :
               <View/>
             } 
            
-             <View style={{flex: 0.9, alignItems: 'flex-start'}}>
+             <View style={{flex: 0.8, alignItems: 'flex-start', }}>
                 <Text numberOfLines={1} style={{marginLeft: 5, color: '#fff'}}> {item.lesson.title}</Text>
             </View>
-            <View style={{flex: 0.4, alignItems: 'flex-start'}}>
+            <View style={{flex: 0.5, alignItems: 'flex-start', }}>
                 {item.lesson.learn_pass_status === 'pass' ? 
-                <Button disabled style={{marginLeft: 5, backgroundColor: '#008000', height: 30, borderRadius: 5, padding: 5}}>
+                <Button disabled style={{backgroundColor: '#008000', height: 30, borderRadius: 5, padding: 5, alignSelf: 'center'}}>
                   <Text style={{color: '#fff', fontSize: 12}}>{this.state.lang === "EN" ? "Complete" : "เรียนผ่านแล้ว"}</Text>
                 </Button>
                 : item.lesson.learn_pass_status === 'learning' ? 
-                <Button disabled style={{marginLeft: 5, backgroundColor: '#ff9900', height: 30, borderRadius: 5, padding: 5}}>
+                <Button disabled style={{backgroundColor: '#ff9900', height: 30, borderRadius: 5, padding: 5, alignSelf: 'center'}}>
                   <Text style={{color: '#fff', fontSize: 12}}>{this.state.lang === "EN" ? "Learning" : "กำลังเรียน"}</Text>
                 </Button>
                 :
-                <Button disabled style={{marginLeft: 5, backgroundColor: '#a6a6a6', height: 30, borderRadius: 5, padding: 5}}>
+                <Button disabled style={{backgroundColor: '#a6a6a6', height: 30, borderRadius: 5, padding: 5, alignSelf: 'center'}}>
                 <Text style={{color: '#fff', fontSize: 12}}>{this.state.lang === "EN" ? "Not start" : "ยังไม่ได้เรียน"}</Text>
               </Button>
                 }
@@ -584,41 +584,41 @@ class TabCourse extends Component {
                 <Icon
                   name="indent-right"
                   size={20}
-                  style={{marginLeft: 10, marginRight: 10, color: '#b3b3b3'}}
+                  style={{color: '#b3b3b3', flex:0.1, marginLeft: 10}}
                 />
-                <Text numberOfLines={1} style={{flex: 1}}>{data.name}</Text>
+                <Text numberOfLines={1} style={{flex:1, marginLeft: 5}}>{data.name}</Text>
 
                 {
                   data.status === "pass" ? 
-                    <Button disabled style={{alignSelf: 'center',marginLeft: 5, backgroundColor: '#008000' , height: 30, borderRadius: 5, padding: 5}}>
+                    <Button disabled style={{alignSelf: 'center', backgroundColor: '#008000' , height: 30, borderRadius: 5, marginLeft:5, }}>
                       <Text style={{color: '#fff', fontSize: 9}}>{this.state.lang === "EN" ? "Complete" : "เรียนผ่าน"}</Text>
                     </Button>
                   : data.status === "learning" ? 
-                    <Button disabled style={{alignSelf: 'center',marginLeft: 5, backgroundColor: '#ff9900' , height: 30, borderRadius: 5, padding: 5}}>
+                    <Button disabled style={{alignSelf: 'center', backgroundColor: '#ff9900' , height: 30, borderRadius: 5, marginLeft:5}}>
                       <Text style={{color: '#fff', fontSize: 9}}>{this.state.lang === "EN" ? "Learning" : "กำลังเรียน"}</Text>
                     </Button>
                   :
-                    <Button disabled style={{alignSelf: 'center',marginLeft: 5, backgroundColor: '#b3b3b3' , height: 30, borderRadius: 5, padding: 5}}>
-                      <Text style={{color: '#fff', fontSize: 9}}>{this.state.lang === "EN" ? "Not start" : "ยังไม่ได้เรียน"}</Text>
+                    <Button disabled style={{alignSelf: 'center', backgroundColor: '#b3b3b3' , height: 30, borderRadius: 5, marginLeft:5}}>
+                      <Text style={{color: '#fff', fontSize: 10, paddingHorizontal:4, alignItems: "center"}}>{this.state.lang === "EN" ? "Not start" : "ยังไม่ได้เรียน"}</Text>
                     </Button>
                 }
               
-                <View style={{flex: 1, marginRight: 5}}>
+                <View style={{flex:0.8, marginHorizontal:5}}>
                 { (item.lesson.prescore != null && item.lesson.pre.pre == 1) || item.lesson.pre.pre == 0 ?
                       <Button iconRight
                         style={{
                           backgroundColor: '#ff9900',
                           borderColor: '#cccccc',
                           borderWidth: 1,
-                          alignSelf: 'flex-end',
-                          margin: 8,
+                          alignSelf: 'center',
+                          marginVertical: 8,
                           borderRadius: 5,
                           height: 35,
-                          padding: 5
+                          padding: 4
                         }}
                         onPress={this.state.can_next_step == 2 ? this.AlertNotPermission.bind(this) : () => navigation.navigate('Vdo', {lesson_id: data.lesson_id, file_id: data.file_id, course_id: this.state.course_id})}
                         >
-                        <Text style={{fontSize: 12, color: '#fff'}}>{this.state.lang === "EN" ? "Start" : "เข้าสู่บทเรียน"}</Text>
+                        <Text style={{fontSize: 12, color: '#fff',}}>{this.state.lang === "EN" ? "Start" : "เข้าสู่บทเรียน"}</Text>
                         <Icon
                           name="play"
                           size={20}
@@ -630,13 +630,13 @@ class TabCourse extends Component {
                           iconRight
                           style={{
                             backgroundColor: '#ff9900',
-                            borderColor: '#cccccc',
-                            borderWidth: 1,
-                            alignSelf: 'flex-end',
-                            margin: 8,
-                            borderRadius: 5,
-                            height: 35,
-                            padding: 5
+                          borderColor: '#cccccc',
+                          borderWidth: 1,
+                          alignSelf: 'center',
+                          marginVertical: 8,
+                          borderRadius: 5,
+                          height: 35,
+                          padding: 4
                           }}
                           onPress={this.AlertNotPermission.bind(this)}
                           >

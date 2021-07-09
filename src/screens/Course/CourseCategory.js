@@ -246,7 +246,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         paddingHorizontal: 5,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        justifyContent: "center"
     },
 })
 
