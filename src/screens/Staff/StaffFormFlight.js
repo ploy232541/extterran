@@ -6,6 +6,7 @@ import AntIcon from "react-native-vector-icons/AntDesign";
 import { Dimensions } from "react-native";
 import { httpClient } from "../../core/HttpClient";
 import { AsyncStorage } from "react-native";
+import moment from "moment";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -149,7 +150,7 @@ const StaffFormFlight = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Phone" : "เบอร์โทร"}
               </Text>
-              <Text style={styles.textSy2}>{flight.phone}</Text>
+              <Text style={styles.textSy2}>{flight.phone ? flight.phone : "-"}</Text>
             </View>
 
             <View
@@ -162,7 +163,9 @@ const StaffFormFlight = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "BirthDay" : "วันเกิด"}
               </Text>
-              <Text style={styles.textSy2}>{flight.birthday}</Text>
+              <Text style={styles.textSy2}>
+                {moment(flight.birthday).format("DD/MM/YYYY")}
+              </Text>
             </View>
 
             <View
@@ -175,7 +178,8 @@ const StaffFormFlight = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Province" : "จังหวัด"}
               </Text>
-              <Text style={styles.textSy2}>{flight.province}</Text>
+              <Text style={styles.textSy2}>{lang == "EN" ? flight.pv_name_en : flight.pv_name_th}
+              </Text>
             </View>
 
             <View
@@ -188,7 +192,14 @@ const StaffFormFlight = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Purpose" : "วัตถุประสงค์"}
               </Text>
-              <Text style={styles.textSy2}>แก้</Text>
+              <Text style={styles.textSy2}>
+                {" "}
+                {flight.purpose
+                  ? lang == "EN"
+                    ? flight.purpose_travel_en
+                    : flight.purpose_travel_th
+                  : flight.purpose_etc}
+              </Text>
             </View>
           </View>
 
@@ -205,7 +216,9 @@ const StaffFormFlight = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "วันที่เดินทาง" : "วันที่เดินทาง"}
               </Text>
-              <Text style={styles.textSy2}>{flight.flight_date}</Text>
+              <Text style={styles.textSy2}>
+                {moment(flight.flight_date).format("DD/MM/YYYY")}
+              </Text>
             </View>
 
             <View
@@ -283,7 +296,9 @@ const StaffFormFlight = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Baggage" : "สัมภาระ"}
               </Text>
-              <Text style={styles.textSy2}>{flight.flight_carry}</Text>
+              <Text style={styles.textSy2}>
+                {flight.flight_carry ? flight.flight_carry : "ไม่มีสัมภาระ"}
+              </Text>
             </View>
           </View>
 

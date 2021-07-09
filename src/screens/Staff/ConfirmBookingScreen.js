@@ -20,6 +20,7 @@ import Icons2 from "react-native-vector-icons/Fontisto";
 import { httpClient } from "../../core/HttpClient";
 import ModalFeedBack from "./ModalFeedBack";
 import { useNavigation } from "@react-navigation/native";
+import { Alert } from "react-native";
 
 const HEIGHT = Dimensions.get("window").height;
 const ConfirmBookingScreen = (props) => {
@@ -85,6 +86,7 @@ const ConfirmBookingScreen = (props) => {
   };
 
   const showModalBooking = (booking_type, booking_id) => {
+
     if (booking_type == 1) {
       navigation.navigate({
         name: "StaffFormFlight",

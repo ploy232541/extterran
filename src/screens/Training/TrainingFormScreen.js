@@ -610,9 +610,6 @@ export default class TrainingFormScreen extends Component {
       let result = this.state.select_1.find((member) => {
         return member.course_id === v;
       });
-
-      // var nf = new Intl.NumberFormat();
-      var data = number(result.course_fee);
       this.setState({
         courseComfrom: result,
       });
@@ -629,11 +626,11 @@ export default class TrainingFormScreen extends Component {
       }
       if (this.state.course == 3 || this.state.course == 4) {
         this.setState({
-          expense: data,
+          expense: Number(result.course_fee).toString(),
         });
       } else {
         this.setState({
-          expense: "",
+          expense: 0,
         });
       }
       this.checkcourse(Number(result.course_fee));

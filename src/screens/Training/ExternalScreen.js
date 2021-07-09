@@ -30,6 +30,7 @@ import FormData from "form-data";
 let dimensions = Dimensions.get("window");
 let pickerWidth = dimensions.width - 56;
 const HEIGHT = Dimensions.get("window").height;
+const WIDTH = Dimensions.get("window").width;
 
 export default class ExternalScreen extends Component {
   constructor(props) {
@@ -101,7 +102,7 @@ export default class ExternalScreen extends Component {
           console.log(error);
         });
     } catch (error) {
-      Alert.alert(error);
+     console.log(error);
     }
   }
 
@@ -292,13 +293,15 @@ export default class ExternalScreen extends Component {
             );
           }
         }
-        
+
         index++;
       } while (index < trainingNeed.length && error == false);
       if (error == false) {
-        const data= new FormData()
-        
-        Object.keys(trainingNeed).forEach((key) => data.append(key, trainingNeed[key]));
+        const data = new FormData();
+
+        Object.keys(trainingNeed).forEach((key) =>
+          data.append(key, trainingNeed[key])
+        );
         Alert.alert(
           this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
           this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
@@ -313,9 +316,9 @@ export default class ExternalScreen extends Component {
               text: this.state.lang === "EN" ? "OK" : "ตกลง",
               onPress: () => {
                 httpClient
-                  .post('/Training/InsertTrainingNeedsExternal', data)
+                  .post("/Training/InsertTrainingNeedsExternal", data)
                   .then((response) => {
-                    const result = response.data
+                    const result = response.data;
                     if (result === true) {
                       Alert.alert(
                         this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
@@ -388,7 +391,7 @@ export default class ExternalScreen extends Component {
                 excludeEmployees.push(this.state.trainingNeed[i].employee_id);
               }
             }
-// ลูปข้อมูล พนักงาน employeeId ว่ามีไหม เครื่องหมาย ! เปลี่ยนจากเจอเป็นไม่เจอ เมื่อไม่เจอมันจะทำการใส่ employee ใน listEmployees
+            // ลูปข้อมูล พนักงาน employeeId ว่ามีไหม เครื่องหมาย ! เปลี่ยนจากเจอเป็นไม่เจอ เมื่อไม่เจอมันจะทำการใส่ employee ใน listEmployees
             let listEmployees = [];
             for (let i = 0; i < this.state.empList.length; i++) {
               let employee = this.state.empList[i];
@@ -398,7 +401,7 @@ export default class ExternalScreen extends Component {
                 listEmployees.push(employee);
               }
             }
-// จบ การกอปปี้พนักงาน 
+            // จบ การกอปปี้พนักงาน
             return (
               <View>
                 <ScrollView>
@@ -414,7 +417,7 @@ export default class ExternalScreen extends Component {
                       >
                         <Text style={styles.textStyle1}>
                           {this.state.lang === "EN"
-                            ? "Employee Name"
+                           ? "Employee Name No."+ (index + 1)
                             : "ชื่อพนักงานคนที่ " + (index + 1)}
                         </Text>
 
@@ -489,10 +492,9 @@ export default class ExternalScreen extends Component {
                           backgroundColor: "#398DDD",
                         }}
                       />
-                      {/* Start กรอบใน */}
+                      
 
                       {Item.data.map((param, i) => {
-                        console.log(Item.data);
                         return (
                           <View style={{ marginTop: 24 }}>
                             <View style={styles.containerSec3}>
@@ -506,7 +508,7 @@ export default class ExternalScreen extends Component {
                               >
                                 <Text style={styles.textStyle1}>
                                   {this.state.lang === "EN"
-                                    ? "Employee Name"
+                                  ? "Employee Name No."+ (index + 1)
                                     : "พนักงานคนที่ " +
                                       (index + 1) +
                                       " คอสเรียนที่ " +
@@ -613,7 +615,6 @@ export default class ExternalScreen extends Component {
                                           (s) => s.id != id
                                         );
                                       });
-
                                       this.setState({
                                         trainingNeed: trainingNeed,
                                       });
@@ -928,6 +929,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     width: 500,
+    marginHorizontal: WIDTH / 20,
+    marginVertical: HEIGHT / 36,
   },
   //กรอบข้อมูล
   containerSec2: {
@@ -1144,5 +1147,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 10,
     // paddingHorizontal: 32,
+  }, containerSec1: {
+    borderWidth: 1,
+    padding: 12,
+    borderRadius: 8,
+    marginHorizontal: 20,
+    marginTop: 18,
   },
 });

@@ -6,7 +6,7 @@ import AntIcon from "react-native-vector-icons/AntDesign";
 import { Dimensions } from "react-native";
 import { httpClient } from "../../core/HttpClient";
 import { AsyncStorage } from "react-native";
-
+import moment from "moment";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -149,7 +149,9 @@ const StaffFormAccom = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Phone" : "เบอร์โทร"}
               </Text>
-              <Text style={styles.textSy2}>{accom.phone}</Text>
+              <Text style={styles.textSy2}>
+                {accom.phone ? accom.phone : "-"}
+              </Text>
             </View>
 
             <View
@@ -162,9 +164,11 @@ const StaffFormAccom = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "BirthDay" : "วันเกิด"}
               </Text>
-              <Text style={styles.textSy2}>{accom.birthday}</Text>
+              <Text style={styles.textSy2}>
+                {moment(accom.birthday).format("DD/MM/YYYY")}
+              </Text>
             </View>
-            
+
             <View
               style={{
                 flexDirection: "row",
@@ -175,7 +179,10 @@ const StaffFormAccom = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Province" : "จังหวัด"}
               </Text>
-              <Text style={styles.textSy2}> {lang == "EN" ? accom.pv_name_en : accom.pv_name_th}</Text>
+              <Text style={styles.textSy2}>
+                {" "}
+                {lang == "EN" ? accom.pv_name_en : accom.pv_name_th}
+              </Text>
             </View>
 
             <View
@@ -185,7 +192,7 @@ const StaffFormAccom = ({ navigation, route }) => {
                 marginTop: 8,
               }}
             >
-               <Text style={styles.textSyH1}>
+              <Text style={styles.textSyH1}>
                 {lang == "EN" ? "District" : "อำเภอ"}
               </Text>
               <Text style={styles.textSy1}>
@@ -204,7 +211,8 @@ const StaffFormAccom = ({ navigation, route }) => {
                 {lang == "EN" ? "Subdistrict" : "ตำบล"}
               </Text>
               <Text style={styles.textSy2}>
-                {lang == "EN" ? accom.sdt_name_en : accom.sdt_name_th}</Text>
+                {lang == "EN" ? accom.sdt_name_en : accom.sdt_name_th}
+              </Text>
             </View>
 
             {/* <View
@@ -232,7 +240,14 @@ const StaffFormAccom = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Purpose" : "วัตถุประสงค์"}
               </Text>
-              <Text style={styles.textSy2}>แก้</Text>
+              <Text style={styles.textSy2}>
+                {" "}
+                {accom.purpose
+                  ? lang == "EN"
+                    ? accom.purpose_hotel_en
+                    : accom.purpose_hotel_th
+                  : accom.purpose_etc}
+              </Text>
             </View>
           </View>
 
@@ -247,9 +262,9 @@ const StaffFormAccom = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "วันที่เดินทาง" : "วันที่เดินทาง"}
+                {lang == "EN" ? "Province" : "จังหวัด"}
               </Text>
-              <Text style={styles.textSy2}>{accom.flight_date}</Text>
+              <Text style={styles.textSy2}>{accom.province}</Text>
             </View>
 
             <View
@@ -260,9 +275,9 @@ const StaffFormAccom = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "เวลาเริ่ม" : "เวลาเริ่ม"}
+                {lang == "EN" ? "Accommodation (Province, Hotel name)" : "ที่พัก (จังหวัดชื่อโรงแรม)"}
               </Text>
-              <Text style={styles.textSy2}>{accom.time_start}</Text>
+              <Text style={styles.textSy2}>{accom.accommodation}</Text>
             </View>
 
             <View
@@ -273,9 +288,9 @@ const StaffFormAccom = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "เวลาสิ้นสุด" : "เวลาสิ้นสุด"}
+                {lang == "EN" ? "Check in date(D/M/Y)" : "เช็คอิน"}
               </Text>
-              <Text style={styles.textSy2}>{accom.time_end}</Text>
+              <Text style={styles.textSy2}>{accom.checkin}</Text>
             </View>
 
             <View
@@ -286,48 +301,9 @@ const StaffFormAccom = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "ต้นทาง" : "ต้นทาง"}
+                {lang == "EN" ? "Check out date(D/M/Y)" : "เช็คเอาต์"}
               </Text>
-              <Text style={styles.textSy2}>{accom.flight_from}</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "ปลายทาง" : "ปลายทาง"}
-              </Text>
-              <Text style={styles.textSy2}>{accom.flight_to}</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "เที่ยวบิน" : "เที่ยวบิน"}
-              </Text>
-              <Text style={styles.textSy2}>{accom.flight}</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Baggage" : "สัมภาระ"}
-              </Text>
-              <Text style={styles.textSy2}>{accom.flight_carry}</Text>
+              <Text style={styles.textSy2}>{accom.checkout}</Text>
             </View>
           </View>
 
