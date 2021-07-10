@@ -25,6 +25,7 @@ import YoutubePlayer from "react-native-youtube-iframe";
 
 const vdo = require('../../video/benner_video.mp4');
 const HEIGHT = Dimensions.get('window').height;
+const WIDTH = Dimensions.get('window').width;
 
 const myProgramsList = [
     {
@@ -230,8 +231,7 @@ function HomeScreen() {
                             video.vdo_type === 'link' ?
                                 <View style={{alignItems: 'center'}}>
                                   <YoutubePlayer
-                                        height={210}
-                                        width={370}
+                                        width={WIDTH}
                                         videoId={video.link_path.substring(32, 43)} 
                                         play={false}
                                         volume={50}
