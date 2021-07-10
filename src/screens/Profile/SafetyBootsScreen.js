@@ -37,6 +37,14 @@ export default class SafetyBootsScreen extends Component {
       boots_name: "",
       boots_size: "",
       month: "",
+      orgid: "",
+      authorityid: [],
+      per_id: "",//
+      select_type: "",//
+      uniform_type: "",//
+      uniform_name: "",//
+      uniform_part: "",//
+      uniform_total: "",//
     };
   }
 
@@ -85,8 +93,14 @@ export default class SafetyBootsScreen extends Component {
             });
             this.setState({
               boots_id: result[0].boots_id,
+              per_id: result[0].per_id,
               boots_type: result[0].boots_type,
+              uniform_total: result[0].uniform_total,
+              uniform_part: result[0].uniform_part,
+              uniform_type: result[0].uniform_type,
+              select_type: result[0].select_type,
               boots_name: result[0].boots_name,
+              uniform_name: result[0].uniform_name,
               boots_size: size.id,
               select_boots: true,
             });
@@ -100,11 +114,47 @@ export default class SafetyBootsScreen extends Component {
         .catch((error) => {
           console.log(error);
         });
+
+        httpClient
+        .get(`/Training/getorgcharttest/${this.state.user_id}`)
+        .then((response) => {
+          const result = response.data;
+          if (result != null) {
+            for (let i = 0; i < result.length; i++) {
+              var row = result[i];
+
+              this.setState({
+                orgid: row.orgchart_id,
+              });
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+        httpClient
+        .get(`/Training/getauthorityid/${this.state.user_id}`)
+        .then((response) => {
+          const result = response.data;
+          if (result != null) {
+            for (let i = 0; i < result.length; i++) {
+
+              this.setState({
+                authorityid: result,
+              });
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
     } catch (error) {}
   }
 
   onPressSend = () => {
-    const { user_id, boots_id, boots_type, boots_name, boots_size } =
+    const { user_id, boots_id, per_id, boots_type, uniform_total, uniform_part, uniform_type, select_type, boots_name, uniform_name, boots_size } =
       this.state;
     if (boots_size == null || boots_size == "") {
       this.state.lang === "EN"
@@ -116,9 +166,15 @@ export default class SafetyBootsScreen extends Component {
       });
       const params = {
         boots_id,
+        per_id,
         user_id,
         boots_type,
+        uniform_total,
+        uniform_part,
+        uniform_type,
+        select_type,
         boots_name,
+        uniform_name,
         boots_size: result.name,
       };
 
@@ -184,8 +240,14 @@ export default class SafetyBootsScreen extends Component {
             });
             this.setState({
               boots_id: result[0].boots_id,
+              per_id: result[0].per_id,
               boots_type: result[0].boots_type,
+              uniform_total: result[0].uniform_total,
+              uniform_part: result[0].uniform_part,
+              uniform_type: result[0].uniform_type,
+              select_type: result[0].select_type,
               boots_name: result[0].boots_name,
+              uniform_name: result[0].uniform_name,
               boots_size: size.id,
               select_boots: true,
             });
@@ -206,7 +268,7 @@ export default class SafetyBootsScreen extends Component {
   };
 
   render() {
-    return (
+    if (this.state.orgid == 2 || (this.state.orgid == 3 && this.state.authorityid != null)) {return (
       <View style={styles.background}>
         <ScrollView>
           <View style={styles.textHeader}>
@@ -235,6 +297,10 @@ export default class SafetyBootsScreen extends Component {
                         this.setState({
                           boots: false,
                           boots_type: "",
+                          uniform_total: "",
+                          uniform_part: "",
+                          uniform_type: "",
+                          select_type: "",
                           boots_size: "",
                         })
                       }
@@ -310,8 +376,13 @@ export default class SafetyBootsScreen extends Component {
                         boots: true,
                         shoes: false,
                         boots_type: 1,
+                        uniform_total: 1,
+                        uniform_part: 4,
+                        uniform_type: 4,
+                        select_type: 2,
                         boots_size: "",
                         boots_name: "Safety Boots",
+                        uniform_name: "Safety Boots",
                       })
                     }
                   >
@@ -338,6 +409,10 @@ export default class SafetyBootsScreen extends Component {
                         this.setState({
                           shoes: false,
                           boots_type: "",
+                          uniform_total: "",
+                          uniform_part: "",
+                          uniform_type: "",
+                          select_type: "",
                           boots_size: "",
                         })
                       }
@@ -411,8 +486,13 @@ export default class SafetyBootsScreen extends Component {
                         shoes: true,
                         boots: false,
                         boots_type: 2,
+                        uniform_total: 1,
+                        uniform_part: 4,
+                        uniform_type: 5,
+                        select_type: 2,
                         boots_size: "",
                         boots_name: "Safety Shoes",
+                        uniform_name: "Safety Shoes",
                       })
                     }
                   >
@@ -434,6 +514,146 @@ export default class SafetyBootsScreen extends Component {
         </ScrollView>
       </View>
     );
+    }
+    else{
+      return(
+      <View style={styles.background}>
+        <ScrollView>
+          <View style={styles.textHeader}>
+            <Text style={{ color: "#009bdc", fontSize: "24" }}>
+              {this.state.lang === "EN"
+                ? "Select Safety Boots"
+                : "เลือกขนาด Safety Boots"}
+            </Text>
+          </View>
+          <View style={styles.containerSec1}>
+            <Card style={styles.card}>
+              <Card.Title title="Safety Boots" />
+              <Card.Content>
+                <Image
+                  style={styles.cardImage}
+                  source={require("../../asset/boots_image/safety.png")}
+                />
+
+                {this.state.boots ? (
+                  <ScrollView>
+                    <Button
+                    style={{backgroundColor: "red"}}
+                      mode="contained"
+                      disabled={this.state.select_boots}
+                      onPress={() =>
+                        this.setState({
+                          boots: false,
+                          boots_type: "",
+                          uniform_total: "",
+                          uniform_part: "",
+                          uniform_type: "",
+                          select_type: "",
+                          boots_size: "",
+                        })
+                      }
+                    >
+                      {" "}
+                      <Icons
+                        name="check"
+                        size={20}
+                        style={{
+                          marginLeft: 10,
+                          marginRight: 5,
+                          color: "white",
+                        }}
+                      />
+                      Safety Boots
+                    </Button>
+
+                    <View style={{ marginTop: 12 }}>
+                      <Text>
+                        {this.state.lang === "EN"
+                          ? "Boot size (US)"
+                          : "ขนาดรองเท้า (US)"}
+                      </Text>
+                      <Picker
+                        enabled={!this.state.select_boots}
+                        mode="dropdown"
+                        placeholder={
+                          this.state.lang === "EN"
+                            ? "Choose size..."
+                            : "เลือกขนาด..."
+                        }
+                        iosIcon={
+                          <Icon
+                            name="angle-down"
+                            style={{
+                              width: "10%",
+                              paddingHorizontal: 1,
+                              paddingBottom: 24,
+                            }}
+                          />
+                        }
+                        style={styles.selectableInputStyle}
+                        placeholderStyle={{ color: "#bfc6ea" }}
+                        placeholderIconColor="#007aff"
+                        selectedValue={this.state.boots_size}
+                        onValueChange={(text) =>
+                          this.setState({ boots_size: text })
+                        }
+                        textStyle={{ fontSize: 14 }}
+                      >
+                        <Picker.Item
+                          label={
+                            this.state.lang === "EN"
+                              ? "Choose size..."
+                              : "เลือกขนาด..."
+                          }
+                          value=""
+                        />
+                        {this.state.select_1.map((item) => {
+                          return (
+                            <Picker.Item label={item.name} value={item.id} />
+                          );
+                        })}
+                      </Picker>
+                    </View>
+                  </ScrollView>
+                ) : (
+                  <Button
+                    mode="contained"
+                    disabled={this.state.select_boots}
+                    onPress={() =>
+                      this.setState({
+                        boots: true,
+                        shoes: false,
+                        boots_type: 1,
+                        uniform_total: 1,
+                        uniform_part: 4,
+                        uniform_type: 4,
+                        select_type: 2,
+                        boots_size: "",
+                        boots_name: "Safety Boots",
+                        uniform_name: "Safety Boots",
+                      })
+                    }
+                  >
+                    Safety Boots
+                  </Button>
+                )}
+              </Card.Content>
+            </Card>
+
+            <Button
+              disabled={this.state.select_boots}
+              onPress={() => this.onPressSend()}
+              mode="contained"
+              style={styles.submitButton}
+            >
+              ยืนยัน
+            </Button>
+          </View>
+        </ScrollView>
+      </View>
+      );
+    }
+    
   }
 }
 
