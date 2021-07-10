@@ -51,6 +51,7 @@ export default class ExternalScreen extends Component {
         price: "",
         other: "",
         upload_file: null,
+        file:""
       },
 
       isDatePickerVisible: false,
@@ -206,14 +207,14 @@ export default class ExternalScreen extends Component {
       trainingNeed.forEach(function (o) {
         o.data = o.data.filter((s) => s.id != id);
       });
-      console.log(trainingNeed);
       this.setState({
         trainingNeed: trainingNeed,
       });
     }
   }
-  onPressSend() {
+ async onPressSend() {
     const { trainingNeed } = this.state;
+    let id = await AsyncStorage.getItem("userId");
     if (trainingNeed.length <= 0) {
       Alert.alert("กรุณาเพิ่มพนักงานอย่างน้อย 1 รายการ");
     } else {
@@ -283,6 +284,35 @@ export default class ExternalScreen extends Component {
                 );
               } else {
                 error = false;
+                let pic = new FormData()
+                pic.append("file", {
+                  name: param.upload_file.name,
+                  uri: param.upload_file.uri,
+                });
+                httpClient
+                    .post('/Training/InsertTrainingNeedPic', pic)
+                    .then((response) => {
+                      let trainingNeed = [...this.state.trainingNeed];
+
+                      let item = { ...trainingNeed[index] };
+                      let data = { ...item["data"] };
+                      let param = data[i];
+                      param.file = data;
+                      data[i] = param;
+                      trainingNeed[index] = item;
+                      var id = "Id of subbrands to remove: ";
+                      //ลบ key ส่วนเกินออก
+                      trainingNeed.forEach(function (o) {
+                        o.data = o.data.filter((s) => s.id != id);
+                      });
+                      console.log(trainingNeed);
+                      this.setState({
+                        trainingNeed: trainingNeed,
+                      });
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
               }
 
               i++;
@@ -297,11 +327,7 @@ export default class ExternalScreen extends Component {
         index++;
       } while (index < trainingNeed.length && error == false);
       if (error == false) {
-        const data = new FormData();
-
-        Object.keys(trainingNeed).forEach((key) =>
-          data.append(key, trainingNeed[key])
-        );
+        
         Alert.alert(
           this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
           this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
@@ -315,6 +341,7 @@ export default class ExternalScreen extends Component {
             {
               text: this.state.lang === "EN" ? "OK" : "ตกลง",
               onPress: () => {
+                let data={trainingNeed:trainingNeed,user_id:id}
                 httpClient
                   .post("/Training/InsertTrainingNeedsExternal", data)
                   .then((response) => {
@@ -862,6 +889,7 @@ export default class ExternalScreen extends Component {
                     price: "",
                     other: "",
                     upload_file: null,
+                    file:""
                   },
                 ];
                 let trainingNeed = [
