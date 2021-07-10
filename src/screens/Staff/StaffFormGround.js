@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  ActivityIndicator,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Divider } from "react-native-elements";
 import AntIcon from "react-native-vector-icons/AntDesign";
@@ -10,9 +17,11 @@ import moment from "moment";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
-const StaffFormGround  = ({ navigation, route }) => {
+const StaffFormGround = ({ navigation, route }) => {
   const [lang, setLang] = useState("TH");
-  const [accom, setAccom] = useState([]);
+  const [ground, setGround] = useState([]);
+  const [item, setItem] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const run = async () => {
@@ -32,20 +41,32 @@ const StaffFormGround  = ({ navigation, route }) => {
       }
 
       httpClient
-        .get(`Team/confirmBookingAccom/${route.params.booking_id}`)
+        .get(`Team/confirmBookingGround/${route.params.booking_id}`)
         .then((response) => {
-          setAccom(response.data);
+          if (response.data) {
+            setGround(response.data.booking);
+            setItem(response.data.ground);
+            setLoading(false);
+          }
         })
         .catch((error) => {
           console.log(error);
         });
-      // console.log("asdfghjxcvbn");
-      // console.log(flight);
-      // console.log("asdfghjxcvbn");
     } catch (e) {
       console.log(e);
     }
   };
+  if (loading) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <ActivityIndicator />
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
@@ -115,14 +136,14 @@ const StaffFormGround  = ({ navigation, route }) => {
               </Text>
 
               <Text style={styles.textSy1}>
-                {lang == "EN" ? accom.firstname_en : accom.firstname}
+                {lang == "EN" ? ground.firstname_en : ground.firstname}
               </Text>
 
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Lastname" : "นามสกุล"}
               </Text>
               <Text style={styles.textSy1}>
-                {lang == "EN" ? accom.lastname_en : accom.lastname}
+                {lang == "EN" ? ground.lastname_en : ground.lastname}
               </Text>
             </View>
 
@@ -136,7 +157,7 @@ const StaffFormGround  = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Identification" : "เลขบัตรประชาชน"}
               </Text>
-              <Text style={styles.textSy2}>{accom.identification}</Text>
+              <Text style={styles.textSy2}>{ground.identification}</Text>
             </View>
 
             <View
@@ -150,7 +171,7 @@ const StaffFormGround  = ({ navigation, route }) => {
                 {lang == "EN" ? "Phone" : "เบอร์โทร"}
               </Text>
               <Text style={styles.textSy2}>
-                {accom.phone ? accom.phone : "-"}
+                {ground.phone ? ground.phone : "-"}
               </Text>
             </View>
 
@@ -162,14 +183,14 @@ const StaffFormGround  = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "BirthDay" : "วันเกิด"}
+                {lang == "EN" ? "Resident" : "ที่อยู่"}
               </Text>
               <Text style={styles.textSy2}>
-                {moment(accom.birthday).format("DD/MM/YYYY")}
+                {ground.address ? ground.address : "-"}
               </Text>
             </View>
 
-            <View
+          <View
               style={{
                 flexDirection: "row",
                 alignItems: "baseline",
@@ -181,7 +202,7 @@ const StaffFormGround  = ({ navigation, route }) => {
               </Text>
               <Text style={styles.textSy2}>
                 {" "}
-                {lang == "EN" ? accom.pv_name_en : accom.pv_name_th}
+                {lang == "EN" ? ground.pv_name_en : ground.pv_name_th}
               </Text>
             </View>
 
@@ -196,7 +217,7 @@ const StaffFormGround  = ({ navigation, route }) => {
                 {lang == "EN" ? "District" : "อำเภอ"}
               </Text>
               <Text style={styles.textSy1}>
-                {lang == "EN" ? accom.dt_name_en : accom.dt_name_th}
+                {lang == "EN" ? ground.dt_name_en : ground.dt_name_th}
               </Text>
             </View>
 
@@ -211,7 +232,7 @@ const StaffFormGround  = ({ navigation, route }) => {
                 {lang == "EN" ? "Subdistrict" : "ตำบล"}
               </Text>
               <Text style={styles.textSy2}>
-                {lang == "EN" ? accom.sdt_name_en : accom.sdt_name_th}
+                {lang == "EN" ? ground.sdt_name_en : ground.sdt_name_th}
               </Text>
             </View>
 
@@ -226,10 +247,9 @@ const StaffFormGround  = ({ navigation, route }) => {
                 {lang == "EN" ? "Zip" : "รหัสไปรษณีย์"}
               </Text>
               <Text style={styles.textSy1}>
-                {lang == "EN" ? accom.dt_name_en : accom.dt_name_th}
+                {lang == "EN" ? ground.dt_name_en : ground.dt_name_th}
               </Text>
             </View>
-            
           </View>
 
           <Divider style={{ backgroundColor: "#d9d9d9" }} />
@@ -245,7 +265,7 @@ const StaffFormGround  = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Date" : "วันออกเดินทาง"}
               </Text>
-              <Text style={styles.textSy2}>{accom.province}</Text>
+              <Text style={styles.textSy2}>{ground.province}</Text>
             </View>
 
             <View
@@ -258,7 +278,7 @@ const StaffFormGround  = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Time" : "เวลาเดินทาง"}
               </Text>
-              <Text style={styles.textSy2}>{accom.accommodation}</Text>
+              <Text style={styles.textSy2}>{ground.accommodation}</Text>
             </View>
 
             <View
@@ -271,7 +291,7 @@ const StaffFormGround  = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "From" : "ต้นทาง"}
               </Text>
-              <Text style={styles.textSy2}>{accom.checkin}</Text>
+              <Text style={styles.textSy2}>{ground.checkin}</Text>
             </View>
 
             <View
@@ -284,7 +304,7 @@ const StaffFormGround  = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "To" : "ปลายทาง"}
               </Text>
-              <Text style={styles.textSy2}>{accom.checkout}</Text>
+              <Text style={styles.textSy2}>{ground.checkout}</Text>
             </View>
           </View>
 
@@ -417,6 +437,5 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
 });
-
 
 export default StaffFormGround;

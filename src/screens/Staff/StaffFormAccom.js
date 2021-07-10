@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  ActivityIndicator,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Divider } from "react-native-elements";
 import AntIcon from "react-native-vector-icons/AntDesign";
@@ -13,6 +20,8 @@ const HEIGHT = Dimensions.get("window").height;
 const StaffFormAccom = ({ navigation, route }) => {
   const [lang, setLang] = useState("TH");
   const [accom, setAccom] = useState([]);
+  const [item, setItem] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const run = async () => {
@@ -34,18 +43,30 @@ const StaffFormAccom = ({ navigation, route }) => {
       httpClient
         .get(`Team/confirmBookingAccom/${route.params.booking_id}`)
         .then((response) => {
-          setAccom(response.data);
+          if (response.data) {
+            setAccom(response.data.booking);
+            setItem(response.data.accom);
+            setLoading(false);
+          }
         })
         .catch((error) => {
           console.log(error);
         });
-      // console.log("asdfghjxcvbn");
-      // console.log(flight);
-      // console.log("asdfghjxcvbn");
     } catch (e) {
       console.log(e);
     }
   };
+  if (loading) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <ActivityIndicator />
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
@@ -91,7 +112,7 @@ const StaffFormAccom = ({ navigation, route }) => {
           </Text>
 
           <View>
-            <Divider style={{ backgroundColor: "#d9d9d9" }} />
+            <Divider style={{ backgroundColor: "blue" }} />
           </View>
           {/* <View
           style={{
@@ -215,21 +236,6 @@ const StaffFormAccom = ({ navigation, route }) => {
               </Text>
             </View>
 
-            {/* <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Zip" : "รหัสไปรษณีย์"}
-              </Text>
-              <Text style={styles.textSy1}>
-                {lang == "EN" ? accom.dt_name_en : accom.dt_name_th}
-              </Text>
-            </View> */}
-
             <View
               style={{
                 flexDirection: "row",
@@ -251,63 +257,72 @@ const StaffFormAccom = ({ navigation, route }) => {
             </View>
           </View>
 
-          <Divider style={{ backgroundColor: "#d9d9d9" }} />
+          {/* <Divider style={{ backgroundColor: "#d9d9d9" }} /> */}
 
-          <View style={{ margin: 20, marginHorizontal: 8 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                // marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Province" : "จังหวัด"}
-              </Text>
-              <Text style={styles.textSy2}>{accom.province}</Text>
-            </View>
+          {item.map((param) => {
+            return (
+              <ScrollView>
+                <Divider style={{ backgroundColor: "blue" }} />
+                <View style={{ margin: 20, marginHorizontal: 8 }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "baseline",
+                      // marginTop: 8,
+                    }}
+                  >
+                    <Text style={styles.textSyH1}>
+                      {lang == "EN" ? "Province" : "จังหวัด"}
+                    </Text>
+                    <Text style={styles.textSy2}>{accom.province}</Text>
+                  </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Accommodation (Province, Hotel name)" : "ที่พัก (จังหวัดชื่อโรงแรม)"}
-              </Text>
-              <Text style={styles.textSy2}>{accom.accommodation}</Text>
-            </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "baseline",
+                      marginTop: 8,
+                    }}
+                  >
+                    <Text style={styles.textSyH1}>
+                      {lang == "EN"
+                        ? "Accommodation (Province, Hotel name)"
+                        : "ที่พัก (จังหวัดชื่อโรงแรม)"}
+                    </Text>
+                    <Text style={styles.textSy2}>{accom.accommodation}</Text>
+                  </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Check in date(D/M/Y)" : "เช็คอิน"}
-              </Text>
-              <Text style={styles.textSy2}>{accom.checkin}</Text>
-            </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "baseline",
+                      marginTop: 8,
+                    }}
+                  >
+                    <Text style={styles.textSyH1}>
+                      {lang == "EN" ? "Check in date(D/M/Y)" : "เช็คอิน"}
+                    </Text>
+                    <Text style={styles.textSy2}>{accom.checkin}</Text>
+                  </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Check out date(D/M/Y)" : "เช็คเอาต์"}
-              </Text>
-              <Text style={styles.textSy2}>{accom.checkout}</Text>
-            </View>
-          </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "baseline",
+                      marginTop: 8,
+                    }}
+                  >
+                    <Text style={styles.textSyH1}>
+                      {lang == "EN" ? "Check out date(D/M/Y)" : "เช็คเอาต์"}
+                    </Text>
+                    <Text style={styles.textSy2}>{accom.checkout}</Text>
+                  </View>
+                </View>
+              </ScrollView>
+            );
+          })}
 
-          <Divider style={{ backgroundColor: "#d9d9d9" }} />
+          <Divider style={{ backgroundColor: "blue" }} />
 
           <Text style={{ marginHorizontal: 10, marginTop: 15 }}>
             {lang == "EN" ? "Approved:" : "อนุมัติโดย:"}

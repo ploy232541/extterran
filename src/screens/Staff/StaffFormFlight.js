@@ -112,7 +112,7 @@ const StaffFormFlight = ({ navigation, route }) => {
           </Text>
 
           <View>
-            <Divider style={{ backgroundColor: "#d9d9d9" }} />
+            <Divider style={{ backgroundColor: "blue" }} />
           </View>
           {/* <View
           style={{
@@ -134,8 +134,7 @@ const StaffFormFlight = ({ navigation, route }) => {
               <Text style={styles.textSyH1}>
                 {lang == "EN" ? "Name" : "ชื่อ"}
               </Text>
-              {/* ตัวอย่าง */}
-              {/* <Text>{flight.firstname}</Text> */}
+
               <Text style={styles.textSy1}>
                 {lang == "EN" ? flight.firstname_en : flight.firstname}
               </Text>
@@ -227,10 +226,11 @@ const StaffFormFlight = ({ navigation, route }) => {
             </View>
           </View>
 
-          <Divider style={{ backgroundColor: "#d9d9d9" }} />
+          {/* <Divider style={{ backgroundColor: "blue" }} /> */}
           {item.map((param) => {
             return (
               <ScrollView>
+                <Divider style={{ backgroundColor: "blue" }} />
                 <View style={{ margin: 20, marginHorizontal: 8 }}>
                   <View
                     style={{
@@ -334,10 +334,12 @@ const StaffFormFlight = ({ navigation, route }) => {
                   </View>
                 </View>
 
-                <Divider style={{ backgroundColor: "#d9d9d9" }} />
+                {/* <Divider style={{ backgroundColor: "blue" }} /> */}
               </ScrollView>
             );
           })}
+
+<Divider style={{ backgroundColor: "blue" }} />
 
           <Text style={{ marginHorizontal: 10, marginTop: 15 }}>
             {lang == "EN" ? "Approved:" : "อนุมัติโดย:"}
@@ -447,19 +449,16 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   textSyH1: {
-    borderWidth: 2,
     fontSize: 16,
     fontWeight: "bold",
   },
   textSy1: {
-    borderWidth: 2,
     fontWeight: "normal",
     fontSize: 16,
     marginLeft: 2,
     marginRight: 5,
   },
   textSy2: {
-    borderWidth: 2,
     fontWeight: "normal",
     fontSize: 16,
     marginLeft: 12,

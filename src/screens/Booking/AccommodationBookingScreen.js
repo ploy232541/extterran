@@ -42,8 +42,10 @@ export default class AccommodationBookingScreen extends Component {
       date: new Date(),
       select_1: [],
       select_3: [],
+      select_4: [],
       tem: -1,
       accommodation: [],
+      hotel:[],
       purpose: "",
       purpose_id: "",
       accom: "",
@@ -122,6 +124,20 @@ export default class AccommodationBookingScreen extends Component {
           if (result != null) {
             this.setState({
               select_3: result,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      httpClient
+        .get(`/Training/FormBookingAccommodationHotel/`)
+        .then((response) => {
+          const result = response.data;
+          if (result != null) {
+            this.setState({
+              select_4: result,
             });
           }
         })
@@ -542,21 +558,42 @@ export default class AccommodationBookingScreen extends Component {
                   />
                 }
                 style={styles.inputLightStyle}
-                placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
+                placeholder={
+                  this.state.lang === "EN" ? "Selecte" : "กรุณาเลือกจังหวัด"
+                }
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.province_id}
-                onValueChange={(text) => this.setState({ province_id: text })}
+                onValueChange={(text) => {
+                  this.setState({ province_id: text });
+                  try {
+                    httpClient
+                    .get(`/Training/getHotel/${text}`)
+                    .then((response) => {
+                      const result = response.data;
+                      if (result != null) {
+                        this.setState({
+                          hotel: result,
+                        });
+                      }
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                  } catch (error) {
+                    
+                  }
+                }}
                 textStyle={{ fontSize: 14 }}
               >
-                <Picker.Item
+                {/* <Picker.Item
                   label={
                     this.state.lang === "EN"
                       ? "Please select your Province"
                       : "กรุณาเลือกจังหวัด"
                   }
                   value=""
-                />
+                /> */}
                 {this.state.select_3.map((data) => {
                   return (
                     <Picker.Item
@@ -571,14 +608,47 @@ export default class AccommodationBookingScreen extends Component {
                 })}
               </Picker>
 
-              <Text>Accommodation (Province, Hotel name):</Text>
+              {/* <Text>Accommodation (Province, Hotel name):</Text>
               <Text style={styles.textInput}>ที่พัก (จังหวัด ชื่อโรงแรม)</Text>
               <TextInput
                 style={styles.inputStyle1}
                 placeholder="ที่พัก (จังหวัด ชื่อโรงแรม)"
                 value={this.state.accom}
                 onChangeText={(text) => this.setState({ accom: text })}
-              ></TextInput>
+              ></TextInput> */}
+
+              <Text>Accommodation (Province, Hotel name):</Text>
+              <Text style={styles.textInput}>ที่พัก (จังหวัด ชื่อโรงแรม)</Text>
+              <Picker
+                mode="dropdown"
+                iosIcon={
+                  <Icon
+                    name="angle-down"
+                    style={{ width: "8%", paddingHorizontal: 2 }}
+                  />
+                }
+                style={styles.inputLightStyle}
+                placeholder={this.state.lang === "EN" ? "Selecte" : "เลือกที่พัก"}
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={this.state.accom}
+                onValueChange={(text) => this.setState({ accom: text })}
+                textStyle={{ fontSize: 14 }}
+              >
+               
+                {this.state.hotel.map((data) => {
+                  return (
+                    <Picker.Item
+                      label={
+                        this.state.lang === "EN"
+                          ? data.hotel_name_en
+                          : data.hotel_name_th
+                      }
+                      value={data.province_id}
+                    />
+                  );
+                })}
+              </Picker>
 
               <Text>Check in date (D/M/Y):</Text>
               <Text style={styles.textInput}>เช็คอิน</Text>
@@ -723,7 +793,7 @@ export default class AccommodationBookingScreen extends Component {
                             fontSize: 14,
                           }}
                         >
-                         {this.state.lang === "EN" ? "Delete" : "ลบ"}
+                          {this.state.lang === "EN" ? "Delete" : "ลบ"}
                         </Text>
                       </Button>
                     </View>
@@ -761,7 +831,7 @@ export default class AccommodationBookingScreen extends Component {
                 style={{ color: "white", marginLeft: 10, marginRight: 5 }}
               />
               <Text style={{ color: "white", marginRight: 10 }}>
-              {this.state.lang === "EN" ? "Add Accommodation" : "เพิ่มที่พัก"}
+                {this.state.lang === "EN" ? "Add Accommodation" : "เพิ่มที่พัก"}
               </Text>
             </Button>
           </View>
@@ -778,13 +848,17 @@ export default class AccommodationBookingScreen extends Component {
                 style={styles.btnConfirmStyle}
                 onPress={() => this.onPressSend()}
               >
-                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Submit" : "ยืนยัน"}</Text>
+                <Text style={{ color: "white" }}>
+                  {this.state.lang === "EN" ? "Submit" : "ยืนยัน"}
+                </Text>
               </Button>
             </View>
 
             <View style={styles.buttonContainer}>
               <Button style={styles.btnCancelStyle}>
-                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}</Text>
+                <Text style={{ color: "white" }}>
+                  {this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}
+                </Text>
               </Button>
             </View>
           </View>
