@@ -229,9 +229,8 @@ function HomeScreen() {
                         {
                           video != null ?
                             video.vdo_type === 'link' ?
-                                <View style={{alignItems: 'center'}}>
+                                <View >
                                   <YoutubePlayer
-                                        width={WIDTH}
                                         videoId={video.link_path.substring(32, 43)} 
                                         play={false}
                                         volume={50}
