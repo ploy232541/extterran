@@ -45,7 +45,7 @@ export default class AccommodationBookingScreen extends Component {
       select_4: [],
       tem: -1,
       accommodation: [],
-      hotel:[],
+      hotel: [],
       purpose: "",
       purpose_id: "",
       accom: "",
@@ -568,21 +568,19 @@ export default class AccommodationBookingScreen extends Component {
                   this.setState({ province_id: text });
                   try {
                     httpClient
-                    .get(`/Training/getHotel/${text}`)
-                    .then((response) => {
-                      const result = response.data;
-                      if (result != null) {
-                        this.setState({
-                          hotel: result,
-                        });
-                      }
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                    });
-                  } catch (error) {
-                    
-                  }
+                      .get(`/Training/getHotel/${text}`)
+                      .then((response) => {
+                        const result = response.data;
+                        if (result != null) {
+                          this.setState({
+                            hotel: result,
+                          });
+                        }
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
+                  } catch (error) {}
                 }}
                 textStyle={{ fontSize: 14 }}
               >
@@ -628,14 +626,15 @@ export default class AccommodationBookingScreen extends Component {
                   />
                 }
                 style={styles.inputLightStyle}
-                placeholder={this.state.lang === "EN" ? "Selecte" : "เลือกที่พัก"}
+                placeholder={
+                  this.state.lang === "EN" ? "Selecte" : "เลือกที่พัก"
+                }
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.accom}
                 onValueChange={(text) => this.setState({ accom: text })}
                 textStyle={{ fontSize: 14 }}
               >
-               
                 {this.state.hotel.map((data) => {
                   return (
                     <Picker.Item
@@ -644,7 +643,7 @@ export default class AccommodationBookingScreen extends Component {
                           ? data.hotel_name_en
                           : data.hotel_name_th
                       }
-                      value={data.province_id}
+                      value={data.hotel_id}
                     />
                   );
                 })}
