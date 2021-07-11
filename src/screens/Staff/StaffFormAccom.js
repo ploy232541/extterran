@@ -14,6 +14,8 @@ import { Dimensions } from "react-native";
 import { httpClient } from "../../core/HttpClient";
 import { AsyncStorage } from "react-native";
 import moment from "moment";
+import { Avatar } from "react-native-paper";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -86,7 +88,7 @@ const StaffFormAccom = ({ navigation, route }) => {
           <Text
             style={{ alignSelf: "center", fontSize: 20, fontWeight: "bold" }}
           >
-            ใบคำขอ Booking
+            {lang == "EN" ? "Booking" : "ใบคำขอ"}
           </Text>
 
           <Text
@@ -98,7 +100,9 @@ const StaffFormAccom = ({ navigation, route }) => {
               alignSelf: "center",
             }}
           >
-            บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด
+            {lang == "EN"
+              ? "EXTERRAN (THAILAND) LTD."
+              : "บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
           </Text>
           <Text
             style={{
@@ -112,7 +116,7 @@ const StaffFormAccom = ({ navigation, route }) => {
           </Text>
 
           <View>
-            <Divider style={{ backgroundColor: "blue" }} />
+            <Divider style={{ backgroundColor: "black", borderWidth: 2 }} />
           </View>
           {/* <View
           style={{
@@ -132,7 +136,7 @@ const StaffFormAccom = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Name" : "ชื่อ"}
+                {lang == "EN" ? "Name:" : "ชื่อ:"}
               </Text>
 
               <Text style={styles.textSy1}>
@@ -140,7 +144,7 @@ const StaffFormAccom = ({ navigation, route }) => {
               </Text>
 
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Lastname" : "นามสกุล"}
+                {lang == "EN" ? "Lastname:" : "นามสกุล:"}
               </Text>
               <Text style={styles.textSy1}>
                 {lang == "EN" ? accom.lastname_en : accom.lastname}
@@ -155,7 +159,7 @@ const StaffFormAccom = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Identification" : "เลขบัตรประชาชน"}
+                {lang == "EN" ? "Identification:" : "เลขบัตรประชาชน:"}
               </Text>
               <Text style={styles.textSy2}>{accom.identification}</Text>
             </View>
@@ -168,7 +172,7 @@ const StaffFormAccom = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Phone" : "เบอร์โทร"}
+                {lang == "EN" ? "Phone:" : "เบอร์:"}
               </Text>
               <Text style={styles.textSy2}>
                 {accom.phone ? accom.phone : "-"}
@@ -183,7 +187,7 @@ const StaffFormAccom = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "BirthDay" : "วันเกิด"}
+                {lang == "EN" ? "BirthDay:" : "วันเกิด:"}
               </Text>
               <Text style={styles.textSy2}>
                 {moment(accom.birthday).format("DD/MM/YYYY")}
@@ -198,11 +202,17 @@ const StaffFormAccom = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Province" : "จังหวัด"}
+                {lang == "EN" ? "Province:" : "จังหวัด:"}
               </Text>
               <Text style={styles.textSy2}>
                 {" "}
-                {lang == "EN" ? accom.pv_name_en : accom.pv_name_th}
+                {lang == "EN"
+                  ? accom.pv_name_en
+                  : accom.pv_name_th
+                  ? lang == "EN"
+                    ? accom.pv_name_en
+                    : accom.pv_name_th
+                  : "-"}
               </Text>
             </View>
 
@@ -214,25 +224,16 @@ const StaffFormAccom = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "District" : "อำเภอ"}
-              </Text>
-              <Text style={styles.textSy1}>
-                {lang == "EN" ? accom.dt_name_en : accom.dt_name_th}
-              </Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "baseline",
-                marginTop: 8,
-              }}
-            >
-              <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Subdistrict" : "ตำบล"}
+                {lang == "EN" ? "District:" : "อำเภอ:"}
               </Text>
               <Text style={styles.textSy2}>
-                {lang == "EN" ? accom.sdt_name_en : accom.sdt_name_th}
+                {lang == "EN"
+                  ? accom.dt_name_en
+                  : accom.dt_name_th
+                  ? lang == "EN"
+                    ? accom.dt_name_en
+                    : accom.dt_name_th
+                  : "-"}
               </Text>
             </View>
 
@@ -244,7 +245,28 @@ const StaffFormAccom = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Purpose" : "วัตถุประสงค์"}
+                {lang == "EN" ? "Subdistrict:" : "ตำบล:"}
+              </Text>
+              <Text style={styles.textSy2}>
+                {lang == "EN"
+                  ? accom.sdt_name_en
+                  : accom.sdt_name_th
+                  ? lang == "EN"
+                    ? accom.sdt_name_en
+                    : accom.sdt_name_th
+                  : "-"}
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "baseline",
+                marginTop: 8,
+              }}
+            >
+              <Text style={styles.textSyH1}>
+                {lang == "EN" ? "Purpose:" : "วัตถุประสงค์:"}
               </Text>
               <Text style={styles.textSy2}>
                 {" "}
@@ -262,7 +284,7 @@ const StaffFormAccom = ({ navigation, route }) => {
           {item.map((param) => {
             return (
               <ScrollView>
-                <Divider style={{ backgroundColor: "blue" }} />
+                <Divider style={{ backgroundColor: "black" }} />
                 <View style={{ margin: 20, marginHorizontal: 8 }}>
                   <View
                     style={{
@@ -272,9 +294,17 @@ const StaffFormAccom = ({ navigation, route }) => {
                     }}
                   >
                     <Text style={styles.textSyH1}>
-                      {lang == "EN" ? "Province" : "จังหวัด"}
+                      {lang == "EN" ? "Province:" : "จังหวัด:"}
                     </Text>
-                    <Text style={styles.textSy2}>{accom.province}</Text>
+                    <Text style={styles.textSy2}>
+                      {lang == "EN"
+                        ? param.pv_name_en
+                        : param.pv_name_th
+                        ? lang == "EN"
+                          ? param.pv_name_en
+                          : param.pv_name_th
+                        : "-"}
+                    </Text>
                   </View>
 
                   <View
@@ -286,10 +316,18 @@ const StaffFormAccom = ({ navigation, route }) => {
                   >
                     <Text style={styles.textSyH1}>
                       {lang == "EN"
-                        ? "Accommodation (Province, Hotel name)"
-                        : "ที่พัก (จังหวัดชื่อโรงแรม)"}
+                        ? "Accommodation (Province, Hotel name):"
+                        : "ที่พัก (จังหวัดชื่อโรงแรม):"}
                     </Text>
-                    <Text style={styles.textSy2}>{accom.accommodation}</Text>
+                    <Text style={styles.textSy2}>
+                      {lang == "EN"
+                        ? param.hotel_name_en
+                        : param.hotel_name_th
+                        ? lang == "EN"
+                          ? param.hotel_name_en
+                          : param.hotel_name_th
+                        : "-"}
+                    </Text>
                   </View>
 
                   <View
@@ -302,7 +340,9 @@ const StaffFormAccom = ({ navigation, route }) => {
                     <Text style={styles.textSyH1}>
                       {lang == "EN" ? "Check in date(D/M/Y)" : "เช็คอิน"}
                     </Text>
-                    <Text style={styles.textSy2}>{accom.checkin}</Text>
+                    <Text style={styles.textSy2}>
+                      {moment(param.checkin).format("DD/MM/YYYY")}
+                    </Text>
                   </View>
 
                   <View
@@ -315,14 +355,32 @@ const StaffFormAccom = ({ navigation, route }) => {
                     <Text style={styles.textSyH1}>
                       {lang == "EN" ? "Check out date(D/M/Y)" : "เช็คเอาต์"}
                     </Text>
-                    <Text style={styles.textSy2}>{accom.checkout}</Text>
+                    <Text style={styles.textSy2}>
+                      {moment(param.checkout).format("DD/MM/YYYY")}
+                    </Text>
                   </View>
                 </View>
               </ScrollView>
             );
           })}
 
-          <Divider style={{ backgroundColor: "blue" }} />
+          {/* <Divider style={{ backgroundColor: "black" }} /> */}
+          <View
+            style={{
+              // marginVertical: 15,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Divider style={{ paddingBottom: 1, flex: 1 }} />
+            <Avatar.Icon
+              icon="arrow-down"
+              size={30}
+              style={styles.arrowDownStyle}
+            />
+            <Divider style={{ paddingBottom: 1, flex: 1 }} />
+          </View>
 
           <Text style={{ marginHorizontal: 10, marginTop: 15 }}>
             {lang == "EN" ? "Approved:" : "อนุมัติโดย:"}
@@ -345,7 +403,7 @@ const StaffFormAccom = ({ navigation, route }) => {
             <Text>ผู้บังคับบัญชาของผู้เข้าฝึกอบรม</Text>
           </View>
 
-          <Text style={{ marginHorizontal: 10, marginTop: 20 }}>
+          <Text style={{ marginHorizontal: 10, marginTop: 25 }}>
             {lang == "EN" ? "Acknowledged By HR:" : "Acknowledged By HR:"}
           </Text>
 
@@ -368,56 +426,68 @@ const StaffFormAccom = ({ navigation, route }) => {
           </View>
 
           {/* <Divider style={{ backgroundColor: "black", marginTop: 40 }} /> */}
+          <Divider
+            style={{
+              backgroundColor: "black",
+              marginTop: 40,
+              marginBottom: 15,
+            }}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              marginHorizontal: 20,
+              marginTop: 5,
+              // marginBottom: 20,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#3bb54a",
+                width: WIDTH / 5,
+                height: HEIGHT * 0.04,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 4,
+              }}
+            >
+              <Text style={{ color: "white" }}>
+                {lang == "EN" ? "Approve" : "อนุมัติ"}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                backgroundColor: "red",
+                width: WIDTH / 5,
+                height: HEIGHT * 0.04,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 4,
+              }}
+            >
+              <Text style={{ color: "white" }}>
+                {lang == "EN" ? "Disapproved" : "ไม่อนุมัติ"}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#6c757d",
+                width: WIDTH / 5,
+                height: HEIGHT * 0.04,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 4,
+              }}
+            >
+              <Text style={{ color: "white" }}>
+                {lang == "EN" ? "Close" : "ปิด"}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-around",
-          marginHorizontal: 20,
-          marginTop: 5,
-          marginBottom: 20,
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#3bb54a",
-            width: WIDTH / 5,
-            height: HEIGHT * 0.04,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 4,
-          }}
-        >
-          <Text style={{ color: "white" }}>อนุมัติ</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{
-            backgroundColor: "red",
-            width: WIDTH / 5,
-            height: HEIGHT * 0.04,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 4,
-          }}
-        >
-          <Text style={{ color: "white" }}>ไม่อนุมัติ</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#6c757d",
-            width: WIDTH / 5,
-            height: HEIGHT * 0.04,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 4,
-          }}
-        >
-          <Text style={{ color: "white" }}>Close</Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -432,19 +502,16 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   textSyH1: {
-    borderWidth: 2,
     fontSize: 16,
     fontWeight: "bold",
   },
   textSy1: {
-    borderWidth: 2,
     fontWeight: "normal",
     fontSize: 16,
     marginLeft: 2,
     marginRight: 5,
   },
   textSy2: {
-    borderWidth: 2,
     fontWeight: "normal",
     fontSize: 16,
     marginLeft: 12,

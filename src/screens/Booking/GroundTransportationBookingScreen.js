@@ -440,98 +440,162 @@ export default class GroundTransportationBookingScreen extends Component {
 
   render() {
     return (
-      <View style={styles.background}>
-        <ScrollView>
+      <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
+        <View
+          style={{
+            flex: 1,
+            borderWidth: 2,
+            borderRadius: 12,
+            marginTop: 20,
+            borderColor: "white",
+            backgroundColor: "white",
+            marginHorizontal: 15,
+            marginBottom: 20,
+          }}
+        >
           {/* Start ground booking form section 1 */}
           <View style={styles.containerSec1}>
-            <View style={styles.textHeader}>
-              <Text style={{ color: "#398DDD", fontSize: 20 }}>
-                บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด
-              </Text>
-              <Text style={{ paddingTop: 16, fontSize: 18 }}>
-                Ground Transportation
-              </Text>
+            {/* <View style={styles.textHeader}> */}
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "bold",
+                color: "#4393de",
+                marginTop: 18,
+                alignSelf: "center",
+              }}
+            >
+              {this.state.lang === "EN"
+                ? "EXTERRAN (THAILAND) LTD."
+                : "บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด"}
+            </Text>
+            <Text
+              style={{
+                alignSelf: "center",
+                fontSize: 16,
+                marginTop: 12,
+                marginBottom: 15,
+              }}
+            >
+              {this.state.lang === "EN" ? "Ground Transportation" : "รถยนต์"}
+            </Text>
+            {/* </View> */}
+
+            <View>
+              <Divider style={{ backgroundColor: "black", borderWidth: 2 }} />
             </View>
 
-            <Divider style={{ paddingBottom: 1, marginTop: 5 }} />
-
             {/* ส่วนที่1 */}
-            <Text style={{ marginTop: 10 }}>Name:</Text>
-            <Text style={styles.textInput}>ชื่อ</Text>
-            <TextInput style={styles.inputStyle} value={this.state.firstname} />
+            <View style={{ margin: 20, marginHorizontal: 8 }}>
+              <Text style={{ marginTop: 10 }}>Name:</Text>
+              <Text style={styles.textInput}>ชื่อ</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.firstname}
+              />
 
-            <Text>Last Name:</Text>
-            <Text style={styles.textInput}>นามสกุล</Text>
-            <TextInput style={styles.inputStyle} value={this.state.lastname} />
+              <Text>Last Name:</Text>
+              <Text style={styles.textInput}>นามสกุล</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.lastname}
+              />
 
-            <Text>ID No:</Text>
-            <Text style={styles.textInput}>เลขบัตรประชาชน</Text>
-            <TextInput
-              style={styles.inputStyle}
-              value={this.state.identification}
-            />
+              <Text>ID No:</Text>
+              <Text style={styles.textInput}>เลขบัตรประชาชน</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.identification}
+              />
 
-            <Text>Resident:</Text>
-            <Text style={styles.textInput}>ที่อยู่</Text>
-            <TextInput
-              style={styles.inputStyle}
-              value={
-                this.state.address +
-                " หมู่" +
-                this.state.address_moo +
-                " หมู่บ้าน" +
-                this.state.address_village +
-                " ซอย" +
-                this.state.address_alley +
-                " ถนน" +
-                this.state.address_road
-              }
-            />
+              <Text>Resident:</Text>
+              <Text style={styles.textInput}>ที่อยู่</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={
+                  this.state.lang === "EN"
+                    ? this.state.address +
+                      " " +
+                      "Moo:" +
+                      this.state.address_moo +
+                      " " +
+                      "Village:" +
+                      this.state.address_village +
+                      " " +
+                      "Alley:" +
+                      this.state.address_alley +
+                      " " +
+                      "Road:" +
+                      this.state.address_road
+                    : this.state.address +
+                      " " +
+                      "หมู่:" +
+                      this.state.address_moo +
+                      " " +
+                      "หมู่บ้าน:" +
+                      this.state.address_village +
+                      " " +
+                      "ซอย:" +
+                      this.state.address_alley +
+                      " " +
+                      "ถนน:" +
+                      this.state.address_road
+                }
+              />
 
-            <Text>Phone No:</Text>
-            <Text style={styles.textInput}>เบอร์โทรศัพท์</Text>
-            <TextInput style={styles.inputStyle} value={this.state.phone} />
+              <Text>Phone No:</Text>
+              <Text style={styles.textInput}>เบอร์โทรศัพท์</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.phone ? this.state.phone : "-"}
+              />
 
-            <Text>Province:</Text>
-            <Text style={styles.textInput}>จังหวัด</Text>
-            <TextInput style={styles.inputStyle} value={this.state.province} />
+              <Text>Province:</Text>
+              <Text style={styles.textInput}>จังหวัด</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.province}
+              />
 
-            <Text>District:</Text>
-            <Text style={styles.textInput}>อำเภอ</Text>
-            <TextInput style={styles.inputStyle} value={this.state.district} />
+              <Text>District:</Text>
+              <Text style={styles.textInput}>อำเภอ</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.district}
+              />
 
-            <Text>Subdistrict:</Text>
-            <Text style={styles.textInput}>ตำบล</Text>
-            <TextInput
-              style={styles.inputStyle}
-              value={this.state.subdistrict}
-            />
+              <Text>Subdistrict:</Text>
+              <Text style={styles.textInput}>ตำบล</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.subdistrict}
+              />
 
-            <Text>Zip:</Text>
-            <Text style={styles.textInput}>รหัสไปรษณีย์</Text>
-            <TextInput
-              style={styles.inputStyle}
-              value={this.state.zipcode.toString()}
-            />
+              <Text>Zip:</Text>
+              <Text style={styles.textInput}>รหัสไปรษณีย์</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.zipcode.toString()}
+              />
+            </View>
+            <View
+              style={{
+                marginBottom: 10,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Divider style={{ paddingBottom: 1, flex: 1 }} />
+              <Avatar.Icon
+                icon="arrow-down"
+                size={30}
+                style={styles.arrowDownStyle}
+              />
+              <Divider style={{ paddingBottom: 1, flex: 1 }} />
+            </View>
           </View>
           {/* จบส่วนที่1 */}
-
-          <View
-            style={{
-              marginVertical: 40,
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Divider style={{ paddingBottom: 1, flex: 1 }} />
-            <Avatar.Icon
-              icon="arrow-down"
-              size={30}
-              style={styles.arrowDownStyle}
-            />
-            <Divider style={{ paddingBottom: 1, flex: 1 }} />
-          </View>
 
           {/* ส่วนที่2 */}
           <View style={styles.containerSec2}>
@@ -560,7 +624,11 @@ export default class GroundTransportationBookingScreen extends Component {
               <Text style={styles.textInput}>ต้นทาง</Text>
               <TextInput
                 style={styles.inputStyle1}
-                placeholder="กรุณากรอกต้นทาง"
+                placeholder={
+                  this.state.lang === "EN"
+                    ? "Please enter form."
+                    : "กรุณากรอกต้นทาง"
+                }
                 value={this.state.froms}
                 onChangeText={(text) => this.setState({ froms: text })}
               ></TextInput>
@@ -569,7 +637,11 @@ export default class GroundTransportationBookingScreen extends Component {
               <Text style={styles.textInput}>ปลายทาง</Text>
               <TextInput
                 style={styles.inputStyle1}
-                placeholder="กรุณากรอกปลายทาง"
+                placeholder={
+                  this.state.lang === "EN"
+                    ? "Please enter to."
+                    : "กรุณากรอกปลายทาง"
+                }
                 value={this.state.tos}
                 onChangeText={(text) => this.setState({ tos: text })}
               ></TextInput>
@@ -580,7 +652,7 @@ export default class GroundTransportationBookingScreen extends Component {
           {/* เพิ่ม */}
           {this.state.ground.map((item, index) => {
             return (
-              <View style={{ marginTop: "5%" }}>
+              <View style={{ marginTop: "8%" }}>
                 <View style={styles.containerSec2}>
                   <View style={styles.contentInSec2}>
                     <Text>Date:</Text>
@@ -612,7 +684,11 @@ export default class GroundTransportationBookingScreen extends Component {
                     <Text style={styles.textInput}>ต้นทาง</Text>
                     <TextInput
                       style={styles.inputStyle1}
-                      placeholder="กรุณากรอกต้นทาง"
+                      placeholder={
+                        this.state.lang === "EN"
+                          ? "Please enter form."
+                          : "กรุณากรอกต้นทาง"
+                      }
                       onChangeText={(text) => {
                         let ground = [...this.state.ground];
                         let item = { ...ground[index] };
@@ -628,7 +704,11 @@ export default class GroundTransportationBookingScreen extends Component {
                     <Text style={styles.textInput}>ปลายทาง</Text>
                     <TextInput
                       style={styles.inputStyle1}
-                      placeholder="กรุณากรอกปลายทาง"
+                      placeholder={
+                        this.state.lang === "EN"
+                          ? "Please enter to."
+                          : "กรุณากรอกปลายทาง"
+                      }
                       onChangeText={(text) => {
                         let ground = [...this.state.ground];
                         let item = { ...ground[index] };
@@ -651,23 +731,23 @@ export default class GroundTransportationBookingScreen extends Component {
                       }
                     >
                       <Icons
-                          name="md-remove-circle"
-                          size={20}
-                          style={{
-                            marginLeft: 10,
-                            marginRight: 5,
-                            color: "white",
-                          }}
-                        />
-                        <Text
-                          style={{
-                            color: "white",
-                            marginRight: 10,
-                            fontSize: 14,
-                          }}
-                        >
-                         {this.state.lang === "EN" ? "Delete" : "ลบ"}
-                        </Text>
+                        name="md-remove-circle"
+                        size={20}
+                        style={{
+                          marginLeft: 10,
+                          marginRight: 5,
+                          color: "white",
+                        }}
+                      />
+                      <Text
+                        style={{
+                          color: "white",
+                          marginRight: 10,
+                          fontSize: 14,
+                        }}
+                      >
+                        {this.state.lang === "EN" ? "Delete" : "ลบ"}
+                      </Text>
                     </Button>
                   </View>
                 </View>
@@ -706,7 +786,9 @@ export default class GroundTransportationBookingScreen extends Component {
                 size={20}
                 style={{ color: "white", marginLeft: 10, marginRight: 5 }}
               />
-              <Text style={{ color: "white", marginRight: 10 }}>{this.state.lang === "EN" ? "Add" : "เพิ่ม"}</Text>
+              <Text style={{ color: "white", marginRight: 10 }}>
+                {this.state.lang === "EN" ? "Add" : "เพิ่ม"}
+              </Text>
             </Button>
           </View>
 
@@ -715,7 +797,7 @@ export default class GroundTransportationBookingScreen extends Component {
               flexDirection: "row",
               justifyContent: "space-around",
               paddingVertical: 20,
-              marginBottom: 40,
+              marginBottom: 12,
             }}
           >
             <View style={styles.buttonContainer}>
@@ -723,17 +805,21 @@ export default class GroundTransportationBookingScreen extends Component {
                 style={styles.btnConfirmStyle}
                 onPress={() => this.onPressSend()}
               >
-                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Submit" : "ยืนยัน"}</Text>
+                <Text style={{ color: "white" }}>
+                  {this.state.lang === "EN" ? "Submit" : "ยืนยัน"}
+                </Text>
               </Button>
             </View>
             <View style={styles.buttonContainer}>
               <Button style={styles.btnCancelStyle}>
-                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}</Text>
+                <Text style={{ color: "white" }}>
+                  {this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}
+                </Text>
               </Button>
             </View>
           </View>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     );
   }
 }
@@ -744,12 +830,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   containerSec1: {
-    borderWidth: 2,
-    padding: 12,
-    borderRadius: 8,
-    marginHorizontal: 20,
-    marginTop: 18,
-    borderColor: "#398DDD",
+    marginHorizontal: 8,
+    marginVertical: 18,
   },
   textHeader: {
     alignItems: "center",
@@ -790,7 +872,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F4F4F4",
   },
   containerSec2: {
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     borderRadius: 8,
     borderWidth: 2,
     borderColor: "#398DDD",

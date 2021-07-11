@@ -262,7 +262,7 @@ export default class FlightBookingScreen extends Component {
       flight: itemCopy,
     });
   }
-  
+
   //บันทึกข้อมูล
   onPressSend = () => {
     try {
@@ -530,132 +530,182 @@ export default class FlightBookingScreen extends Component {
 
   render() {
     return (
-      <View style={styles.background}>
-        <ScrollView>
+      <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
+        <View
+          style={{
+            flex: 1,
+            borderWidth: 2,
+            borderRadius: 12,
+            marginTop: 20,
+            borderColor: "white",
+            backgroundColor: "white",
+            marginHorizontal: 15,
+            marginBottom: 20,
+          }}
+        >
           {/* Start flight booking form section 1 */}
           <View style={styles.containerSec1}>
-            <View style={styles.textHeader}>
-              <Text style={{ color: "#398DDD", fontSize: 20 }}>
-                บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด
-              </Text>
-              <Text style={{ paddingTop: 16, fontSize: 18 }}>Flight</Text>
+            {/* <View style={styles.textHeader}> */}
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "bold",
+                color: "#4393de",
+                marginTop: 18,
+                alignSelf: "center",
+              }}
+            >
+              {this.state.lang === "EN"
+                ? "EXTERRAN (THAILAND) LTD."
+                : "บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด"}
+            </Text>
+
+            <Text
+              style={{
+                alignSelf: "center",
+                fontSize: 16,
+                marginTop: 12,
+                marginBottom: 15,
+              }}
+            >
+              {this.state.lang === "EN" ? "Flight" : "เครื่องบิน"}
+            </Text>
+            {/* </View> */}
+
+            <View>
+              <Divider style={{ backgroundColor: "black", borderWidth: 2 }} />
             </View>
 
-            <Divider style={{ paddingBottom: 1, marginTop: 5 }} />
-
             {/* ส่วนที่1 */}
-            <Text style={{ marginTop: 10 }}>Name:</Text>
-            <Text style={styles.textInput}>ชื่อ</Text>
-            <TextInput style={styles.inputStyle} value={this.state.firstname} />
+            <View style={{ margin: 20, marginHorizontal: 8}}>
+              <Text style={{ marginTop: 10 }}>Name:</Text>
+              <Text style={styles.textInput}>ชื่อ</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.firstname}
+              />
 
-            <Text>Last Name:</Text>
-            <Text style={styles.textInput}>นามสกุล</Text>
-            <TextInput style={styles.inputStyle} value={this.state.lastname} />
+              <Text>Last Name:</Text>
+              <Text style={styles.textInput}>นามสกุล</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.lastname}
+              />
 
-            <Text>ID No:</Text>
-            <Text style={styles.textInput}>เลขบัตรประชาชน</Text>
-            <TextInput
-              style={styles.inputStyle}
-              value={this.state.identification}
-            />
+              <Text>ID No:</Text>
+              <Text style={styles.textInput}>เลขบัตรประชาชน</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.identification}
+              />
 
-            <Text>Phone No:</Text>
-            <Text style={styles.textInput}>เบอร์โทรศัพท์</Text>
-            <TextInput style={styles.inputStyle} value={this.state.phone} />
+              <Text>Phone No:</Text>
+              <Text style={styles.textInput}>เบอร์โทรศัพท์</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.phone ? this.state.phone : "-"}
+              />
 
-            <Text>Birthday:</Text>
-            <Text style={styles.textInput}>วันเกิด</Text>
-            <TextInput
-              style={styles.inputStyle}
-              // value={this.state.birthday}
-              value={this.formatDate(this.state.birthday)}
-            />
+              <Text>Birthday:</Text>
+              <Text style={styles.textInput}>วันเกิด</Text>
+              <TextInput
+                style={styles.inputStyle}
+                // value={this.state.birthday}
+                value={this.formatDate(this.state.birthday)}
+              />
 
-            <Text>Province:</Text>
-            <Text style={styles.textInput}>จังหวัด</Text>
-            <TextInput style={styles.inputStyle} value={this.state.province} />
+              <Text>Province:</Text>
+              <Text style={styles.textInput}>จังหวัด</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.province}
+              />
 
-            <Text>Purpose:</Text>
-            <Text style={styles.textInput}>วัตถุประสงค์ในการเดินทาง</Text>
-            <Picker
-              mode="dropdown"
-              iosIcon={
-                <Icon
-                  name="angle-down"
-                  style={{ width: "8%", paddingHorizontal: 2 }}
-                />
-              }
-              style={styles.inputLightStyle}
-              placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
-              placeholderStyle={{ color: "#bfc6ea" }}
-              placeholderIconColor="#007aff"
-              selectedValue={this.state.purpose}
-              onValueChange={(text) =>
-                this.setState({ purpose: text, purposeEtc: "" })
-              }
-              textStyle={{ fontSize: 14 }}
-            >
-              <Picker.Item
-                label={
+              <Text>Purpose:</Text>
+              <Text style={styles.textInput}>วัตถุประสงค์ในการเดินทาง</Text>
+              <Picker
+                mode="dropdown"
+                iosIcon={
+                  <Icon
+                    name="angle-down"
+                    style={{ width: "8%", paddingHorizontal: 2 }}
+                  />
+                }
+                style={styles.inputLightStyle}
+                placeholder={
                   this.state.lang === "EN"
                     ? "Please select your travel purpose"
                     : "กรุณาเลือกวัตถุประสงค์ในการเดินทาง"
                 }
-                value=""
-              />
-              {this.state.select_2.map((data) => {
-                return (
-                  <Picker.Item
-                    label={
-                      this.state.lang === "EN"
-                        ? data.purpose_travel_en
-                        : data.purpose_travel_th
-                    }
-                    value={data.id}
-                  />
-                );
-              })}
-            </Picker>
-
-            {/* กรณีเลือกอื่นๆ */}
-            {this.state.purpose == 3 && (
-              <View>
-                <Text>Purpose:</Text>
-                <Text style={styles.textInput}>
-                  กรุณาระบุวัตถุประสงค์ อื่นๆ
-                </Text>
-                <TextInput
-                  style={styles.inputStyle1}
-                  placeholder={
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={this.state.purpose}
+                onValueChange={(text) =>
+                  this.setState({ purpose: text, purposeEtc: "" })
+                }
+                textStyle={{ fontSize: 14 }}
+              >
+                {/* <Picker.Item
+                  label={
                     this.state.lang === "EN"
-                      ? "Please enter purpose"
-                      : "กรุณากรอกวัตถุประสงค์"
+                      ? "Please select your travel purpose"
+                      : "กรุณาเลือกวัตถุประสงค์ในการเดินทาง"
                   }
-                  value={this.state.purposeEtc}
-                  onChangeText={(text) => this.setState({ purposeEtc: text })}
-                ></TextInput>
-              </View>
-            )}
-            {/* กรณีเลือกอื่นๆ */}
+                  value=""
+                /> */}
+                {this.state.select_2.map((data) => {
+                  return (
+                    <Picker.Item
+                      label={
+                        this.state.lang === "EN"
+                          ? data.purpose_travel_en
+                          : data.purpose_travel_th
+                      }
+                      value={data.id}
+                    />
+                  );
+                })}
+              </Picker>
+
+              {/* กรณีเลือกอื่นๆ */}
+              {this.state.purpose == 3 && (
+                <View>
+                  <Text>Purpose:</Text>
+                  <Text style={styles.textInput}>
+                    กรุณาระบุวัตถุประสงค์ อื่นๆ
+                  </Text>
+                  <TextInput
+                    style={styles.inputStyle1}
+                    placeholder={
+                      this.state.lang === "EN"
+                        ? "Please enter purpose"
+                        : "กรุณากรอกวัตถุประสงค์"
+                    }
+                    value={this.state.purposeEtc}
+                    onChangeText={(text) => this.setState({ purposeEtc: text })}
+                  ></TextInput>
+                </View>
+              )}
+              {/* กรณีเลือกอื่นๆ */}
+            </View>
+            <View
+              style={{
+                marginBottom: 10,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Divider style={{ paddingBottom: 1, flex: 1 }} />
+              <Avatar.Icon
+                icon="arrow-down"
+                size={30}
+                style={styles.arrowDownStyle}
+              />
+              <Divider style={{ paddingBottom: 1, flex: 1 }} />
+            </View>
           </View>
           {/* จบส่วนที่1 */}
-
-          <View
-            style={{
-              marginVertical: 40,
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Divider style={{ paddingBottom: 1, flex: 1 }} />
-            <Avatar.Icon
-              icon="arrow-down"
-              size={30}
-              style={styles.arrowDownStyle}
-            />
-            <Divider style={{ paddingBottom: 1, flex: 1 }} />
-          </View>
 
           {/* ส่วนที่2 */}
           <View style={styles.containerSec2}>
@@ -701,7 +751,7 @@ export default class FlightBookingScreen extends Component {
                       />
                     }
                     style={styles.inputLightStyle}
-                    placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
+                    placeholder={this.state.lang === "EN" ? "Please select from the flight." : "กรุณาเลือกเที่ยวบินต้นทาง"}
                     placeholderStyle={{ color: "#bfc6ea" }}
                     placeholderIconColor="#007aff"
                     selectedValue={this.state.froms_id}
@@ -710,14 +760,14 @@ export default class FlightBookingScreen extends Component {
                     }
                     textStyle={{ fontSize: 14 }}
                   >
-                    <Picker.Item
+                    {/* <Picker.Item
                       label={
                         this.state.lang === "EN"
-                          ? "Please select a source"
-                          : "กรุณาเลือกต้นทาง"
+                          ? "Please select from the flight"
+                          : "กรุณาเลือกเที่ยวบินต้นทาง"
                       }
                       value=""
-                    />
+                    /> */}
 
                     {this.state.select_1.map((data) => {
                       return (
@@ -747,7 +797,7 @@ export default class FlightBookingScreen extends Component {
                     style={styles.inputStyle1}
                     placeholder={
                       this.state.lang === "EN"
-                        ? "Please enter the departure flight"
+                        ? "Please enter from the flight."
                         : "กรุณากรอกเที่ยวบินต้นทาง"
                     }
                     value={this.state.froms}
@@ -772,21 +822,21 @@ export default class FlightBookingScreen extends Component {
                       />
                     }
                     style={styles.inputLightStyle}
-                    placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
+                    placeholder={this.state.lang === "EN" ? "Please select end the flight." : "กรุณาเลือกเที่ยวบินปลายทาง"}
                     placeholderStyle={{ color: "#bfc6ea" }}
                     placeholderIconColor="#007aff"
                     selectedValue={this.state.tos_id}
                     onValueChange={(text) => this.setState({ tos_id: text })}
                     textStyle={{ fontSize: 14 }}
                   >
-                    <Picker.Item
+                    {/* <Picker.Item
                       label={
                         this.state.lang === "EN"
-                          ? "Please select destination flight"
-                          : "กรุณาเลือกปลายทาง"
+                          ? "Please select end the flight"
+                          : "กรุณาเลือกเที่ยวบินปลายทาง"
                       }
                       value=""
-                    />
+                    /> */}
                     {this.state.select_1.map((data) => {
                       return (
                         <Picker.Item
@@ -815,7 +865,7 @@ export default class FlightBookingScreen extends Component {
                     style={styles.inputStyle1}
                     placeholder={
                       this.state.lang === "EN"
-                        ? "Please enter destination flight"
+                        ? "Please enter end the flight."
                         : "กรุณากรอกเที่ยวบินปลายทาง"
                     }
                     value={this.state.tos}
@@ -849,7 +899,7 @@ export default class FlightBookingScreen extends Component {
               <Text style={styles.textInput}>เที่ยวบิน</Text>
               <TextInput
                 style={styles.inputStyle1}
-                placeholder="กรุณากรอกเที่ยวบิน"
+                placeholder={this.state.lang === "EN" ? "Please enter your flight." : "กรุณากรอกเที่ยวบิน"}
                 value={this.state.firstflight}
                 onChangeText={(text) => this.setState({ firstflight: text })}
               ></TextInput>
@@ -877,7 +927,7 @@ export default class FlightBookingScreen extends Component {
                 <View>
                   <TextInput
                     style={styles.inputStyle1}
-                    placeholder="กรุณากรอกน้ำหนักสัมภาระ"
+                    placeholder={this.state.lang === "EN" ? "Please enter your baggage weight." : "กรุณากรอกน้ำหนักสัมภาระ"}
                     value={this.state.baggage}
                     onChangeText={(text) => this.setState({ baggage: text })}
                   ></TextInput>
@@ -898,7 +948,7 @@ export default class FlightBookingScreen extends Component {
           {/* เพิ่มเที่ยวบิน */}
           {this.state.flight.map((item, index) => {
             return (
-              <View style={{ marginTop: "5%" }}>
+              <View style={{ marginTop: "8%" }}>
                 <View style={styles.containerSec2}>
                   <View style={styles.contentInSec2}>
                     <Text>Date:</Text>
@@ -950,9 +1000,7 @@ export default class FlightBookingScreen extends Component {
                             />
                           }
                           style={styles.inputLightStyle}
-                          placeholder={
-                            this.state.lang === "EN" ? "Selecte" : "เลือก"
-                          }
+                          placeholder={this.state.lang === "EN" ? "Please select from the flight." : "กรุณาเลือกเที่ยวบินต้นทาง"}
                           placeholderStyle={{ color: "#bfc6ea" }}
                           placeholderIconColor="#007aff"
                           selectedValue={item.data.froms_id}
@@ -969,14 +1017,14 @@ export default class FlightBookingScreen extends Component {
                           }}
                           textStyle={{ fontSize: 14 }}
                         >
-                          <Picker.Item
+                          {/* <Picker.Item
                             label={
                               this.state.lang === "EN"
-                                ? "Please select a source"
-                                : "กรุณาเลือกต้นทาง"
+                                ? "Please select form the flight"
+                                : "กรุณาเลือกเที่ยวบินต้นทาง"
                             }
                             value=""
-                          />
+                          /> */}
 
                           {this.state.select_1.map((data) => {
                             return (
@@ -1006,7 +1054,7 @@ export default class FlightBookingScreen extends Component {
                           style={styles.inputStyle1}
                           placeholder={
                             this.state.lang === "EN"
-                              ? "Please enter the departure flight"
+                              ? "Please enter from the flight."
                               : "กรุณากรอกเที่ยวบินต้นทาง"
                           }
                           onChangeText={(text) => {
@@ -1038,9 +1086,7 @@ export default class FlightBookingScreen extends Component {
                             />
                           }
                           style={styles.inputLightStyle}
-                          placeholder={
-                            this.state.lang === "EN" ? "Selecte" : "เลือก"
-                          }
+                          placeholder={this.state.lang === "EN" ? "Please select end the flight." : "กรุณาเลือกเที่ยวบินปลายทาง"}
                           placeholderStyle={{ color: "#bfc6ea" }}
                           placeholderIconColor="#007aff"
                           selectedValue={item.data.tos_id}
@@ -1057,14 +1103,10 @@ export default class FlightBookingScreen extends Component {
                           }}
                           textStyle={{ fontSize: 14 }}
                         >
-                          <Picker.Item
-                            label={
-                              this.state.lang === "EN"
-                                ? "Please select a source"
-                                : "กรุณาเลือกต้นทาง"
-                            }
+                          {/* <Picker.Item
+                            label={this.state.lang === "EN" ? "Please select from the flight." : "กรุณาเลือกเที่ยวบินต้นทาง"}
                             value=""
-                          />
+                          /> */}
                           {this.state.select_1.map((data) => {
                             return (
                               <Picker.Item
@@ -1093,7 +1135,7 @@ export default class FlightBookingScreen extends Component {
                           style={styles.inputStyle1}
                           placeholder={
                             this.state.lang === "EN"
-                              ? "Please enter destination flight"
+                              ? "Please enter end the flight."
                               : "กรุณากรอกเที่ยวบินปลายทาง"
                           }
                           value={item.data.tos}
@@ -1184,7 +1226,7 @@ export default class FlightBookingScreen extends Component {
                       <View>
                         <TextInput
                           style={styles.inputStyle1}
-                          placeholder="กรุณากรอกน้ำหนักสัมภาระ"
+                          placeholder={this.state.lang === "EN" ? "Please enter your baggage weight." : "กรุณากรอกน้ำหนักสัมภาระ"}
                           value={item.data.baggage}
                           onChangeText={(text) => {
                             let flight = [...this.state.flight];
@@ -1226,7 +1268,7 @@ export default class FlightBookingScreen extends Component {
                             fontSize: 14,
                           }}
                         >
-                         {this.state.lang === "EN" ? "Delete" : "ลบ"}
+                          {this.state.lang === "EN" ? "Delete" : "ลบ"}
                         </Text>
                       </Button>
                     </View>
@@ -1286,7 +1328,7 @@ export default class FlightBookingScreen extends Component {
               flexDirection: "row",
               justifyContent: "space-around",
               paddingVertical: 20,
-              marginBottom: 40,
+              marginBottom: 12,
             }}
           >
             <View style={styles.buttonContainer}>
@@ -1294,18 +1336,22 @@ export default class FlightBookingScreen extends Component {
                 style={styles.btnConfirmStyle}
                 onPress={() => this.onPressSend()}
               >
-                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Submit" : "ยืนยัน"}</Text>
+                <Text style={{ color: "white" }}>
+                  {this.state.lang === "EN" ? "Submit" : "ยืนยัน"}
+                </Text>
               </Button>
             </View>
 
             <View style={styles.buttonContainer}>
               <Button style={styles.btnCancelStyle}>
-                <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}</Text>
+                <Text style={{ color: "white" }}>
+                  {this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}
+                </Text>
               </Button>
             </View>
           </View>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     );
   }
 }
@@ -1318,12 +1364,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   containerSec1: {
-    borderWidth: 2,
-    padding: 12,
-    borderRadius: 8,
-    marginHorizontal: 20,
-    marginTop: 18,
-    borderColor: "#398DDD",
+    marginHorizontal: 8,
+    marginVertical: 18,
   },
   textHeader: {
     alignItems: "center",
@@ -1375,7 +1417,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F4F4F4",
   },
   containerSec2: {
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     borderRadius: 8,
     borderWidth: 2,
     borderColor: "#398DDD",

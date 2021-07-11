@@ -14,6 +14,8 @@ import { Dimensions } from "react-native";
 import { httpClient } from "../../core/HttpClient";
 import { AsyncStorage } from "react-native";
 import moment from "moment";
+import { Avatar } from "react-native-paper";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
@@ -86,7 +88,7 @@ const StaffFormFlight = ({ navigation, route }) => {
           <Text
             style={{ alignSelf: "center", fontSize: 20, fontWeight: "bold" }}
           >
-            ใบคำขอ Booking
+            {lang == "EN" ? "Booking" : "ใบคำขอ"}
           </Text>
 
           <Text
@@ -98,7 +100,9 @@ const StaffFormFlight = ({ navigation, route }) => {
               alignSelf: "center",
             }}
           >
-            บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด
+            {lang == "EN"
+              ? "EXTERRAN (THAILAND) LTD."
+              : "บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
           </Text>
           <Text
             style={{
@@ -112,17 +116,9 @@ const StaffFormFlight = ({ navigation, route }) => {
           </Text>
 
           <View>
-            <Divider style={{ backgroundColor: "blue" }} />
+            <Divider style={{ backgroundColor: "black", borderWidth: 2 }} />
           </View>
-          {/* <View
-          style={{
-            flex: 1,
-            borderWidth: 2,
-            borderRadius: 12,
-            marginTop: 20,
-            borderColor: "#d9d9d9",
-          }}
-        > */}
+
           <View style={{ margin: 20, marginHorizontal: 8 }}>
             <View
               style={{
@@ -132,7 +128,7 @@ const StaffFormFlight = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Name" : "ชื่อ"}
+                {lang == "EN" ? "Name:" : "ชื่อ:"}
               </Text>
 
               <Text style={styles.textSy1}>
@@ -140,7 +136,7 @@ const StaffFormFlight = ({ navigation, route }) => {
               </Text>
 
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Lastname" : "นามสกุล"}
+                {lang == "EN" ? "Lastname:" : "นามสกุล:"}
               </Text>
               <Text style={styles.textSy1}>
                 {lang == "EN" ? flight.lastname_en : flight.lastname}
@@ -155,9 +151,11 @@ const StaffFormFlight = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Identification" : "เลขบัตรประชาชน"}
+                {lang == "EN" ? "Identification:" : "เลขบัตรประชาชน:"}
               </Text>
-              <Text style={styles.textSy2}>{flight.identification}</Text>
+              <Text style={styles.textSy2}>
+                {flight.identification ? flight.identification : "-"}
+              </Text>
             </View>
 
             <View
@@ -168,7 +166,7 @@ const StaffFormFlight = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Phone" : "เบอร์โทร"}
+                {lang == "EN" ? "Phone:" : "เบอร์:"}
               </Text>
               <Text style={styles.textSy2}>
                 {flight.phone ? flight.phone : "-"}
@@ -183,7 +181,7 @@ const StaffFormFlight = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "BirthDay" : "วันเกิด"}
+                {lang == "EN" ? "BirthDay:" : "วันเกิด:"}
               </Text>
               <Text style={styles.textSy2}>
                 {moment(flight.birthday).format("DD/MM/YYYY")}
@@ -198,10 +196,16 @@ const StaffFormFlight = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Province" : "จังหวัด"}
+                {lang == "EN" ? "Province:" : "จังหวัด:"}
               </Text>
               <Text style={styles.textSy2}>
-                {lang == "EN" ? flight.pv_name_en : flight.pv_name_th}
+                {lang == "EN"
+                  ? flight.pv_name_en
+                  : flight.pv_name_th
+                  ? lang == "EN"
+                    ? flight.pv_name_en
+                    : flight.pv_name_th
+                  : "-"}
               </Text>
             </View>
 
@@ -213,7 +217,7 @@ const StaffFormFlight = ({ navigation, route }) => {
               }}
             >
               <Text style={styles.textSyH1}>
-                {lang == "EN" ? "Purpose" : "วัตถุประสงค์"}
+                {lang == "EN" ? "Purpose:" : "วัตถุประสงค์:"}
               </Text>
               <Text style={styles.textSy2}>
                 {" "}
@@ -226,11 +230,11 @@ const StaffFormFlight = ({ navigation, route }) => {
             </View>
           </View>
 
-          {/* <Divider style={{ backgroundColor: "blue" }} /> */}
+          {/* <Divider style={{ backgroundColor: "black" }} /> */}
           {item.map((param) => {
             return (
               <ScrollView>
-                <Divider style={{ backgroundColor: "blue" }} />
+                <Divider style={{ backgroundColor: "black" }} />
                 <View style={{ margin: 20, marginHorizontal: 8 }}>
                   <View
                     style={{
@@ -240,7 +244,7 @@ const StaffFormFlight = ({ navigation, route }) => {
                     }}
                   >
                     <Text style={styles.textSyH1}>
-                      {lang == "EN" ? "วันที่เดินทาง" : "วันที่เดินทาง"}
+                      {lang == "EN" ? "Date:" : "วันออกเดินทาง:"}
                     </Text>
                     <Text style={styles.textSy2}>
                       {moment(param.flight_date).format("DD/MM/YYYY")}
@@ -255,7 +259,7 @@ const StaffFormFlight = ({ navigation, route }) => {
                     }}
                   >
                     <Text style={styles.textSyH1}>
-                      {lang == "EN" ? "เวลาเริ่ม" : "เวลาเริ่ม"}
+                      {lang == "EN" ? "Start Time:" : "เวลาเริ่ม:"}
                     </Text>
                     <Text style={styles.textSy2}>{param.time_start}</Text>
                   </View>
@@ -268,7 +272,7 @@ const StaffFormFlight = ({ navigation, route }) => {
                     }}
                   >
                     <Text style={styles.textSyH1}>
-                      {lang == "EN" ? "เวลาสิ้นสุด" : "เวลาสิ้นสุด"}
+                      {lang == "EN" ? "End Time:" : "เวลาสิ้นสุด:"}
                     </Text>
                     <Text style={styles.textSy2}>{param.time_end}</Text>
                   </View>
@@ -281,7 +285,7 @@ const StaffFormFlight = ({ navigation, route }) => {
                     }}
                   >
                     <Text style={styles.textSyH1}>
-                      {lang == "EN" ? "from" : "ต้นทาง"}
+                      {lang == "EN" ? "From:" : "ต้นทาง:"}
                     </Text>
                     <Text style={styles.textSy2}>
                       {lang == "EN" ? param.from_name_en : param.from_name}
@@ -297,7 +301,7 @@ const StaffFormFlight = ({ navigation, route }) => {
                     }}
                   >
                     <Text style={styles.textSyH1}>
-                      {lang == "EN" ? "to" : "ปลายทาง"}
+                      {lang == "EN" ? "To:" : "ปลายทาง:"}
                     </Text>
                     <Text style={styles.textSy2}>
                       {lang == "EN" ? param.to_name_en : param.to_name}
@@ -313,9 +317,11 @@ const StaffFormFlight = ({ navigation, route }) => {
                     }}
                   >
                     <Text style={styles.textSyH1}>
-                      {lang == "EN" ? "เที่ยวบิน" : "เที่ยวบิน"}
+                      {lang == "EN" ? "Flight:" : "เที่ยวบิน:"}
                     </Text>
-                    <Text style={styles.textSy2}>{param.flight}</Text>
+                    <Text style={styles.textSy2}>
+                      {param.flight ? param.flight : "-"}
+                    </Text>
                   </View>
 
                   <View
@@ -326,7 +332,7 @@ const StaffFormFlight = ({ navigation, route }) => {
                     }}
                   >
                     <Text style={styles.textSyH1}>
-                      {lang == "EN" ? "Baggage" : "สัมภาระ"}
+                      {lang == "EN" ? "Baggage:" : "สัมภาระ:"}
                     </Text>
                     <Text style={styles.textSy2}>
                       {param.param_carry ? flight.flight_carry : "ไม่มีสัมภาระ"}
@@ -334,12 +340,28 @@ const StaffFormFlight = ({ navigation, route }) => {
                   </View>
                 </View>
 
-                {/* <Divider style={{ backgroundColor: "blue" }} /> */}
+                {/* <Divider style={{ backgroundColor: "black" }} /> */}
               </ScrollView>
             );
           })}
 
-<Divider style={{ backgroundColor: "blue" }} />
+          {/* <Divider style={{ backgroundColor: "black" }} /> */}
+          <View
+            style={{
+              // marginVertical: 15,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Divider style={{ paddingBottom: 1, flex: 1 }} />
+            <Avatar.Icon
+              icon="arrow-down"
+              size={30}
+              style={styles.arrowDownStyle}
+            />
+            <Divider style={{ paddingBottom: 1, flex: 1 }} />
+          </View>
 
           <Text style={{ marginHorizontal: 10, marginTop: 15 }}>
             {lang == "EN" ? "Approved:" : "อนุมัติโดย:"}
@@ -362,7 +384,7 @@ const StaffFormFlight = ({ navigation, route }) => {
             <Text>ผู้บังคับบัญชาของผู้เข้าฝึกอบรม</Text>
           </View>
 
-          <Text style={{ marginHorizontal: 10, marginTop: 20 }}>
+          <Text style={{ marginHorizontal: 10, marginTop: 25 }}>
             {lang == "EN" ? "Acknowledged By HR:" : "Acknowledged By HR:"}
           </Text>
 
@@ -384,57 +406,68 @@ const StaffFormFlight = ({ navigation, route }) => {
             <Text>ผู้จัดการฝ่ายทรัพยากรบุคคล</Text>
           </View>
 
-          {/* <Divider style={{ backgroundColor: "black", marginTop: 40 }} /> */}
+          <Divider
+            style={{
+              backgroundColor: "black",
+              marginTop: 40,
+              marginBottom: 15,
+            }}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              marginHorizontal: 20,
+              marginTop: 5,
+              // marginBottom: 20,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#3bb54a",
+                width: WIDTH / 5,
+                height: HEIGHT * 0.04,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 4,
+              }}
+            >
+              <Text style={{ color: "white" }}>
+                {lang == "EN" ? "Approve" : "อนุมัติ"}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                backgroundColor: "red",
+                width: WIDTH / 5,
+                height: HEIGHT * 0.04,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 4,
+              }}
+            >
+              <Text style={{ color: "white" }}>
+                {lang == "EN" ? "Disapproved" : "ไม่อนุมัติ"}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#6c757d",
+                width: WIDTH / 5,
+                height: HEIGHT * 0.04,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 4,
+              }}
+            >
+              <Text style={{ color: "white" }}>
+                {lang == "EN" ? "Close" : "ปิด"}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-around",
-          marginHorizontal: 20,
-          marginTop: 5,
-          marginBottom: 20,
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#3bb54a",
-            width: WIDTH / 5,
-            height: HEIGHT * 0.04,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 4,
-          }}
-        >
-          <Text style={{ color: "white" }}>อนุมัติ</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{
-            backgroundColor: "red",
-            width: WIDTH / 5,
-            height: HEIGHT * 0.04,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 4,
-          }}
-        >
-          <Text style={{ color: "white" }}>ไม่อนุมัติ</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#6c757d",
-            width: WIDTH / 5,
-            height: HEIGHT * 0.04,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 4,
-          }}
-        >
-          <Text style={{ color: "white" }}>Close</Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );
