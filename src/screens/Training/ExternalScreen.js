@@ -37,8 +37,6 @@ export default class ExternalScreen extends Component {
     super(props);
 
     this.state = {
-      selectedUser: "กรุณาเลือกผู้ใช้",
-      course: "กรุณาเลือกหลักสูตร",
       trainingNeedItem: {
         employee_id: "",
         data: [],
@@ -51,7 +49,7 @@ export default class ExternalScreen extends Component {
         price: "",
         other: "",
         upload_file: null,
-        file:""
+        file:null,
       },
 
       isDatePickerVisible: false,
@@ -292,22 +290,26 @@ export default class ExternalScreen extends Component {
                 httpClient
                     .post('/Training/InsertTrainingNeedPic', pic)
                     .then((response) => {
-                      let trainingNeed = [...this.state.trainingNeed];
-
-                      let item = { ...trainingNeed[index] };
+                  
+                      let file=response.data
+                     
+                      let trainingNeeds = [...trainingNeed];
+                      let item = { ...trainingNeeds[index-1] };
+                     
                       let data = { ...item["data"] };
-                      let param = data[i];
-                      param.file = data;
+                      let param = data[i-1];
+                   
+                      param.file = file;
                       data[i] = param;
-                      trainingNeed[index] = item;
+                      trainingNeeds[index-1] = item;
+                      
                       var id = "Id of subbrands to remove: ";
                       //ลบ key ส่วนเกินออก
-                      trainingNeed.forEach(function (o) {
+                      trainingNeeds.forEach(function (o) {
                         o.data = o.data.filter((s) => s.id != id);
                       });
-                      console.log(trainingNeed);
                       this.setState({
-                        trainingNeed: trainingNeed,
+                        trainingNeed: trainingNeeds,
                       });
                     })
                     .catch((error) => {
@@ -687,6 +689,7 @@ export default class ExternalScreen extends Component {
 
                                 <TextInput
                                   style={styles.inputStyle4}
+                                  keyboardType = 'numeric'
                                   placeholder={
                                     this.state.lang === "EN"
                                       ? "Training Cost"
@@ -889,7 +892,7 @@ export default class ExternalScreen extends Component {
                     price: "",
                     other: "",
                     upload_file: null,
-                    file:""
+                    file:null,
                   },
                 ];
                 let trainingNeed = [

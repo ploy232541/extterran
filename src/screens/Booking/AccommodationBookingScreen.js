@@ -51,6 +51,7 @@ export default class AccommodationBookingScreen extends Component {
       accom: "",
       user_id: "",
       purposeEtc: "",
+      hotelItem:[],
       accommodationItem: {
         data: {
           //dates: "DD/MM/YYYY",
@@ -584,14 +585,7 @@ export default class AccommodationBookingScreen extends Component {
                 }}
                 textStyle={{ fontSize: 14 }}
               >
-                {/* <Picker.Item
-                  label={
-                    this.state.lang === "EN"
-                      ? "Please select your Province"
-                      : "กรุณาเลือกจังหวัด"
-                  }
-                  value=""
-                /> */}
+         
                 {this.state.select_3.map((data) => {
                   return (
                     <Picker.Item
@@ -672,6 +666,7 @@ export default class AccommodationBookingScreen extends Component {
 
           {/* เพิ่มที่พัก */}
           {this.state.accommodation.map((item, index) => {
+            
             return (
               <View style={{ marginTop: "5%" }}>
                 <View style={styles.containerSec2}>
@@ -688,30 +683,40 @@ export default class AccommodationBookingScreen extends Component {
                       }
                       style={styles.inputLightStyle}
                       placeholder={
-                        this.state.lang === "EN" ? "Selecte" : "เลือก"
+                        this.state.lang === "EN" ? "Selecte" : "กรุณาเลือกจังหวัด"
                       }
                       placeholderStyle={{ color: "#bfc6ea" }}
                       placeholderIconColor="#007aff"
                       selectedValue={item.data.province_id}
                       onValueChange={(text) => {
-                        let accommodation = [...this.state.accommodation];
-                        let item = { ...accommodation[index] };
-                        let data = { ...item["data"] };
-                        data.province_id = text;
-                        item["data"] = data;
-                        accommodation[index] = item;
-                        this.setState({ accommodation: accommodation });
+                        try {
+                          let accommodation = [...this.state.accommodation];
+                          let item = { ...accommodation[index] };
+                          let data = { ...item["data"] };
+                          data.province_id = text;
+                          item["data"] = data;
+                          accommodation[index] = item;
+                          this.setState({ accommodation: accommodation });
+                          httpClient
+                            .get(`/Training/getHotel/${text}`)
+                            .then((response) => {
+                              const result = response.data;
+                              if (result != null) {
+                    
+                               this.setState({hotelItem:result})
+                              
+                              }
+                            })
+                            .catch((error) => {
+                              console.log(error);
+                            });
+                        } catch (error) {}
+                       
+                       
                       }}
                       textStyle={{ fontSize: 14 }}
                     >
-                      <Picker.Item
-                        label={
-                          this.state.lang === "EN"
-                            ? "Please select your Province"
-                            : "กรุณาเลือกจังหวัด"
-                        }
-                        value=""
-                      />
+                    
                       {this.state.select_3.map((data) => {
                         return (
                           <Picker.Item
@@ -730,20 +735,46 @@ export default class AccommodationBookingScreen extends Component {
                     <Text style={styles.textInput}>
                       ที่พัก (จังหวัด ชื่อโรงแรม)
                     </Text>
-                    <TextInput
-                      style={styles.inputStyle1}
-                      value={item.data.accommodation}
-                      onChangeText={(text) => {
-                        let accommodation = [...this.state.accommodation];
-                        let item = { ...accommodation[index] };
-                        let data = { ...item["data"] };
-                        data.accommodation = text;
-                        item["data"] = data;
-                        accommodation[index] = item;
-                        this.setState({ accommodation: accommodation });
-                      }}
-                      placeholder="ที่พัก (จังหวัด ชื่อโรงแรม)"
-                    ></TextInput>
+                    <Picker
+                mode="dropdown"
+                iosIcon={
+                  <Icon
+                    name="angle-down"
+                    style={{ width: "8%", paddingHorizontal: 2 }}
+                  />
+                }
+                style={styles.inputLightStyle}
+                placeholder={
+                  this.state.lang === "EN" ? "Selecte" : "เลือกที่พัก"
+                }
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={item.data.accommodation}
+                onValueChange={(text) => {
+                  let accommodation = [...this.state.accommodation];
+                  let item = { ...accommodation[index] };
+                  let data = { ...item["data"] };
+                  data.accommodation = text;
+                  item["data"] = data;
+                  accommodation[index] = item;
+                  this.setState({ accommodation: accommodation });
+                }}
+                textStyle={{ fontSize: 14 }}
+              >
+                {this.state.hotelItem.map((data) => {
+                  return (
+                    <Picker.Item
+                      label={
+                        this.state.lang === "EN"
+                          ? data.hotel_name_en
+                          : data.hotel_name_th
+                      }
+                      value={data.hotel_id}
+                    />
+                  );
+                })}
+              </Picker>
+                  
 
                     <Text>Check in date (D/M/Y):</Text>
                     <Text style={styles.textInput}>เช็คอิน</Text>
