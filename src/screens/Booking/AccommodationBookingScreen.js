@@ -51,7 +51,7 @@ export default class AccommodationBookingScreen extends Component {
       accom: "",
       user_id: "",
       purposeEtc: "",
-      hotelItem:[],
+      hotelItem: [],
       accommodationItem: {
         data: {
           //dates: "DD/MM/YYYY",
@@ -404,146 +404,192 @@ export default class AccommodationBookingScreen extends Component {
 
   render() {
     return (
-      <View style={styles.background}>
-        <ScrollView>
+      <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
+        <View
+          style={{
+            flex: 1,
+            borderWidth: 2,
+            borderRadius: 12,
+            marginTop: 20,
+            borderColor: "white",
+            backgroundColor: "white",
+            marginHorizontal: 15,
+            marginBottom: 20,
+          }}
+        >
           {/* Start accommodation booking form section 1 */}
           <View style={styles.containerSec1}>
-            <View style={styles.textHeader}>
-              <Text style={{ color: "#398DDD", fontSize: 20 }}>
-                บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด
-              </Text>
-              <Text style={{ paddingTop: 16, fontSize: 18 }}>
-                Accommodation
-              </Text>
+            {/* <View style={styles.textHeader}> */}
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "bold",
+                color: "#4393de",
+                marginTop: 18,
+                alignSelf: "center",
+              }}
+            >
+              {this.state.lang === "EN"
+                ? "EXTERRAN (THAILAND) LTD."
+                : "บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด"}
+            </Text>
+            <Text
+              style={{
+                alignSelf: "center",
+                fontSize: 16,
+                marginTop: 12,
+                marginBottom: 15,
+              }}
+            >
+              {this.state.lang === "EN" ? "Accommodation" : "ที่พัก"}
+            </Text>
+            {/* </View> */}
+
+            <View>
+              <Divider style={{ backgroundColor: "black", borderWidth: 2 }} />
             </View>
 
-            <Divider style={{ paddingBottom: 1, marginTop: 5 }} />
-
             {/* ส่วนที่1 */}
-            <Text style={{ marginTop: 10 }}>Name:</Text>
-            <Text style={styles.textInput}>ชื่อ</Text>
-            <TextInput style={styles.inputStyle} value={this.state.firstname} />
-
-            <Text>Last Name:</Text>
-            <Text style={styles.textInput}>นามสกุล</Text>
-            <TextInput style={styles.inputStyle} value={this.state.lastname} />
-
-            <Text>ID No:</Text>
-            <Text style={styles.textInput}>เลขบัตรประชาชน</Text>
-            <TextInput
-              style={styles.inputStyle}
-              value={this.state.identification}
-            />
-
-            <Text>Phone No:</Text>
-            <Text style={styles.textInput}>เบอร์โทรศัพท์</Text>
-            <TextInput style={styles.inputStyle} value={this.state.phone} />
-
-            <Text>Province:</Text>
-            <Text style={styles.textInput}>จังหวัด</Text>
-            <TextInput style={styles.inputStyle} value={this.state.province} />
-
-            <Text>District:</Text>
-            <Text style={styles.textInput}>อำเภอ</Text>
-            <TextInput style={styles.inputStyle} value={this.state.district} />
-
-            <Text>Subdistrict:</Text>
-            <Text style={styles.textInput}>ตำบล</Text>
-            <TextInput
-              style={styles.inputStyle}
-              value={this.state.subdistrict}
-            />
-
-            <Text>Zip:</Text>
-            <Text style={styles.textInput}>รหัสไปรษณีย์</Text>
-            <TextInput
-              style={styles.inputStyle}
-              value={this.state.zipcode.toString()}
-            />
-
-            <Text>Purpose:</Text>
-            <Text style={styles.textInput}>วัตถุประสงค์ในการจองที่พัก</Text>
-            <Picker
-              mode="dropdown"
-              iosIcon={
-                <Icon
-                  name="angle-down"
-                  style={{ width: "8%", paddingHorizontal: 2 }}
-                />
-              }
-              style={styles.inputLightStyle}
-              placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
-              placeholderStyle={{ color: "#bfc6ea" }}
-              placeholderIconColor="#007aff"
-              selectedValue={this.state.purpose_id}
-              onValueChange={(text) => {
-                this.setState({ purpose_id: text, purposeEtc: "" });
-                console.log(this.state.purpose_id);
-              }}
-              textStyle={{ fontSize: 14 }}
-            >
-              <Picker.Item
-                label={
-                  this.state.lang === "EN"
-                    ? "Please select your hotel purpose"
-                    : "กรุณาเลือกวัตถุประสงค์ในการจองที่พัก"
-                }
-                value=""
+            <View style={{ margin: 20, marginHorizontal: 8 }}>
+              <Text style={{ marginTop: 10 }}>Name:</Text>
+              <Text style={styles.textInput}>ชื่อ</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.firstname}
               />
-              {this.state.select_1.map((data) => {
-                return (
-                  <Picker.Item
-                    label={
-                      this.state.lang === "EN"
-                        ? data.purpose_hotel_en
-                        : data.purpose_hotel_th
-                    }
-                    value={data.id}
+
+              <Text>Last Name:</Text>
+              <Text style={styles.textInput}>นามสกุล</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.lastname}
+              />
+
+              <Text>ID No:</Text>
+              <Text style={styles.textInput}>เลขบัตรประชาชน</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.identification}
+              />
+
+              <Text>Phone No:</Text>
+              <Text style={styles.textInput}>เบอร์โทรศัพท์</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.phone ? this.state.phone : "-"}
+              />
+
+              <Text>Province:</Text>
+              <Text style={styles.textInput}>จังหวัด</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.province}
+              />
+
+              <Text>District:</Text>
+              <Text style={styles.textInput}>อำเภอ</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.district}
+              />
+
+              <Text>Subdistrict:</Text>
+              <Text style={styles.textInput}>ตำบล</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.subdistrict}
+              />
+
+              <Text>Zip:</Text>
+              <Text style={styles.textInput}>รหัสไปรษณีย์</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.zipcode.toString()}
+              />
+
+              <Text>Purpose:</Text>
+              <Text style={styles.textInput}>วัตถุประสงค์ในการจองที่พัก</Text>
+              <Picker
+                mode="dropdown"
+                iosIcon={
+                  <Icon
+                    name="angle-down"
+                    style={{ width: "8%", paddingHorizontal: 2 }}
                   />
-                );
-              })}
-            </Picker>
-
-            {/* กรณีเลือกอื่นๆ */}
-
-            {this.state.purpose_id == 6 && (
-              <View>
-                <Text>Purpose:</Text>
-                <Text style={styles.textInput}>
-                  กรุณาระบุวัตถุประสงค์ อื่นๆ
-                </Text>
-                <TextInput
-                  style={styles.inputStyle1}
-                  placeholder={
+                }
+                style={styles.inputLightStyle}
+                placeholder={this.state.lang === "EN" ? "Selecte" : "เลือก"}
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={this.state.purpose_id}
+                onValueChange={(text) => {
+                  this.setState({ purpose_id: text, purposeEtc: "" });
+                  console.log(this.state.purpose_id);
+                }}
+                textStyle={{ fontSize: 14 }}
+              >
+                <Picker.Item
+                  label={
                     this.state.lang === "EN"
-                      ? "Please enter purpose"
-                      : "กรุณากรอกวัตถุประสงค์"
+                      ? "Please select your hotel purpose"
+                      : "กรุณาเลือกวัตถุประสงค์ในการจองที่พัก"
                   }
-                  value={this.state.purposeEtc}
-                  onChangeText={(text) => this.setState({ purposeEtc: text })}
-                ></TextInput>
-              </View>
-            )}
-            {/* กรณีเลือกอื่นๆ */}
+                  value=""
+                />
+                {this.state.select_1.map((data) => {
+                  return (
+                    <Picker.Item
+                      label={
+                        this.state.lang === "EN"
+                          ? data.purpose_hotel_en
+                          : data.purpose_hotel_th
+                      }
+                      value={data.id}
+                    />
+                  );
+                })}
+              </Picker>
+
+              {/* กรณีเลือกอื่นๆ */}
+
+              {this.state.purpose_id == 6 && (
+                <View>
+                  <Text>Purpose:</Text>
+                  <Text style={styles.textInput}>
+                    กรุณาระบุวัตถุประสงค์ อื่นๆ
+                  </Text>
+                  <TextInput
+                    style={styles.inputStyle1}
+                    placeholder={
+                      this.state.lang === "EN"
+                        ? "Please enter purpose"
+                        : "กรุณากรอกวัตถุประสงค์"
+                    }
+                    value={this.state.purposeEtc}
+                    onChangeText={(text) => this.setState({ purposeEtc: text })}
+                  ></TextInput>
+                </View>
+              )}
+              {/* กรณีเลือกอื่นๆ */}
+            </View>
+            <View
+              style={{
+                marginBottom: 10,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Divider style={{ paddingBottom: 1, flex: 1 }} />
+              <Avatar.Icon
+                icon="arrow-down"
+                size={30}
+                style={styles.arrowDownStyle}
+              />
+              <Divider style={{ paddingBottom: 1, flex: 1 }} />
+            </View>
           </View>
           {/* จบส่วนที่1 */}
-
-          <View
-            style={{
-              marginVertical: 40,
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Divider style={{ paddingBottom: 1, flex: 1 }} />
-            <Avatar.Icon
-              icon="arrow-down"
-              size={30}
-              style={styles.arrowDownStyle}
-            />
-            <Divider style={{ paddingBottom: 1, flex: 1 }} />
-          </View>
 
           {/* ส่วนที่2 */}
           <View style={styles.containerSec2}>
@@ -560,7 +606,9 @@ export default class AccommodationBookingScreen extends Component {
                 }
                 style={styles.inputLightStyle}
                 placeholder={
-                  this.state.lang === "EN" ? "Selecte" : "กรุณาเลือกจังหวัด"
+                  this.state.lang === "EN"
+                    ? "Please select a province."
+                    : "กรุณาเลือกจังหวัด"
                 }
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
@@ -585,7 +633,6 @@ export default class AccommodationBookingScreen extends Component {
                 }}
                 textStyle={{ fontSize: 14 }}
               >
-         
                 {this.state.select_3.map((data) => {
                   return (
                     <Picker.Item
@@ -621,7 +668,9 @@ export default class AccommodationBookingScreen extends Component {
                 }
                 style={styles.inputLightStyle}
                 placeholder={
-                  this.state.lang === "EN" ? "Selecte" : "เลือกที่พัก"
+                  this.state.lang === "EN"
+                    ? "Please select a accommodation"
+                    : "กรุณาเลือกที่พัก"
                 }
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
@@ -666,7 +715,6 @@ export default class AccommodationBookingScreen extends Component {
 
           {/* เพิ่มที่พัก */}
           {this.state.accommodation.map((item, index) => {
-            
             return (
               <View style={{ marginTop: "5%" }}>
                 <View style={styles.containerSec2}>
@@ -683,7 +731,9 @@ export default class AccommodationBookingScreen extends Component {
                       }
                       style={styles.inputLightStyle}
                       placeholder={
-                        this.state.lang === "EN" ? "Selecte" : "กรุณาเลือกจังหวัด"
+                        this.state.lang === "EN"
+                          ? "Please select a province."
+                          : "กรุณาเลือกจังหวัด"
                       }
                       placeholderStyle={{ color: "#bfc6ea" }}
                       placeholderIconColor="#007aff"
@@ -702,21 +752,16 @@ export default class AccommodationBookingScreen extends Component {
                             .then((response) => {
                               const result = response.data;
                               if (result != null) {
-                    
-                               this.setState({hotelItem:result})
-                              
+                                this.setState({ hotelItem: result });
                               }
                             })
                             .catch((error) => {
                               console.log(error);
                             });
                         } catch (error) {}
-                       
-                       
                       }}
                       textStyle={{ fontSize: 14 }}
                     >
-                    
                       {this.state.select_3.map((data) => {
                         return (
                           <Picker.Item
@@ -736,45 +781,46 @@ export default class AccommodationBookingScreen extends Component {
                       ที่พัก (จังหวัด ชื่อโรงแรม)
                     </Text>
                     <Picker
-                mode="dropdown"
-                iosIcon={
-                  <Icon
-                    name="angle-down"
-                    style={{ width: "8%", paddingHorizontal: 2 }}
-                  />
-                }
-                style={styles.inputLightStyle}
-                placeholder={
-                  this.state.lang === "EN" ? "Selecte" : "เลือกที่พัก"
-                }
-                placeholderStyle={{ color: "#bfc6ea" }}
-                placeholderIconColor="#007aff"
-                selectedValue={item.data.accommodation}
-                onValueChange={(text) => {
-                  let accommodation = [...this.state.accommodation];
-                  let item = { ...accommodation[index] };
-                  let data = { ...item["data"] };
-                  data.accommodation = text;
-                  item["data"] = data;
-                  accommodation[index] = item;
-                  this.setState({ accommodation: accommodation });
-                }}
-                textStyle={{ fontSize: 14 }}
-              >
-                {this.state.hotelItem.map((data) => {
-                  return (
-                    <Picker.Item
-                      label={
-                        this.state.lang === "EN"
-                          ? data.hotel_name_en
-                          : data.hotel_name_th
+                      mode="dropdown"
+                      iosIcon={
+                        <Icon
+                          name="angle-down"
+                          style={{ width: "8%", paddingHorizontal: 2 }}
+                        />
                       }
-                      value={data.hotel_id}
-                    />
-                  );
-                })}
-              </Picker>
-                  
+                      style={styles.inputLightStyle}
+                      placeholder={
+                        this.state.lang === "EN"
+                          ? "Please select a accommodation"
+                          : "กรุณาเลือกที่พัก"
+                      }
+                      placeholderStyle={{ color: "#bfc6ea" }}
+                      placeholderIconColor="#007aff"
+                      selectedValue={item.data.accommodation}
+                      onValueChange={(text) => {
+                        let accommodation = [...this.state.accommodation];
+                        let item = { ...accommodation[index] };
+                        let data = { ...item["data"] };
+                        data.accommodation = text;
+                        item["data"] = data;
+                        accommodation[index] = item;
+                        this.setState({ accommodation: accommodation });
+                      }}
+                      textStyle={{ fontSize: 14 }}
+                    >
+                      {this.state.hotelItem.map((data) => {
+                        return (
+                          <Picker.Item
+                            label={
+                              this.state.lang === "EN"
+                                ? data.hotel_name_en
+                                : data.hotel_name_th
+                            }
+                            value={data.hotel_id}
+                          />
+                        );
+                      })}
+                    </Picker>
 
                     <Text>Check in date (D/M/Y):</Text>
                     <Text style={styles.textInput}>เช็คอิน</Text>
@@ -892,8 +938,8 @@ export default class AccommodationBookingScreen extends Component {
               </Button>
             </View>
           </View>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     );
   }
 }
@@ -904,12 +950,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   containerSec1: {
-    borderWidth: 2,
-    padding: 12,
-    borderRadius: 8,
-    marginHorizontal: 20,
-    marginTop: 18,
-    borderColor: "#398DDD",
+    marginHorizontal: 8,
+    marginVertical: 18,
   },
   textHeader: {
     alignItems: "center",
