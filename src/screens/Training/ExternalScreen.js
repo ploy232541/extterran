@@ -35,7 +35,6 @@ const WIDTH = Dimensions.get("window").width;
 export default class ExternalScreen extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       trainingNeedItem: {
         employee_id: "",
@@ -49,7 +48,7 @@ export default class ExternalScreen extends Component {
         price: "",
         other: "",
         upload_file: null,
-        file:null,
+        file: null,
       },
 
       isDatePickerVisible: false,
@@ -101,7 +100,7 @@ export default class ExternalScreen extends Component {
           console.log(error);
         });
     } catch (error) {
-     console.log(error);
+      console.log(error);
     }
   }
 
@@ -210,7 +209,7 @@ export default class ExternalScreen extends Component {
       });
     }
   }
- async onPressSend() {
+  async onPressSend() {
     const { trainingNeed } = this.state;
     let id = await AsyncStorage.getItem("userId");
     if (trainingNeed.length <= 0) {
@@ -282,39 +281,38 @@ export default class ExternalScreen extends Component {
                 );
               } else {
                 error = false;
-                let pic = new FormData()
+                let pic = new FormData();
                 pic.append("file", {
                   name: param.upload_file.name,
                   uri: param.upload_file.uri,
                 });
                 httpClient
-                    .post('/Training/InsertTrainingNeedPic', pic)
-                    .then((response) => {
-                  
-                      let file=response.data
-                     
-                      let trainingNeeds = [...trainingNeed];
-                      let item = { ...trainingNeeds[index-1] };
-                     
-                      let data = { ...item["data"] };
-                      let param = data[i-1];
-                   
-                      param.file = file;
-                      data[i] = param;
-                      trainingNeeds[index-1] = item;
-                      
-                      var id = "Id of subbrands to remove: ";
-                      //ลบ key ส่วนเกินออก
-                      trainingNeeds.forEach(function (o) {
-                        o.data = o.data.filter((s) => s.id != id);
-                      });
-                      this.setState({
-                        trainingNeed: trainingNeeds,
-                      });
-                    })
-                    .catch((error) => {
-                      console.log(error);
+                  .post("/Training/InsertTrainingNeedPic", pic)
+                  .then((response) => {
+                    let file = response.data;
+
+                    let trainingNeeds = [...trainingNeed];
+                    let item = { ...trainingNeeds[index - 1] };
+
+                    let data = { ...item["data"] };
+                    let param = data[i - 1];
+
+                    param.file = file;
+                    data[i] = param;
+                    trainingNeeds[index - 1] = item;
+
+                    var id = "Id of subbrands to remove: ";
+                    //ลบ key ส่วนเกินออก
+                    trainingNeeds.forEach(function (o) {
+                      o.data = o.data.filter((s) => s.id != id);
                     });
+                    this.setState({
+                      trainingNeed: trainingNeeds,
+                    });
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
               }
 
               i++;
@@ -329,7 +327,6 @@ export default class ExternalScreen extends Component {
         index++;
       } while (index < trainingNeed.length && error == false);
       if (error == false) {
-        
         Alert.alert(
           this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
           this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
@@ -343,7 +340,7 @@ export default class ExternalScreen extends Component {
             {
               text: this.state.lang === "EN" ? "OK" : "ตกลง",
               onPress: () => {
-                let data={trainingNeed:trainingNeed,user_id:id}
+                let data = { trainingNeed: trainingNeed, user_id: id };
                 httpClient
                   .post("/Training/InsertTrainingNeedsExternal", data)
                   .then((response) => {
@@ -379,6 +376,9 @@ export default class ExternalScreen extends Component {
         );
       }
     }
+  }
+  reset() {
+    this.setState({ trainingNeed: [] });
   }
   render() {
     return (
@@ -446,7 +446,7 @@ export default class ExternalScreen extends Component {
                       >
                         <Text style={styles.textStyle1}>
                           {this.state.lang === "EN"
-                           ? "Employee Name No."+ (index + 1)
+                            ? "Employee Name No." + (index + 1)
                             : "ชื่อพนักงานคนที่ " + (index + 1)}
                         </Text>
 
@@ -470,12 +470,6 @@ export default class ExternalScreen extends Component {
                             selectedValue={
                               Item.employee_id ? Item.employee_id : ""
                             }
-                            // onBlur={() => {
-                            //   // this.updateEmployees()
-                            //   this.setState({
-                            //     trainingNeed: this.state.trainingNeed,
-                            //   });
-                            // }}
                             onValueChange={(text) => {
                               let trainingNeed = [...this.state.trainingNeed];
                               let item = { ...trainingNeed[index] };
@@ -521,7 +515,6 @@ export default class ExternalScreen extends Component {
                           backgroundColor: "#398DDD",
                         }}
                       />
-                      
 
                       {Item.data.map((param, i) => {
                         return (
@@ -537,7 +530,7 @@ export default class ExternalScreen extends Component {
                               >
                                 <Text style={styles.textStyle1}>
                                   {this.state.lang === "EN"
-                                  ? "Employee Name No."+ (index + 1)
+                                    ? "Employee Name No." + (index + 1)
                                     : "พนักงานคนที่ " +
                                       (index + 1) +
                                       " คอสเรียนที่ " +
@@ -689,7 +682,7 @@ export default class ExternalScreen extends Component {
 
                                 <TextInput
                                   style={styles.inputStyle4}
-                                  keyboardType = 'numeric'
+                                  keyboardType="numeric"
                                   placeholder={
                                     this.state.lang === "EN"
                                       ? "Training Cost"
@@ -892,7 +885,7 @@ export default class ExternalScreen extends Component {
                     price: "",
                     other: "",
                     upload_file: null,
-                    file:null,
+                    file: null,
                   },
                 ];
                 let trainingNeed = [
@@ -1178,7 +1171,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 10,
     // paddingHorizontal: 32,
-  }, containerSec1: {
+  },
+  containerSec1: {
     borderWidth: 1,
     padding: 12,
     borderRadius: 8,
