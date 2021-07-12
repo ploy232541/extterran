@@ -88,7 +88,9 @@ const StaffFormGround = ({ navigation, route }) => {
           <Text
             style={{ alignSelf: "center", fontSize: 20, fontWeight: "bold" }}
           >
-            {lang == "EN" ? "Booking" : "ใบคำขอ"}
+           {lang == "EN"
+              ? "Booking Request"
+              : "ใบคำขอ Booking"}
           </Text>
 
           <Text

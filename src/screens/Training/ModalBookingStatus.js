@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-native";
 // import AsyncStorage1 from "@react-native-async-storage/async-storage"; //--
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Divider } from "react-native-elements";
 import AntIcon from "react-native-vector-icons/AntDesign";
@@ -18,10 +18,30 @@ import { Dimensions } from "react-native";
 import HTML from "react-native-render-html";
 import Modal from "react-native-modal";
 import { httpClient } from "../../utils/Provider";
+import { Avatar } from "react-native-paper";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
 const ModalBookingStatus = (props) => {
+  const [lang, setLang] = useState("TH");
+
+  useEffect(() => {
+    const run = async () => {
+      getData();
+    };
+    run();
+  }, []);
+
+  const getData = async () => {
+    let getLang = await AsyncStorage.getItem("language");
+    setLang(getLang);
+    if (getLang == "EN") {
+      var lang_id = "1";
+    } else {
+      var lang_id = "2";
+    }
+  };
+
   return (
     <Modal visible={props.chkVisible} onBackdropPress={props.closeModal}>
       <ScrollView
@@ -30,7 +50,7 @@ const ModalBookingStatus = (props) => {
           borderWidth: 1,
           borderRadius: 12,
           marginTop: 20,
-          borderColor: "#d9d9d9",
+          borderColor: "red",
           backgroundColor: "white",
         }}
       >
@@ -41,41 +61,44 @@ const ModalBookingStatus = (props) => {
                   <Text
                     style={{
                       alignSelf: "center",
-                      fontSize: 18,
-                      marginBottom: 10,
+                      fontSize: 20,
+                      fontWeight: "bold",
                     }}
                   >
-                    ใบคำขอ Booking
+                    {lang == "EN" ? "Booking Request" : "ใบคำขอ Booking"}
                   </Text>
-                  <View style={{ marginHorizontal: 20 }}>
-                    <Divider style={{ backgroundColor: "#d9d9d9" }} />
-                  </View>
 
                   <Text
                     style={{
-                      fontSize: 16,
+                      fontSize: 18,
+                      fontWeight: "bold",
                       color: "#4393de",
-                      marginTop: 10,
+                      marginTop: 18,
                       alignSelf: "center",
                     }}
                   >
-                    บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด
+                    {lang == "EN"
+                      ? "EXTERRAN (THAILAND) LTD."
+                      : "บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
                   </Text>
                   <Text
                     style={{
                       alignSelf: "center",
                       fontSize: 16,
+                      marginTop: 4,
                       marginBottom: 15,
-                      marginTop: 10,
                     }}
                   >
                     Booking Request
                   </Text>
-                  <View style={{ marginHorizontal: 48 }}>
-                    <Divider style={{ backgroundColor: "#d9d9d9" }} />
+
+                  <View>
+                    <Divider
+                      style={{ backgroundColor: "black", borderWidth: 2 }}
+                    />
                   </View>
 
-                  <View style={{ margin: 20 }}>
+                  <View style={{ margin: 20, marginHorizontal: 8 }}>
                     <Text style={{ marginTop: 10 }}>First name :</Text>
                     <Text style={styles.textInput}>ชื่อ</Text>
                     <TextInput
@@ -105,7 +128,7 @@ const ModalBookingStatus = (props) => {
                     <TextInput
                       editable={false}
                       style={styles.inputStyle}
-                      value={item.phone}
+                      value={item.phone ? item.phone : "-"}
                     />
 
                     {item.booking_type == 1 ? (
@@ -167,7 +190,7 @@ const ModalBookingStatus = (props) => {
                         <TextInput
                           editable={false}
                           style={styles.inputStyle}
-                          value={item.zip}
+                          value={item.zip ? item.zip : "-"}
                         />
                       </>
                     ) : null}
@@ -183,7 +206,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={item.purpose}
+                              value={item.purpose ? item.purpose : "-"}
                             />
                           </>
                         ) : null}
@@ -196,7 +219,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={item.purpose_etc}
+                              value={item.purpose_etc ? item.purpose_etc : "-"}
                             />
                           </>
                         ) : null}
@@ -204,20 +227,19 @@ const ModalBookingStatus = (props) => {
                     ) : null}
                   </View>
 
-                  <Divider
-                    style={{ backgroundColor: "black", marginHorizontal: 10 }}
-                  />
+                  <Divider style={{ backgroundColor: "black" }} />
 
                   {item.booking_type == 1
                     ? item.booking.map((value) => {
                         return (
                           <View
                             style={{
-                              padding: 20,
-                              marginTop: 30,
-                              marginBottom: 30,
+                              padding: 12,
+                              marginTop: "8%",
+                              // marginTop: 30,
+                              // marginBottom: 20,
                               borderWidth: 1,
-                              borderColor: "#e6e6e6",
+                              borderColor: "#398DDD",
                               borderRadius: 10,
                             }}
                           >
@@ -288,11 +310,12 @@ const ModalBookingStatus = (props) => {
                         return (
                           <View
                             style={{
-                              padding: 20,
-                              marginTop: 30,
-                              marginBottom: 30,
+                              padding: 12,
+                              marginTop: "8%",
+                              // marginTop: 30,
+                              // marginBottom: 20,
                               borderWidth: 1,
-                              borderColor: "#e6e6e6",
+                              borderColor: "#398DDD",
                               borderRadius: 10,
                             }}
                           >
@@ -337,11 +360,12 @@ const ModalBookingStatus = (props) => {
                         return (
                           <View
                             style={{
-                              padding: 20,
-                              marginTop: 30,
-                              marginBottom: 30,
+                              padding: 12,
+                              marginTop: "8%",
+                              // marginTop: 30,
+                              // marginBottom: 20,
                               borderWidth: 1,
-                              borderColor: "#e6e6e6",
+                              borderColor: "#398DDD",
                               borderRadius: 10,
                             }}
                           >
@@ -381,15 +405,37 @@ const ModalBookingStatus = (props) => {
                       })
                     : null}
 
-                  <Divider
-                    style={{ backgroundColor: "black", marginHorizontal: 10 }}
-                  />
+                  <View
+                    style={{
+                      marginVertical: "10%",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Divider style={{ paddingBottom: 1, flex: 1 }} />
+                    <Avatar.Icon
+                      icon="arrow-down"
+                      size={30}
+                      style={styles.arrowDownStyle}
+                    />
+                    <Divider style={{ paddingBottom: 1, flex: 1 }} />
+                  </View>
 
-                  <View style={{ margin: 20 }}>
-                    <View style={{ paddingTop: 20 }}>
-                      <Text>Approved : </Text>
-                      <Text style={styles.textInput}>อนุมัติโดย</Text>
-                    </View>
+                  {/* <View style={{ marginTop: 15 }}> */}
+                  <View>
+                    <Text style={{ marginHorizontal: 10,}}>
+                      Approved :{" "}
+                    </Text>
+                    <Text
+                      style={{
+                        color: "grey",
+                        marginHorizontal: 10,
+                      }}
+                    >
+                      อนุมัติโดย
+                    </Text>
+                    {/* </View> */}
 
                     <View style={styles.confirmStyle}>
                       <Text style={{ textAlign: "center" }}>
@@ -406,7 +452,7 @@ const ModalBookingStatus = (props) => {
                       </View>
                     </View>
 
-                    <View style={{ paddingTop: 20 }}>
+                    <View style={{ marginHorizontal: 8}}>
                       <Text>Acknowledged By HR :</Text>
                     </View>
 
@@ -459,7 +505,8 @@ const ModalBookingStatus = (props) => {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 18,
-    marginVertical: 18,
+    // marginVertical: 18,
+    marginTop: 18,
   },
   marginText: {
     marginTop: 5,

@@ -88,7 +88,9 @@ const StaffFormFlight = ({ navigation, route }) => {
           <Text
             style={{ alignSelf: "center", fontSize: 20, fontWeight: "bold" }}
           >
-            {lang == "EN" ? "Booking" : "ใบคำขอ"}
+            {lang == "EN"
+              ? "Booking Request"
+              : "ใบคำขอ Booking"}
           </Text>
 
           <Text
@@ -368,7 +370,7 @@ const StaffFormFlight = ({ navigation, route }) => {
           </Text>
           <Divider
             style={{
-              backgroundColor: "#4393de",
+              backgroundColor: "blue",
               marginHorizontal: 36,
               marginTop: 50,
             }}

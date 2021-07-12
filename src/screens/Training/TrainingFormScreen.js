@@ -252,9 +252,8 @@ export default class TrainingFormScreen extends Component {
         >
           <View style={stylesdialog.centeredView}>
             <View style={stylesdialog.modalView}>
-      
-                <HTML html={this.state.condition}  />
-        
+              <HTML html={this.state.condition} />
+
               <Pressable
                 style={[stylesdialog.button, stylesdialog.buttonClose]}
                 onPress={() => this.setModalVisible(!modalVisible)}
@@ -349,24 +348,24 @@ export default class TrainingFormScreen extends Component {
       courseItem2: itemCopy,
     });
   }
-  reset(){
+  reset() {
     this.setState({
       form_month: null,
-      course:"",
-      courseselect:"",
-      nameCourse:"",
-      expense:"",
-      startDate:"",
-      endDate:"",
-      total:"",
-      place:"",
-      upload_file:"",
-      nameplace_etc:"",
-      pre_requerse:"",
-      pre_requerse2:"",
-      courseItem:[],
-      courseItem2:[],
-    })
+      course: "",
+      courseselect: "",
+      nameCourse: "",
+      expense: "",
+      startDate: "",
+      endDate: "",
+      total: "",
+      place: "",
+      upload_file: "",
+      nameplace_etc: "",
+      pre_requerse: "",
+      pre_requerse2: "",
+      courseItem: [],
+      courseItem2: [],
+    });
   }
 
   onPressSend = () => {
@@ -502,16 +501,15 @@ export default class TrainingFormScreen extends Component {
             courseItem,
             courseItem2,
           };
-          const data = new FormData()
+          const data = new FormData();
           if (upload_file == null || upload_file != "") {
-           
             data.append("file", {
               name: upload_file.name,
               uri: upload_file.uri,
             });
             Object.keys(params).forEach((key) => data.append(key, params[key]));
-          }else{
-            data=params
+          } else {
+            data = params;
           }
 
           console.log(data);
@@ -529,9 +527,9 @@ export default class TrainingFormScreen extends Component {
                 text: this.state.lang === "EN" ? "OK" : "ตกลง",
                 onPress: () => {
                   httpClient
-                    .post('/Training/InsertTrainingRequest', data)
+                    .post("/Training/InsertTrainingRequest", data)
                     .then((response) => {
-                      const result = response.data
+                      const result = response.data;
                       if (result === true) {
                         Alert.alert(
                           this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
@@ -950,57 +948,96 @@ export default class TrainingFormScreen extends Component {
   render() {
     const { listFeedBack, upload_file } = this.state;
     return (
-      <View style={styles.background}>
-        <ScrollView>
+      <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
+        <View
+          style={{
+            flex: 1,
+            borderWidth: 2,
+            borderRadius: 12,
+            marginTop: 20,
+            borderColor: "white",
+            backgroundColor: "white",
+            marginHorizontal: 15,
+            marginBottom: 20,
+          }}
+        >
           <View style={styles.containerSec1}>
-            <View style={styles.textHeader}>
-              <Text style={{ color: "#398DDD", fontSize: 20 }}>
-                บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด
-              </Text>
-              <Text style={{ paddingTop: 16, fontSize: 18 }}>
-                Training Request
-              </Text>
+            {/* <View style={styles.textHeader}> */}
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "bold",
+                color: "#4393de",
+                marginTop: 18,
+                alignSelf: "center",
+              }}
+            >
+              {this.state.lang === "EN"
+                ? "EXTERRAN (THAILAND) LTD."
+                : "บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด"}
+            </Text>
+            <Text
+              style={{
+                alignSelf: "center",
+                fontSize: 16,
+                marginTop: 12,
+                marginBottom: 15,
+              }}
+            >
+              Training Request
+            </Text>
+            {/* </View> */}
+
+            <View>
+              <Divider style={{ backgroundColor: "black", borderWidth: 2 }} />
             </View>
 
-            <Divider
-              style={{ paddingBottom: 1, marginTop: 5, marginBottom: 10 }}
-            />
-
             {/* ส่วนที่1 */}
-            <Text style={styles.textInputEng}>First name :</Text>
-            <Text style={styles.textInputThai}>ชื่อ</Text>
-            <TextInput style={styles.inputStyle} value={this.state.firstname} />
+            <View style={{ margin: 20, marginHorizontal: 8 }}>
+              <Text style={styles.textInputEng}>First name :</Text>
+              <Text style={styles.textInputThai}>ชื่อ</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.firstname}
+              />
 
-            <Text style={styles.textInputEng}>Last name:</Text>
-            <Text style={styles.textInputThai}>นามสกุล</Text>
-            <TextInput style={styles.inputStyle} value={this.state.lastname} />
+              <Text style={styles.textInputEng}>Last name:</Text>
+              <Text style={styles.textInputThai}>นามสกุล</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.lastname}
+              />
 
-            <Text style={styles.textInputEng}>Position :</Text>
-            <Text style={styles.textInputThai}>ตำแหน่ง</Text>
-            <TextInput style={styles.inputStyle} value={this.state.position} />
+              <Text style={styles.textInputEng}>Position :</Text>
+              <Text style={styles.textInputThai}>ตำแหน่ง</Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.position}
+              />
 
-            <Text style={styles.textInputEng}>Dept :</Text>
-            <Text style={styles.textInputThai}>แผนก</Text>
-            <TextInput style={styles.inputStyle} value={this.state.dept} />
+              <Text style={styles.textInputEng}>Dept :</Text>
+              <Text style={styles.textInputThai}>แผนก</Text>
+              <TextInput style={styles.inputStyle} value={this.state.dept} />
+            </View>
+
+            <View
+              style={{
+                marginBottom: 10,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Divider style={{ paddingBottom: 1, flex: 1 }} />
+              <Avatar.Icon
+                icon="arrow-down"
+                size={30}
+                style={styles.arrowDownStyle}
+              />
+              <Divider style={{ paddingBottom: 1, flex: 1 }} />
+            </View>
           </View>
           {/* ส่วนที่1 */}
-
-          <View
-            style={{
-              marginVertical: 40,
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Divider style={{ paddingBottom: 1, flex: 1 }} />
-            <Avatar.Icon
-              icon="arrow-down"
-              size={30}
-              style={styles.arrowDownStyle}
-            />
-            <Divider style={{ paddingBottom: 1, flex: 1 }} />
-          </View>
 
           {/* ส่วนที่2 */}
           <View style={styles.containerSec2}>
@@ -1020,7 +1057,7 @@ export default class TrainingFormScreen extends Component {
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.course}
-                onValueChange={(t)=>this.onPickerValueChange(t)}
+                onValueChange={(t) => this.onPickerValueChange(t)}
                 textStyle={{ fontSize: 14 }}
               >
                 <Picker.Item
@@ -1162,8 +1199,7 @@ export default class TrainingFormScreen extends Component {
               </TouchableOpacity>
 
               <DateTimePickerModal
-            
-                 locale="th_TH"
+                locale="th_TH"
                 isVisible={this.state.isDatePickerVisible}
                 mode="date"
                 onConfirm={this.handleConfirm}
@@ -1277,7 +1313,7 @@ export default class TrainingFormScreen extends Component {
 
           <View
             style={{
-              marginVertical: 40,
+              marginVertical: 30,
               flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
@@ -1503,7 +1539,7 @@ export default class TrainingFormScreen extends Component {
 
           <View
             style={{
-              marginVertical: 40,
+              marginVertical: 30,
               flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
@@ -1519,7 +1555,7 @@ export default class TrainingFormScreen extends Component {
           </View>
 
           {/* ส่วนที่6 */}
-          <View style={styles.containerSec2}>
+          <View style={styles.containerSec4}>
             <View style={styles.contentInSec2}>
               <Text style={styles.textInputEng}>Approved :</Text>
               <Text style={styles.textInputThai}>อนุมัติโดย</Text>
@@ -1573,7 +1609,7 @@ export default class TrainingFormScreen extends Component {
 
           {/* ส่วนที่7 */}
           {this.state.form_month != null && (
-            <View style={styles.containerSec2}>
+            <View style={styles.containerSec5}>
               <View tyle={styles.contentInSec2}>
                 <View style={styles.pickerContainer1}>
                   <Text style={styles.textHeader1}>หนังสือสัญญา</Text>
@@ -1612,187 +1648,281 @@ export default class TrainingFormScreen extends Component {
                 </View>
 
                 <View style={styles.pickerContainer1}>
-                  <Text style={styles.textHeader2}>
-                    The Training / Seminar / Education Bond
-                  </Text>
-                  <Text style={styles.textInputThai1}>
-                    สัญญาผูกพันการฝึกอบรม สัมมนา การศึกษา
-                  </Text>
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={{ flex: 0.1}}></View>
+                    <View style={{ flex: 8}}>
+                      <Text style={styles.textHeader2}>
+                        The Training / Seminar / Education Bond
+                      </Text>
+                    </View>
+
+                    <View style={{ flex: 0.1}}></View>
+                  </View>
+
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={{ flex: 0.1}}></View>
+                    <View style={{ flex: 8}}>
+                      <Text style={styles.textInputThai1}>
+                        สัญญาผูกพันการฝึกอบรม สัมมนา การศึกษา
+                      </Text>
+                    </View>
+
+                    <View style={{ flex: 0.1}}></View>
+                  </View>
                 </View>
 
-                <Text style={styles.textInputEng5}>
-                  This Training/ Seminar /Education Bond Contract is made on the
-                  <Text style={{ fontWeight: "bold" }}>
-                    {" " + this.state.dateEng}
-                  </Text>{" "}
-                  Between{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    Exterran (Thailand) Ltd.,{" "}
-                  </Text>
-                  a company incorporated in Thailand, having its address
-                  registered at 100/58 Sathorn Nakorn Tower, 28th Floor, North
-                  Sathorn Road, Silom, Bangrak, Bangkok 10500, hereinafter
-                  referred to as the “Sponsoring Company”, on the one part, And
-                  <Text style={{ fontWeight: "bold" }}>
-                    {" " +
-                      this.state.profile.firstname_en +
-                      " " +
-                      this.state.profile.lastname_en +
-                      " "}
-                  </Text>
-                  identification number{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {this.state.profile.identification}{" "}
-                  </Text>
-                  hereinafter called “Employee”, the other part.
-                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputEng5}>
+                      This Training/ Seminar /Education Bond Contract is made on
+                      the
+                      <Text style={{ fontWeight: "bold" }}>
+                        {" " + this.state.dateEng}
+                      </Text>{" "}
+                      Between{" "}
+                      <Text style={{ fontWeight: "bold" }}>
+                        Exterran (Thailand) Ltd.,{" "}
+                      </Text>
+                      a company incorporated in Thailand, having its address
+                      registered at 100/58 Sathorn Nakorn Tower, 28th Floor,
+                      North Sathorn Road, Silom, Bangrak, Bangkok 10500,
+                      hereinafter referred to as the “Sponsoring Company”, on
+                      the one part, And
+                      <Text style={{ fontWeight: "bold" }}>
+                        {" " +
+                          this.state.profile.firstname_en +
+                          " " +
+                          this.state.profile.lastname_en +
+                          " "}
+                      </Text>
+                      identification number{" "}
+                      <Text style={{ fontWeight: "bold" }}>
+                        {this.state.profile.identification}{" "}
+                      </Text>
+                      hereinafter called “Employee”, the other part.
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
 
-                <Text style={styles.textInputThai2}>
-                  สัญญาผูกพันการฝึกอบรม สัมมนา การศึกษาฉบับนี้
-                  จัดทำขึ้นเมื่อวันที่
-                  <Text style={{ fontWeight: "bold" }}>
-                    {" " + this.state.dateThai + " "}
-                  </Text>
-                  ระหว่าง{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    บริษัท เอ็กซ์เธอร์แอน จำกัด{" "}
-                  </Text>
-                  สำนักงานตั้งอยู่เลขที่ 100/58 อาคารสาธรนคร ชั้น 28
-                  ถนนสาทรเหนือ แขวงสีลม เขตบางรัก กรุงเทพฯ 10500
-                  ซึ่งต่อไปในสัญญานี้เรียกว่า “บริษัทให้การสนับสนุน” ฝ่ายหนึ่ง
-                  กับ
-                  <Text style={{ fontWeight: "bold" }}>
-                    {" "}
-                    {" " +
-                      this.state.profile.firstname +
-                      " " +
-                      this.state.profile.lastname +
-                      " "}
-                  </Text>
-                  เลขประจำตัวประชาชน{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {this.state.profile.identification}{" "}
-                  </Text>
-                  ซึ่งต่อไปในสัญญานี้เรียกว่า “ผู้รับ” อีกฝ่ายหนึ่ง
-                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputThai2}>
+                      สัญญาผูกพันการฝึกอบรม สัมมนา การศึกษาฉบับนี้
+                      จัดทำขึ้นเมื่อวันที่
+                      <Text style={{ fontWeight: "bold" }}>
+                        {" " + this.state.dateThai + " "}
+                      </Text>
+                      ระหว่าง
+                      <Text style={{ fontWeight: "bold" }}>
+                        {" " + "บริษัท เอ็กซ์เธอร์แอน จำกัด" + " "}
+                      </Text>
+                      สำนักงานตั้งอยู่เลขที่ 100/58 อาคารสาธรนคร ชั้น 28
+                      ถนนสาทรเหนือ แขวงสีลม เขตบางรัก กรุงเทพฯ 10500
+                      ซึ่งต่อไปในสัญญานี้เรียกว่า “บริษัทให้การสนับสนุน”
+                      ฝ่ายหนึ่ง กับ
+                      <Text style={{ fontWeight: "bold" }}>
+                        {" " +
+                          this.state.profile.firstname +
+                          " " +
+                          this.state.profile.lastname +
+                          " "}
+                      </Text>
+                      เลขประจำตัวประชาชน
+                      <Text style={{ fontWeight: "bold" }}>
+                        {" " + this.state.profile.identification + " "}
+                      </Text>
+                      ซึ่งต่อไปในสัญญานี้เรียกว่า “ผู้รับ” อีกฝ่ายหนึ่ง
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
 
-                <Text style={styles.textInputEng5}>
-                  Whereas the Sponsoring Company and Recipient Employee agreed
-                  on the following;
-                </Text>
-                <Text style={styles.textInputThai4}>
-                  ทั้งสองฝ่ายได้ตกลงกันดังนี้:{"\n"}
-                </Text>
-                <Text style={styles.textInputThai3}>
-                  1. Support recipient to study for the{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    "
-                    {this.state.course != "0"
-                      ? this.state.courseComfrom.course_title
-                      : this.state.nameCourse
-                      ? this.state.nameCourse
-                      : "............."}
-                    "
-                  </Text>{" "}
-                  at
-                  <Text style={{ fontWeight: "bold" }}>
-                    {" "}
-                    {this.state.nameplace
-                      ? this.state.nameplace
-                      : this.state.nameplace_etc
-                      ? this.state.nameplace_etc
-                      : "............."}
-                  </Text>{" "}
-                  which will be conducted on{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {this.state.startdateeng
-                      ? this.state.startdateeng
-                      : "............."}{" "}
-                    -{" "}
-                    {this.state.enddateeng
-                      ? this.state.enddateeng
-                      : "............."}{" "}
-                  </Text>{" "}
-                  {"\n"}จัดให้พนักงานเข้ารับการฝึกอบรม
-                  สัมมนาหรือการศึกษาหลักสูตร{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    "
-                    {this.state.course != "0"
-                      ? this.state.courseComfrom.course_title
-                      : this.state.nameCourse}
-                    " ณ{" "}
-                    {this.state.nameplace
-                      ? this.state.nameplace
-                      : this.state.nameplace_etc
-                      ? this.state.nameplace_etc
-                      : "............."}
-                  </Text>{" "}
-                  ซึ่งจัดขึ้นระหว่างวันที่{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {this.state.startdatethai
-                      ? this.state.startdatethai
-                      : "............."}{" "}
-                    -{" "}
-                    {this.state.enddatethai
-                      ? this.state.enddatethai
-                      : "............."}
-                  </Text>
-                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputEng5}>
+                      Whereas the Sponsoring Company and Recipient Employee
+                      agreed on the following:
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
 
-                <Text style={styles.textInputEng6}>
-                  With the details are ass follow:
-                </Text>
-                <Text style={styles.textInputThai3}>
-                  100% of the training course fees including but not limited to
-                  transportation expense, meal expense, accommodations, will be
-                  paid but the company.
-                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputThai4}>
+                      ทั้งสองฝ่ายได้ตกลงกันดังนี้:
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
 
-                <Text style={styles.textInputEng6}>
-                  โดยมีรายละเอียดการสนับสนุนดังนี้:
-                </Text>
-                <Text style={styles.textInputThai3}>
-                  บริษัทสนับสนุนค่าฝึกอบรม ค่าเดินทาง ค่าที่พัก
-                  และเบี้ยเลี้ยงค่าอาหาร
-                  ตลอดการฝึกอบรมหรือการศึกษาเต็มตามจำนวนให้กับพนักงานในการฝึกอบรมหรือการศึกษาตลอดหลักสูตร
-                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputThai3}>
+                      1. Support recipient to study for the
+                      <Text style={{ fontWeight: "bold" }}>
+                        "
+                        {this.state.course != "0"
+                          ? this.state.courseComfrom.course_title
+                          : this.state.nameCourse
+                          ? this.state.nameCourse
+                          : "--ไม่ได้กรอกครอส--"}
+                        "
+                      </Text>{" "}
+                      at
+                      <Text style={{ fontWeight: "bold" }}>
+                        {" "}
+                        {this.state.nameplace
+                          ? this.state.nameplace
+                          : this.state.nameplace_etc
+                          ? this.state.nameplace_etc
+                          : "--ไม่ได้กรอกสถานที่--"}
+                      </Text>{" "}
+                      which will be conducted on{" "}
+                      <Text style={{ fontWeight: "bold" }}>
+                        {this.state.startdateeng
+                          ? this.state.startdateeng
+                          : "--ไม่ได้กรอกวันเริ่ม--"}{" "}
+                        -{" "}
+                        {this.state.enddateeng
+                          ? this.state.enddateeng
+                          : "--ไม่ได้กรอกวันสิ้นสุด--"}{" "}
+                      </Text>{" "}
+                      {"\n"}จัดให้พนักงานเข้ารับการฝึกอบรม
+                      สัมมนาหรือการศึกษาหลักสูตร{" "}
+                      <Text style={{ fontWeight: "bold" }}>
+                        "
+                        {this.state.course != "0"
+                          ? this.state.courseComfrom.course_title
+                          : this.state.nameCourse}
+                        " ณ{" "}
+                        {this.state.nameplace
+                          ? this.state.nameplace
+                          : this.state.nameplace_etc
+                          ? this.state.nameplace_etc
+                          : "--ไม่ได้กรอกสถานที่--"}
+                      </Text>{" "}
+                      ซึ่งจัดขึ้นระหว่างวันที่{" "}
+                      <Text style={{ fontWeight: "bold" }}>
+                        {this.state.startdatethai
+                          ? this.state.startdatethai
+                          : "--ไม่ได้กรอกวันเริ่ม--"}{" "}
+                        -{" "}
+                        {this.state.enddatethai
+                          ? this.state.enddatethai
+                          : "--ไม่ได้กรอกวันสิ้นสุด--"}
+                      </Text>
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
 
-                <Text style={styles.textInputEng6}>
-                  The recipient employee has agreed as follows:
-                  ผู้รับทุนตกลงดังนี้:
-                </Text>
-                <Text style={styles.textInputThai3}>
-                  1. Accept the Company sponsorship the above-mentioned
-                  programs. Thereafter on completion and certification, the
-                  Employee must serv a service bond of{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {this.state.form_month} months per course
-                  </Text>{" "}
-                  (hereinafter referred to as “Bond Period”) with the Company
-                  after finishing the training course will be{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {this.state.countMonthEng}
-                  </Text>
-                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputEng6}>
+                      With the details are ass follow:
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
 
-                <Text style={styles.textInputThai3}>
-                  ยอมรับให้บริษัทฯเป็นผู้ออกค่าใช้จ่ายในการเข้ารับการอบรม
-                  หรือการศึกษาดังกล่าว แบะพนักงานตกลงว่าหลังจากสำเร็จการฝึกอบรม
-                  หรือการศึกษา นักงานจำทำงานให้แก่บริษัทฯ มีกำหนดระยะเวลา{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {this.state.form_month
-                      ? this.state.form_month + " "
-                      : "..........."}
-                    เดือน ต่อหลักสูตร โดยเริ่มนับหลังจากเสร็จสิ้นการฝึกอบรม{" "}
-                  </Text>{" "}
-                  คือวันที่{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {this.state.countMonthThai
-                      ? this.state.countMonthThai + " "
-                      : ".........."}
-                  </Text>
-                  {`(ซึ่งในสัญญานี้เรียกว่า “ระยะเวลาใช้ทุนคืน”)`}
-                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputThai3}>
+                      100% of the training course fees including but not limited
+                      to transportation expense, meal expense, accommodations,
+                      will be paid but the company.
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
+
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputEng6}>
+                      โดยมีรายละเอียดการสนับสนุนดังนี้:
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
+
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputThai3}>
+                      บริษัทสนับสนุนค่าฝึกอบรม ค่าเดินทาง ค่าที่พัก
+                      และเบี้ยเลี้ยงค่าอาหาร
+                      ตลอดการฝึกอบรมหรือการศึกษาเต็มตามจำนวนให้กับพนักงานในการฝึกอบรมหรือการศึกษาตลอดหลักสูตร
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
+
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputEng6}>
+                      The recipient employee has agreed as follows:
+                      ผู้รับทุนตกลงดังนี้:
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
+
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8, marginTop: 4}}>
+                    <Text style={styles.textInputThai3}>
+                      1. Accept the Company sponsorship the above-mentioned
+                      programs. Thereafter on completion and certification, the
+                      Employee must serv a service bond of{" "}
+                      <Text style={{ fontWeight: "bold" }}>
+                        {this.state.form_month} months per course
+                      </Text>{" "}
+                      (hereinafter referred to as “Bond Period”) with the
+                      Company after finishing the training course will be{" "}
+                      <Text style={{ fontWeight: "bold" }}>
+                        {this.state.countMonthEng}
+                      </Text>
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
+
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputThai3}>
+                      ยอมรับให้บริษัทฯเป็นผู้ออกค่าใช้จ่ายในการเข้ารับการอบรม
+                      หรือการศึกษาดังกล่าว
+                      แบะพนักงานตกลงว่าหลังจากสำเร็จการฝึกอบรม หรือการศึกษา
+                      นักงานจำทำงานให้แก่บริษัทฯ มีกำหนดระยะเวลา{" "}
+                      <Text style={{ fontWeight: "bold" }}>
+                        {this.state.form_month
+                          ? this.state.form_month + " "
+                          : "..........."}
+                        เดือน ต่อหลักสูตร โดยเริ่มนับหลังจากเสร็จสิ้นการฝึกอบรม{" "}
+                      </Text>{" "}
+                      คือวันที่{" "}
+                      <Text style={{ fontWeight: "bold" }}>
+                        {this.state.countMonthThai
+                          ? this.state.countMonthThai + " "
+                          : ".........."}
+                      </Text>
+                      {`(ซึ่งในสัญญานี้เรียกว่า “ระยะเวลาใช้ทุนคืน”)`}
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
 
                 <View
                   style={{
@@ -1814,54 +1944,85 @@ export default class TrainingFormScreen extends Component {
                   </Table>
                 </View>
 
-                <Text style={styles.textInputThai3}>
-                  2. If the recipient has not completed the training course of
-                  education program under this contract irrespective causes or
-                  unable to continue working with Company due to resignation or
-                  dismissal by Company as a result of breaking the Company’s
-                  employee work rules and regulations, Code of Conduct or under
-                  Thai Labor Law, except the recipient undergoes the severe
-                  accident which causes the recipient unable to work, the
-                  recipient must pay the full amount or in the lieu of the Bond
-                  Period on the pro-rata basis of given training/education costs
-                  and expenses to Company immediately or prior to the date of
-                  the last wage/ salary payment.
-                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputThai3}>
+                      2. If the recipient has not completed the training course
+                      of education program under this contract irrespective
+                      causes or unable to continue working with Company due to
+                      resignation or dismissal by Company as a result of
+                      breaking the Company’s employee work rules and
+                      regulations, Code of Conduct or under Thai Labor Law,
+                      except the recipient undergoes the severe accident which
+                      causes the recipient unable to work, the recipient must
+                      pay the full amount or in the lieu of the Bond Period on
+                      the pro-rata basis of given training/education costs and
+                      expenses to Company immediately or prior to the date of
+                      the last wage/ salary payment.
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
 
-                <Text style={styles.textInputThai3}>
-                  หากผู้รับไม่จบการฝึกอบรม
-                  หรือการศึกษาตามสัญญาฉบับนี้ด้วยสาเหตุใดก็ตาม
-                  หรือผู้รับไม่สามารถทำงานต่อให้บริษัทได้เนื่องจากผู้รับลาออกจากบริษัทฯ
-                  หรือบริษัทฯ
-                  ให้พ้นสภาพการเป็นพนักงานอันเนื่องจากผู้รับได้กระทำผิดต่อข้อบังคับเกี่ยวกับการทำงานหรือกฎระเบียบว่าด้วยหลักจริยธรรมของบริษัทฯ
-                  หรือตามกฎหมายแรงาน
-                  เว้นแต่ผู้รับประสบอุบัติเหตุร้ายแรงจนไม่สามารถทำงานต่อให้กับบริษัทฯได้
-                  ผู้รับจะต้องชดใช้เงินทุนการฝึกอบรมหรือการศึกษาที่ได้รับไปแล้วทั้งหมดคืนให้กับบริษัทฯ
-                  ทันที หรือก่นอวันที่ผู้รับได้รับค่าจ้างงวดสุดท้าย
-                  กรณีที่ผู้ได้รับได้ทำงานใช้ทุนคืนตามระยะเวลาใช้ทุนคืนบางส่วน
-                  ให้ผู้รับคืนเงินส่วนที่เหลือโดยคำนวณตามสัดส่วนระยะเวลาคงเหลือของระยะเวลาใช้ทุนคืน
-                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputThai3}>
+                      หากผู้รับไม่จบการฝึกอบรม
+                      หรือการศึกษาตามสัญญาฉบับนี้ด้วยสาเหตุใดก็ตาม
+                      หรือผู้รับไม่สามารถทำงานต่อให้บริษัทได้เนื่องจากผู้รับลาออกจากบริษัทฯ
+                      หรือบริษัทฯ
+                      ให้พ้นสภาพการเป็นพนักงานอันเนื่องจากผู้รับได้กระทำผิดต่อข้อบังคับเกี่ยวกับการทำงานหรือกฎระเบียบว่าด้วยหลักจริยธรรมของบริษัทฯ
+                      หรือตามกฎหมายแรงาน
+                      เว้นแต่ผู้รับประสบอุบัติเหตุร้ายแรงจนไม่สามารถทำงานต่อให้กับบริษัทฯได้
+                      ผู้รับจะต้องชดใช้เงินทุนการฝึกอบรมหรือการศึกษาที่ได้รับไปแล้วทั้งหมดคืนให้กับบริษัทฯ
+                      ทันที หรือก่นอวันที่ผู้รับได้รับค่าจ้างงวดสุดท้าย
+                      กรณีที่ผู้ได้รับได้ทำงานใช้ทุนคืนตามระยะเวลาใช้ทุนคืนบางส่วน
+                      ให้ผู้รับคืนเงินส่วนที่เหลือโดยคำนวณตามสัดส่วนระยะเวลาคงเหลือของระยะเวลาใช้ทุนคืน
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
 
-                <Text style={styles.textInputThai3}>
-                  IN WITHNESS WHEREOF the parties have fully satisfied
-                  themselves with the terms and conditions hereof and have
-                  hereto appended their signatures on the day and year first
-                  above written, in Bangkok Thailand
-                  คู่สัญญาได้อ่านข้อความในสัญญาและเข้าใจครบถ้วนทุกประการแล้วจึงได้ลงนามสัญญา
-                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputThai3}>
+                      IN WITHNESS WHEREOF the parties have fully satisfied
+                      themselves with the terms and conditions hereof and have
+                      hereto appended their signatures on the day and year first
+                      above written, in Bangkok Thailand
+                      คู่สัญญาได้อ่านข้อความในสัญญาและเข้าใจครบถ้วนทุกประการแล้วจึงได้ลงนามสัญญา
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
 
-                <Text style={styles.textInputEng6}>
-                  <Text style={{ fontWeight: "bold" }}>Remark: </Text> This
-                  Contract is made in one original and one duplicate copy. The
-                  original and the duplicate shall be retained by the Employee
-                  and the Company respectively.
-                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputEng6}>
+                      <Text style={{ fontWeight: "bold" }}>Remark: </Text> This
+                      Contract is made in one original and one duplicate copy.
+                      The original and the duplicate shall be retained by the
+                      Employee and the Company respectively.
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
 
-                <Text style={styles.textInputThai3}>
-                  <Text style={{ fontWeight: "bold" }}>หมายเหตุ: </Text>
-                  สัญญานี้จัดทำขึ้น 2 ฉบับเท่านั้น ต้นฉบับสำหรับพนักงาน
-                  คู่ฉบับสำหรับบริษัทฯ
-                </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text style={styles.textInputThai3}>
+                      <Text style={{ fontWeight: "bold" }}>หมายเหตุ: </Text>
+                      สัญญานี้จัดทำขึ้น 2 ฉบับเท่านั้น ต้นฉบับสำหรับพนักงาน
+                      คู่ฉบับสำหรับบริษัทฯ
+                    </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
 
                 <View style={styles.checkboxContainer}>
                   <CheckBox
@@ -1873,241 +2034,466 @@ export default class TrainingFormScreen extends Component {
                   {/* เอก */}
                 </View>
 
-                <View style={{ marginBottom: 12 }}>
-                  <Text style={styles.textInputThai5}>
-                    <Text style={{ fontWeight: "bold" }}>
-                      Employee Recipient ผู้รับ:
-                    </Text>
-                  </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginBottom: 12 }}>
+                      <Text style={styles.textInputThai5}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          Employee Recipient ผู้รับ:
+                        </Text>
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
                 <View style={styles.pickerContainer2}>
-                  <Text
+                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
+                  <View
                     style={{
-                      // textAlign: "justify",
-                      // marginHorizontal: 8,
-                      textDecorationLine: "underline",
+                      flex: 4,
+                      borderWidth: 2,
+                      alignItems: "flex-start",
+                      justifyContent: "center",
                     }}
                   >
-                    {this.state.profile.firstname +
-                      " " +
-                      this.state.profile.lastname}
-                  </Text>
-
-                  <View style={{ paddingLeft: "25%" }}>
-                    <Text>Date:</Text>
-                  </View>
-
-                  <View
-                  // style={{
-                  //   // textAlign: "justify",
-                  //   // marginHorizontal: 8,
-                  //   // marginBottom: 4,
-                  // }}
-                  >
-                    <Text style={{ textDecorationLine: "underline" }}>
-                      {" "}
-                      {this.state.dateTimeNow}
+                    <Text
+                      style={{
+                        // textAlign: "justify",
+                        marginLeft: 6,
+                        textDecorationLine: "underline",
+                        borderWidth: 2,
+                      }}
+                    >
+                      {this.state.profile.firstname +
+                        " " +
+                        this.state.profile.lastname}
                     </Text>
                   </View>
+
+                  <View style={{ flexDirection: "column" }}>
+                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                    <View
+                      style={{
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {/* <View style={{ paddingLeft: "25%" }}> */}
+                      <Text
+                        style={{
+                          // textAlign: "justify",
+                          // marginHorizontal: 8,
+                          borderWidth: 2,
+                        }}
+                      >
+                        Date:
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        borderWidth: 2,
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          textDecorationLine: "underline",
+                          borderWidth: 2,
+                        }}
+                      >
+                        {this.state.dateTimeNow}
+                      </Text>
+                    </View>
+                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                  </View>
+                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
                 </View>
 
-                <View style={{ marginTop: 18, marginBottom: 8 }}>
-                  <Text style={styles.textInputThai3}>
-                    {this.state.profile.firstname +
-                      " " +
-                      this.state.profile.lastname}
-                  </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginTop: 12, marginBottom: 5 }}>
+                      <Text style={styles.textInputThai3}>
+                        {this.state.profile.firstname +
+                          " " +
+                          this.state.profile.lastname}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
-                <Text
-                  style={{
-                    textAlign: "justify",
-                    marginHorizontal: 8,
-                    marginBottom: 24,
-                  }}
-                >
-                  {this.state.position}
-                </Text>
-
-                <View style={{ marginBottom: 12 }}>
-                  <Text style={styles.textInputThai5}>
-                    <Text style={{ fontWeight: "bold" }}>
-                      For and on behalf of Exterran (Thailand) Ltd.
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <Text
+                      style={{
+                        textAlign: "justify",
+                        // marginHorizontal: 8,
+                        marginBottom: 24,
+                      }}
+                    >
+                      {this.state.position}
                     </Text>
-                    {"\n"}ผู้แทนบริษัทเอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด:
-                  </Text>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
+                </View>
+
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginBottom: 12 }}>
+                      <Text style={styles.textInputThai5}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          For and on behalf of Exterran (Thailand) Ltd.
+                        </Text>
+                        {"\n"}ผู้แทนบริษัทเอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด:
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
                 <View style={styles.pickerContainer2}>
-                  {/* <Text style={{ textAlign: "justify", marginHorizontal: 8 }}> */}
-                  {/* <Text style={{ textDecorationLine: "underline" }}> */}
-                  <Image
-                    style={styles.logo}
-                    source={{
-                      uri: `http://smartxlearning.com/uploads/signature/${this.state.signPurpose[0].purpose_id}/${this.state.signPurpose[0].sign_image}`,
-                    }}
-                  />
-                  {/* </Text> */}
-                  {/* </Text> */}
-                  <View style={{ textAlign: "justify", paddingTop: 32 }}>
-                    <Text>Date:</Text>
+                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
+                  <View style={{ flex: 4, borderWidth: 2 }}>
+                    {/* <Text style={{ textAlign: "justify", marginHorizontal: 8 }}> */}
+                    {/* <Text style={{ textDecorationLine: "underline" }}> */}
+                    <Image
+                      style={styles.logo}
+                      source={{
+                        uri: `http://smartxlearning.com/uploads/signature/${this.state.signPurpose[0].purpose_id}/${this.state.signPurpose[0].sign_image}`,
+                      }}
+                    />
                   </View>
-                  <View
+
+                  {/* </Text> */}
+                  {/* </Text> */}
+                  {/* <View style={{ textAlign: "justify", paddingTop: 32 }}>
+                    <Text>Date:</Text>
+                  </View> */}
+
+                  <View style={{ flexDirection: "column" }}>
+                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                    <View
+                      style={{
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        borderWidth: 2,
+                      }}
+                    >
+                      {/* <View style={{ paddingLeft: "25%" }}> */}
+                      <Text
+                        style={{
+                          // textAlign: "justify",
+                          // marginHorizontal: 8,
+                          borderWidth: 2,
+                        }}
+                      >
+                        Date:
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        borderWidth: 2,
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          textDecorationLine: "underline",
+                          borderWidth: 2,
+                        }}
+                      >
+                        {this.state.dateTimeNow}
+                      </Text>
+                    </View>
+                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                  </View>
+
+                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
+                </View>
+
+                {/* <View
                     style={{
                       textAlign: "justify",
                       paddingTop: 32,
                     }}
                   >
                     <Text style={{ textDecorationLine: "underline" }}>
-                      {" "}
-                      {this.state.dateTimeNow}
-                    </Text>
+                      {" "} */}
+
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginTop: 14, marginBottom: 8 }}>
+                      <Text style={styles.textInputThai3}>
+                        {this.state.lang === "EN"
+                          ? this.state.signPurpose[0].purpose_name_en +
+                            " " +
+                            this.state.signPurpose[0].purpose_lastname_en
+                          : this.state.signPurpose[0].purpose_name +
+                            " " +
+                            this.state.signPurpose[0].purpose_lastname}
+                      </Text>
+                    </View>
                   </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
-                <View style={{ marginTop: 14, marginBottom: 8 }}>
-                  <Text style={styles.textInputThai3}>
-                    {this.state.lang === "EN"
-                      ? this.state.signPurpose[0].purpose_name_en +
-                        " " +
-                        this.state.signPurpose[0].purpose_lastname_en
-                      : this.state.signPurpose[0].purpose_name +
-                        " " +
-                        this.state.signPurpose[0].purpose_lastname}
-                  </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginBottom: 8 }}>
+                      <Text style={styles.textInputThai3}>
+                        {this.state.signPurpose[0].purpose_position}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
-                <View style={{ marginBottom: 8 }}>
-                  <Text style={styles.textInputThai3}>
-                    {this.state.signPurpose[0].purpose_position}
-                  </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginBottom: 24 }}>
+                      <Text style={styles.textInputThai3}>
+                        {this.state.signPurpose[0].purpose_position_en}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
-                <View style={{ marginBottom: 24 }}>
-                  <Text style={styles.textInputThai3}>
-                    {this.state.signPurpose[0].purpose_position_en}
-                  </Text>
-                </View>
-
-                <View style={{ marginBottom: 12 }}>
-                  <Text style={styles.textInputThai5}>
-                    <Text style={{ fontWeight: "bold" }}>
-                      In the presence of Witness พยาน:
-                    </Text>
-                  </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginBottom: 12 }}>
+                      <Text style={styles.textInputThai5}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          In the presence of Witness พยาน:
+                        </Text>
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
                 <View style={styles.pickerContainer2}>
                   {/* <Text style={{ textAlign: "justify", marginHorizontal: 8 }}>
                     <Text style={{ textDecorationLine: "underline" }}> */}
-                  <Image
-                    style={styles.logo}
-                    source={{
-                      uri: `http://smartxlearning.com/uploads/signature/${this.state.signPurpose[1].purpose_id}/${this.state.signPurpose[1].sign_image}`,
-                    }}
-                  />
+                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
+                  <View style={{ flex: 4, borderWidth: 2 }}>
+                    <Image
+                      style={styles.logo}
+                      source={{
+                        uri: `http://smartxlearning.com/uploads/signature/${this.state.signPurpose[1].purpose_id}/${this.state.signPurpose[1].sign_image}`,
+                      }}
+                    />
+                  </View>
                   {/* </Text>
                   </Text> */}
 
-                  <View style={{ textAlign: "justify", paddingTop: 32 }}>
-                    <Text>Date:</Text>
+                  <View style={{ flexDirection: "column" }}>
+                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                    <View
+                      style={{
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        borderWidth: 2,
+                      }}
+                    >
+                      {/* <View style={{ paddingLeft: "25%" }}> */}
+                      <Text
+                        style={{
+                          // textAlign: "justify",
+                          // marginHorizontal: 8,
+                          borderWidth: 2,
+                        }}
+                      >
+                        Date:
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        borderWidth: 2,
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          textDecorationLine: "underline",
+                          borderWidth: 2,
+                        }}
+                      >
+                        {this.state.dateTimeNow}
+                      </Text>
+                    </View>
+                    <View style={{ flex: 1, borderWidth: 2 }}></View>
                   </View>
+                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
+                </View>
 
-                  <View
-                    style={{
-                      textAlign: "justify",
-                      paddingTop: 32,
-                    }}
-                  >
-                    <Text style={{ textDecorationLine: "underline" }}>
-                      {" "}
-                      {this.state.dateTimeNow}
-                    </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginTop: 14, marginBottom: 8 }}>
+                      <Text style={styles.textInputThai3}>
+                        {this.state.lang === "EN"
+                          ? this.state.signPurpose[1].purpose_name_en +
+                            " " +
+                            this.state.signPurpose[1].purpose_lastname_en
+                          : this.state.signPurpose[1].purpose_name +
+                            " " +
+                            this.state.signPurpose[1].purpose_lastname}
+                      </Text>
+                    </View>
                   </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
-                <View style={{ marginTop: 14, marginBottom: 8 }}>
-                  <Text style={styles.textInputThai3}>
-                    {this.state.lang === "EN"
-                      ? this.state.signPurpose[1].purpose_name_en +
-                        " " +
-                        this.state.signPurpose[1].purpose_lastname_en
-                      : this.state.signPurpose[1].purpose_name +
-                        " " +
-                        this.state.signPurpose[1].purpose_lastname}
-                  </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginBottom: 8 }}>
+                      <Text style={styles.textInputThai3}>
+                        {this.state.signPurpose[1].purpose_position}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
-                <View style={{ marginBottom: 8 }}>
-                  <Text style={styles.textInputThai3}>
-                    {this.state.signPurpose[1].purpose_position}
-                  </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginBottom: 24 }}>
+                      <Text style={styles.textInputThai3}>
+                        {this.state.signPurpose[1].purpose_position_en}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
-                <View style={{ marginBottom: 24 }}>
-                  <Text style={styles.textInputThai3}>
-                    {this.state.signPurpose[1].purpose_position_en}
-                  </Text>
-                </View>
-
-                <View style={{ marginBottom: 12 }}>
-                  <Text style={styles.textInputThai5}>
-                    <Text style={{ fontWeight: "bold" }}>
-                      In the presence of Witness พยาน:
-                    </Text>
-                  </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginBottom: 12 }}>
+                      <Text style={styles.textInputThai5}>
+                        <Text style={{ fontWeight: "bold" }}>
+                          In the presence of Witness พยาน:
+                        </Text>
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
                 <View style={styles.pickerContainer2}>
                   {/* <Text style={{ textAlign: "justify", marginHorizontal: 8 }}>
                     <Text style={{ textDecorationLine: "underline" }}> */}
-                  <Image
-                    style={styles.logo}
-                    source={{
-                      uri: `http://smartxlearning.com/uploads/signature/${this.state.signPurpose[2].purpose_id}/${this.state.signPurpose[2].sign_image}`,
-                    }}
-                  />
+                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
+                  <View style={{ flex: 4, borderWidth: 2 }}>
+                    <Image
+                      style={styles.logo}
+                      source={{
+                        uri: `http://smartxlearning.com/uploads/signature/${this.state.signPurpose[2].purpose_id}/${this.state.signPurpose[2].sign_image}`,
+                      }}
+                    />
+                  </View>
                   {/* </Text>
                   </Text> */}
-                  <View style={{ textAlign: "justify", paddingTop: 32 }}>
-                    <Text>Date:</Text>
+                  <View style={{ flexDirection: "column" }}>
+                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                    <View
+                      style={{
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        borderWidth: 2,
+                      }}
+                    >
+                      {/* <View style={{ paddingLeft: "25%" }}> */}
+                      <Text
+                        style={{
+                          // textAlign: "justify",
+                          // marginHorizontal: 8,
+                          borderWidth: 2,
+                        }}
+                      >
+                        Date:
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        borderWidth: 2,
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          textDecorationLine: "underline",
+                          borderWidth: 2,
+                        }}
+                      >
+                        {this.state.dateTimeNow}
+                      </Text>
+                    </View>
+                    <View style={{ flex: 1, borderWidth: 2 }}></View>
                   </View>
-                  <View
-                    style={{
-                      textAlign: "justify",
-                      paddingTop: 32,
-                    }}
-                  >
-                    <Text style={{ textDecorationLine: "underline" }}>
-                      {" "}
-                      {this.state.dateTimeNow}
-                    </Text>
+                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
+                </View>
+
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginTop: 14, marginBottom: 8 }}>
+                      <Text style={styles.textInputThai3}>
+                        {this.state.lang === "EN"
+                          ? this.state.signPurpose[2].purpose_name_en +
+                            " " +
+                            this.state.signPurpose[2].purpose_lastname_en
+                          : this.state.signPurpose[2].purpose_name +
+                            " " +
+                            this.state.signPurpose[2].purpose_lastname}
+                      </Text>
+                    </View>
                   </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
-                <View style={{ marginTop: 14, marginBottom: 8 }}>
-                  <Text style={styles.textInputThai3}>
-                    {this.state.lang === "EN"
-                      ? this.state.signPurpose[2].purpose_name_en +
-                        " " +
-                        this.state.signPurpose[2].purpose_lastname_en
-                      : this.state.signPurpose[2].purpose_name +
-                        " " +
-                        this.state.signPurpose[2].purpose_lastname}
-                  </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginBottom: 8 }}>
+                      <Text style={styles.textInputThai3}>
+                        {this.state.signPurpose[2].purpose_position}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
 
-                <View style={{ marginBottom: 8 }}>
-                  <Text style={styles.textInputThai3}>
-                    {this.state.signPurpose[2].purpose_position}
-                  </Text>
-                </View>
-
-                <View style={{ marginBottom: 24 }}>
-                  <Text style={styles.textInputThai3}>
-                    {this.state.signPurpose[0].purpose_position_en}
-                  </Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 8}}>
+                    <View style={{ marginBottom: 24 }}>
+                      <Text style={styles.textInputThai3}>
+                        {this.state.signPurpose[0].purpose_position_en}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ flex: 0.1}}></View>
                 </View>
               </View>
             </View>
@@ -2118,8 +2504,8 @@ export default class TrainingFormScreen extends Component {
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-evenly",
-              // paddingVertical: 5,
+              justifyContent: "space-between",
+              paddingHorizontal: 45,
               marginBottom: 10,
             }}
           >
@@ -2141,8 +2527,8 @@ export default class TrainingFormScreen extends Component {
           {/* ส่วนที่8 */}
           <View>{this.showdialog()}</View>
           {/* จบส่วนที่8*/}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     );
   }
 }
@@ -2159,18 +2545,33 @@ const styles = StyleSheet.create({
     // marginBottom: 32,
   },
   containerSec1: {
-    borderWidth: 1,
-    padding: 12,
-    borderRadius: 8,
-    marginHorizontal: 20,
-    marginTop: 18,
+    // borderWidth: 1,
+    // padding: 12,
+    // borderRadius: 8,
+    // marginHorizontal: 20,
+    // marginTop: 18,
+    marginHorizontal: 8,
+    marginVertical: 18,
   },
   //กรอบข้อมูลรอบนอก
   containerSec2: {
-    marginHorizontal: 20,
+    marginHorizontal: 12,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#999999",
+    borderWidth: 2,
+    borderColor: "#398DDD",
+  },
+  containerSec4: {
+    marginHorizontal: 12,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: "red",
+  },
+  containerSec5: {
+    marginHorizontal: 12,
+    marginBottom: 30,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: "gray",
   },
   containerSec3: {
     marginTop: 18,
@@ -2193,8 +2594,9 @@ const styles = StyleSheet.create({
   },
   textHeader2: {
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 14,
     marginTop: 8,
+    alignSelf: "center"
   },
   inputStyle: {
     backgroundColor: "#DCDCDC",
@@ -2306,7 +2708,7 @@ const styles = StyleSheet.create({
   textInputEng5: {
     marginTop: 12,
     textAlign: "justify",
-    marginHorizontal: 8,
+    // marginHorizontal: 8,
   },
   textInputThai: {
     color: "grey",
@@ -2314,28 +2716,29 @@ const styles = StyleSheet.create({
   textInputThai1: {
     marginTop: 5,
     fontSize: 14,
+    textAlign: "center",
   },
   textInputThai2: {
     marginTop: 15,
     textAlign: "justify",
-    marginHorizontal: 8,
+    // marginHorizontal: 8,
   },
   textInputEng6: {
     textAlign: "justify",
-    marginHorizontal: 8,
+    // marginHorizontal: 8,
   },
   textInputThai3: {
     textAlign: "justify",
-    marginHorizontal: 8,
+    // marginHorizontal: 8,
   },
   textInputThai4: {
     textAlign: "justify",
-    marginHorizontal: 8,
+    // marginHorizontal: 8,
     marginBottom: 4,
   },
   textInputThai5: {
     textAlign: "justify",
-    marginHorizontal: 8,
+    // marginHorizontal: 8,
     // marginBottom: 18,
   },
   inputLightStyle: {
@@ -2464,7 +2867,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 15,
-    padding: 15,
+    paddingVertical: 15,
+    paddingHorizontal: 22,
     elevation: 2,
   },
   buttonOpen: {
@@ -2491,9 +2895,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   logo: {
-    width: WIDTH / 3,
-    height: HEIGHT / 9,
-    // padding: 1,
+    width: WIDTH / 5,
+    height: HEIGHT / 12,
+    marginLeft: 8,
     alignItems: "center",
     marginTop: 2,
   },
@@ -2529,7 +2933,8 @@ const stylesdialog = StyleSheet.create({
   },
   button: {
     borderRadius: 15,
-    padding: 15,
+    paddingVertical: 15,
+    paddingHorizontal: 24,
     elevation: 2,
     // margin:5
   },
