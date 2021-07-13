@@ -614,25 +614,6 @@ const styles = StyleSheet.create({
     height: 44,
     // paddingHorizontal: 8,
   },
-  /// del button
-  deleteButton: {
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "green",
-    width: 36,
-    height: 36,
-    marginLeft: -152,
-    marginTop: 5,
-  },
-  addButtonText: {
-    // color: "white",
-    // fontSize: 30,
-    // fontWeight: "700",
-    // marginBottom: 5,
-    // marginTop: -2,
-    // marginLeft: 1,
-  },
   contentInSec: {
     padding: 2,
   },
@@ -716,10 +697,10 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: "white",
     fontSize: 30,
-    fontWeight: "700",
-    marginBottom: 5,
-    marginTop: -2,
-    marginLeft: 1,
+    fontWeight: "bold",
+    justifyContent: "center",
+    paddingHorizontal: 2,
+
   },
   /// add button
   addButton: {
@@ -738,7 +719,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "red",
+    backgroundColor: "#b30000",
     width: 36,
     height: 36,
     marginLeft: 8,
