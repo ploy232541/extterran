@@ -441,7 +441,7 @@ export default class ExternalScreen extends Component {
                           flexDirection: "column",
                           justifyContent: "space-around",
                           paddingHorizontal: 8,
-                          marginBottom: 8,
+                          
                         }}
                       >
                         <Text style={styles.textStyle1}>
@@ -741,7 +741,7 @@ export default class ExternalScreen extends Component {
                                   }}
                                 ></TextInput>
 
-                                <View>
+                                <View style={{marginTop: 15, paddingHorizontal: 6,}}>
                                   <Text style={styles.textInputEng}>
                                     File :
                                   </Text>
@@ -972,7 +972,7 @@ const styles = StyleSheet.create({
   //ชื่อหัวข้อ
   textStyle1: {
     marginTop: 12,
-    marginBottom: 12,
+    marginBottom: 2,
     paddingHorizontal: 6,
   },
   cardStyle: {
@@ -1119,7 +1119,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: HEIGHT / 20,
     width: "100%",
-    marginTop: 15,
+    marginTop: 10,
     marginBottom: 2,
     borderColor: "#007aff",
   },
@@ -1128,8 +1128,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#007aff",
     height: HEIGHT / 20,
-    marginTop: 15,
     paddingLeft: 10,
+    marginTop: 10,
     marginBottom: 2,
   },
   inputStyle5: {
@@ -1137,7 +1137,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#007aff",
     height: HEIGHT / 20,
-    marginTop: 15,
+    marginTop: 10,
     paddingLeft: 10,
     marginBottom: 2,
     justifyContent: "center",
