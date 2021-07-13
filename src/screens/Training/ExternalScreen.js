@@ -789,7 +789,7 @@ export default class ExternalScreen extends Component {
                                     >
                                       {param.upload_file ? (
                                         <Text style={{ color: "green" }}>
-                                          ชื่อไฟล์ {param.upload_file.name}
+                                          ชื่อไฟล์: {param.upload_file.name}
                                         </Text>
                                       ) : <Text>กรุณาเลือกไฟล์<Text style={{color:"red", fontWeight: "bold", fontSize: "18"}}> * </Text></Text> }
                                     </View>
@@ -799,7 +799,6 @@ export default class ExternalScreen extends Component {
                                 <Divider
                                   style={{
                                     paddingBottom: 1,
-
                                     marginBottom: 4,
                                     marginTop: 10,
                                   }}

@@ -1299,11 +1299,11 @@ export default class TrainingFormScreen extends Component {
                   </Button>
 
                   <View
-                    style={{ flex: 1, marginTop: 20, alignItems: "flex-start" }}
+                    style={{ flex: 1, marginTop: 10, alignItems: "flex-start" }}
                   >
                     {upload_file ? (
-                      <Text style={{ color: "red" }}>{upload_file.name}</Text>
-                    ) : null}
+                      <Text style={{ color: "green" }}>ชื่อไฟล์: {upload_file.name}</Text>
+                    ) : <Text>ชื่อไฟล์:</Text>}
                   </View>
                 </View>
               </View>
