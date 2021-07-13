@@ -783,15 +783,15 @@ export default class ExternalScreen extends Component {
                                     <View
                                       style={{
                                         flex: 1,
-                                        marginTop: 20,
+                                        marginTop: 10,
                                         alignItems: "flex-start",
                                       }}
                                     >
                                       {param.upload_file ? (
-                                        <Text style={{ color: "red" }}>
-                                          {param.upload_file.name}
+                                        <Text style={{ color: "green" }}>
+                                          ชื่อไฟล์ {param.upload_file.name}
                                         </Text>
-                                      ) : null}
+                                      ) : <Text>กรุณาเลือกไฟล์<Text style={{color:"red", fontWeight: "bold", fontSize: "18"}}> * </Text></Text> }
                                     </View>
                                   </View>
                                 </View>
@@ -1037,7 +1037,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "red",
+    backgroundColor: "#b30000",
     width: 36,
     height: 36,
     marginLeft: 8,
