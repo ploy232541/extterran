@@ -53,7 +53,7 @@ const ConfirmTrainingScreen = (props) => {
   
   
         httpClient
-          .get(`Team/BookingTeam/${user_id}`)
+          .get(`Team/TrainingRequest/${user_id}`)
           .then((response) => {
             let res = response.data;
             if (res != null) {
@@ -140,7 +140,7 @@ const ConfirmTrainingScreen = (props) => {
     const _renderContent = (item) => {
       return (
         <View style={{ alignSelf: "center", padding: 10 }}>
-          {item.booking_type == 1 ? (
+          
             <View style={{ flexDirection: "row" }}>
               <Icons0
                 style={{ color: "#010c65",}}
@@ -151,31 +151,7 @@ const ConfirmTrainingScreen = (props) => {
                 {lang == "EN" ? "Flight" : "ตั๋วเครื่องบิน"}
               </Text>
             </View>
-          ) : item.booking_type == 2 ? (
-            <View style={{ flexDirection: "row" }}>
-              <Icon2
-                style={{ color: "#010c65",}}
-                name="hotel"
-                size={25}
-              />
-              <Text style={{ fontSize: 18, marginHorizontal: 2,}}>
-                {lang == "EN" ? "Accom" : "ที่พัก"}
-              </Text>
-            </View>
-          ) : item.booking_type == 3 ? (
-            <View style={{ flexDirection: "row" }}>
-              <Icons2
-                style={{ color: "#010c65",}}
-                name="car"
-                size={25}
-              />
-              <Text style={{ fontSize: 18, marginHorizontal: 2,}}>
-                {lang == "EN" ? "Ground" : "รถยนต์"}
-              </Text>
-            </View>
-          ) : (
-            ""
-          )}
+          
         </View>
       );
     };
