@@ -25,7 +25,7 @@ import Icons3 from "react-native-vector-icons/Ionicons";
 import Icons4 from "react-native-vector-icons/MaterialCommunityIcons";
 import join from "url-join";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage } from "react-native";
 
 import indexStyle, { colors } from "../styles/index.style";
 
@@ -35,6 +35,7 @@ import ModalBookingStatus from "../screens/Training/ModalBookingStatus";
 import ModalBookingUnderStatus from "../screens/Training/ModalBookingUnderStatus";
 import ModalTrainingStatus from "../screens/Training/ModalTrainingStatus";
 import ModalTrainingUnderStatus from "../screens/Training/ModalTrainingUnderStatus";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const absoluteURLRegex = /^(?:\w+:)\/\//;
 const { manifest } = Constants;
@@ -207,7 +208,12 @@ export function accordionListScreen(type, subtype, title = null) {
         <List.Accordion
           expanded={expanded}
           onPress={() => (isNotEmpty ? func(!expanded) : null)}
-          style={{ borderRadius: 10, backgroundColor:'orange', marginTop: 12, marginHorizontal: 10,}}
+          style={{
+            borderRadius: 10,
+            backgroundColor: "orange",
+            marginVertical:12,
+            marginHorizontal: 10,
+          }}
           title={
             type == 0
               ? isNotEmpty
@@ -217,7 +223,7 @@ export function accordionListScreen(type, subtype, title = null) {
                     : `รายการอนุมัติ${word[2]}`
                   : lang == "EN"
                   ? `Your ${word[1]} Requests`
-                  : `สถานะใบคำร้อง${word[2]}`
+                  : "สถานะใบคำร้อง" + word[2]
                 : lang == "EN"
                 ? "No requests found."
                 : "ไม่พบรายการใบคำร้อง"
@@ -235,16 +241,25 @@ export function accordionListScreen(type, subtype, title = null) {
                 : null
               : null
           }
-          titleStyle={[
-            indexStyle.titleStyle,
-            { color: isNotEmpty ? colors.exterran : "black" },
-          ]}
+          // titleStyle={[
+          //   indexStyle.titleStyle,
+          //   { color: isNotEmpty ? colors.exterran : "" },
+          // ]}
         >
           {data.length > 0
             ? data.map((item) => {
                 return (
                   // <Card style={indexStyle.cardStyle}>
-                  <Card style={{borderRadius: 10, marginHorizontal:10, backgroundColor: "white", marginTop: 5, borderColor: "#003263", borderWidth: 1,}}>
+                  <Card
+                    style={{
+                      borderRadius: 10,
+                      marginHorizontal: 10,
+                      backgroundColor: "white",
+                      marginTop: 5,
+                      borderColor: "#003263",
+                      borderWidth: 1,
+                    }}
+                  >
                     <Card.Content style={indexStyle.cardContentStyle}>
                       <View
                         style={[
@@ -261,21 +276,21 @@ export function accordionListScreen(type, subtype, title = null) {
                             name={"aircraft"}
                             size={30}
                             // style={indexStyle.iconsStyle}
-                            style={{color: "#0077ff", marginBottom:10}}
+                            style={{ color: "#007bff", marginBottom: 10 }}
                           />
                         ) : item.booking_type == 2 ? (
                           <Icons1
                             name={"hotel"}
                             size={30}
                             // style={indexStyle.iconsStyle}
-                            style={{color: "#0077ff", marginBottom:10}}
+                            style={{ color: "#007bff", marginBottom: 10 }}
                           />
                         ) : item.booking_type == 3 ? (
                           <Icons2
                             name={"car"}
                             size={30}
                             // style={indexStyle.iconsStyle}
-                            style={{color: "#0077ff", marginBottom:10}}
+                            style={{ color: "#007bff", marginBottom: 10 }}
                           />
                         ) : null}
 
@@ -317,29 +332,50 @@ export function accordionListScreen(type, subtype, title = null) {
                       </View>
 
                       {word[0] == "0" && item.url_print ? (
-                        <Button
-                          contentStyle={indexStyle.buttonContentStyle}
-                          icon="printer"
-                          labelStyle={{ fontSize: 36 }}
-                          mode="contained"
-                          onPress={() => Linking.openURL(item.url_print)}
-                          // style={indexStyle.buttonPrintStyle}
-                          style={{marginTop:18,marginBottom:15,width:"50%",alignSelf:"center"}}
-                        >
-                          <View>
-                            <Text
-                              style={[
-                                indexStyle.buttonTextStyle,
-                                { color: "white", fontSize: 14,},
-                              ]}
-                            >
-                              {lang == "EN" ? "Print" : "พิมพ์"}
-                            </Text>
-                          </View>
-                        </Button>
+                        // <Button
+                        //   contentStyle={indexStyle.buttonContentStyle}
+                        //   icon="printer"
+                        //   labelStyle={{ fontSize: 36 }}
+                        //   mode="contained"
+                        //   onPress={() => Linking.openURL(item.url_print)}
+                        //   // style={indexStyle.buttonPrintStyle}
+                        //   style={{
+                        //     marginTop: 18,
+                        //     marginBottom: 15,
+                        //     width: "50%",
+                        //     alignSelf: "center",
+                        //   }}
+                        // >
+                        //   <View>
+                        //     <Text
+                        //       style={[
+                        //         indexStyle.buttonTextStyle,
+                        //         { color: "white", fontSize: 14 },
+                        //       ]}
+                        //     >
+                        //       {lang == "EN" ? "Print" : "พิมพ์"}
+                        //     </Text>
+                        //   </View>
+                        // </Button>
+                        <TouchableOpacity
+                        style={{
+                          borderRadius: 50,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          height: 36,
+                          marginLeft: 8,
+                          marginRight: 2,
+                          marginTop: 10,
+                        }}
+                        onPress={() => Linking.openURL(item.url_print)}
+                      >
+                        <Icon name="print" size={30} style={{color: "orange"}}>
+                          <Text style={{fontSize: 14, color: "black"}}>{lang == "EN" ? " " + "Print" : " " + "พิมพ์"}</Text>
+                        </Icon>
+                      </TouchableOpacity>
                       ) : null}
 
-                      <Button
+                      {/* <Button
                         contentStyle={indexStyle.buttonContentStyle}
                         icon="file"
                         labelStyle={{ color: colors.exterran, fontSize: 32 }}
@@ -352,15 +388,36 @@ export function accordionListScreen(type, subtype, title = null) {
                       >
                         <View>
                           <Text
-                            style={[
-                              indexStyle.buttonTextStyle,
-                              { fontSize: 15 },
-                            ]}
+                            // style={[
+                            //   indexStyle.buttonTextStyle,
+                            //   { fontSize: 15 },
+                            // ]}
                           >
                             {lang == "EN" ? "Detail" : "ติดตาม"}
                           </Text>
                         </View>
-                      </Button>
+                      </Button> */}
+                      <TouchableOpacity
+                        style={{
+                          borderRadius: 50,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: "#007bff",
+                          height: 36,
+                          marginLeft: 8,
+                          marginRight: 2,
+                          marginTop: 10,
+                        }}
+                        onPress={() =>
+                          shown(
+                            item.modal || item.request_id || item.booking_id
+                          )
+                        }
+                      >
+                        <Icon name="file" size={25} style={{color: "white"}}>
+                          <Text style={{fontSize: 14, color: "white"}}>{lang == "EN" ? " " + "Detail" : " " + "ติดตาม"}</Text>
+                        </Icon>
+                      </TouchableOpacity>
                     </Card.Content>
                   </Card>
                 );
@@ -494,7 +551,11 @@ export function accordionListScreen(type, subtype, title = null) {
 export function activityIndicator() {
   return (
     <View style={indexStyle.activityIndicatorView}>
-      <ActivityIndicator color={colors.exterran} size={30} style={{marginTop:12}} />
+      <ActivityIndicator
+        color={colors.exterran}
+        size={30}
+        style={{ marginTop: 12 }}
+      />
     </View>
   );
 }
@@ -607,13 +668,14 @@ export function getLanguage() {
 
 export function getOSLocale() {
   // Determine device language.
-  const locale = (Platform.OS === "ios"
-    ? // iOS 12, e.g. "fr_FR"
-      NativeModules.SettingsManager.settings.AppleLocale ||
-      // iOS 13+, e.g. "en_US"
-      NativeModules.SettingsManager.settings.AppleLanguages[0]
-    : // Android, e.g. "th_TH"
-      NativeModules.I18nManager.localeIdentifier
+  const locale = (
+    Platform.OS === "ios"
+      ? // iOS 12, e.g. "fr_FR"
+        NativeModules.SettingsManager.settings.AppleLocale ||
+        // iOS 13+, e.g. "en_US"
+        NativeModules.SettingsManager.settings.AppleLanguages[0]
+      : // Android, e.g. "th_TH"
+        NativeModules.I18nManager.localeIdentifier
   )
     .slice(0, 2)
     .toUpperCase();

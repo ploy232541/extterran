@@ -7,6 +7,8 @@ import {
   Dimensions,
   TouchableOpacity,
   TextInput,
+  Alert,
+  AsyncStorage,
 } from "react-native";
 import { Picker, Tab } from "native-base";
 import { Avatar } from "react-native-paper";
@@ -18,9 +20,9 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import HomeScreen from "../Home/HomeScreen";
 import MyProgramsScreen from "../MyProgramsScreen";
 import ProfileScreen from "../Profile/ProfileScreen";
-import { Alert } from "react-native";
+
 import { httpClient } from "../../core/HttpClient";
-import { AsyncStorage } from "react-native";
+
 import Icons from "react-native-vector-icons/Ionicons";
 import * as DocumentPicker from "expo-document-picker";
 import HTML from "react-native-render-html";
@@ -385,7 +387,7 @@ export default class ExternalScreen extends Component {
       <View style={styles.background}>
         <ScrollView>
           <View style={styles.textHeader}>
-            <Text style={{ color: "#333333", fontSize: "24" }}>
+            <Text style={{ color: "#333333", fontSize: 24,}}>
               Training Needs - External
             </Text>
           </View>
@@ -441,7 +443,7 @@ export default class ExternalScreen extends Component {
                           flexDirection: "column",
                           justifyContent: "space-around",
                           paddingHorizontal: 8,
-                          
+                          marginBottom: 8,
                         }}
                       >
                         <Text style={styles.textStyle1}>
@@ -477,7 +479,7 @@ export default class ExternalScreen extends Component {
                               trainingNeed[index] = item;
                               this.setState({ trainingNeed: trainingNeed });
                             }}
-                            textStyle={{ fontSize: 14 }}
+                            textStyle={{ fontSize: 14, }}
                           >
                             <Picker.Item
                               label={
@@ -601,15 +603,15 @@ export default class ExternalScreen extends Component {
                                 <View>
                                   <Picker
                                     mode="dropdown"
-                                    iosIcon={
-                                      <Icon
-                                        name="angle-down"
-                                        style={{
-                                          width: "8%",
-                                          paddingHorizontal: 2,
-                                        }}
-                                      />
-                                    }
+                                    // iosIcon={
+                                    //   <Icon
+                                    //     name="angle-down"
+                                    //     style={{
+                                    //       width: "8%",
+                                    //       paddingHorizontal: 2,
+                                    //     }}
+                                    //   />
+                                    // }
                                     style={styles.inputLightStyle}
                                     placeholder={
                                       this.state.lang === "EN"
@@ -641,7 +643,7 @@ export default class ExternalScreen extends Component {
                                         trainingNeed: trainingNeed,
                                       });
                                     }}
-                                    textStyle={{ fontSize: 14 }}
+                                    textStyle={{ fontSize: 14,}}
                                   >
                                     <Picker.Item
                                       label={
@@ -741,7 +743,7 @@ export default class ExternalScreen extends Component {
                                   }}
                                 ></TextInput>
 
-                                <View style={{marginTop: 15, paddingHorizontal: 6,}}>
+                                <View>
                                   <Text style={styles.textInputEng}>
                                     File :
                                   </Text>
@@ -783,15 +785,15 @@ export default class ExternalScreen extends Component {
                                     <View
                                       style={{
                                         flex: 1,
-                                        marginTop: 10,
+                                        marginTop: 20,
                                         alignItems: "flex-start",
                                       }}
                                     >
                                       {param.upload_file ? (
-                                        <Text style={{ color: "green" }}>
-                                          ชื่อไฟล์: {param.upload_file.name}
+                                        <Text style={{ color: "red" }}>
+                                          {param.upload_file.name}
                                         </Text>
-                                      ) : <Text>กรุณาเลือกไฟล์<Text style={{color:"red", fontWeight: "bold", fontSize: "18"}}> * </Text></Text> }
+                                      ) : null}
                                     </View>
                                   </View>
                                 </View>
@@ -799,6 +801,7 @@ export default class ExternalScreen extends Component {
                                 <Divider
                                   style={{
                                     paddingBottom: 1,
+
                                     marginBottom: 4,
                                     marginTop: 10,
                                   }}
@@ -971,7 +974,7 @@ const styles = StyleSheet.create({
   //ชื่อหัวข้อ
   textStyle1: {
     marginTop: 12,
-    marginBottom: 2,
+    marginBottom: 12,
     paddingHorizontal: 6,
   },
   cardStyle: {
@@ -1036,7 +1039,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#b30000",
+    backgroundColor: "red",
     width: 36,
     height: 36,
     marginLeft: 8,
@@ -1118,7 +1121,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: HEIGHT / 20,
     width: "100%",
-    marginTop: 10,
+    marginTop: 15,
     marginBottom: 2,
     borderColor: "#007aff",
   },
@@ -1127,8 +1130,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#007aff",
     height: HEIGHT / 20,
+    marginTop: 15,
     paddingLeft: 10,
-    marginTop: 10,
     marginBottom: 2,
   },
   inputStyle5: {
@@ -1136,7 +1139,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#007aff",
     height: HEIGHT / 20,
-    marginTop: 10,
+    marginTop: 15,
     paddingLeft: 10,
     marginBottom: 2,
     justifyContent: "center",
@@ -1179,3 +1182,4 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
 });
+
