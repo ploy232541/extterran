@@ -25,6 +25,7 @@ const HEIGHT = Dimensions.get("window").height;
 const ModalBookingStatus = (props) => {
   const [lang, setLang] = useState("TH");
 
+
   useEffect(() => {
     const run = async () => {
       getData();
@@ -248,7 +249,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.date}
+                              value={value.date ? value.date : "-"}
                             />
 
                             <Text>Time :</Text>
@@ -256,7 +257,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.time_start}
+                              value={value.time_start ? value.time_start : "-"}
                             />
 
                             <Text>Time :</Text>
@@ -264,7 +265,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.time_end}
+                              value={value.time_end ? value.time_end : "-"}
                             />
 
                             <Text>From :</Text>
@@ -272,7 +273,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.flight_from}
+                              value={value.flight_from ? value.flight_from : "-"}
                             />
 
                             <Text>To :</Text>
@@ -280,7 +281,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.flight_to}
+                              value={value.flight_to ? value.flight_to : "-"}
                             />
 
                             <Text>Flight :</Text>
@@ -288,7 +289,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.flight}
+                              value={value.flight ? value.flight : "-"}
                             />
 
                             {item.flight_carry ? (
@@ -324,7 +325,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.province}
+                              value={value.province ? value.province : "-"}
                             />
 
                             <Text>Accommodation (Province, Hotel name) :</Text>
@@ -334,7 +335,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.hotel_name}
+                              value={value.hotel_name ? value.hotel_name : "-"}
                             />
 
                             <Text>Check in date(D/M/Y) :</Text>
@@ -342,7 +343,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.checkin}
+                              value={value.checkin ? value.checkin : "-"}
                             />
 
                             <Text>Check out date(D/M/Y) :</Text>
@@ -350,7 +351,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.checkout}
+                              value={value.checkout ? value.checkout : "-"}
                             />
                           </View>
                         );
@@ -374,7 +375,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.ground_date}
+                              value={value.ground_date ? value.ground_date : "-"}
                             />
 
                             <Text>Time :</Text>
@@ -382,7 +383,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.ground_time}
+                              value={value.ground_time ? value.ground_time : "-"}
                             />
 
                             <Text>From :</Text>
@@ -390,7 +391,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.ground_from}
+                              value={value.ground_from ? value.ground_from : "-"}
                             />
 
                             <Text>To :</Text>
@@ -398,7 +399,7 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.ground_to}
+                              value={value.ground_to ? value.ground_to : "-"}
                             />
                           </View>
                         );

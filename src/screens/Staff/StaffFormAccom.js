@@ -36,6 +36,7 @@ const StaffFormAccom = ({ navigation, route }) => {
     try {
       let getLang = await AsyncStorage.getItem("language");
       setLang(getLang);
+      setLoading(true)
       if (getLang == "EN") {
         var lang_id = "1";
       } else {

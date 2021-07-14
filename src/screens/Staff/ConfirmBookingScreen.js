@@ -51,20 +51,6 @@ const ConfirmBookingScreen = (props) => {
         var lang_id = "2";
       }
 
-      httpClient
-        .get(`Team/BookingTeam/${user_id}`)
-        .then((response) => {
-          let res = response.data;
-          if (res != null) {
-            setDataArray(res);
-            setLoading(false);
-          } else {
-            setLoading(false);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
 
       httpClient
         .get(`Team/BookingTeam/${user_id}`)
@@ -113,9 +99,12 @@ const ConfirmBookingScreen = (props) => {
           flexDirection: "row",
           padding: 10,
           alignItems: "center",
-          backgroundColor: "#f2f2f2",
-          borderWidth: 1,
-          borderColor: "#e6e6e6",
+          backgroundColor: "white",
+          borderWidth: 2,
+          borderColor: "black",
+          borderRadius: 4,
+          marginBottom:2,
+          marginTop:2,
         }}
       >
         <Icon2 style={{ color: "#cccccc" }} size={20} name="user" />
@@ -129,7 +118,7 @@ const ConfirmBookingScreen = (props) => {
             onPress={() => {
               showModalBooking(item.booking_type, item.booking_id);
             }}
-            style={{ height: 30, backgroundColor: "#3399ff" }}
+            style={{ height: 30, backgroundColor: "#3bb54a" }}
           >
             <Text style={{ marginLeft: 5, marginRight: 5, color: "#fff" }}>
               รายละเอียด
@@ -220,8 +209,8 @@ const ConfirmBookingScreen = (props) => {
       <View style={styles.container}>
         <Text style={styles.textHeader}>{title}</Text>
 
-        <View style={{ flexDirection: "row", marginVertical: 20 }}>
-          <PeopleIcon name="md-people" size={20} style={{ marginRight: 10 }} />
+        <View style={{ flexDirection: "row", marginVertical: 20,}}>
+          <PeopleIcon name="md-people" size={20} style={{ marginRight: 10,}} />
           <Text style={styles.textNumber}>
             จำนวน <Text style={{ color: "#398DDD" }}>{dataArray.length}</Text>{" "}
             คน
@@ -248,7 +237,8 @@ const styles = StyleSheet.create({
   textHeader: {
     color: "#398DDD",
     alignSelf: "center",
-    fontSize: 18,
+    fontSize: 24,
+    fontWeight: "bold"
   },
   textNumber: {
     fontWeight: "bold",
