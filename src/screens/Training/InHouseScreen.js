@@ -143,8 +143,7 @@ export default class InHouseScreen extends Component {
         index++;
       } while (index < trainingNeed.length && error == false);
       if (error == false) {
-        
-        let data=[...trainingNeed,{user_id:id}]
+        let data = { trainingNeed: trainingNeed, user_id: id };
  
         Alert.alert(
           this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
