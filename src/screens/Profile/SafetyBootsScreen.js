@@ -7,6 +7,8 @@ import {
   Text,
   Image,
   Alert,
+  ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
@@ -45,6 +47,7 @@ export default class SafetyBootsScreen extends Component {
       uniform_name: "",//
       uniform_part: "",//
       uniform_total: "",//
+      loading:true,
     };
   }
 
@@ -53,7 +56,7 @@ export default class SafetyBootsScreen extends Component {
 
     let n = new Date().getMonth();
     this.setState({ user_id: id, month: n });
-    if (this.state.month < 10) {
+    if (this.state.month > 10) {
       this.setState({ select_boots: true });
     }
     const res = await AsyncStorage.getItem("language");
@@ -110,6 +113,7 @@ export default class SafetyBootsScreen extends Component {
               this.setState({ shoes: true });
             }
           }
+          this.setState({loading:false})
         })
         .catch((error) => {
           console.log(error);
@@ -267,12 +271,23 @@ export default class SafetyBootsScreen extends Component {
     }
   };
 
-  render() {
+  render() { if (this.state.loading) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <ActivityIndicator />
+        </View>
+      </SafeAreaView>
+    );
+  }
+    console.log("orgid = " + this.state.orgid);
     if (this.state.orgid == 2 || (this.state.orgid == 3 && this.state.authorityid != null)) {return (
       <View style={styles.background}>
         <ScrollView>
           <View style={styles.textHeader}>
-            <Text style={{ color: "#009bdc", fontSize: "24" }}>
+            <Text style={{ color: "#009bdc", fontSize: 24 }}>
               {this.state.lang === "EN"
                 ? "Select Safety Boots"
                 : "เลือกขนาด Safety Boots"}
@@ -520,7 +535,7 @@ export default class SafetyBootsScreen extends Component {
       <View style={styles.background}>
         <ScrollView>
           <View style={styles.textHeader}>
-            <Text style={{ color: "#009bdc", fontSize: "24" }}>
+            <Text style={{ color: "#009bdc", fontSize: 24 }}>
               {this.state.lang === "EN"
                 ? "Select Safety Boots"
                 : "เลือกขนาด Safety Boots"}
