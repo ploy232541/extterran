@@ -194,6 +194,9 @@ export default class InHouseScreen extends Component {
       }
     }
   };
+  reset() {
+    this.setState({ trainingNeed: [] });
+  }
   render() {
     return (
       <View style={styles.background}>
