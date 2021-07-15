@@ -899,7 +899,7 @@ export default class ExternalScreen extends Component {
                 });
               }}
             >
-              <Icon name="user-plus" color="#fff" size="26" />
+              <Icon name="user-plus" color="#fff" size={26} />
               <Text
                 style={{
                   color: "#fff",

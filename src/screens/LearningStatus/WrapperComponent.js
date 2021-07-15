@@ -100,7 +100,7 @@ class WrapperComponent extends Component {
                             item.click_to_course != null ?
                             <View style={styles.list}>
                                 <View style={{flexDirection: 'row'}}>
-                                    <Icons style={{marginTop: 2, marginRight: 2}} size="18" name="settings" />
+                                    <Icons style={{marginTop: 2, marginRight: 2}} size={18} name="settings" />
                                     <Text style={styles.contentTitle}>
                                     {lang == 'EN' ? 'Manage' : 'จัดการ'}
                                     </Text>
@@ -179,7 +179,7 @@ class WrapperComponent extends Component {
 
                         <View style={styles.list}>
                             <View style={{flexDirection: 'row'}}>
-                                <Icons style={{marginTop: 2, marginRight: 2}} size="18" name="settings" />
+                                <Icons style={{marginTop: 2, marginRight: 2}} size={18} name="settings" />
                                 <Text style={styles.contentTitle}>
                                 {lang == 'EN' ? 'Manage' : 'จัดการ'}
                                 </Text>

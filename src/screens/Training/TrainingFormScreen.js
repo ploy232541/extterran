@@ -501,18 +501,6 @@ export default class TrainingFormScreen extends Component {
             courseItem,
             courseItem2,
           };
-          const data = new FormData();
-          if (upload_file == null || upload_file != "") {
-            data.append("file", {
-              name: upload_file.name,
-              uri: upload_file.uri,
-            });
-            Object.keys(params).forEach((key) => data.append(key, params[key]));
-          } else {
-            data = params;
-          }
-
-          console.log(data);
           Alert.alert(
             this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
             this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
@@ -527,23 +515,39 @@ export default class TrainingFormScreen extends Component {
                 text: this.state.lang === "EN" ? "OK" : "ตกลง",
                 onPress: () => {
                   httpClient
-                    .post("/Training/InsertTrainingRequest", data)
+                    .post("/Training/InsertTrainingRequest", params)
                     .then((response) => {
                       const result = response.data;
-                      if (result === true) {
-                        Alert.alert(
-                          this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                          this.state.lang === "EN"
-                            ? "Training request sent"
-                            : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
-                          [
-                            {
-                              text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                              onPress: () => this.reset(),
-                            },
-                          ],
-                          { cancelable: false }
-                        );
+                      if (result != false) {
+                        const data = new FormData();
+                        if (upload_file == null || upload_file != "") {
+                          data.append("file", {
+                            name: result,
+                            uri: upload_file.uri,
+                          });
+                          // Object.keys(params).forEach((key) => data.append(key, params[key]));
+                        } 
+                        httpClient
+                          .post("/Training/InsertTrainingRequestFile",data, {})
+                          .then((response) => {
+                            const result = response.data;
+                          })
+                          .catch((error) => {
+                            console.log(error);
+                          });
+                        // Alert.alert(
+                        //   this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                        //   this.state.lang === "EN"
+                        //     ? "Training request sent"
+                        //     : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
+                        //   [
+                        //     {
+                        //       text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                        //       onPress: () => this.reset(),
+                        //     },
+                        //   ],
+                        //   { cancelable: false }
+                        // );
                       } else {
                         Alert.alert(
                           this.state.lang === "EN"
@@ -566,6 +570,7 @@ export default class TrainingFormScreen extends Component {
     }
   };
   //aek
+
   onPickerValueChange = (value) => {
     this.setState({
       expense: null,
@@ -1302,8 +1307,12 @@ export default class TrainingFormScreen extends Component {
                     style={{ flex: 1, marginTop: 10, alignItems: "flex-start" }}
                   >
                     {upload_file ? (
-                      <Text style={{ color: "green" }}>ชื่อไฟล์: {upload_file.name}</Text>
-                    ) : <Text>ชื่อไฟล์:</Text>}
+                      <Text style={{ color: "green" }}>
+                        ชื่อไฟล์: {upload_file.name}
+                      </Text>
+                    ) : (
+                      <Text>ชื่อไฟล์:</Text>
+                    )}
                   </View>
                 </View>
               </View>
@@ -1649,31 +1658,31 @@ export default class TrainingFormScreen extends Component {
 
                 <View style={styles.pickerContainer1}>
                   <View style={{ flexDirection: "row" }}>
-                    <View style={{ flex: 0.1}}></View>
-                    <View style={{ flex: 8}}>
+                    <View style={{ flex: 0.1 }}></View>
+                    <View style={{ flex: 8 }}>
                       <Text style={styles.textHeader2}>
                         The Training / Seminar / Education Bond
                       </Text>
                     </View>
 
-                    <View style={{ flex: 0.1}}></View>
+                    <View style={{ flex: 0.1 }}></View>
                   </View>
 
                   <View style={{ flexDirection: "row" }}>
-                    <View style={{ flex: 0.1}}></View>
-                    <View style={{ flex: 8}}>
+                    <View style={{ flex: 0.1 }}></View>
+                    <View style={{ flex: 8 }}>
                       <Text style={styles.textInputThai1}>
                         สัญญาผูกพันการฝึกอบรม สัมมนา การศึกษา
                       </Text>
                     </View>
 
-                    <View style={{ flex: 0.1}}></View>
+                    <View style={{ flex: 0.1 }}></View>
                   </View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputEng5}>
                       This Training/ Seminar /Education Bond Contract is made on
                       the
@@ -1703,12 +1712,12 @@ export default class TrainingFormScreen extends Component {
                       hereinafter called “Employee”, the other part.
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputThai2}>
                       สัญญาผูกพันการฝึกอบรม สัมมนา การศึกษาฉบับนี้
                       จัดทำขึ้นเมื่อวันที่
@@ -1737,33 +1746,33 @@ export default class TrainingFormScreen extends Component {
                       ซึ่งต่อไปในสัญญานี้เรียกว่า “ผู้รับ” อีกฝ่ายหนึ่ง
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputEng5}>
                       Whereas the Sponsoring Company and Recipient Employee
                       agreed on the following:
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputThai4}>
                       ทั้งสองฝ่ายได้ตกลงกันดังนี้:
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputThai3}>
                       1. Support recipient to study for the
                       <Text style={{ fontWeight: "bold" }}>
@@ -1820,67 +1829,67 @@ export default class TrainingFormScreen extends Component {
                       </Text>
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputEng6}>
                       With the details are ass follow:
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputThai3}>
                       100% of the training course fees including but not limited
                       to transportation expense, meal expense, accommodations,
                       will be paid but the company.
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputEng6}>
                       โดยมีรายละเอียดการสนับสนุนดังนี้:
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputThai3}>
                       บริษัทสนับสนุนค่าฝึกอบรม ค่าเดินทาง ค่าที่พัก
                       และเบี้ยเลี้ยงค่าอาหาร
                       ตลอดการฝึกอบรมหรือการศึกษาเต็มตามจำนวนให้กับพนักงานในการฝึกอบรมหรือการศึกษาตลอดหลักสูตร
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputEng6}>
                       The recipient employee has agreed as follows:
                       ผู้รับทุนตกลงดังนี้:
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8, marginTop: 4}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8, marginTop: 4 }}>
                     <Text style={styles.textInputThai3}>
                       1. Accept the Company sponsorship the above-mentioned
                       programs. Thereafter on completion and certification, the
@@ -1895,12 +1904,12 @@ export default class TrainingFormScreen extends Component {
                       </Text>
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputThai3}>
                       ยอมรับให้บริษัทฯเป็นผู้ออกค่าใช้จ่ายในการเข้ารับการอบรม
                       หรือการศึกษาดังกล่าว
@@ -1921,7 +1930,7 @@ export default class TrainingFormScreen extends Component {
                       {`(ซึ่งในสัญญานี้เรียกว่า “ระยะเวลาใช้ทุนคืน”)`}
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View
@@ -1945,8 +1954,8 @@ export default class TrainingFormScreen extends Component {
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputThai3}>
                       2. If the recipient has not completed the training course
                       of education program under this contract irrespective
@@ -1962,12 +1971,12 @@ export default class TrainingFormScreen extends Component {
                       the last wage/ salary payment.
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputThai3}>
                       หากผู้รับไม่จบการฝึกอบรม
                       หรือการศึกษาตามสัญญาฉบับนี้ด้วยสาเหตุใดก็ตาม
@@ -1982,12 +1991,12 @@ export default class TrainingFormScreen extends Component {
                       ให้ผู้รับคืนเงินส่วนที่เหลือโดยคำนวณตามสัดส่วนระยะเวลาคงเหลือของระยะเวลาใช้ทุนคืน
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputThai3}>
                       IN WITHNESS WHEREOF the parties have fully satisfied
                       themselves with the terms and conditions hereof and have
@@ -1996,12 +2005,12 @@ export default class TrainingFormScreen extends Component {
                       คู่สัญญาได้อ่านข้อความในสัญญาและเข้าใจครบถ้วนทุกประการแล้วจึงได้ลงนามสัญญา
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputEng6}>
                       <Text style={{ fontWeight: "bold" }}>Remark: </Text> This
                       Contract is made in one original and one duplicate copy.
@@ -2009,19 +2018,19 @@ export default class TrainingFormScreen extends Component {
                       Employee and the Company respectively.
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text style={styles.textInputThai3}>
                       <Text style={{ fontWeight: "bold" }}>หมายเหตุ: </Text>
                       สัญญานี้จัดทำขึ้น 2 ฉบับเท่านั้น ต้นฉบับสำหรับพนักงาน
                       คู่ฉบับสำหรับบริษัทฯ
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={styles.checkboxContainer}>
@@ -2035,8 +2044,8 @@ export default class TrainingFormScreen extends Component {
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginBottom: 12 }}>
                       <Text style={styles.textInputThai5}>
                         <Text style={{ fontWeight: "bold" }}>
@@ -2045,7 +2054,7 @@ export default class TrainingFormScreen extends Component {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={styles.pickerContainer2}>
@@ -2114,8 +2123,8 @@ export default class TrainingFormScreen extends Component {
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginTop: 12, marginBottom: 5 }}>
                       <Text style={styles.textInputThai3}>
                         {this.state.profile.firstname +
@@ -2124,12 +2133,12 @@ export default class TrainingFormScreen extends Component {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <Text
                       style={{
                         textAlign: "justify",
@@ -2140,12 +2149,12 @@ export default class TrainingFormScreen extends Component {
                       {this.state.position}
                     </Text>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginBottom: 12 }}>
                       <Text style={styles.textInputThai5}>
                         <Text style={{ fontWeight: "bold" }}>
@@ -2155,7 +2164,7 @@ export default class TrainingFormScreen extends Component {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={styles.pickerContainer2}>
@@ -2230,8 +2239,8 @@ export default class TrainingFormScreen extends Component {
                       {" "} */}
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginTop: 14, marginBottom: 8 }}>
                       <Text style={styles.textInputThai3}>
                         {this.state.lang === "EN"
@@ -2244,36 +2253,36 @@ export default class TrainingFormScreen extends Component {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginBottom: 8 }}>
                       <Text style={styles.textInputThai3}>
                         {this.state.signPurpose[0].purpose_position}
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginBottom: 24 }}>
                       <Text style={styles.textInputThai3}>
                         {this.state.signPurpose[0].purpose_position_en}
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginBottom: 12 }}>
                       <Text style={styles.textInputThai5}>
                         <Text style={{ fontWeight: "bold" }}>
@@ -2282,7 +2291,7 @@ export default class TrainingFormScreen extends Component {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={styles.pickerContainer2}>
@@ -2343,8 +2352,8 @@ export default class TrainingFormScreen extends Component {
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginTop: 14, marginBottom: 8 }}>
                       <Text style={styles.textInputThai3}>
                         {this.state.lang === "EN"
@@ -2357,36 +2366,36 @@ export default class TrainingFormScreen extends Component {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginBottom: 8 }}>
                       <Text style={styles.textInputThai3}>
                         {this.state.signPurpose[1].purpose_position}
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginBottom: 24 }}>
                       <Text style={styles.textInputThai3}>
                         {this.state.signPurpose[1].purpose_position_en}
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginBottom: 12 }}>
                       <Text style={styles.textInputThai5}>
                         <Text style={{ fontWeight: "bold" }}>
@@ -2395,7 +2404,7 @@ export default class TrainingFormScreen extends Component {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={styles.pickerContainer2}>
@@ -2455,8 +2464,8 @@ export default class TrainingFormScreen extends Component {
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginTop: 14, marginBottom: 8 }}>
                       <Text style={styles.textInputThai3}>
                         {this.state.lang === "EN"
@@ -2469,31 +2478,31 @@ export default class TrainingFormScreen extends Component {
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginBottom: 8 }}>
                       <Text style={styles.textInputThai3}>
                         {this.state.signPurpose[2].purpose_position}
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 0.1}}></View>
-                  <View style={{ flex: 8}}>
+                  <View style={{ flex: 0.1 }}></View>
+                  <View style={{ flex: 8 }}>
                     <View style={{ marginBottom: 24 }}>
                       <Text style={styles.textInputThai3}>
                         {this.state.signPurpose[0].purpose_position_en}
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 0.1}}></View>
+                  <View style={{ flex: 0.1 }}></View>
                 </View>
               </View>
             </View>
@@ -2596,7 +2605,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14,
     marginTop: 8,
-    alignSelf: "center"
+    alignSelf: "center",
   },
   inputStyle: {
     backgroundColor: "#DCDCDC",
