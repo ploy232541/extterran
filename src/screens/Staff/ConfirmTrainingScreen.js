@@ -71,25 +71,25 @@ const ConfirmTrainingScreen = (props) => {
       }
     };
   
-    const showModalBooking = (booking_type, booking_id) => {
+    // const showModalBooking = (booking_type, booking_id) => {
   
-      if (booking_type == 1) {
-        navigation.navigate({
-          name: "StaffFormFlight",
-          params: { booking_id: booking_id },
-        });
-      } else if (booking_type == 2) {
-        navigation.navigate({
-          name: "StaffFormAccom",
-          params: { booking_id: booking_id },
-        });
-      } else if (booking_type == 3) {
-        navigation.navigate({
-          name: "StaffFormGround",
-          params: { booking_id: booking_id },
-        });
-      }
-    };
+    //   if (booking_type == 1) {
+    //     navigation.navigate({
+    //       name: "StaffFormFlight",
+    //       params: { booking_id: booking_id },
+    //     });
+    //   } else if (booking_type == 2) {
+    //     navigation.navigate({
+    //       name: "StaffFormAccom",
+    //       params: { booking_id: booking_id },
+    //     });
+    //   } else if (booking_type == 3) {
+    //     navigation.navigate({
+    //       name: "StaffFormGround",
+    //       params: { booking_id: booking_id },
+    //     });
+    //   }
+    // };
   
     const _renderHeader = (item, expanded) => {
       let lang = AsyncStorage.getItem("language");
@@ -111,12 +111,15 @@ const ConfirmTrainingScreen = (props) => {
           <Text style={{ flex: 1, marginLeft: 5, color: "#000" }}>
             {lang == "EN"
               ? item.firstname_en + " " + item.lastname_en
-              : item.firstname + " " + item.lastname}
+              : item.firstname + " " + item.lastname + "" + item.request_id}
           </Text>
           <View style={{ justifyContent: "flex-end", marginRight: 10 }}>
             <Button
               onPress={() => {
-                showModalBooking(item.booking_type, item.booking_id);
+                navigation.navigate({
+                  name: "TrainingApproveFormScreen",
+                  params: { request_id : item.request_id },
+                });
               }}
               style={{ height: 30, backgroundColor: "#3bb54a" }}
             >
@@ -142,13 +145,13 @@ const ConfirmTrainingScreen = (props) => {
         <View style={{ alignSelf: "center", padding: 10 }}>
           
             <View style={{ flexDirection: "row" }}>
-              <Icons0
+              {/* <Icons0
                 style={{ color: "#010c65",}}
                 name="aircraft"
                 size={25}
-              />
-              <Text style={{ fontSize: 18, marginHorizontal: 2,}}>
-                {lang == "EN" ? "Flight" : "ตั๋วเครื่องบิน"}
+              /> */}
+              <Text style={{ fontSize: 18, marginHorizontal: 2, fontWeight: "bold"}}>
+                {item.course_title ? item.course_title : item.course_etc}
               </Text>
             </View>
           

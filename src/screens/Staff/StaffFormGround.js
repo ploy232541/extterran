@@ -51,6 +51,9 @@ const StaffFormGround = ({ navigation, route }) => {
             setItem(response.data.ground);
             setLoading(false);
           }
+          else{
+            setLoading(false)
+          }
         })
         .catch((error) => {
           console.log(error);

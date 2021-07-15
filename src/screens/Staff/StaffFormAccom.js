@@ -51,6 +51,9 @@ const StaffFormAccom = ({ navigation, route }) => {
             setItem(response.data.accom);
             setLoading(false);
           }
+          else{
+            setLoading(false)
+          }
         })
         .catch((error) => {
           console.log(error);

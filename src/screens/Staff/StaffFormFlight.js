@@ -51,6 +51,9 @@ const StaffFormFlight = ({ navigation, route }) => {
             setItem(response.data.flight);
             setLoading(false);
           }
+          else{
+            setLoading(false)
+          }
         })
         .catch((error) => {
           console.log(error);

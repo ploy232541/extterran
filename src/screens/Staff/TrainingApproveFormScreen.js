@@ -21,12 +21,12 @@ import { httpClient } from "../../utils/Provider";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
-const TrainingApproveFormScreen = (props) => {
-  const [loading, setLoading] = useState(false);
+const TrainingApproveFormScreen = ({ navigation, route }) => {
   const [lang, setLang] = useState("TH");
   const [dataArray, setDataArray] = useState([]);
   const [noApprove, setNoApprove] = useState(false);
   const [approval_note, setApproval_note] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const run = () => {
@@ -38,7 +38,7 @@ const TrainingApproveFormScreen = (props) => {
 
   const getData = async () => {
     try {
-      //   setLoading(true)
+      setLoading(true);
       let getLang = await AsyncStorage.getItem("language");
       setLang(getLang);
       if (getLang == "EN") {
@@ -46,18 +46,19 @@ const TrainingApproveFormScreen = (props) => {
       } else {
         var lang_id = "2";
       }
-
+// console.log(route.params.require_id);
       httpClient
-        .get(`/Team/getTrainingRequestApprove/${props.request_id}/${lang_id}`)
+        .get(`/Team/getTrainingRequestApprove/${route.params.request_id}/${lang_id}`)
         .then((response) => {
           let res = response.data;
           if (res != null) {
             setDataArray(res);
-            // setLoading(false)
+           setLoading(false)
+            // console.log(res);
           }
-          //   else{
-          //     setLoading(false)
-          //   }
+            else{
+              setLoading(false)
+            }
         })
         .catch((e) => console.log(e));
     } catch (e) {
@@ -92,7 +93,7 @@ const TrainingApproveFormScreen = (props) => {
             if (confirm) {
               let user_id = await AsyncStorage.getItem("userId");
               let param = {
-                request_id: props.request_id,
+                request_id: route.request_id,
                 user_id: user_id,
                 approval_status: approval_status,
                 approval_note: approval_note,
@@ -106,7 +107,7 @@ const TrainingApproveFormScreen = (props) => {
                     Alert.alert(
                       lang == "EN" ? "Successful" : "บันทึกเรียบร้อย",
                       "",
-                      [{ text: "OK", onPress: props.closeModal }]
+                      [{ text: "OK", onPress: route.closeModal }]
                     );
                   }
                 })
@@ -122,59 +123,61 @@ const TrainingApproveFormScreen = (props) => {
     );
   };
 
-  //    if (loading) {
-  //         return (
-  //           <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-  //             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-  //               <ActivityIndicator />
-  //             </View>
-  //           </SafeAreaView>
-  //         );
-  //     }
+     if (loading) {
+          return (
+            <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator />
+              </View>
+            </SafeAreaView>
+          );
+      }
   return (
-    <Modal visible={props.chkVisible} onBackdropPress={props.closeModal}>
+    <Modal visible={route.chkVisible} onBackdropPress={route.closeModal}>
       <ScrollView
         style={{
           flex: 1,
-          borderWidth: 1,
+          borderWidth: 2,
           borderRadius: 12,
           marginTop: 20,
-          borderColor: "#d9d9d9",
+          borderColor: "red",
           backgroundColor: "white",
         }}
       >
         {dataArray ? (
           <View style={styles.container}>
             <Text
-              style={{ alignSelf: "center", fontSize: 18, marginBottom: 10 }}
-            >
-              ใบคำขอฝึกอบรม
+              style={{  alignSelf: "center", fontSize: 20, fontWeight: "bold"  }}
+            >   
+              {lang == "EN"
+              ? "Training Request"
+              : "ใบคำขอฝึกอบรม"}
             </Text>
-            <View style={{ marginHorizontal: 20 }}>
-              <Divider style={{ backgroundColor: "#d9d9d9" }} />
-            </View>
 
             <Text
               style={{
-                fontSize: 16,
-                color: "#4393de",
-                marginTop: 10,
-                alignSelf: "center",
+                fontSize: 18,
+              fontWeight: "bold",
+              color: "#4393de",
+              marginTop: 18,
+              alignSelf: "center",
               }}
             >
-              บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด
+              {lang == "EN"
+              ? "EXTERRAN (THAILAND) LTD."
+              : "บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
             </Text>
             <Text
               style={{
                 alignSelf: "center",
                 fontSize: 16,
+                marginTop: 4,
                 marginBottom: 15,
-                marginTop: 10,
               }}
             >
               Training Request
             </Text>
-            <View style={{ marginHorizontal: 48 }}>
+            <View>
               <Divider style={{ backgroundColor: "#d9d9d9" }} />
             </View>
 
@@ -460,7 +463,7 @@ const TrainingApproveFormScreen = (props) => {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    onPress={props.closeModal}
+                    onPress={route.closeModal}
                     style={{
                       backgroundColor: "gray",
                       width: WIDTH / 5,
@@ -511,7 +514,7 @@ const TrainingApproveFormScreen = (props) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={props.closeModal}
+                  onPress={route.closeModal}
                   style={{
                     backgroundColor: "gray",
                     width: WIDTH / 5,
