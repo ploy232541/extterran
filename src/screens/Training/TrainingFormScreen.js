@@ -527,6 +527,7 @@ export default class TrainingFormScreen extends Component {
                           });
                           // Object.keys(params).forEach((key) => data.append(key, params[key]));
                         } 
+                        
                         httpClient
                           .post("/Training/InsertTrainingRequestFile",data, {})
                           .then((response) => {
