@@ -71,26 +71,6 @@ const ConfirmTrainingScreen = (props) => {
       }
     };
   
-    // const showModalBooking = (booking_type, booking_id) => {
-  
-    //   if (booking_type == 1) {
-    //     navigation.navigate({
-    //       name: "StaffFormFlight",
-    //       params: { booking_id: booking_id },
-    //     });
-    //   } else if (booking_type == 2) {
-    //     navigation.navigate({
-    //       name: "StaffFormAccom",
-    //       params: { booking_id: booking_id },
-    //     });
-    //   } else if (booking_type == 3) {
-    //     navigation.navigate({
-    //       name: "StaffFormGround",
-    //       params: { booking_id: booking_id },
-    //     });
-    //   }
-    // };
-  
     const _renderHeader = (item, expanded) => {
       let lang = AsyncStorage.getItem("language");
       return (

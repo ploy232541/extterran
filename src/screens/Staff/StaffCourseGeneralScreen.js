@@ -72,12 +72,15 @@ const StaffCourseGeneralScreen = (props) => {
         return (
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               padding: 10,
-              alignItems: 'center',
-              backgroundColor: '#f2f2f2',
-              borderWidth: 1,
-              borderColor: '#e6e6e6',
+              alignItems: "center",
+              backgroundColor: "white",
+              borderWidth: 2,
+              borderColor: "black",
+              borderRadius: 4,
+              marginBottom:2,
+              marginTop:2,
             }}>
             <Icon2 style={{color: '#cccccc'}} size={20} name="user" />
             <Text style={{flex: 1, marginLeft: 5, color: '#000'}}>
@@ -221,9 +224,10 @@ const styles = StyleSheet.create({
         marginVertical: 18,
     },
     textHeader: {
-        color: "#398DDD",
-        alignSelf: "center",
-        fontSize: 18,
+      color: "#398DDD",
+      alignSelf: "center",
+      fontSize: 24,
+      fontWeight: "bold"
     },
     textNumber: {
         fontWeight: "bold",
