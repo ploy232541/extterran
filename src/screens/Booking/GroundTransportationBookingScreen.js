@@ -758,6 +758,7 @@ export default class GroundTransportationBookingScreen extends Component {
 
           {/* โชว์ DateTimePickerModal*/}
           <DateTimePickerModal
+          locale="th"
             isVisible={this.state.isDatePickerVisible}
             mode="date"
             onConfirm={this.handleConfirm}
@@ -765,6 +766,7 @@ export default class GroundTransportationBookingScreen extends Component {
           />
 
           <DateTimePickerModal
+          locale="th"
             isVisible={this.state.isTimePickerVisible}
             mode="time"
             onConfirm={this.handleTimePicker}

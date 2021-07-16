@@ -882,6 +882,7 @@ export default class AccommodationBookingScreen extends Component {
 
           {/* โชว์ DateTimePickerModal*/}
           <DateTimePickerModal
+          locale="th"
             isVisible={this.state.isDatePickerVisible}
             mode="date"
             onConfirm={this.handleConfirm}

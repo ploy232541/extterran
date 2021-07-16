@@ -111,7 +111,7 @@ const ConfirmTrainingScreen = (props) => {
           <Text style={{ flex: 1, marginLeft: 5, color: "#000" }}>
             {lang == "EN"
               ? item.firstname_en + " " + item.lastname_en
-              : item.firstname + " " + item.lastname + "" + item.request_id}
+              : item.firstname + " " + item.lastname}
           </Text>
           <View style={{ justifyContent: "flex-end", marginRight: 10 }}>
             <Button

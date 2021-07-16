@@ -177,6 +177,7 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
             >
               Training Request
             </Text>
+            
             <View>
               <Divider style={{ backgroundColor: "#d9d9d9" }} />
             </View>

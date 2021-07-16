@@ -936,6 +936,7 @@ export default class FlightBookingScreen extends Component {
               {/* กรณีติ๊ก checkbox */}
 
               <DateTimePickerModal
+              locale="th"
                 // isVisible={isTimePickerVisible}
                 mode="time"
                 // onConfirm={handleTimePicker}
@@ -1274,6 +1275,7 @@ export default class FlightBookingScreen extends Component {
                     </View>
 
                     <DateTimePickerModal
+                    locale="th"
                       // isVisible={isTimePickerVisible}
                       mode="time"
                       // onConfirm={handleTimePicker}
@@ -1296,6 +1298,7 @@ export default class FlightBookingScreen extends Component {
           />
 
           <DateTimePickerModal
+          locale="th"
             isVisible={this.state.isTimePickerVisible}
             mode="time"
             onConfirm={this.handleTimePicker}

@@ -809,6 +809,7 @@ export default class ExternalScreen extends Component {
                               </View>
 
                               <DateTimePickerModal
+                              locale="th"
                                 isVisible={this.state.isDatePickerVisible}
                                 mode="date"
                                 locale={this.state.lang === "EN" ? "en" : "th"}

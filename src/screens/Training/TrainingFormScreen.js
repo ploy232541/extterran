@@ -1205,7 +1205,7 @@ export default class TrainingFormScreen extends Component {
               </TouchableOpacity>
 
               <DateTimePickerModal
-                locale="th_TH"
+                locale="th"
                 isVisible={this.state.isDatePickerVisible}
                 mode="date"
                 onConfirm={this.handleConfirm}

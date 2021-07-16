@@ -1867,6 +1867,7 @@ formOther = () => {
           </TouchableOpacity>
 
           <DateTimePickerModal
+          locale="th"
             onChange={(e) => {
               console.log(e);
             }}
