@@ -355,8 +355,8 @@ export default class TrainingFormScreen extends Component {
       courseselect: "",
       nameCourse: "",
       expense: "",
-      startDate: "",
-      endDate: "",
+      startDate: "DD/MM/YYYY",
+      endDate: "DD/MM/YYYY",
       total: "",
       place: "",
       upload_file: "",
@@ -519,36 +519,67 @@ export default class TrainingFormScreen extends Component {
                     .then((response) => {
                       const result = response.data;
                       if (result != false) {
-                        const data = new FormData();
-                        if (upload_file == null || upload_file != "") {
+                        if (upload_file != null && upload_file != "") {
+                          console.log(upload_file);
+                          const data = new FormData();
                           data.append("file", {
-                            name: result,
+                            name: result + "",
                             uri: upload_file.uri,
                           });
-                          // Object.keys(params).forEach((key) => data.append(key, params[key]));
-                        } 
-                        
-                        httpClient
-                          .post("/Training/InsertTrainingRequestFile",data, {})
-                          .then((response) => {
-                            const result = response.data;
-                          })
-                          .catch((error) => {
-                            console.log(error);
-                          });
-                        // Alert.alert(
-                        //   this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                        //   this.state.lang === "EN"
-                        //     ? "Training request sent"
-                        //     : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
-                        //   [
-                        //     {
-                        //       text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                        //       onPress: () => this.reset(),
-                        //     },
-                        //   ],
-                        //   { cancelable: false }
-                        // );
+
+                          httpClient
+                            .post(
+                              "/Training/InsertTrainingRequestFile",
+                              data,
+                              {}
+                            )
+                            .then((response) => {
+                              const result = response.data;
+                              if (result == true) {
+                                Alert.alert(
+                                  this.state.lang === "EN"
+                                    ? "Alert"
+                                    : "แจ้งเตือน",
+                                  this.state.lang === "EN"
+                                    ? "Training request sent"
+                                    : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
+                                  [
+                                    {
+                                      text:
+                                        this.state.lang === "EN"
+                                          ? "OK"
+                                          : "ตกลง",
+                                      onPress: () => this.reset(),
+                                    },
+                                  ],
+                                  { cancelable: false }
+                                );
+                              } else {
+                                Alert.alert(
+                                  this.state.lang === "EN"
+                                    ? `Training request failed`
+                                    : "ไม่สามารถส่งคำร้องขอฝึกอบรมได้"
+                                );
+                              }
+                            })
+                            .catch((error) => {
+                              console.log(error);
+                            });
+                        } else {
+                          Alert.alert(
+                            this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                            this.state.lang === "EN"
+                              ? "Training request sent"
+                              : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
+                            [
+                              {
+                                text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                                onPress: () => this.reset(),
+                              },
+                            ],
+                            { cancelable: false }
+                          );
+                        }
                       } else {
                         Alert.alert(
                           this.state.lang === "EN"
@@ -1205,7 +1236,7 @@ export default class TrainingFormScreen extends Component {
               </TouchableOpacity>
 
               <DateTimePickerModal
-                locale="th"
+                locale="th_TH"
                 isVisible={this.state.isDatePickerVisible}
                 mode="date"
                 onConfirm={this.handleConfirm}
