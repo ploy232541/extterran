@@ -11,9 +11,9 @@ axios.interceptors.request.use(async (config)=> {
         if (jwtToken != null) {
             config.headers = { 'x-access-token': jwtToken }
         }
-        // config.url = join('http://smartxlearning.com:3000', config.url); //server 
+        //config.url = join('http://smartxlearning.com:3000', config.url); //server 
         //config.url = join('https://warm-savannah-75708.herokuapp.com', config.url); //server heroku
-        config.url = join('http://192.168.1.38:3000', config.url); //localhost office bws
+        config.url = join('http://192.168.182.217:3000', config.url); //localhost office bws
         // config.url = join('http://192.168.1.39:3000', config.url); //localhost home 
     }
     return config;
