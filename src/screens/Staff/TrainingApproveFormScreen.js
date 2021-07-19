@@ -92,8 +92,9 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
 
             if (confirm) {
               let user_id = await AsyncStorage.getItem("userId");
+              console.log(route);
               let param = {
-                request_id: route.request_id,
+                request_id: route.params.request_id,
                 user_id: user_id,
                 approval_status: approval_status,
                 approval_note: approval_note,

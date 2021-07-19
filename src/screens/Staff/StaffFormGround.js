@@ -25,6 +25,7 @@ const StaffFormGround = ({ navigation, route }) => {
   const [ground, setGround] = useState([]);
   const [item, setItem] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [noApprove, setNoApprove] = useState(false);
 
   useEffect(() => {
     const run = async () => {

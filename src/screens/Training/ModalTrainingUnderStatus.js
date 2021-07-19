@@ -82,7 +82,7 @@ const ModalTrainingUnderStatus = (props) => {
                   </View>
 
                   <View style={{ margin: 20 }}>
-                    <Text style={{ marginTop: 10 }}>First name :</Text>
+                    <Text style={{ marginTop: 10 }}>First name:</Text>
                     <Text style={styles.textInput}>ชื่อ</Text>
                     <TextInput
                       editable={false}
@@ -98,7 +98,7 @@ const ModalTrainingUnderStatus = (props) => {
                       value={item.lastname}
                     />
 
-                    <Text>Position :</Text>
+                    <Text>Position:</Text>
                     <Text style={styles.textInput}>ตำแหน่ง</Text>
                     <TextInput
                       editable={false}
@@ -106,7 +106,7 @@ const ModalTrainingUnderStatus = (props) => {
                       value={item.position}
                     />
 
-                    <Text>Dept :</Text>
+                    <Text>Dept:</Text>
                     <Text style={styles.textInput}>แผนก</Text>
                     <TextInput
                       editable={false}
@@ -118,7 +118,7 @@ const ModalTrainingUnderStatus = (props) => {
                       <Divider style={{ paddingBottom: 1 }} />
                     </View>
 
-                    <Text>Expense :</Text>
+                    <Text>Expense:</Text>
                     <Text style={styles.textInput}>
                       ค่าใช้จ่ายต่อบุคคล (ไม่รวมภาษี)
                     </Text>
@@ -128,7 +128,7 @@ const ModalTrainingUnderStatus = (props) => {
                       value={item.expense}
                     />
 
-                    <Text>Name of Course :</Text>
+                    <Text>Name of Course:</Text>
                     <Text style={styles.textInput}>ชื่อหลักสูตร</Text>
                     <TextInput
                       editable={false}
@@ -136,7 +136,7 @@ const ModalTrainingUnderStatus = (props) => {
                       value={item.course_title}
                     />
 
-                    <Text>Start Date :</Text>
+                    <Text>Start Date:</Text>
                     <Text style={styles.textInput}>วันที่เริ่มฝึกอบรบ</Text>
                     <TextInput
                       editable={false}
@@ -144,7 +144,7 @@ const ModalTrainingUnderStatus = (props) => {
                       value={item.start_date}
                     />
 
-                    <Text>End Date :</Text>
+                    <Text>End Date:</Text>
                     <Text style={styles.textInput}>วันที่สิ้นสุดฝึกอบรบ</Text>
                     <TextInput
                       editable={false}
@@ -152,7 +152,7 @@ const ModalTrainingUnderStatus = (props) => {
                       value={item.end_date}
                     />
 
-                    <Text>Total :</Text>
+                    <Text>Total:</Text>
                     <Text style={styles.textInput}>รวมวันฝึกอบรม</Text>
                     <TextInput
                       editable={false}
@@ -187,7 +187,7 @@ const ModalTrainingUnderStatus = (props) => {
                     style={{ backgroundColor: "black", marginHorizontal: 10 }}
                   />
                   <View style={{ margin: 20 }}>
-                    <Text>Pre-Requisities for Training :</Text>
+                    <Text>Pre-Requisities for Training:</Text>
                     <Text style={styles.textInput}>
                       คุณสมบัติขั้นพื้นฐานเพื่อฝึกอบรม
                     </Text>
@@ -203,7 +203,7 @@ const ModalTrainingUnderStatus = (props) => {
                         })
                       : null}
 
-                    <Text>Expected Result of Training :</Text>
+                    <Text>Expected Result of Training:</Text>
                     <Text style={styles.textInput}>
                       ผลที่คาดว่าจะได้รับจากการฝึกอบรม
                     </Text>
@@ -219,7 +219,7 @@ const ModalTrainingUnderStatus = (props) => {
                         })
                       : null}
 
-                    <Text>Particpant/Requeste :</Text>
+                    <Text>Particpant/Requeste:</Text>
                     <Text style={styles.textInput}>
                       ผู้เข้าอบรม/ผู้ยื่นคำขอ
                     </Text>
@@ -229,7 +229,7 @@ const ModalTrainingUnderStatus = (props) => {
                       value={item.participant}
                     />
 
-                    <Text>Date :</Text>
+                    <Text>Date:</Text>
                     <Text style={styles.textInput}>วันที่</Text>
                     <TextInput
                       editable={false}
@@ -237,7 +237,7 @@ const ModalTrainingUnderStatus = (props) => {
                       value={item.created_date}
                     />
 
-                    <Text>Place :</Text>
+                    <Text>Place:</Text>
                     <Text style={styles.textInput}>สถานที่ฝึกอบรม</Text>
                     <TextInput
                       editable={false}
