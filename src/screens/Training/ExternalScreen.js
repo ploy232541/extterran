@@ -283,38 +283,6 @@ export default class ExternalScreen extends Component {
                 );
               } else {
                 error = false;
-                let pic = new FormData();
-                pic.append("file", {
-                  name: param.upload_file.name,
-                  uri: param.upload_file.uri,
-                });
-                httpClient
-                  .post("/Training/InsertTrainingNeedPic", pic)
-                  .then((response) => {
-                    let file = response.data;
-
-                    let trainingNeeds = [...trainingNeed];
-                    let item = { ...trainingNeeds[index - 1] };
-
-                    let data = { ...item["data"] };
-                    let param = data[i - 1];
-
-                    param.file = file;
-                    data[i] = param;
-                    trainingNeeds[index - 1] = item;
-
-                    var id = "Id of subbrands to remove: ";
-                    //ลบ key ส่วนเกินออก
-                    trainingNeeds.forEach(function (o) {
-                      o.data = o.data.filter((s) => s.id != id);
-                    });
-                    this.setState({
-                      trainingNeed: trainingNeeds,
-                    });
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
               }
 
               i++;
@@ -342,36 +310,74 @@ export default class ExternalScreen extends Component {
             {
               text: this.state.lang === "EN" ? "OK" : "ตกลง",
               onPress: () => {
-                let data = { trainingNeed: trainingNeed, user_id: id };
-                httpClient
-                  .post("/Training/InsertTrainingNeedsExternal", data)
-                  .then((response) => {
-                    const result = response.data;
-                    if (result === true) {
-                      Alert.alert(
-                        this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                        this.state.lang === "EN"
-                          ? "Training request sent"
-                          : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
-                        [
-                          {
-                            text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                            onPress: () => this.reset(),
-                          },
-                        ],
-                        { cancelable: false }
-                      );
-                    } else {
-                      Alert.alert(
-                        this.state.lang === "EN"
-                          ? `Training request failed`
-                          : "ไม่สามารถส่งคำร้องขอฝึกอบรมได้"
-                      );
+                let status = true;
+                let counter=0
+                  do {
+                    let element =trainingNeed[counter]
+                 
+                  let data = element.data;
+                  let employee_id = element.employee_id;
+                  data.every((param) => {
+                    let params={
+                      employee_id:employee_id,data:param,user_id:id
                     }
-                  })
-                  .catch((error) => {
-                    console.log(error);
+                    httpClient
+                      .post("/Training/InsertTrainingNeedsExternal", params)
+                      .then((response) => {
+                        const result = response.data;
+                        if (result != false) {
+                          let pic = new FormData();
+                          pic.append("file", {
+                            name: result + "",
+                            uri: param.upload_file.uri,
+                          });
+                          httpClient
+                            .post("/Training/InsertTrainingNeedPic", pic)
+                            .then((response) => {
+                              if(response.data==false){
+                                status=false
+                                console.log(status);
+                              }else{status=false
+                                console.log(status);}
+                     
+                            })
+                            .catch((error) => {
+                              console.log(error);
+                            });
+                        } else{status=false}
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
+
                   });
+                  if (status==true) {
+                    counter++
+                  }
+                  
+                } while (counter<trainingNeed.length&&status==true);
+
+                  if (counter>=trainingNeed.length&&status==true) {
+                  Alert.alert(
+                    this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                    this.state.lang === "EN"
+                      ? "Training request sent"
+                      : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
+                    [
+                      {
+                        text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                        onPress: () => this.reset1(),
+                      },
+                    ],
+                    { cancelable: false }
+                  );
+                } else {
+                  Alert.alert(
+                    this.state.lang === "EN"
+                      ? `Training request failed`
+                      : "ไม่สามารถส่งคำร้องขอฝึกอบรมได้"
+                  );
+                }
               },
             },
           ]
@@ -387,7 +393,7 @@ export default class ExternalScreen extends Component {
       <View style={styles.background}>
         <ScrollView>
           <View style={styles.textHeader}>
-            <Text style={{ color: "#333333", fontSize: 24,}}>
+            <Text style={{ color: "#333333", fontSize: 24 }}>
               Training Needs - External
             </Text>
           </View>
@@ -479,7 +485,7 @@ export default class ExternalScreen extends Component {
                               trainingNeed[index] = item;
                               this.setState({ trainingNeed: trainingNeed });
                             }}
-                            textStyle={{ fontSize: 14, }}
+                            textStyle={{ fontSize: 14 }}
                           >
                             <Picker.Item
                               label={
@@ -603,15 +609,6 @@ export default class ExternalScreen extends Component {
                                 <View>
                                   <Picker
                                     mode="dropdown"
-                                    // iosIcon={
-                                    //   <Icon
-                                    //     name="angle-down"
-                                    //     style={{
-                                    //       width: "8%",
-                                    //       paddingHorizontal: 2,
-                                    //     }}
-                                    //   />
-                                    // }
                                     style={styles.inputLightStyle}
                                     placeholder={
                                       this.state.lang === "EN"
@@ -643,7 +640,7 @@ export default class ExternalScreen extends Component {
                                         trainingNeed: trainingNeed,
                                       });
                                     }}
-                                    textStyle={{ fontSize: 14,}}
+                                    textStyle={{ fontSize: 14 }}
                                   >
                                     <Picker.Item
                                       label={
@@ -809,7 +806,7 @@ export default class ExternalScreen extends Component {
                               </View>
 
                               <DateTimePickerModal
-                              locale="th"
+                                locale="th"
                                 isVisible={this.state.isDatePickerVisible}
                                 mode="date"
                                 locale={this.state.lang === "EN" ? "en" : "th"}
