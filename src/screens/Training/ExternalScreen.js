@@ -58,10 +58,11 @@ export default class ExternalScreen extends Component {
       empList: [],
       purposeList: [],
       startDate: "DD/MM/YYYY",
-
+      statusSent: false,
       tem: -1,
       dateIndex: -1,
       dateI: -1,
+      statusSubmit: true,
     };
   }
 
@@ -212,10 +213,12 @@ export default class ExternalScreen extends Component {
     }
   }
   async onPressSend() {
+
     const { trainingNeed } = this.state;
-    let id = await AsyncStorage.getItem("userId");
+    let userID = await AsyncStorage.getItem("userId");
     if (trainingNeed.length <= 0) {
       Alert.alert("กรุณาเพิ่มพนักงานอย่างน้อย 1 รายการ");
+      
     } else {
       let index = 0;
       let error = false;
@@ -284,10 +287,11 @@ export default class ExternalScreen extends Component {
               } else {
                 error = false;
               }
-
+          
               i++;
             } while (i < data.length && error == false);
           } else {
+          
             Alert.alert(
               "กรุณาเพิ่มคอสเรียนอย่างน้อย 1 รายการ ในช่องที่ " + (index + 1)
             );
@@ -303,24 +307,28 @@ export default class ExternalScreen extends Component {
           [
             {
               text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-              onPress: () => console.log("Cancel Pressed"),
+              onPress: () => this.setState({ statusSubmit: true }),
               style: "cancel",
             },
             ,
             {
               text: this.state.lang === "EN" ? "OK" : "ตกลง",
               onPress: () => {
-                let status = true;
-                let counter=0
-                  do {
-                    let element =trainingNeed[counter]
-                 
+                this.setState({statusSubmit:false})
+                this.setState({ statusSent: true });
+                let counter = 0;
+                do {
+                  let element = trainingNeed[counter];
+
                   let data = element.data;
                   let employee_id = element.employee_id;
+                  let ix = 0;
                   data.every((param) => {
-                    let params={
-                      employee_id:employee_id,data:param,user_id:id
-                    }
+                    let params = {
+                      employee_id: employee_id,
+                      data: param,
+                      user_id: userID,
+                    };
                     httpClient
                       .post("/Training/InsertTrainingNeedsExternal", params)
                       .then((response) => {
@@ -334,43 +342,77 @@ export default class ExternalScreen extends Component {
                           httpClient
                             .post("/Training/InsertTrainingNeedPic", pic)
                             .then((response) => {
-                              if(response.data==false){
-                                status=false
-                                console.log(status);
-                              }else{status=false
-                                console.log(status);}
-                     
+                              if (response.data == false) {
+                                this.setState({ statusSent: false });
+                              }
+                              if (
+                                this.state.statusSent == false &&
+                                counter >= trainingNeed.length &&
+                                ix >= data.length
+                              ) {
+                                Alert.alert(
+                                  this.state.lang === "EN"
+                                    ? `Training request failed`
+                                    : "ไม่สามารถส่งคำร้องขอฝึกอบรมได้"
+                                );
+                                this.setState({ statusSubmit: true });
+                              } else if (
+                                this.state.statusSent == true &&
+                                counter >= trainingNeed.length &&
+                                ix >= data.length
+                              ) {
+                                this.setState({ statusSubmit: true });
+                                Alert.alert(
+                                  this.state.lang === "EN"
+                                    ? "Alert"
+                                    : "แจ้งเตือน",
+                                  this.state.lang === "EN"
+                                    ? "Training request sent"
+                                    : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
+                                  [
+                                    {
+                                      text:
+                                        this.state.lang === "EN"
+                                          ? "OK"
+                                          : "ตกลง",
+                                      onPress: () => this.reset(),
+                                    },
+                                  ],
+                                  { cancelable: false }
+                                );
+                              }
                             })
                             .catch((error) => {
                               console.log(error);
                             });
-                        } else{status=false}
+                        } else {
+                          if (this.state.statusSent == true) {
+                            this.setState({ statusSent: false });
+                            Alert.alert(
+                              this.state.lang === "EN"
+                                ? `Training request failed`
+                                : "ไม่สามารถส่งคำร้องขอฝึกอบรมได้"
+                            );
+                            this.setState({ statusSubmit: true });
+                          }
+                        }
                       })
                       .catch((error) => {
                         console.log(error);
                       });
-
+                    ix++;
                   });
-                  if (status==true) {
-                    counter++
-                  }
-                  
-                } while (counter<trainingNeed.length&&status==true);
 
-                  if (counter>=trainingNeed.length&&status==true) {
-                  Alert.alert(
-                    this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                    this.state.lang === "EN"
-                      ? "Training request sent"
-                      : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
-                    [
-                      {
-                        text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                        onPress: () => this.reset1(),
-                      },
-                    ],
-                    { cancelable: false }
-                  );
+                  counter++;
+                } while (
+                  counter < trainingNeed.length &&
+                  this.state.statusSent == true
+                );
+
+                if (
+                  counter >= trainingNeed.length &&
+                  this.state.statusSent == true
+                ) {
                 } else {
                   Alert.alert(
                     this.state.lang === "EN"
@@ -782,15 +824,19 @@ export default class ExternalScreen extends Component {
                                     <View
                                       style={{
                                         flex: 1,
-                                        marginTop: 20,
-                                        alignItems: "flex-start",
+                                        marginTop: 10,
+                                        alignItems: "center",
                                       }}
                                     >
                                       {param.upload_file ? (
-                                        <Text style={{ color: "red" }}>
-                                          {param.upload_file.name}
+                                        <Text style={{ color: "green" }}>
+                                          ชื่อไฟล์ : {param.upload_file.name}
                                         </Text>
-                                      ) : null}
+                                      ) : (
+                                        <Text style={{ color: "red" }}>
+                                          กรุณาแนปไฟล์
+                                        </Text>
+                                      )}
                                     </View>
                                   </View>
                                 </View>
@@ -918,14 +964,31 @@ export default class ExternalScreen extends Component {
             }}
           >
             <View style={styles.buttonContainer}>
-              <Button
-                style={styles.btnConfirmStyle}
-                onPress={() => this.onPressSend()}
-              >
-                <Text style={{ color: "white" }}>
-                  {this.state.lang === "EN" ? "Submit" : "ยืนยัน"}
-                </Text>
-              </Button>
+              {this.state.statusSubmit == true ? (
+                <View>
+                  <Button
+                    style={styles.btnConfirmStyle}
+                    onPress={() => this.onPressSend()}
+                  >
+                    <Text style={{ color: "white" }}>
+                      {this.state.lang === "EN" ? "Submit" : "ยืนยัน"}
+                    </Text>
+                  </Button>
+                </View>
+                
+              ) : (
+                <View>
+                  <Button
+                    style={styles.btnConfirmStyle1}
+                    disabled={true}
+                    enable={false}
+                  >
+                    <Text style={{ color: "white" }}>
+                      {this.state.lang === "EN" ? "Sending..." : "กำลังส่ง..."}
+                    </Text>
+                  </Button>
+                </View>
+              )}
             </View>
 
             <View style={styles.buttonContainer}>
@@ -1165,6 +1228,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     // paddingHorizontal: 32,
   },
+  btnConfirmStyle1: {
+    backgroundColor: "#5b6455",
+    justifyContent: "center",
+    alignSelf: "center",
+    borderRadius: 10,
+    // paddingHorizontal: 32,
+  },
   btnCancelStyle: {
     backgroundColor: "#5A6268",
     justifyContent: "center",
@@ -1180,4 +1250,3 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
 });
-
