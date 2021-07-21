@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: 18,
     marginVertical: 18,
+    backgroundColor: "white"
   },
   dataTableStyle: {
     borderWidth: 1,

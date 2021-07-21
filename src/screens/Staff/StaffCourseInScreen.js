@@ -88,7 +88,7 @@ const StaffCourseInScreen = (props) => {
             </Text>
             <View style={{ justifyContent: "flex-end", marginRight: 10 }}>
               {
-                item.feedback_show_button ?
+                // item.feedback_show_button ?
                 <Button 
                 onPress={() => showModal(item.user_id)}
                 style={{height: 30, backgroundColor: '#3399ff'}}
@@ -116,12 +116,12 @@ const StaffCourseInScreen = (props) => {
                     }
                    
                 </Button>
-                :
-                <Button disabled style={{height: 30, backgroundColor: '#b3e0ff'}}>
-                    <Text style={{marginLeft: 5, marginRight: 5, color: '#fff'}}>
-                        FeedBack
-                    </Text>
-                </Button>
+                // :
+                // <Button disabled style={{height: 30, backgroundColor: '#b3e0ff'}}>
+                //     <Text style={{marginLeft: 5, marginRight: 5, color: '#fff'}}>
+                //         FeedBack
+                //     </Text>
+                // </Button>
               }
             </View>
             <View style={{justifyContent: 'flex-end'}}>

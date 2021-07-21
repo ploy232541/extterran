@@ -51,6 +51,7 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
         .get(`/Team/getTrainingRequestApprove/${route.params.request_id}/${lang_id}`)
         .then((response) => {
           let res = response.data;
+          console.log(res);
           if (res != null) {
             setDataArray(res);
            setLoading(false)
@@ -108,7 +109,7 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
                     Alert.alert(
                       lang == "EN" ? "Successful" : "บันทึกเรียบร้อย",
                       "",
-                      [{ text: "OK", onPress: route.closeModal }]
+                      [{ text: "OK", onPress: navigation.goBack()}]
                     );
                   }
                 })
@@ -134,7 +135,9 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
           );
       }
   return (
-    <Modal visible={route.chkVisible} onBackdropPress={route.closeModal}>
+    <Modal visible={route.chkVisible} 
+    // onBackdropPress={() => navigation.goBack()}
+    >
       <ScrollView
         style={{
           flex: 1,
@@ -465,7 +468,7 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    onPress={route.closeModal}
+                    onPress={() => navigation.goBack()}
                     style={{
                       backgroundColor: "gray",
                       width: WIDTH / 5,
@@ -516,7 +519,7 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={route.closeModal}
+                  onPress={() => navigation.goBack()}
                   style={{
                     backgroundColor: "gray",
                     width: WIDTH / 5,

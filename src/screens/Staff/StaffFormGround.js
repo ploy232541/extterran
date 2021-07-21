@@ -434,7 +434,8 @@ const StaffFormGround = ({ navigation, route }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={route.closeModal}
+                  // onPress={route.closeModal}
+                  onPress={() => navigation.goBack()}
                   style={{
                     backgroundColor: "gray",
                     width: WIDTH / 5,

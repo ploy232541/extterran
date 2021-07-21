@@ -79,8 +79,8 @@ export default class Modal_FeedBack extends Component {
                                       </View>
 
                                         <View style={{alignItems: 'flex-end', marginBottom: 15}}>
-                                        <View style={{backgroundColor: '#3399ff', padding: 20, borderRadius: 10, justifyContent: 'center',alignItems: 'center'}}>
-                                            <Text style={{fontSize: 16, marginBottom: 10, color: '#fff' }}>
+                                        <View style={{backgroundColor: '#3399ff', marginTop: 5 ,paddingHorizontal: 20,paddingVertical: 10,borderRadius: 10, justifyContent: 'center',alignItems: 'center'}}>
+                                            <Text style={{fontSize: 14,  color: '#fff',marginBottom: 4 }}>
                                              {data.feedback_text}
                                             </Text>
                                             {
@@ -109,8 +109,8 @@ export default class Modal_FeedBack extends Component {
                                            <View style={{alignItems: 'flex-start'}}>
                                             <Label style={{fontSize: 16, marginBottom: 5}}>{data.user_ans}</Label>
                                             <View style={{alignItems: 'flex-start', marginBottom: 15}}>
-                                                <View style={{backgroundColor: '#d9d9d9', padding: 20, borderRadius: 10, justifyContent: 'center',alignItems: 'center'}}>
-                                                    <Text style={{fontSize: 16, marginBottom: 10 }}>
+                                                <View style={{backgroundColor: '#d9d9d9',marginTop: 5 ,paddingHorizontal: 20,paddingVertical: 10, borderRadius: 10, justifyContent: 'center',alignItems: 'center' , }}>
+                                                    <Text style={{fontSize: 14, marginBottom: 4}}>
                                                     {data.answer_text}
                                                     </Text>
                                                     {

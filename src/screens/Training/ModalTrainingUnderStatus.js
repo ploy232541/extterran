@@ -24,6 +24,7 @@ const HEIGHT = Dimensions.get("window").height;
 const ModalTrainingUnderStatus = (props) => {
   // props.request_id
 
+  console.log(props);
   return (
     <Modal
       backdropOpacity={0.5}

@@ -215,7 +215,11 @@ const styles = StyleSheet.create({
   root: {
     backgroundColor: "#fff",
   },
-  container: { flex: 1, marginHorizontal: 10, marginVertical: 15 },
+  container: { flex: 1, 
+    marginHorizontal: 10, 
+    marginVertical: 15,
+  borderColor: "#ddd",
+borderWidth:1 },
   headline: {
     textAlign: "center",
     fontWeight: "bold",

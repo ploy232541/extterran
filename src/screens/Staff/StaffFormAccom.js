@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { Divider } from "react-native-elements";
@@ -26,6 +27,7 @@ const StaffFormAccom = ({ navigation, route }) => {
   const [item, setItem] = useState([]);
   const [loading, setLoading] = useState(false);
   const [noApprove, setNoApprove] = useState(false);
+  const [approval_note, setApproval_note] = useState(null);
 
   useEffect(() => {
     const run = async () => {
@@ -63,6 +65,69 @@ const StaffFormAccom = ({ navigation, route }) => {
       console.log(e);
     }
   };
+
+  const submitApprove = async (approval_status) => {
+    Alert.alert(
+      lang == "EN" ? "Alert" : "แจ้งเตือน",
+      
+        lang == "EN" ? "Confirm the recording." : "ยืนยันการบันทึก",
+      [
+        {
+          text: lang == "EN" ? "CANCEN" : "ยกเลิก",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        ,
+        {
+          text: lang == "EN" ? "OK" : "ตกลง",
+          onPress: async () => {
+            let confirm = false;
+            if (noApprove) {
+              if (approval_note != null) {
+                confirm = true;
+              } else {
+                confirm = false;
+              }
+            } else {
+              confirm = true;
+            }
+
+            if (confirm) {
+              let user_id = await AsyncStorage.getItem("userId");
+              console.log(route);
+              let param = {
+                booking_id: route.params.booking_id,
+                user_id: user_id,
+                approval_status: approval_status,
+                approval_note: approval_note,
+              };
+
+              httpClient
+                .post(`/Team/saveBookingRequestApprove`, param)
+                .then((response) => {
+                  let res = response.data;
+                  if (res == true) {
+                    Alert.alert(
+                      lang == "EN" ? "Successful" : "บันทึกเรียบร้อย",
+                      "",
+                      [{ text: "OK", onPress: navigation.goBack()}]
+                    );
+                  }
+                })
+                .catch((e) => console.log(e));
+            } else {
+              Alert.alert(
+                lang == "EN" ? "Please enter a reason." : "โปรดกรอกเหตุผลด้วย"
+              );
+            }
+          },
+        },
+      ]
+      
+      
+    );
+  };
+
   if (loading) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -369,7 +434,7 @@ const StaffFormAccom = ({ navigation, route }) => {
                   </Text>
                   <TextInput
                     style={styles.inputStyle}
-                    // onChangeText={(text) => setApproval_note(text)}
+                    onChangeText={(text) => setApproval_note(text)}
                   />
                 </View>
                 <View
@@ -380,7 +445,7 @@ const StaffFormAccom = ({ navigation, route }) => {
                   }}
                 >
                   <TouchableOpacity
-                    // onPress={() => submitApprove(2)}
+                    onPress={() => submitApprove(2)}
                     style={{
                       backgroundColor: "green",
                       width: WIDTH / 5,
@@ -394,7 +459,7 @@ const StaffFormAccom = ({ navigation, route }) => {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    // onPress={() => setNoApprove(false)}
+                    onPress={() => setNoApprove(false)}
                     style={{
                       backgroundColor: "red",
                       width: WIDTH / 5,
@@ -408,7 +473,8 @@ const StaffFormAccom = ({ navigation, route }) => {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    onPress={route.closeModal}
+                    // onPress={route.closeModal}
+                    onPress={() => navigation.goBack()}
                     style={{
                       backgroundColor: "gray",
                       width: WIDTH / 5,
@@ -431,7 +497,7 @@ const StaffFormAccom = ({ navigation, route }) => {
                 }}
               >
                 <TouchableOpacity
-                  // onPress={() => submitApprove(1)}
+                  onPress={() => submitApprove(1)}
                   style={{
                     backgroundColor: "green",
                     width: WIDTH / 5,
@@ -445,7 +511,7 @@ const StaffFormAccom = ({ navigation, route }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  // onPress={() => setNoApprove(true)}
+                  onPress={() => setNoApprove(true)}
                   style={{
                     backgroundColor: "red",
                     width: WIDTH / 5,
@@ -459,7 +525,8 @@ const StaffFormAccom = ({ navigation, route }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={route.closeModal}
+                  // onPress={route.closeModal}
+                  onPress={() => navigation.goBack()}
                   style={{
                     backgroundColor: "gray",
                     width: WIDTH / 5,
