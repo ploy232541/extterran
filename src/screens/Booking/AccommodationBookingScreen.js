@@ -455,21 +455,21 @@ export default class AccommodationBookingScreen extends Component {
               <Text style={styles.textInput}>ชื่อ</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.firstname}
+                value={this.state.firstname ? this.state.firstname : "-"}
               />
 
               <Text>Last Name:</Text>
               <Text style={styles.textInput}>นามสกุล</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.lastname}
+                value={this.state.lastname ? this.state.lastname : "-"}
               />
 
               <Text>ID No:</Text>
               <Text style={styles.textInput}>เลขบัตรประชาชน</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.identification}
+                value={this.state.identification ? this.state.identification : "-"}
               />
 
               <Text>Phone No:</Text>
@@ -483,28 +483,28 @@ export default class AccommodationBookingScreen extends Component {
               <Text style={styles.textInput}>จังหวัด</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.province}
+                value={this.state.province ? this.state.province : "-"}
               />
 
               <Text>District:</Text>
               <Text style={styles.textInput}>อำเภอ</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.district}
+                value={this.state.district ? this.state.district : "-"}
               />
 
               <Text>Subdistrict:</Text>
               <Text style={styles.textInput}>ตำบล</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.subdistrict}
+                value={this.state.subdistrict ? this.state.subdistrict : "-"}
               />
 
               <Text>Zip:</Text>
               <Text style={styles.textInput}>รหัสไปรษณีย์</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.zipcode.toString()}
+                value={this.state.zipcode.toString() ? this.state.zipcode.toString() : "-"}
               />
 
               <Text>Purpose:</Text>
