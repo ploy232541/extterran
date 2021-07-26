@@ -95,7 +95,7 @@ export default class AccommodationBookingScreen extends Component {
                   this.state.lang === "EN" ? row.dt_name_en : row.dt_name_th,
                 subdistrict:
                   this.state.lang === "EN" ? row.sdt_name_en : row.sdt_name_th,
-                zipcode: row.zipcode,
+                zipcode: row.zipcode ? row.zipcode : "-",
               });
             }
           }
@@ -504,7 +504,7 @@ export default class AccommodationBookingScreen extends Component {
               <Text style={styles.textInput}>รหัสไปรษณีย์</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.zipcode.toString() ? this.state.zipcode.toString() : "-"}
+                value={this.state.zipcode? this.state.zipcode.toString() : "-"}
               />
 
               <Text>Purpose:</Text>

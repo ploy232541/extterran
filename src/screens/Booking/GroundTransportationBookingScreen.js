@@ -95,22 +95,22 @@ export default class GroundTransportationBookingScreen extends Component {
                   this.state.lang === "EN" ? row.dt_name_en : row.dt_name_th,
                 subdistrict:
                   this.state.lang === "EN" ? row.sdt_name_en : row.sdt_name_th,
-                zipcode: row.zipcode,
-                address: row.address,
-                address_moo: row.address_moo,
-                address_village: row.address_village,
-                address_alley: row.address_alley,
-                address_road: row.address_road,
+                zipcode: row.zipcode ? row.zipcode : "-",
+                address: row.address ? row.address : "-",
+                address_moo: row.address_moo ? row.address_moo : "-",
+                address_village: row.address_village ? row.address_village : "-",
+                address_alley: row.address_alley ? row.address_alley : "-",
+                address_road: row.address_road ? row.address_road : "-",
                 resident:
-                  row.address +
+                row.address ? row.address : "-" +
                   " หมู่" +
-                  row.address_moo +
+                  row.address_moo ? row.address_moo : "-" +
                   " หมู่บ้าน" +
-                  row.address_village +
+                  row.address_village ? row.address_village : "-" +
                   " ซอย" +
-                  row.address_alley +
+                  row.address_alley ? row.address_alley : "-" +
                   " ถนน" +
-                  row.address_road,
+                  row.address_road ? row.address_road : "-",
               });
             }
           }
@@ -554,28 +554,28 @@ export default class GroundTransportationBookingScreen extends Component {
               <Text style={styles.textInput}>จังหวัด</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.province}
+                value={this.state.province ? this.state.province : "-"}
               />
 
               <Text>District:</Text>
               <Text style={styles.textInput}>อำเภอ</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.district}
+                value={this.state.district ? this.state.district : "-"}
               />
 
               <Text>Subdistrict:</Text>
               <Text style={styles.textInput}>ตำบล</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.subdistrict}
+                value={this.state.subdistrict ? this.state.subdistrict : "-"}
               />
 
               <Text>Zip:</Text>
               <Text style={styles.textInput}>รหัสไปรษณีย์</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.zipcode.toString()}
+                value={this.state.zipcode ? this.state.zipcode.toString() : "-"}
               />
             </View>
             <View
