@@ -149,7 +149,8 @@ export default class OutfitScreen extends Component {
           //let i = 0;
           //console.log("result = " + (Number(result.length)+3)%2);
           //console.log("result = " + result[i + 1].uniform_id);
-          for (let i = 0; i < result.length; i++) {
+           if (result != null && result != "") {
+             for (let i = 0; i < result.length; i++) {
             //console.log("result = " + result[i].uniform_size);
             if (result[i].uniform_type == "1" && result[i].uniform_part == "1") {
               let bob_size = this.state.select_1.find((item) => {
@@ -158,26 +159,33 @@ export default class OutfitScreen extends Component {
               let bob_pant_size = this.state.select_1.find((item) => {
                 return item.name == result[i+1].uniform_size;
               });
-              console.log("bob_size.id = " + bob_size.id);
-              this.setState({
-                bob_count: String(result[i].uniform_total),
-                bob_gender: result[i].uniform_sex,
-                bob_size: bob_size.id,
-                bob_pant_size: bob_pant_size.id,
-                edit_bob_size: result[i].sleevelength,
-                edit_bob_pant_size: result[i+1].trouserbeak,
-                select_uniform: true,
-              })
-              this.setState({bob: true});
+              // console.log("bob_size.id = " + bob_size.id);
+              // console.log("bob_pant_size.id = " + bob_pant_size.id);
+              if (bob_size != null) {
+                this.setState({
+                  bob_count: String(result[i].uniform_total),
+                  bob_gender: result[i].uniform_sex,
+                  bob_size: bob_size.id,
+                  bob_pant_size: bob_pant_size.id,
+                  edit_bob_size: result[i].sleevelength,
+                  edit_bob_pant_size: result[i+1].trouserbeak,
+                  select_uniform: true,
+                })
+                this.setState({bob: true});
+              }
+              else {
+                this.reset();
+              }
             }
-            if (result[i].uniform_type == "2" && result[i].uniform_part == "1") {
+            else if (result[i].uniform_type == "2" && result[i].uniform_part == "1") {
               let shirt_size = this.state.select_1.find((member) => {
                 return member.name == result[i].uniform_size;
               });
               let shirt_pant_size = this.state.select_1.find((member) => {
                 return member.name == result[i+1].uniform_size;
               });
-              this.setState({
+              if (shirt_size != null) {
+                this.setState({
                 shirt_count: String(result[i].uniform_total),
                 shirt_gender: result[i].uniform_sex,
                 shirt_size: shirt_size.id,
@@ -187,21 +195,31 @@ export default class OutfitScreen extends Component {
                 select_uniform: true,
               })
               this.setState({shirt: true});
+              }
+              else{
+                this.reset();
+              }
             }
-            if (result[i].uniform_type == "3" && result[i].uniform_part == "3") {
+            else if (result[i].uniform_type == "3" && result[i].uniform_part == "3") {
               let coverall_size = this.state.select_1.find((member) => {
                 return member.name == result[i].uniform_size;
               });
-              this.setState({coverall: true});
-              this.setState({
-                coverall_count: String(result[i].uniform_total),
-                coverall_size: coverall_size.id,
-                edit_coverall_size: result[i].sleevelength,
-                select_uniform: true,
-              })
-              
+              if (coverall_size != null) {
+                this.setState({coverall: true});
+                this.setState({
+                  coverall_count: String(result[i].uniform_total),
+                  coverall_size: coverall_size.id,
+                  edit_coverall_size: result[i].sleevelength,
+                  select_uniform: true,
+                })
+              }
+              else{
+                this.reset();
+              }
             }
           }
+          }
+          
           this.setState({loading:false})
           
           /*if (result != null) {
@@ -256,14 +274,14 @@ export default class OutfitScreen extends Component {
   onPressSend = () => {
     const {alertiffillsome, uniform_id, user_id, selectcount, bob_size, edit_bob_size, bob_pant_size, edit_bob_pant_size, bob_gender, bob_count, shirt_size, edit_shirt_size, shirt_pant_size, edit_shirt_pant_size, shirt_gender, shirt_count, coverall_size, edit_coverall_size, coverall_count} =
       this.state;
-      console.log("bob gender  = " + bob_gender);
-      console.log("shirt gender  = " + shirt_gender);
-      console.log("bob size = " + bob_size);
-      console.log("edit bob size = " + edit_bob_size);
-      console.log("bob pant size = " + bob_pant_size);
-      console.log("edit bob pant size = " + edit_bob_pant_size);
-      console.log("bob count = " + bob_count);
-      console.log(Number(bob_count) + Number(shirt_count));
+      // console.log("bob gender  = " + bob_gender);
+      // console.log("shirt gender  = " + shirt_gender);
+      // console.log("bob size = " + bob_size);
+      // console.log("edit bob size = " + edit_bob_size);
+      // console.log("bob pant size = " + bob_pant_size);
+      // console.log("edit bob pant size = " + edit_bob_pant_size);
+      // console.log("bob count = " + bob_count);
+      // console.log(Number(bob_count) + Number(shirt_count));
     if ( Number(bob_count) + Number(shirt_count) + Number(coverall_count) > Number(this.state.selectcount)) {
       this.state.lang === "EN"
         ? Alert.alert("You can\'t select all a uniform more than " + this.state.selectcount)
@@ -391,13 +409,14 @@ export default class OutfitScreen extends Component {
       this.setState({ select_uniform: true });
     }
     try {
-      httpClient
+         httpClient
         .get(`/Training/getuniforms/${this.state.user_id}`)
         .then((response) => {
           const result = response.data;
-          //let i = 0;
-          //console.log("result = " + (Number(result.length)+3)%2);
-          //console.log("result = " + result[i + 1].uniform_id);
+          if (result != null && result != "") {
+            //let i = 0;
+            //console.log("result = " + (Number(result.length)+3)%2);
+            //console.log("result = " + result[i + 1].uniform_id);
           for (let i = 0; i < result.length; i++) {
             //console.log("result = " + result[i].uniform_type);
             if (result[i].uniform_type == "1" && result[i].uniform_part == "1") {
@@ -407,17 +426,22 @@ export default class OutfitScreen extends Component {
               let bobpantsize = this.state.select_1.find((member) => {
                 return member.name == result[i+1].uniform_size;
               });
-              this.setState({
-                bob_count: String(result[i].uniform_total),
-                bob_gender: result[i].uniform_sex,
-                bob_size: bobsize.id,
-                bob_pant_size: bobpantsize.id,
-                edit_bob_size: result[i].sleevelength,
-                edit_bob_pant_size: result[i+1].trouserbeak,
-                select_uniform: true,
-              })
-              this.setState({bob: true});
-            }
+              if (bobsize == null) {
+                this.reset();
+              }
+              else{
+                this.setState({
+                  bob_count: String(result[i].uniform_total),
+                  bob_gender: result[i].uniform_sex,
+                  bob_size: bobsize.id,
+                  bob_pant_size: bobpantsize.id,
+                  edit_bob_size: result[i].sleevelength,
+                  edit_bob_pant_size: result[i+1].trouserbeak,
+                  select_uniform: true,
+                })
+                this.setState({bob: true});
+                }
+              }
             if (result[i].uniform_type == "2" && result[i].uniform_part == "1") {
               let shirtsize = this.state.select_1.find((member) => {
                 return member.name == result[i].uniform_size;
@@ -425,28 +449,40 @@ export default class OutfitScreen extends Component {
               let shirtpantsize = this.state.select_1.find((member) => {
                 return member.name == result[i+1].uniform_size;
               });
-              this.setState({
-                shirt_count: String(result[i].uniform_total),
-                shirt_gender: result[i].uniform_sex,
-                shirt_size: shirtsize.id,
-                shirt_pant_size: shirtpantsize.id,
-                edit_shirt_size: result[i].sleevelength,
-                edit_shirt_pant_size: result[i+1].trouserbeak,
-                select_uniform: true,
-              })
-              this.setState({shirt: true});
+              if (shirtsize == null) {
+                this.reset();
+              }
+              else{
+                this.setState({
+                  shirt_count: String(result[i].uniform_total),
+                  shirt_gender: result[i].uniform_sex,
+                  shirt_size: shirtsize.id,
+                  shirt_pant_size: shirtpantsize.id,
+                  edit_shirt_size: result[i].sleevelength,
+                  edit_shirt_pant_size: result[i+1].trouserbeak,
+                  select_uniform: true,
+                })
+                this.setState({shirt: true});
+              }
+              
             }
             if (result[i].uniform_type == "3" && result[i].uniform_part == "3") {
               let coverallsize = this.state.select_1.find((member) => {
                 return member.name == result[i].uniform_size;
               });
-              this.setState({
-                shirt_count: String(result[i].uniform_total),
-                coverall_size: shirtsize.id,
-                edit_coverall_size: result[i].sleevelength,
-                select_uniform: true,
-              })
-              this.setState({coverall: true});
+              if (coverallsize == null) {
+                this.reset();
+              }
+              else{
+                this.setState({
+                  shirt_count: String(result[i].uniform_total),
+                  coverall_size: shirtsize.id,
+                  edit_coverall_size: result[i].sleevelength,
+                  select_uniform: true,
+                })
+                this.setState({coverall: true});
+              }
+              
             }
           }
           
@@ -473,10 +509,15 @@ export default class OutfitScreen extends Component {
             })
             this.setState({bob: true});
           }*/
+         } 
         })
+        
+          
         .catch((error) => {
           console.log(error);
         });
+       
+      
     } catch (error) {
       console.log(error);
     }

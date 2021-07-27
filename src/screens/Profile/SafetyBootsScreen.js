@@ -90,28 +90,34 @@ export default class SafetyBootsScreen extends Component {
         .get(`/Training/getBoots/${this.state.user_id}`)
         .then((response) => {
           const result = response.data;
-          if (result != null) {
+          if (result != null && result != "") {
             let size = this.state.select_1.find((member) => {
               return member.name == result[0].boots_size;
             });
-            this.setState({
-              boots_id: result[0].boots_id,
-              per_id: result[0].per_id,
-              boots_type: result[0].boots_type,
-              uniform_total: result[0].uniform_total,
-              uniform_part: result[0].uniform_part,
-              uniform_type: result[0].uniform_type,
-              select_type: result[0].select_type,
-              boots_name: result[0].boots_name,
-              uniform_name: result[0].uniform_name,
-              boots_size: size.id,
-              select_boots: true,
-            });
-            if (result[0].boots_type == 1) {
-              this.setState({ boots: true });
-            } else if (result[0].boots_type == 2) {
-              this.setState({ shoes: true });
+            if (size == null) {
+              this.reset();
             }
+            else{
+              this.setState({
+                boots_id: result[0].boots_id,
+                per_id: result[0].per_id,
+                boots_type: result[0].boots_type,
+                uniform_total: result[0].uniform_total,
+                uniform_part: result[0].uniform_part,
+                uniform_type: result[0].uniform_type,
+                select_type: result[0].select_type,
+                boots_name: result[0].boots_name,
+                uniform_name: result[0].uniform_name,
+                boots_size: size.id,
+                select_boots: true,
+              });
+              if (result[0].boots_type == 1) {
+                this.setState({ boots: true });
+              } else if (result[0].boots_type == 2) {
+                this.setState({ shoes: true });
+              }
+            }
+            
           }
           this.setState({loading:false})
         })
@@ -238,28 +244,34 @@ export default class SafetyBootsScreen extends Component {
         .get(`/Training/getBoots/${this.state.user_id}`)
         .then((response) => {
           const result = response.data;
-          if (result != null) {
+          if (result != null && result != "") {
             let size = this.state.select_1.find((member) => {
               return member.name == result[0].boots_size;
             });
-            this.setState({
-              boots_id: result[0].boots_id,
-              per_id: result[0].per_id,
-              boots_type: result[0].boots_type,
-              uniform_total: result[0].uniform_total,
-              uniform_part: result[0].uniform_part,
-              uniform_type: result[0].uniform_type,
-              select_type: result[0].select_type,
-              boots_name: result[0].boots_name,
-              uniform_name: result[0].uniform_name,
-              boots_size: size.id,
-              select_boots: true,
-            });
-            if (result[0].boots_type == 1) {
-              this.setState({ boots: true });
-            } else if (result[0].boots_type == 2) {
-              this.setState({ shoes: true });
+            if (size == null) {
+              this.reset();
             }
+            else{
+              this.setState({
+                boots_id: result[0].boots_id,
+                per_id: result[0].per_id,
+                boots_type: result[0].boots_type,
+                uniform_total: result[0].uniform_total,
+                uniform_part: result[0].uniform_part,
+                uniform_type: result[0].uniform_type,
+                select_type: result[0].select_type,
+                boots_name: result[0].boots_name,
+                uniform_name: result[0].uniform_name,
+                boots_size: size.id,
+                select_boots: true,
+              });
+              if (result[0].boots_type == 1) {
+                this.setState({ boots: true });
+              } else if (result[0].boots_type == 2) {
+                this.setState({ shoes: true });
+              }
+            }
+            
           }
         
         })
@@ -271,7 +283,8 @@ export default class SafetyBootsScreen extends Component {
     }
   };
 
-  render() { if (this.state.loading) {
+  render() { 
+    if (this.state.loading) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
         <View
@@ -283,7 +296,9 @@ export default class SafetyBootsScreen extends Component {
     );
   }
     console.log("orgid = " + this.state.orgid);
-    if (this.state.orgid == 2 || (this.state.orgid == 3 && this.state.authorityid != null)) {return (
+    if (this.state.orgid == 2 || (this.state.orgid == 3 && this.state.authorityid != null)) {
+      return (
+        
       <View style={styles.background}>
         <ScrollView>
           <View style={styles.textHeader}>
