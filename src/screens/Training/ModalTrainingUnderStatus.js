@@ -17,7 +17,7 @@ import AntIcon from "react-native-vector-icons/AntDesign";
 import { Dimensions } from "react-native";
 import HTML from "react-native-render-html";
 import Modal from "react-native-modal";
-import { httpClient } from "../../utils/Provider";
+
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;

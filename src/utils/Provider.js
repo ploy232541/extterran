@@ -241,10 +241,7 @@ export function accordionListScreen(type, subtype, title = null) {
                 : null
               : null
           }
-          // titleStyle={[
-          //   indexStyle.titleStyle,
-          //   { color: isNotEmpty ? colors.exterran : "" },
-          // ]}
+        
         >
           {data.length > 0
             ? data.map((item) => {
@@ -332,31 +329,7 @@ export function accordionListScreen(type, subtype, title = null) {
                       </View>
 
                       {word[0] == "0" && item.url_print ? (
-                        // <Button
-                        //   contentStyle={indexStyle.buttonContentStyle}
-                        //   icon="printer"
-                        //   labelStyle={{ fontSize: 36 }}
-                        //   mode="contained"
-                        //   onPress={() => Linking.openURL(item.url_print)}
-                        //   // style={indexStyle.buttonPrintStyle}
-                        //   style={{
-                        //     marginTop: 18,
-                        //     marginBottom: 15,
-                        //     width: "50%",
-                        //     alignSelf: "center",
-                        //   }}
-                        // >
-                        //   <View>
-                        //     <Text
-                        //       style={[
-                        //         indexStyle.buttonTextStyle,
-                        //         { color: "white", fontSize: 14 },
-                        //       ]}
-                        //     >
-                        //       {lang == "EN" ? "Print" : "พิมพ์"}
-                        //     </Text>
-                        //   </View>
-                        // </Button>
+                      
                         <TouchableOpacity
                         style={{
                           borderRadius: 50,
@@ -375,28 +348,6 @@ export function accordionListScreen(type, subtype, title = null) {
                       </TouchableOpacity>
                       ) : null}
 
-                      {/* <Button
-                        contentStyle={indexStyle.buttonContentStyle}
-                        icon="file"
-                        labelStyle={{ color: colors.exterran, fontSize: 32 }}
-                        onPress={() =>
-                          shown(
-                            item.modal || item.request_id || item.booking_id
-                          )
-                        }
-                        style={indexStyle.buttonDetailStyle}
-                      >
-                        <View>
-                          <Text
-                            // style={[
-                            //   indexStyle.buttonTextStyle,
-                            //   { fontSize: 15 },
-                            // ]}
-                          >
-                            {lang == "EN" ? "Detail" : "ติดตาม"}
-                          </Text>
-                        </View>
-                      </Button> */}
                       <TouchableOpacity
                         style={{
                           borderRadius: 50,
