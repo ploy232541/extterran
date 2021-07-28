@@ -22,9 +22,7 @@ import Modal from "react-native-modal";
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
 const ModalTrainingUnderStatus = (props) => {
-  // props.request_id
-
-  console.log(props);
+ 
   return (
     <Modal
       backdropOpacity={0.5}
