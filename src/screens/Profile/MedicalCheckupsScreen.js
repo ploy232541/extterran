@@ -256,10 +256,30 @@ export default class MedicalCheckupsScreen extends Component {
     }
   }
 
+/* ***** */
+mimetype = (name) => {
+    let allow =  {"png":"image/png","pdf":"application/pdf","jpeg":"image/jpeg", "jpg":"image/jpg"};
+    let extention = name.split(".")[1];
+    if (allow[extention] !== undefined){
+      return allow[extention]
+    }
+    else {
+      return undefined
+    }
+  }
+/* ***** */
+
   async uploadFile() {
     let result = await DocumentPicker.getDocumentAsync({});
-    if (result.type == "success") {
+    result.type = this.mimetype(result.name)
+    if (result.type !== undefined) {
       this.setState({ file_download: result });
+    }
+    else{
+      Alert.alert(
+        this.state.lang === "EN"
+            ? "Please select image or PDF file"
+            : "กรุณาเลือกเป็นรูปภาพหรือไฟล์ PDF");
     }
   }
 
@@ -543,9 +563,37 @@ export default class MedicalCheckupsScreen extends Component {
       );
   }
 
+  // test = (name, uri) => {
+
+  //   let testData = {"FormData":{
+  //     "_parts": [{
+  //         "file": [
+  //          {
+  //           "name": name,
+  //           "uri": uri,
+  //         },
+  //       ]
+  //     }]
+  //   },
+  //   }
+  //    console.log('====testData====',testData)
+
+    
+  // }
+
+
+  
+
   onPressSend = () => {
     const {staff_id, user_id, form_approval, startDate, endDate, hospital_id, doctor_id, chk_other, abnormal, spcecify, fitness, comments, fit_for_confined, file_download, followupdate, comment_follow, certificate} =
       this.state;
+
+      // const data = new FormData();
+      // file_download.name = 16 + "";
+      // data.append('file', file_download);
+      // console.log('====data====',data);
+      // console.log(file_download.name);
+                    
       if (startDate == null) {
         Alert.alert(
           this.state.lang === "EN"
@@ -634,22 +682,29 @@ export default class MedicalCheckupsScreen extends Component {
                       .then((response) => {
                         const result = response.data;
                         if (result != false) {
+                          file_download.name = result + "";
                           if (file_download != null && file_download != "") {
                             console.log(file_download);
+                            // let data = [
+                            //   'file', {
+                            //   name: result + "",
+                            //   uri: file_download.uri,
+                            // }
+                            // ];
+                            // const data = new FormData();
+                            // data.append('file', {
+                            //   name: result + "",
+                            //   uri: file_download.uri
+                            // });
                             const data = new FormData();
-                            data.append('file', {
-                              name: result + "",
-                              uri: file_download.uri
-                            });
-                            console.log(data);
-
+                            data.append('file', file_download);
+                            console.log(file_download.name);
+                            console.log('====data====',data);
                             httpClient
-                              .post("/Training/InsertMedicalCheckUpFile", 
-                              data, 
-                              {}
-                              )
+                              .post("/Training/InsertMedicalCheckUpFile", data, {})
                               .then((response) => {
                                 const result = response.data;
+                                console.log('====result====',result);
                                 if (result == true) {
                                   Alert.alert(
                                     this.state.lang === "EN"
@@ -751,30 +806,30 @@ export default class MedicalCheckupsScreen extends Component {
       this.state.hospital_id = "";
       this.state.doctor_id = "";
     }
-    console.log("------------------------------------------------------------------------------------------------------------------------------------------------------");
-    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ใช้ Insert+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    console.log("staff_id = " + this.state.staff_id);
-    console.log("user_id = " + this.state.user_id);
-    console.log("form_approval = " + this.state.form_approval);
-    console.log("startDate = " + this.state.startDate);
-    console.log("endDate = " + this.state.endDate);
-    console.log("chk_other = " + this.state.chk_other);
-    console.log("hospital_id = " + this.state.hospital_id);
-    console.log("doctor_id = " + this.state.doctor_id);
-    console.log("abnormal = " + this.state.abnormal);
-    console.log("spcecify = " + this.state.spcecify);
-    console.log("fitness = " + this.state.fitness);
-    console.log("comments = " + this.state.comments);
-    console.log("fit_for_confined = " + this.state.fit_for_confined);
-    console.log("file_download = " + this.state.file_download);
-    console.log("followupdate = " + this.state.followupdate);
-    console.log("comment_follow = " + this.state.comment_follow);
-    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++จบใช้ Insert+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    console.log("last_chk_other = " + this.state.last_chk_other);
-    console.log("select_1 = " + this.state.select_1);
-    console.log("select_2 = " + this.state.select_2);
-    console.log("last_hospital_id = " + this.state.last_hospital_id);
-    console.log("------------------------------------------------------------------------------------------------------------------------------------------------------");
+    // console.log("------------------------------------------------------------------------------------------------------------------------------------------------------");
+    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ใช้ Insert+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    // console.log("staff_id = " + this.state.staff_id);
+    // console.log("user_id = " + this.state.user_id);
+    // console.log("form_approval = " + this.state.form_approval);
+    // console.log("startDate = " + this.state.startDate);
+    // console.log("endDate = " + this.state.endDate);
+    // console.log("chk_other = " + this.state.chk_other);
+    // console.log("hospital_id = " + this.state.hospital_id);
+    // console.log("doctor_id = " + this.state.doctor_id);
+    // console.log("abnormal = " + this.state.abnormal);
+    // console.log("spcecify = " + this.state.spcecify);
+    // console.log("fitness = " + this.state.fitness);
+    // console.log("comments = " + this.state.comments);
+    // console.log("fit_for_confined = " + this.state.fit_for_confined);
+    // console.log("file_download = " + this.state.file_download);
+    // console.log("followupdate = " + this.state.followupdate);
+    // console.log("comment_follow = " + this.state.comment_follow);
+    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++จบใช้ Insert+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    // console.log("last_chk_other = " + this.state.last_chk_other);
+    // console.log("select_1 = " + this.state.select_1);
+    // console.log("select_2 = " + this.state.select_2);
+    // console.log("last_hospital_id = " + this.state.last_hospital_id);
+    // console.log("------------------------------------------------------------------------------------------------------------------------------------------------------");
     return (
       <ScrollView style={styles.background}>
         <View style={styles.textHead1}>
