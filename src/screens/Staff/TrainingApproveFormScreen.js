@@ -21,13 +21,13 @@ import { httpClient } from "../../utils/Provider";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
-const TrainingApproveFormScreen = ({ navigation, route }) => {
+const TrainingApproveFormScreen = (props) => {
+  const [loading, setLoading] = useState(false);
   const [lang, setLang] = useState("TH");
   const [dataArray, setDataArray] = useState([]);
   const [noApprove, setNoApprove] = useState(false);
   const [approval_note, setApproval_note] = useState(null);
-  const [loading, setLoading] = useState(false);
-
+console.log(67);
   useEffect(() => {
     const run = () => {
       getData();
@@ -38,7 +38,7 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
 
   const getData = async () => {
     try {
-      setLoading(true);
+      //   setLoading(true)
       let getLang = await AsyncStorage.getItem("language");
       setLang(getLang);
       if (getLang == "EN") {
@@ -46,20 +46,18 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
       } else {
         var lang_id = "2";
       }
-// console.log(route.params.require_id);
+
       httpClient
-        .get(`/Team/getTrainingRequestApprove/${route.params.request_id}/${lang_id}`)
+        .get(`/Team/getTrainingRequestApprove/${props.request_id}/${lang_id}`)
         .then((response) => {
           let res = response.data;
-          console.log(res);
           if (res != null) {
             setDataArray(res);
-           setLoading(false)
-            // console.log(res);
+            // setLoading(false)
           }
-            else{
-              setLoading(false)
-            }
+          //   else{
+          //     setLoading(false)
+          //   }
         })
         .catch((e) => console.log(e));
     } catch (e) {
@@ -93,9 +91,8 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
 
             if (confirm) {
               let user_id = await AsyncStorage.getItem("userId");
-              console.log(route);
               let param = {
-                request_id: route.params.request_id,
+                request_id: props.request_id,
                 user_id: user_id,
                 approval_status: approval_status,
                 approval_note: approval_note,
@@ -109,7 +106,7 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
                     Alert.alert(
                       lang == "EN" ? "Successful" : "บันทึกเรียบร้อย",
                       "",
-                      [{ text: "OK", onPress: navigation.goBack()}]
+                      [{ text: "OK", onPress: props.closeModal }]
                     );
                   }
                 })
@@ -125,64 +122,59 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
     );
   };
 
-     if (loading) {
-          return (
-            <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <ActivityIndicator />
-              </View>
-            </SafeAreaView>
-          );
-      }
+  //    if (loading) {
+  //         return (
+  //           <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+  //             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+  //               <ActivityIndicator />
+  //             </View>
+  //           </SafeAreaView>
+  //         );
+  //     }
   return (
-    <Modal visible={route.chkVisible} 
-    // onBackdropPress={() => navigation.goBack()}
-    >
+    <Modal visible={props.chkVisible} onBackdropPress={props.closeModal}>
       <ScrollView
         style={{
           flex: 1,
-          borderWidth: 2,
+          borderWidth: 1,
           borderRadius: 12,
           marginTop: 20,
-          borderColor: "red",
+          borderColor: "#d9d9d9",
           backgroundColor: "white",
         }}
       >
         {dataArray ? (
           <View style={styles.container}>
             <Text
-              style={{  alignSelf: "center", fontSize: 20, fontWeight: "bold"  }}
-            >   
-              {lang == "EN"
-              ? "Training Request"
-              : "ใบคำขอฝึกอบรม"}
+              style={{ alignSelf: "center", fontSize: 18, marginBottom: 10 }}
+            >
+              ใบคำขอฝึกอบรม
             </Text>
+            <View style={{ marginHorizontal: 20 }}>
+              <Divider style={{ backgroundColor: "#d9d9d9" }} />
+            </View>
 
             <Text
               style={{
-                fontSize: 18,
-              fontWeight: "bold",
-              color: "#4393de",
-              marginTop: 18,
-              alignSelf: "center",
+                fontSize: 16,
+                color: "#4393de",
+                marginTop: 10,
+                alignSelf: "center",
               }}
             >
-              {lang == "EN"
-              ? "EXTERRAN (THAILAND) LTD."
-              : "บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
+              บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด
             </Text>
             <Text
               style={{
                 alignSelf: "center",
                 fontSize: 16,
-                marginTop: 4,
                 marginBottom: 15,
+                marginTop: 10,
               }}
             >
               Training Request
             </Text>
-            
-            <View>
+            <View style={{ marginHorizontal: 48 }}>
               <Divider style={{ backgroundColor: "#d9d9d9" }} />
             </View>
 
@@ -468,7 +460,7 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    onPress={() => navigation.goBack()}
+                    onPress={props.closeModal}
                     style={{
                       backgroundColor: "gray",
                       width: WIDTH / 5,
@@ -519,7 +511,7 @@ const TrainingApproveFormScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={() => navigation.goBack()}
+                  onPress={props.closeModal}
                   style={{
                     backgroundColor: "gray",
                     width: WIDTH / 5,

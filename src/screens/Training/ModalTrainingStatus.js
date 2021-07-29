@@ -271,7 +271,9 @@ console.log(props.modelData);
 
                     <View style={styles.confirmStyle}>
                       <Text style={{ textAlign: "center" }}>
-                      {lang=='EN'?"Wichit Sophitanontrat":"วิชิต โสภิตานนท์รัตน์"}
+                      {item.country_manager != null
+                          ? item.country_manager
+                          : ""}
                       </Text>
                       <Divider
                         style={{ paddingBottom: 1, backgroundColor: "blue" }}

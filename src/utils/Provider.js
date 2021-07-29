@@ -107,6 +107,8 @@ export function accordionListScreen(type, subtype, title = null) {
   const word0 = ["1", "Booking", "การจอง", "Category", "ประเภท"];
   const [expanded, setExpanded] = useState(false);
   const [expanded0, setExpanded0] = useState(false);
+  const [expanded1, setExpanded1] = useState(false);
+  const [expanded2, setExpanded2] = useState(false);
   const [lang, setLang] = useState(getLanguage());
   const [loading, setLoading] = useState(true);
   const [bookingId, setBookingId] = useState(null);
@@ -115,8 +117,11 @@ export function accordionListScreen(type, subtype, title = null) {
   const [trainingList, setTrainingList] = useState([]);
   const [modalData, setModalData] = useState(null);
   const [modalData0, setModalData0] = useState(null);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible0, setModalVisible0] = useState(false);
+  const [modalVisible1, setModalVisible1] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
 
   let count = bookingList.length || trainingList.length,
     isNotEmpty = bookingList.length > 0 || trainingList.length > 0,
@@ -184,6 +189,8 @@ export function accordionListScreen(type, subtype, title = null) {
     return () => {
       setExpanded(false);
       setExpanded0(false);
+      setExpanded1(false);
+      setExpanded2(false);
       setBookingId(null);
       setRequestId(null);
       setBookingList([]);
@@ -211,7 +218,7 @@ export function accordionListScreen(type, subtype, title = null) {
           style={{
             borderRadius: 10,
             backgroundColor: "orange",
-            marginVertical:12,
+            marginVertical: 12,
             marginHorizontal: 10,
           }}
           title={
@@ -241,10 +248,6 @@ export function accordionListScreen(type, subtype, title = null) {
                 : null
               : null
           }
-          // titleStyle={[
-          //   indexStyle.titleStyle,
-          //   { color: isNotEmpty ? colors.exterran : "" },
-          // ]}
         >
           {data.length > 0
             ? data.map((item) => {
@@ -332,71 +335,30 @@ export function accordionListScreen(type, subtype, title = null) {
                       </View>
 
                       {word[0] == "0" && item.url_print ? (
-                        // <Button
-                        //   contentStyle={indexStyle.buttonContentStyle}
-                        //   icon="printer"
-                        //   labelStyle={{ fontSize: 36 }}
-                        //   mode="contained"
-                        //   onPress={() => Linking.openURL(item.url_print)}
-                        //   // style={indexStyle.buttonPrintStyle}
-                        //   style={{
-                        //     marginTop: 18,
-                        //     marginBottom: 15,
-                        //     width: "50%",
-                        //     alignSelf: "center",
-                        //   }}
-                        // >
-                        //   <View>
-                        //     <Text
-                        //       style={[
-                        //         indexStyle.buttonTextStyle,
-                        //         { color: "white", fontSize: 14 },
-                        //       ]}
-                        //     >
-                        //       {lang == "EN" ? "Print" : "พิมพ์"}
-                        //     </Text>
-                        //   </View>
-                        // </Button>
                         <TouchableOpacity
-                        style={{
-                          borderRadius: 50,
-                          alignItems: "center",
-                          justifyContent: "center",
-                          height: 36,
-                          marginLeft: 8,
-                          marginRight: 2,
-                          marginTop: 10,
-                        }}
-                        onPress={() => Linking.openURL(item.url_print)}
-                      >
-                        <Icon name="print" size={30} style={{color: "orange"}}>
-                          <Text style={{fontSize: 14, color: "black"}}>{lang == "EN" ? " " + "Print" : " " + "พิมพ์"}</Text>
-                        </Icon>
-                      </TouchableOpacity>
+                          style={{
+                            borderRadius: 50,
+                            alignItems: "center",
+                            justifyContent: "center",
+                            height: 36,
+                            marginLeft: 8,
+                            marginRight: 2,
+                            marginTop: 10,
+                          }}
+                          onPress={() => Linking.openURL(item.url_print)}
+                        >
+                          <Icon
+                            name="print"
+                            size={30}
+                            style={{ color: "orange" }}
+                          >
+                            <Text style={{ fontSize: 14, color: "black" }}>
+                              {lang == "EN" ? " " + "Print" : " " + "พิมพ์"}
+                            </Text>
+                          </Icon>
+                        </TouchableOpacity>
                       ) : null}
 
-                      {/* <Button
-                        contentStyle={indexStyle.buttonContentStyle}
-                        icon="file"
-                        labelStyle={{ color: colors.exterran, fontSize: 32 }}
-                        onPress={() =>
-                          shown(
-                            item.modal || item.request_id || item.booking_id
-                          )
-                        }
-                        style={indexStyle.buttonDetailStyle}
-                      >
-                        <View>
-                          <Text
-                            // style={[
-                            //   indexStyle.buttonTextStyle,
-                            //   { fontSize: 15 },
-                            // ]}
-                          >
-                            {lang == "EN" ? "Detail" : "ติดตาม"}
-                          </Text>
-                        </View>
-                      </Button> */}
                       <TouchableOpacity
                         style={{
                           borderRadius: 50,
@@ -414,8 +376,10 @@ export function accordionListScreen(type, subtype, title = null) {
                           )
                         }
                       >
-                        <Icon name="file" size={25} style={{color: "white"}}>
-                          <Text style={{fontSize: 14, color: "white"}}>{lang == "EN" ? " " + "Detail" : " " + "ติดตาม"}</Text>
+                        <Icon name="file" size={25} style={{ color: "white" }}>
+                          <Text style={{ fontSize: 14, color: "white" }}>
+                            {lang == "EN" ? " " + "Detail" : " " + "ติดตาม"}
+                          </Text>
                         </Icon>
                       </TouchableOpacity>
                     </Card.Content>
@@ -424,7 +388,6 @@ export function accordionListScreen(type, subtype, title = null) {
               })
             : null}
         </List.Accordion>
-
         {modal ? (
           type == 0 ? (
             subtype == 1 ? (
@@ -477,6 +440,9 @@ export function accordionListScreen(type, subtype, title = null) {
   const closeModal = () => setModalVisible(false);
 
   const closeModal0 = () => setModalVisible0(false);
+  const closeModal1 = () => setModalVisible1(false);
+
+  const closeModal2 = () => setModalVisible2(false);
 
   const showModal = (modal) => {
     setModalVisible(true);
@@ -489,16 +455,16 @@ export function accordionListScreen(type, subtype, title = null) {
   };
 
   const showModel1 = (requestId) => {
-    setModalVisible(true);
+    setModalVisible1(true);
     setRequestId(requestId);
   };
 
   const showModal2 = (bookingId) => {
-    setModalVisible(true);
+    setModalVisible2(true);
     setBookingId(bookingId);
   };
 
-  console.log(bookingList.forEach((item) => item.booking_id));
+  // console.log(bookingList.forEach((item) => item.booking_id));
 
   return (
     <SafeAreaView style={indexStyle.container}>
@@ -530,17 +496,32 @@ export function accordionListScreen(type, subtype, title = null) {
                 bookingList
               )}
             </>
-          ) : (
+          ) : subtype == 2 ? (
+            accordion(
+              word,
+              expanded1,
+              setExpanded1,
+              requestId,
+              // trainingList.forEach((item) => item.training_id),
+              modalVisible1,
+              closeModal1,
+              showModel1,
+              trainingList
+            )
+          ) : subtype == 3 ? (
             accordion(
               word0,
-              expanded,
-              setExpanded,
-              bookingList.forEach((item) => item.booking_id),
-              modalVisible,
-              closeModal,
+              expanded2,
+              setExpanded2,
+              bookingId,
+              // bookingList.forEach((item) => item.booking_id),
+              modalVisible2,
+              closeModal2,
               showModal2,
               bookingList
             )
+          ) : (
+            ""
           )}
         </ScrollView>
       )}
