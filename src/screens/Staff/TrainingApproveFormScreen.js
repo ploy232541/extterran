@@ -27,7 +27,6 @@ const TrainingApproveFormScreen = (props) => {
   const [dataArray, setDataArray] = useState([]);
   const [noApprove, setNoApprove] = useState(false);
   const [approval_note, setApproval_note] = useState(null);
-console.log(67);
   useEffect(() => {
     const run = () => {
       getData();
@@ -383,8 +382,8 @@ console.log(67);
 
               <View style={styles.confirmStyle}>
                 <Text style={{ textAlign: "center" }}>
-                  {dataArray.ht_training_coordinator != null
-                    ? dataArray.ht_training_coordinator
+                  {dataArray.hr_training_coordinator != null
+                    ? dataArray.hr_training_coordinator
                     : ""}
                 </Text>
                 <Divider

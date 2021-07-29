@@ -142,50 +142,7 @@ export function accordionListScreen(type, subtype, title = null) {
 
   useEffect(() => {
     const source = httpClient.CancelToken.source();
-
-    const run = async () => {
-      try {
-        let langCode = getLanguage(),
-          langId = langCode === "EN" ? "1" : "2",
-          userId = await AsyncStorage.getItem("userId");
-
-        setLang(langCode);
-
-        if (type == 0) {
-          setDataList(
-            `/Training/getBooking${
-              subtype == 1 ? "Under" : ""
-            }/${langId}/${userId}`,
-            setBookingList
-          );
-
-          setDataList(
-            `/Training/getTrainingRequest${
-              subtype == 1 ? "Under" : ""
-            }/${langId}/${userId}`,
-            setTrainingList
-          );
-        } else if (type == 1) {
-          if (subtype == 2) {
-            setDataList(
-              `/Team/getTrainingRequest/${userId}/${langId}`,
-              setTrainingList
-            );
-          }
-          if (subtype == 3) {
-            setDataList(
-              `/Team/getBookingRequest/${userId}/${langId}`,
-              setBookingList
-            );
-          }
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
     run();
-
     return () => {
       setExpanded(false);
       setExpanded0(false);
@@ -199,6 +156,46 @@ export function accordionListScreen(type, subtype, title = null) {
       source.cancel();
     };
   }, []);
+  const run = async () => {
+    try {
+      let langCode = getLanguage(),
+        langId = langCode === "EN" ? "1" : "2",
+        userId = await AsyncStorage.getItem("userId");
+
+      setLang(langCode);
+
+      if (type == 0) {
+        setDataList(
+          `/Training/getBooking${
+            subtype == 1 ? "Under" : ""
+          }/${langId}/${userId}`,
+          setBookingList
+        );
+
+        setDataList(
+          `/Training/getTrainingRequest${
+            subtype == 1 ? "Under" : ""
+          }/${langId}/${userId}`,
+          setTrainingList
+        );
+      } else if (type == 1) {
+        if (subtype == 2) {
+          setDataList(
+            `/Team/getTrainingRequest/${userId}/${langId}`,
+            setTrainingList
+          );
+        }
+        if (subtype == 3) {
+          setDataList(
+            `/Team/getBookingRequest/${userId}/${langId}`,
+            setBookingList
+          );
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const accordion = (
     word,
@@ -437,12 +434,24 @@ export function accordionListScreen(type, subtype, title = null) {
     );
   };
 
-  const closeModal = () => setModalVisible(false);
+  const closeModal = () => {
+    setModalVisible(false);
+    run();
+  };
 
-  const closeModal0 = () => setModalVisible0(false);
-  const closeModal1 = () => setModalVisible1(false);
+  const closeModal0 = () => {
+    setModalVisible0(false);
+    run();
+  };
+  const closeModal1 = () => {
+    setModalVisible1(false);
+    run();
+  };
 
-  const closeModal2 = () => setModalVisible2(false);
+  const closeModal2 = () => {
+    setModalVisible2(false);
+    run();
+  };
 
   const showModal = (modal) => {
     setModalVisible(true);

@@ -795,30 +795,7 @@ export default class MedicalCheckupsScreen extends Component {
       this.state.hospital_id = "";
       this.state.doctor_id = "";
     }
-    // console.log("------------------------------------------------------------------------------------------------------------------------------------------------------");
-    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ใช้ Insert+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    // console.log("staff_id = " + this.state.staff_id);
-    // console.log("user_id = " + this.state.user_id);
-    // console.log("form_approval = " + this.state.form_approval);
-    // console.log("startDate = " + this.state.startDate);
-    // console.log("endDate = " + this.state.endDate);
-    // console.log("chk_other = " + this.state.chk_other);
-    // console.log("hospital_id = " + this.state.hospital_id);
-    // console.log("doctor_id = " + this.state.doctor_id);
-    // console.log("abnormal = " + this.state.abnormal);
-    // console.log("spcecify = " + this.state.spcecify);
-    // console.log("fitness = " + this.state.fitness);
-    // console.log("comments = " + this.state.comments);
-    // console.log("fit_for_confined = " + this.state.fit_for_confined);
-    // console.log("file_download = " + this.state.file_download);
-    // console.log("followupdate = " + this.state.followupdate);
-    // console.log("comment_follow = " + this.state.comment_follow);
-    // console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++จบใช้ Insert+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    // console.log("last_chk_other = " + this.state.last_chk_other);
-    // console.log("select_1 = " + this.state.select_1);
-    // console.log("select_2 = " + this.state.select_2);
-    // console.log("last_hospital_id = " + this.state.last_hospital_id);
-    // console.log("------------------------------------------------------------------------------------------------------------------------------------------------------");
+
     return (
       <ScrollView style={styles.background}>
         <View style={styles.textHead1}>
@@ -878,20 +855,6 @@ export default class MedicalCheckupsScreen extends Component {
             <Text style={styles.checkbox}>โรงพยาบาลอื่นๆ</Text>
           </View>
 
-          {/* <View style={styles.container}>
-          <Text>Is CheckBox selected: {this.state.chk_other ? "👍" : "👎"}</Text>
-          </View> */}
-
-          {/* <Text>
-            Medical Examination Provider <Text style={{ color: "red" }}>*</Text>
-          </Text>
-          <Text>(Hospital Name, Location)</Text>
-          <TextInput style={styles.inputStyle} />
-
-          <Text>
-            Occupational Medicine Doctor <Text style={{ color: "red" }}>*</Text>
-          </Text>
-          <TextInput style={styles.inputStyle} /> */}
 
           <Text>
             Abnormal Finding <Text style={{ color: "red" }}>*</Text>

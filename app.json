@@ -17,7 +17,7 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.exterran.elearning",
+      "bundleIdentifier": "com.exterran.elearnings",
       "buildNumber": "1.0.1",
       "supportsTablet": true
     },

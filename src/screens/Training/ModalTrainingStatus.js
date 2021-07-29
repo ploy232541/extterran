@@ -23,9 +23,9 @@ const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
 
  const ModalTrainingStatus = (props) => {
-  // props.request_id
+
    let lang =  AsyncStorage.getItem("language");
-console.log(props.modelData);
+
   return (
     <Modal visible={props.chkVisible} onBackdropPress={props.closeModal}>
       <ScrollView
