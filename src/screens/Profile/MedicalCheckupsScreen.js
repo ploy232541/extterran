@@ -1,20 +1,18 @@
-import { Picker,Tab } from "native-base";
+import { Picker, Tab } from "native-base";
 import Icons from "react-native-vector-icons/FontAwesome";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as DocumentPicker from "expo-document-picker";
-import React, { 
-  Component,
-  } from "react";
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TextInput, 
+import React, { Component } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
   Dimensions,
   Alert,
-   } from "react-native";
+} from "react-native";
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
-import { CheckBox } from 'react-native-elements'
+import { CheckBox } from "react-native-elements";
 import { AsyncStorage } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import RadioForm, {
@@ -28,7 +26,6 @@ import { httpClient } from "../../core/HttpClient";
 
 const HEIGHT = Dimensions.get("window").height;
 
-
 const radio_props = [
   { label: "A: Fit, no restrictions recommended", value: 1 },
   { label: "B: Fit, with restrictions recommended (see comments)", value: 2 },
@@ -41,8 +38,6 @@ const radio1_props = [
   { label: "ไม่", value: 2 },
   { label: "N/A", value: 3 },
 ];
-
-
 
 export default class MedicalCheckupsScreen extends Component {
   constructor(props) {
@@ -79,12 +74,12 @@ export default class MedicalCheckupsScreen extends Component {
 
   async componentDidMount() {
     let id = await AsyncStorage.getItem("userId");
-    this.setState({ user_id: id});
+    this.setState({ user_id: id });
     const res = await AsyncStorage.getItem("language");
     if (res === "EN") {
-      this.setState({ lang: "EN"});
+      this.setState({ lang: "EN" });
     } else {
-      this.setState({ lang: "TH"});
+      this.setState({ lang: "TH" });
     }
     try {
       httpClient
@@ -108,7 +103,7 @@ export default class MedicalCheckupsScreen extends Component {
           console.log(error);
         });
 
-        httpClient
+      httpClient
         .get(`/Training/getstaffname/${this.state.user_id}`)
         .then((response) => {
           const result = response.data;
@@ -124,24 +119,24 @@ export default class MedicalCheckupsScreen extends Component {
           console.log(error);
         });
 
-        // httpClient
-        // .get(`/Training/getmedicalcheckupdate/${this.state.user_id}`)
-        // .then((response) => {
-        //   const result = response.data;
+      // httpClient
+      // .get(`/Training/getmedicalcheckupdate/${this.state.user_id}`)
+      // .then((response) => {
+      //   const result = response.data;
 
-        //   if (result != null && result != "") {
-        //     this.setState({
-        //       medical: result,
-        //     });
-        //   }
-        //   // if (medical == true) {
-        //   //   httpClient
-        //   //     .get(``)
-        //   // }
-        // })
-        // .catch((error) => {
-        //   console.log(error);
-        // });
+      //   if (result != null && result != "") {
+      //     this.setState({
+      //       medical: result,
+      //     });
+      //   }
+      //   // if (medical == true) {
+      //   //   httpClient
+      //   //     .get(``)
+      //   // }
+      // })
+      // .catch((error) => {
+      //   console.log(error);
+      // });
     } catch (error) {}
   }
 
@@ -161,13 +156,12 @@ export default class MedicalCheckupsScreen extends Component {
         .catch((error) => {
           console.log(error);
         });
-    } catch (error) {
-    }
-  }
+    } catch (error) {}
+  };
 
   formatDate = (date) => {
     let d = new Date(date),
-      month = String(d.getMonth() +1),
+      month = String(d.getMonth() + 1),
       day = String(d.getDate()),
       year = d.getFullYear();
 
@@ -178,9 +172,9 @@ export default class MedicalCheckupsScreen extends Component {
   };
   formatDate2 = (date) => {
     let d = new Date(date),
-      month = String(d.getMonth() +1),
+      month = String(d.getMonth() + 1),
       day = String(d.getDate()),
-      year = d.getFullYear() +1;
+      year = d.getFullYear() + 1;
 
     if (month.length < 2) month = "0" + month;
     if (day.length < 2) day = "0" + day;
@@ -245,8 +239,8 @@ export default class MedicalCheckupsScreen extends Component {
         comment_follow: null,
         certificate: null,
       });
-    } 
-  }
+    }
+  };
 
   radiocheck2 = (check) => {
     if (check === 1 || check === 2 || check === 3) {
@@ -254,32 +248,36 @@ export default class MedicalCheckupsScreen extends Component {
         fit_for_confined: check,
       });
     }
-  }
+  };
 
-/* ***** */
-mimetype = (name) => {
-    let allow =  {"png":"image/png","pdf":"application/pdf","jpeg":"image/jpeg", "jpg":"image/jpg"};
+  /* ***** */
+  mimetype = (name) => {
+    let allow = {
+      png: "image/png",
+      pdf: "application/pdf",
+      jpeg: "image/jpeg",
+      jpg: "image/jpg",
+    };
     let extention = name.split(".")[1];
-    if (allow[extention] !== undefined){
-      return allow[extention]
+    if (allow[extention] !== undefined) {
+      return allow[extention];
+    } else {
+      return undefined;
     }
-    else {
-      return undefined
-    }
-  }
-/* ***** */
+  };
+  /* ***** */
 
   async uploadFile() {
     let result = await DocumentPicker.getDocumentAsync({});
-    result.type = this.mimetype(result.name)
+    result.type = this.mimetype(result.name);
     if (result.type !== undefined) {
       this.setState({ file_download: result });
-    }
-    else{
+    } else {
       Alert.alert(
         this.state.lang === "EN"
-            ? "Please select image or PDF file"
-            : "กรุณาเลือกเป็นรูปภาพหรือไฟล์ PDF");
+          ? "Please select image or PDF file"
+          : "กรุณาเลือกเป็นรูปภาพหรือไฟล์ PDF"
+      );
     }
   }
 
@@ -292,22 +290,20 @@ mimetype = (name) => {
 
   formA = () => {
     if (this.state.radioformA) {
-      return (   
+      return (
         <View>
           <Text>Comments:</Text>
-          <TextInput 
-          style={styles.inputStyle} 
-          value={this.state.comments}
-          onChangeText={(text) =>
-            this.setState({ comments: text})}
+          <TextInput
+            style={styles.inputStyle}
+            value={this.state.comments}
+            onChangeText={(text) => this.setState({ comments: text })}
           />
 
-          <Text>
-            Fit for Confined Space work </Text>
+          <Text>Fit for Confined Space work </Text>
           <View style={{ marginTop: 10, marginBottom: 8 }}>
             <RadioForm
               radio_props={radio1_props}
-              initial={this.state.fit_for_confined -1}
+              initial={this.state.fit_for_confined - 1}
               onPress={(item) => this.radiocheck2(item)}
               style={{ marginHorizontal: 4 }}
             />
@@ -337,17 +333,15 @@ mimetype = (name) => {
               <Text>Choose File</Text>
             </View>
           </TouchableOpacity>
-            <View
-              style={{ flex: 1, marginTop: 10, alignItems: "flex-start" }}
-                >
-                {this.state.file_download ? (
-                  <Text style={{ color: "green" }}>
-                    ชื่อไฟล์: {this.state.file_download.name}
-                  </Text>
-                    ) : (
-                      <Text>ชื่อไฟล์:</Text>
-                    )}
-            </View>
+          <View style={{ flex: 1, marginTop: 10, alignItems: "flex-start" }}>
+            {this.state.file_download ? (
+              <Text style={{ color: "green" }}>
+                ชื่อไฟล์: {this.state.file_download.name}
+              </Text>
+            ) : (
+              <Text>ชื่อไฟล์:</Text>
+            )}
+          </View>
         </View>
       );
     } else {
@@ -362,11 +356,10 @@ mimetype = (name) => {
           <Text>
             Comments: <Text style={{ color: "red" }}>*</Text>
           </Text>
-          <TextInput 
-          style={styles.inputStyle} 
-          value={this.state.comments}
-          onChangeText={(text) =>
-            this.setState({ comments: text})}
+          <TextInput
+            style={styles.inputStyle}
+            value={this.state.comments}
+            onChangeText={(text) => this.setState({ comments: text })}
           />
 
           <Text>
@@ -375,7 +368,7 @@ mimetype = (name) => {
           <View style={{ marginTop: 10, marginBottom: 8 }}>
             <RadioForm
               radio_props={radio1_props}
-              initial={this.state.fit_for_confined -1}
+              initial={this.state.fit_for_confined - 1}
               onPress={(item) => this.radiocheck2(item)}
               style={{ marginHorizontal: 4 }}
             />
@@ -420,14 +413,14 @@ mimetype = (name) => {
             <Text style={{ color: "red" }}>*</Text>
           </Text>
           <Text>(กรณีมีใบรับรองแพทย์ให้อัพโหลดไฟล์แนบมาด้วย)</Text>
-          <TextInput 
-          style={styles.inputStyle} 
-          value={this.state.comment_follow}
-          onChangeText={(text) =>
-            this.setState({ comment_follow: text})}
+          <TextInput
+            style={styles.inputStyle}
+            value={this.state.comment_follow}
+            onChangeText={(text) => this.setState({ comment_follow: text })}
           />
 
-          <Text>Medical certificate: <Text style={{ color: "red" }}>*</Text>
+          <Text>
+            Medical certificate: <Text style={{ color: "red" }}>*</Text>
           </Text>
           <TouchableOpacity
             style={{
@@ -457,98 +450,88 @@ mimetype = (name) => {
   };
 
   formDoctorA = () => {
-      return(
-        <View>
+    return (
+      <View>
         <Text>
-            Medical Examination Provider <Text style={{ color: "red" }}>*</Text>
-          </Text>
-          <Text>(Hospital Name, Location)</Text>
-          <TextInput style={styles.inputStyle} 
+          Medical Examination Provider <Text style={{ color: "red" }}>*</Text>
+        </Text>
+        <Text>(Hospital Name, Location)</Text>
+        <TextInput
+          style={styles.inputStyle}
           value={this.state.hospital_id}
-          onChangeText={(text) =>
-            this.setState({ hospital_id: text})}
-          />
+          onChangeText={(text) => this.setState({ hospital_id: text })}
+        />
 
-          <Text>
-            Occupational Medicine Doctor <Text style={{ color: "red" }}>*</Text>
-          </Text>
-          <TextInput style={styles.inputStyle} />
-        </View>
-      );
-  }
+        <Text>
+          Occupational Medicine Doctor <Text style={{ color: "red" }}>*</Text>
+        </Text>
+        <TextInput style={styles.inputStyle} />
+      </View>
+    );
+  };
 
   formDoctorB = () => {
-      return(
-        <View>
+    return (
+      <View>
         <Text>
-            Medical Examination Provider <Text style={{ color: "red" }}>*</Text>
-          </Text>
-          <Text>(Hospital Name, Location)</Text>
-                      <Picker
-                        // enabled={false}
-                        mode="dropdown"
-                        placeholder= "Select Hospital"
-                        iosIcon={
-                          <Icon
-                            name="angle-down"
-                            style={{
-                              width: "10%",
-                              paddingHorizontal: 1,
-                              paddingBottom: 24,
-                            }}
-                          />
-                        }
-                        style={styles.dropdownstyle}
-                        placeholderStyle={{ color: "#bfc6ea" }}
-                        placeholderIconColor="#007aff"
-                        selectedValue={this.state.hospital_id}
-                        onValueChange={(text) => this.setState({ hospital_id: text })}
-                        textStyle={{ fontSize: 14 }}
-                      >
-                        <Picker.Item
-                          label="Select Hospital"
-                          value=""
-                        />
-                        {this.state.select_1.map((item) => {
-                          return (
-                            <Picker.Item label={item.name} value={item.id} />
-                          );
-                        })}
-                      </Picker>
-                      <Text>
-            Occupational Medicine Doctor <Text style={{ color: "red" }}>*</Text>
-          </Text>
-                      <Picker
-                        //enabled={!this.state.select_uniform}
-                        mode="dropdown"
-                        placeholder= "Select Doctor"
-                        iosIcon={
-                          <Icon
-                            name="angle-down"
-                            style={{
-                              width: "10%",
-                              paddingHorizontal: 1,
-                              paddingBottom: 24,
-                            }}
-                          />
-                        }
-                        style={styles.dropdownstyle}
-                        placeholderStyle={{ color: "#bfc6ea" }}
-                        placeholderIconColor="#007aff"
-                        selectedValue={this.state.doctor_id}
-                        onValueChange={(text) => this.setState({ doctor_id: text })}
-                        textStyle={{ fontSize: 14 }}
-                      >
-                        <Picker.Item
-                          label="Select Doctor"
-                          value=""
-                        />
-                        {this.state.select_2.map((item) => {
-                          return (
-                            <Picker.Item label={item.name} value={item.id} />
-                          );
-                        })}
-                      </Picker>
+          Medical Examination Provider <Text style={{ color: "red" }}>*</Text>
+        </Text>
+        <Text>(Hospital Name, Location)</Text>
+        <Picker
+          // enabled={false}
+          mode="dropdown"
+          placeholder="Select Hospital"
+          iosIcon={
+            <Icon
+              name="angle-down"
+              style={{
+                width: "10%",
+                paddingHorizontal: 1,
+                paddingBottom: 24,
+              }}
+            />
+          }
+          style={styles.dropdownstyle}
+          placeholderStyle={{ color: "#bfc6ea" }}
+          placeholderIconColor="#007aff"
+          selectedValue={this.state.hospital_id}
+          onValueChange={(text) => this.setState({ hospital_id: text })}
+          textStyle={{ fontSize: 14 }}
+        >
+          <Picker.Item label="Select Hospital" value="" />
+          {this.state.select_1.map((item) => {
+            return <Picker.Item label={item.name} value={item.id} />;
+          })}
+        </Picker>
+        <Text>
+          Occupational Medicine Doctor <Text style={{ color: "red" }}>*</Text>
+        </Text>
+        <Picker
+          //enabled={!this.state.select_uniform}
+          mode="dropdown"
+          placeholder="Select Doctor"
+          iosIcon={
+            <Icon
+              name="angle-down"
+              style={{
+                width: "10%",
+                paddingHorizontal: 1,
+                paddingBottom: 24,
+              }}
+            />
+          }
+          style={styles.dropdownstyle}
+          placeholderStyle={{ color: "#bfc6ea" }}
+          placeholderIconColor="#007aff"
+          selectedValue={this.state.doctor_id}
+          onValueChange={(text) => this.setState({ doctor_id: text })}
+          textStyle={{ fontSize: 14 }}
+        >
+          <Picker.Item label="Select Doctor" value="" />
+          {this.state.select_2.map((item) => {
+            return <Picker.Item label={item.name} value={item.id} />;
+          })}
+        </Picker>
         {/* <Text>
             Medical Examination Provider <Text style={{ color: "red" }}>*</Text>
           </Text>
@@ -559,9 +542,9 @@ mimetype = (name) => {
             Occupational Medicine Doctor <Text style={{ color: "red" }}>*</Text>
           </Text>
           <TextInput style={styles.inputStyle} /> */}
-        </View>
-      );
-  }
+      </View>
+    );
+  };
 
   // test = (name, uri) => {
 
@@ -578,230 +561,236 @@ mimetype = (name) => {
   //   }
   //    console.log('====testData====',testData)
 
-    
   // }
 
-
-  
-
   onPressSend = () => {
-    const {staff_id, user_id, form_approval, startDate, endDate, hospital_id, doctor_id, chk_other, abnormal, spcecify, fitness, comments, fit_for_confined, file_download, followupdate, comment_follow, certificate} =
-      this.state;
+    const {
+      staff_id,
+      user_id,
+      form_approval,
+      startDate,
+      endDate,
+      hospital_id,
+      doctor_id,
+      chk_other,
+      abnormal,
+      spcecify,
+      fitness,
+      comments,
+      fit_for_confined,
+      file_download,
+      followupdate,
+      comment_follow,
+      certificate,
+    } = this.state;
 
-      // const data = new FormData();
-      // file_download.name = 16 + "";
-      // data.append('file', file_download);
-      // console.log('====data====',data);
-      // console.log(file_download.name);
-                    
-      if (startDate == null) {
+    // const data = new FormData();
+    // file_download.name = 16 + "";
+    // data.append('file', file_download);
+    // console.log('====data====',data);
+    // console.log(file_download.name);
+
+    if (startDate == null) {
+      Alert.alert(
+        this.state.lang === "EN"
+          ? "Please select Medical Examination Date"
+          : "กรุณาเลือกวันตรวจสุขภาพ"
+      );
+    } else if (hospital_id == "") {
+      Alert.alert(
+        this.state.lang === "EN"
+          ? "Please select Medical Examination Provider"
+          : "กรุณาเลือกผู้ให้บริการตรวจสุขภาพ"
+      );
+    } else if (doctor_id == "") {
+      Alert.alert(
+        this.state.lang === "EN"
+          ? "Please select Occupational Medicine Doctor"
+          : "กรุณาเลือกแพทย์อาชีวเวชศาสตร์"
+      );
+    } else if (abnormal == "") {
+      Alert.alert(
+        this.state.lang === "EN"
+          ? "Please Fill Abnormal Finding"
+          : "กรุณากรอกการค้นหาที่ผิดปกติ"
+      );
+    } else if (fitness != 1 && (spcecify == null || specify == "")) {
+      Alert.alert(
+        this.state.lang === "EN"
+          ? "Please Fill Other, please Specify"
+          : "กรุณากรอกช่อง Other, please Specify"
+      );
+    } else if (fitness == 0) {
+      Alert.alert(
+        this.state.lang === "EN"
+          ? "Please Select Fitness for Duty Certificate"
+          : "กรุณาเลือกความพร้อมสำหรับใบรับรองการปฏิบัติหน้าที่"
+      );
+    } else if (fitness == 1) {
+      if (fit_for_confined == 0) {
         Alert.alert(
           this.state.lang === "EN"
-            ? "Please select Medical Examination Date"
-            : "กรุณาเลือกวันตรวจสุขภาพ"
+            ? "Please Select Fit for Confined Space work"
+            : "กรุณาเลือกความพร้อมในการปฏิบัติงานในที่อับอากาศ"
         );
-      } else if (hospital_id == "") {
+      } else if (file_download == null) {
+        Alert.alert(
+          this.state.lang === "EN" ? "Please Upload File" : "กรุณาอัพโหลดไฟล์"
+        );
+      } else {
+        const params = {
+          staff_id,
+          user_id,
+          form_approval,
+          startDate,
+          endDate,
+          hospital_id,
+          doctor_id,
+          chk_other,
+          abnormal,
+          spcecify,
+          fitness,
+          comments,
+          fit_for_confined,
+          // file_download,
+          followupdate,
+          comment_follow,
+          // certificate,
+        };
+        Alert.alert(
+          this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+          this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+          [
+            {
+              text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+            ,
+            {
+              text: this.state.lang === "EN" ? "OK" : "ตกลง",
+              onPress: () => {
+                httpClient
+                  .post("/Training/insertmedicalcheckup", params)
+                  .then((response) => {
+                    const result = response.data;
+                    if (result != false) {
+                      file_download.name = result + "";
+                      if (file_download != null && file_download != "") {
+                        console.log(file_download);
+                        // let data = [
+                        //   'file', {
+                        //   name: result + "",
+                        //   uri: file_download.uri,
+                        // }
+                        // ];
+                        // const data = new FormData();
+                        // data.append('file', {
+                        //   name: result + "",
+                        //   uri: file_download.uri
+                        // });
+                        const data = new FormData();
+                        data.append("file", file_download);
+                        console.log(file_download.name);
+                        console.log("====data====", data);
+                        httpClient
+                          .post("/Training/InsertMedicalCheckUpFile", data, {})
+                          .then((response) => {
+                            const result = response.data;
+                            console.log("====result====", result);
+                            if (result == true) {
+                              Alert.alert(
+                                this.state.lang === "EN"
+                                  ? "Alert"
+                                  : "แจ้งเตือน",
+                                this.state.lang === "EN"
+                                  ? "A medical check-up has been sent"
+                                  : "ทำการส่งใบตรวจสุขภาพ",
+                                [
+                                  {
+                                    text:
+                                      this.state.lang === "EN" ? "OK" : "ตกลง",
+                                    //onPress: () => this.reset(),
+                                  },
+                                ],
+                                { cancelable: false }
+                              );
+                            } else {
+                              Alert.alert(
+                                this.state.lang === "EN"
+                                  ? "A medical check-up failed sent"
+                                  : "ไม่สามารถส่งใบตรวจสุขภาพ"
+                              );
+                            }
+                          })
+                          .catch((error) => {
+                            console.log(error);
+                          });
+                      }
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              },
+            },
+          ]
+        );
+      }
+    } else if (fitness == 2 || fitness == 3 || fitness == 4) {
+      if (comments == null && comments == "") {
         Alert.alert(
           this.state.lang === "EN"
-            ? "Please select Medical Examination Provider"
-            : "กรุณาเลือกผู้ให้บริการตรวจสุขภาพ"
+            ? "Please Fill Comment"
+            : "กรุณากรอกความคิดเห็น"
         );
-      } else if (doctor_id == "") {
+      } else if (fit_for_confined == 0 || fit_for_confined == -1) {
         Alert.alert(
           this.state.lang === "EN"
-            ? "Please select Occupational Medicine Doctor"
-            : "กรุณาเลือกแพทย์อาชีวเวชศาสตร์"
+            ? "Please Select Fit for Confined Space work"
+            : "กรุณาเลือกความพร้อมในการปฏิบัติงานในที่อับอากาศ"
         );
-      } else if (abnormal == "") {
+      } else if (file_download == null) {
+        Alert.alert(
+          this.state.lang === "EN" ? "Please Upload File" : "กรุณาอัพโหลดไฟล์"
+        );
+      } else if (followupdate == null) {
         Alert.alert(
           this.state.lang === "EN"
-            ? "Please Fill Abnormal Finding"
-            : "กรุณากรอกการค้นหาที่ผิดปกติ"
+            ? "Please Select Follow up date"
+            : "กรุณาเลือก Follow up date"
         );
-      } else if (fitness != 1 && (spcecify == null || specify == "")) {
+      } else if (comment_follow == null && comment_follow == "") {
         Alert.alert(
           this.state.lang === "EN"
-            ? "Please Fill Other, please Specify"
-            : "กรุณากรอกช่อง Other, please Specify"
+            ? "Please Fill Comment: Progress of follow up"
+            : "กรุณากรอก Comment: Progress of follow up"
         );
-      } else if (fitness == 0) {
+      } else if (certificate == null) {
         Alert.alert(
           this.state.lang === "EN"
-            ? "Please Select Fitness for Duty Certificate"
-            : "กรุณาเลือกความพร้อมสำหรับใบรับรองการปฏิบัติหน้าที่"
+            ? "Please Upload Certificate File"
+            : "กรุณาอัพโหลดไฟล์ใบรับรองแพทย์"
         );
-      } else if (fitness == 1) {
-          if (fit_for_confined == 0) {
-            Alert.alert(
-            this.state.lang === "EN"
-              ? "Please Select Fit for Confined Space work"
-              : "กรุณาเลือกความพร้อมในการปฏิบัติงานในที่อับอากาศ"
-            );
-          } else if (file_download == null) {
-            Alert.alert(
-            this.state.lang === "EN"
-              ? "Please Upload File"
-              : "กรุณาอัพโหลดไฟล์"
-            );
-          }
-          else{
-            const params = {
-            staff_id,
-            user_id,
-            form_approval,
-            startDate,
-            endDate,
-            hospital_id,
-            doctor_id,
-            chk_other,
-            abnormal,
-            spcecify,
-            fitness,
-            comments,
-            fit_for_confined,
-            // file_download,
-            followupdate,
-            comment_follow,
-            // certificate,
-            };
-            Alert.alert(
-              this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-              this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
-              [
-                {
-                  text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
-                },
-                ,
-                {
-                  text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                  onPress: () => {
-                    httpClient
-                      .post("/Training/insertmedicalcheckup", params)
-                      .then((response) => {
-                        const result = response.data;
-                        if (result != false) {
-                          file_download.name = result + "";
-                          if (file_download != null && file_download != "") {
-                            console.log(file_download);
-                            // let data = [
-                            //   'file', {
-                            //   name: result + "",
-                            //   uri: file_download.uri,
-                            // }
-                            // ];
-                            // const data = new FormData();
-                            // data.append('file', {
-                            //   name: result + "",
-                            //   uri: file_download.uri
-                            // });
-                            const data = new FormData();
-                            data.append('file', file_download);
-                            console.log(file_download.name);
-                            console.log('====data====',data);
-                            httpClient
-                              .post("/Training/InsertMedicalCheckUpFile", data, {})
-                              .then((response) => {
-                                const result = response.data;
-                                console.log('====result====',result);
-                                if (result == true) {
-                                  Alert.alert(
-                                    this.state.lang === "EN"
-                                      ? "Alert"
-                                      : "แจ้งเตือน",
-                                    this.state.lang === "EN"
-                                      ? "A medical check-up has been sent"
-                                      : "ทำการส่งใบตรวจสุขภาพ",
-                                    [
-                                      {
-                                        text:
-                                          this.state.lang === "EN"
-                                            ? "OK"
-                                            : "ตกลง",
-                                        //onPress: () => this.reset(),
-                                      },
-                                    ],
-                                    { cancelable: false }
-                                  );
-                                } else {
-                                  Alert.alert(
-                                    this.state.lang === "EN"
-                                      ? "A medical check-up failed sent"
-                                      : "ไม่สามารถส่งใบตรวจสุขภาพ"
-                                  );
-                                }
-                              })
-                              .catch((error) => {
-                              console.log(error);
-                              });
-                          }
-                        }
-                      })
-                      .catch((error) => {
-                      console.log(error);
-                      });
-                  }
-                }
-              ]
-              );
-          }
-      } else if (fitness == 2 || fitness == 3 || fitness == 4) {
-          if (comments == null && comments == "") {
-            Alert.alert(
-            this.state.lang === "EN"
-              ? "Please Fill Comment"
-              : "กรุณากรอกความคิดเห็น"
-            );
-          } else if (fit_for_confined == 0 || fit_for_confined == -1) {
-            Alert.alert(
-            this.state.lang === "EN"
-              ? "Please Select Fit for Confined Space work"
-              : "กรุณาเลือกความพร้อมในการปฏิบัติงานในที่อับอากาศ"
-            );
-          } else if (file_download == null) {
-            Alert.alert(
-            this.state.lang === "EN"
-              ? "Please Upload File"
-              : "กรุณาอัพโหลดไฟล์"
-            );
-          } else if (followupdate == null) {
-            Alert.alert(
-            this.state.lang === "EN"
-              ? "Please Select Follow up date"
-              : "กรุณาเลือก Follow up date"
-            );
-          } else if (comment_follow == null && comment_follow == "") {
-            Alert.alert(
-            this.state.lang === "EN"
-              ? "Please Fill Comment: Progress of follow up"
-              : "กรุณากรอก Comment: Progress of follow up"
-            );
-          } else if (certificate == null) {
-            Alert.alert(
-            this.state.lang === "EN"
-              ? "Please Upload Certificate File"
-              : "กรุณาอัพโหลดไฟล์ใบรับรองแพทย์"
-            );
-          }
-        }
-  }
+      }
+    }
+  };
 
   reset = async () => {
     try {
-      httpClient
-        .get()
-    } catch (error) {
-    }
-  }
+      httpClient.get();
+    } catch (error) {}
+  };
 
   render() {
-    if (this.state.hospital_id != "" && this.state.last_hospital_id != this.state.hospital_id) {
-        this.getDoctor()
-        this.state.doctor_id = "";
-        this.state.last_hospital_id = this.state.hospital_id;
-      }
-    else if (this.state.chk_other != this.state.last_chk_other) {
+    if (
+      this.state.hospital_id != "" &&
+      this.state.last_hospital_id != this.state.hospital_id
+    ) {
+      this.getDoctor();
+      this.state.doctor_id = "";
+      this.state.last_hospital_id = this.state.hospital_id;
+    } else if (this.state.chk_other != this.state.last_chk_other) {
       this.state.last_chk_other = this.state.chk_other;
       this.state.hospital_id = "";
       this.state.doctor_id = "";
@@ -834,7 +823,12 @@ mimetype = (name) => {
       <ScrollView style={styles.background}>
         <View style={styles.textHead1}>
           <Text
-            style={{ fontSize: 24, color: "#1E90FF", fontWeight: "bold", alignSelf: "center"}}
+            style={{
+              fontSize: 24,
+              color: "#1E90FF",
+              fontWeight: "bold",
+              alignSelf: "center",
+            }}
           >
             Medical Checkups
           </Text>
@@ -843,16 +837,12 @@ mimetype = (name) => {
           <Text>
             Medical Examination Date <Text style={{ color: "red" }}>*</Text>
           </Text>
-          <TouchableOpacity 
-          onPress={() => this.showDatePicker("start")}
-          // disabled={true}
+          <TouchableOpacity
+            onPress={() => this.showDatePicker("start")}
+            // disabled={true}
           >
             <View style={styles.inputDate}>
-              <Text 
-              style={{ paddingLeft: 10 }}
-              >
-              {this.state.startDate}
-              </Text>
+              <Text style={{ paddingLeft: 10 }}>{this.state.startDate}</Text>
             </View>
           </TouchableOpacity>
 
@@ -869,7 +859,7 @@ mimetype = (name) => {
             <Text style={{ color: "red" }}>*</Text>
           </Text>
           <Text>(plus +12 Months)</Text>
-          <TouchableOpacity >
+          <TouchableOpacity>
             <View style={styles.inputDate}>
               <Text style={{ paddingLeft: 10 }}>{this.state.endDate}</Text>
             </View>
@@ -881,11 +871,13 @@ mimetype = (name) => {
               //value={this.state.chk_other}
               //style={styles.checkbox}
               checked={this.state.chk_other}
-              onPress={() => this.setState({chk_other: !this.state.chk_other})}
+              onPress={() =>
+                this.setState({ chk_other: !this.state.chk_other })
+              }
             />
             <Text style={styles.checkbox}>โรงพยาบาลอื่นๆ</Text>
           </View>
-          
+
           {/* <View style={styles.container}>
           <Text>Is CheckBox selected: {this.state.chk_other ? "👍" : "👎"}</Text>
           </View> */}
@@ -904,31 +896,30 @@ mimetype = (name) => {
           <Text>
             Abnormal Finding <Text style={{ color: "red" }}>*</Text>
           </Text>
-          <TextInput 
-          style={styles.inputStyle} 
-          value={this.state.abnormal}
-          onChangeText={(text) =>
-            this.setState({ abnormal: text})}
+          <TextInput
+            style={styles.inputStyle}
+            value={this.state.abnormal}
+            onChangeText={(text) => this.setState({ abnormal: text })}
           />
 
           {this.state.radioformB ? (
             <ScrollView>
-              <Text>Other, please spcecify <Text style={{ color: "red" }}>*</Text></Text>
-              <TextInput 
-              style={styles.inputStyle} 
-              value={this.state.spcecify}
-              onChangeText={(text) =>
-                this.setState({ spcecify: text})}
+              <Text>
+                Other, please spcecify <Text style={{ color: "red" }}>*</Text>
+              </Text>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.spcecify}
+                onChangeText={(text) => this.setState({ spcecify: text })}
               />
             </ScrollView>
           ) : (
             <ScrollView>
               <Text>Other, please spcecify</Text>
-              <TextInput 
-              style={styles.inputStyle} 
-              value={this.state.spcecify}
-              onChangeText={(text) =>
-                this.setState({ spcecify: text})}
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.spcecify}
+                onChangeText={(text) => this.setState({ spcecify: text })}
               />
             </ScrollView>
           )}
@@ -942,7 +933,7 @@ mimetype = (name) => {
           <View style={{ marginTop: 10, marginBottom: 8 }}>
             <RadioForm
               radio_props={radio_props}
-              initial={this.state.fitness -1}
+              initial={this.state.fitness - 1}
               onPress={(item) => this.radiocheck(item)}
               style={{ marginHorizontal: 4 }}
             />
@@ -1006,13 +997,13 @@ mimetype = (name) => {
             </View>
           </TouchableOpacity> */}
 
-            <Button
-              onPress={() => this.onPressSend()}
-              mode="contained"
-              style={styles.submitButton}
-            >
-              Submit
-            </Button>
+          <Button
+            onPress={() => this.onPressSend()}
+            mode="contained"
+            style={styles.submitButton}
+          >
+            Submit
+          </Button>
         </View>
       </ScrollView>
     );
@@ -1034,7 +1025,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderColor: "#398DDD",
   },
-  checkboxContainer:{
+  checkboxContainer: {
     flexDirection: "row",
   },
   checkbox: {
