@@ -193,7 +193,8 @@ export default class ExternalScreen extends Component {
 
   async uploadFile(index, i) {
     let result = await DocumentPicker.getDocumentAsync({});
-    if (result.type == "success") {
+    result.type = this.mimetype(result.name);
+    if (result.type !== undefined) {
       let trainingNeed = [...this.state.trainingNeed];
 
       let item = { ...trainingNeed[index] };
@@ -212,6 +213,23 @@ export default class ExternalScreen extends Component {
       });
     }
   }
+   /* ***** */
+   mimetype = (name) => {
+    let allow = {
+      png: "image/png",
+      JPG: "image/JPG",
+      pdf: "application/pdf",
+      jpeg: "image/jpeg",
+      jpg: "image/jpg",
+    };
+    let extention = name.split(".")[1];
+    if (allow[extention] !== undefined) {
+      return allow[extention];
+    } else {
+      return undefined;
+    }
+  };
+  /* ***** */
   async onPressSend() {
 
     const { trainingNeed } = this.state;
@@ -337,6 +355,7 @@ export default class ExternalScreen extends Component {
                           let pic = new FormData();
                           pic.append("file", {
                             name: result + "",
+                            type:upload_file.type,
                             uri: param.upload_file.uri,
                           });
                           httpClient

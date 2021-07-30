@@ -254,6 +254,7 @@ export default class MedicalCheckupsScreen extends Component {
   mimetype = (name) => {
     let allow = {
       png: "image/png",
+      JPG: "image/JPG",
       pdf: "application/pdf",
       jpeg: "image/jpeg",
       jpg: "image/jpg",

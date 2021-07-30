@@ -227,14 +227,6 @@ export default class TrainingFormScreen extends Component {
   //aek
   setModalVisible = (visible) => {
     this.setState({ modalVisible: visible });
-    // if (status=="2") {
-    //   this.setState({
-    //           expense: "",
-    //           courseselect: "",
-    //           form_month: "",
-    //           modalVisible: "",
-    // })
-    // }
   };
 
   showdialog() {
@@ -274,7 +266,6 @@ export default class TrainingFormScreen extends Component {
       this.setState({
         problem_type: "",
         course: "",
-
         showCourse: false,
         inputCourse: false,
         nameCourse: "",
@@ -368,6 +359,23 @@ export default class TrainingFormScreen extends Component {
     });
   }
 
+  /* ***** */
+  mimetype = (name) => {
+    let allow = {
+      png: "image/png",
+      JPG: "image/JPG",
+      pdf: "application/pdf",
+      jpeg: "image/jpeg",
+      jpg: "image/jpg",
+    };
+    let extention = name.split(".")[1];
+    if (allow[extention] !== undefined) {
+      return allow[extention];
+    } else {
+      return undefined;
+    }
+  };
+  /* ***** */
   onPressSend = () => {
     try {
       const {
@@ -494,7 +502,6 @@ export default class TrainingFormScreen extends Component {
             endDate,
             total,
             place,
-            // upload_file,
             nameplace_etc,
             pre_requerse,
             pre_requerse2,
@@ -520,10 +527,10 @@ export default class TrainingFormScreen extends Component {
                       const result = response.data;
                       if (result != false) {
                         if (upload_file != null && upload_file != "") {
-                          console.log(upload_file);
                           const data = new FormData();
                           data.append("file", {
                             name: result + "",
+                            type:upload_file.type,
                             uri: upload_file.uri,
                           });
 
@@ -903,10 +910,18 @@ export default class TrainingFormScreen extends Component {
     this.dateCount();
   };
 
+
   async uploadFile() {
     let result = await DocumentPicker.getDocumentAsync({});
-    if (result.type == "success") {
+    result.type = this.mimetype(result.name);
+    if (result.type !== undefined) {
       this.setState({ upload_file: result });
+    } else {
+      Alert.alert(
+        this.state.lang === "EN"
+          ? "Please select image or PDF file"
+          : "กรุณาเลือกเป็นรูปภาพหรือไฟล์ PDF"
+      );
     }
   }
 
