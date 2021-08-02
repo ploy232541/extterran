@@ -54,8 +54,8 @@ export default class MedicalCheckupsScreen extends Component {
       staff_id: "",
       user_id: "",
       form_approval: 0,
-      startDate: null,
-      endDate: null,
+      startDate: "DD/MM/YYYY",
+      endDate: "DD/MM/YYYY",
       hospital_id: "",
       doctor_id: "",
       chk_other: false,
@@ -65,7 +65,7 @@ export default class MedicalCheckupsScreen extends Component {
       comments: null,
       fit_for_confined: 0,
       file_download: null,
-      followupdate: null,
+      followupdate: "DD/MM/YYYY",
       comment_follow: null,
       certificate: null,
       // จบใช้ insert
@@ -303,7 +303,7 @@ export default class MedicalCheckupsScreen extends Component {
     if (month.length < 2) month = "0" + month;
     if (day.length < 2) day = "0" + day;
 
-    return [day, month, year].join("-");
+    return [day, month, year].join("/");
   };
   formatDate2 = (date) => {
     let d = new Date(date),
@@ -314,7 +314,7 @@ export default class MedicalCheckupsScreen extends Component {
     if (month.length < 2) month = "0" + month;
     if (day.length < 2) day = "0" + day;
 
-    return [day, month, year].join("-");
+    return [day, month, year].join("/");
   };
   showDatePicker = (props, index) => {
     this.setState({ isDatePickerVisible: true });
@@ -358,7 +358,7 @@ export default class MedicalCheckupsScreen extends Component {
         comments: null,
         fit_for_confined: 0,
         file_download: null,
-        followupdate: null,
+        followupdate: "DD/MM/YYYY",
         comment_follow: null,
         certificate: null,
       });
@@ -370,7 +370,7 @@ export default class MedicalCheckupsScreen extends Component {
         comments: null,
         fit_for_confined: 0,
         file_download: null,
-        followupdate: null,
+        followupdate: "DD/MM/YYYY",
         comment_follow: null,
         certificate: null,
       });
@@ -790,7 +790,7 @@ mimetype = (name) => {
       // console.log('====data====',data);
       // console.log(file_download.name);
                     
-      if (startDate == null) {
+      if (startDate == null || startDate == "DD/MM/YYYY") {
         Alert.alert(
           this.state.lang === "EN"
             ? "Please select Medical Examination Date"
@@ -961,7 +961,7 @@ mimetype = (name) => {
               ? "Please Upload File"
               : "กรุณาอัพโหลดไฟล์"
             );
-          } else if (followupdate == null) {
+          } else if (followupdate == null || followupdate == "DD/MM/YYYY") {
             Alert.alert(
             this.state.lang === "EN"
               ? "Please Select Follow up date"
