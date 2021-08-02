@@ -2573,7 +2573,9 @@ export default class TrainingFormScreen extends Component {
                 {this.state.lang === "EN" ? "Accept" : "ยืนยัน"}
               </Text>
             </Pressable>
-            <Pressable style={[styles.button, styles.buttonCancel]} onPress="">
+            <Pressable style={[styles.button, styles.buttonCancel]} 
+            onPress={() => this.reset()}
+            >
               <Text style={styles.textStyle}>
                 {this.state.lang === "EN" ? "Cancel" : "ยกเลิก"}
               </Text>
