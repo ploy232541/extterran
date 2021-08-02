@@ -1,34 +1,22 @@
-import { DataTable, RadioButton, Title } from "react-native-paper";
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { View, Text, StyleSheet, Dimensions, TextInput } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { colors } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Divider, CheckBox } from "react-native-elements";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { Button, Label, Picker } from "native-base";
+import { Button, Picker } from "native-base";
 import { Avatar } from "react-native-paper";
 import RadioForm from "react-native-simple-radio-button";
-import DropDownPicker from "react-native-dropdown-picker";
-import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-  Col,
-  Cols,
-  Cell,
-} from "react-native-table-component";
-import { withSafeAreaInsets } from "react-native-safe-area-context";
 import { AsyncStorage } from "react-native";
 import { httpClient } from "../../core/HttpClient";
+import { Alert } from "react-native";
 
 const radio_props = [
-  { label: "BBS พฤติกรรม \n", value: 0 },
-  { label: "SWA การหยุดงาน \n", value: 1 },
-  { label: "HazOb รายงานความสภาพเสี่ยงที่จะเกิด \nอุบัติภัย", value: 2 },
+  { label: "BBS พฤติกรรม", value: 0 },
+  { label: "SWA การหยุดงาน", value: 1 },
+  { label: "HazOb รายงานความสภาพเสี่ยงที่จะเกิดอุบัติภัย", value: 2 },
   {
-    label: "Near Miss สภาพที่เป็นอันตราย/เหตุการณ์ \nเกือบเกิดอุบัติเหตุ",
+    label: "Near Miss สภาพที่เป็นอันตราย/เหตุการณ์เกือบเกิดอุบัติเหตุ",
     value: 3,
   },
   { label: "Other", value: 4 },
@@ -203,7 +191,683 @@ export default class MainProfileScreen extends Component {
     super(props);
 
     this.state = {
-      data1: [{ rd_row: "" }],
+      user_id: "",
+      dataform1: [
+        {
+          formtype: 1,
+          question_id: 1,
+          question_type: 2,
+          question_name: "observation_detail",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 2,
+          question_type: 4,
+          question_name: "activated_stop_work",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 3,
+          question_type: 2,
+          question_name: "recommendation_for_improvement",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 4,
+          question_type: 4,
+          question_name: "part10_1_1",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 5,
+          question_type: 4,
+          question_name: "part10_1_2",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 6,
+          question_type: 4,
+          question_name: "part10_1_3",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 7,
+          question_type: 4,
+          question_name: "part10_1_4",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 8,
+          question_type: 4,
+          question_name: "part10_1_5",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 9,
+          question_type: 4,
+          question_name: "part10_2_1",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 10,
+          question_type: 4,
+          question_name: "part10_2_2",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 11,
+          question_type: 4,
+          question_name: "part10_2_3",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 12,
+          question_type: 4,
+          question_name: "part10_3_1",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 13,
+          question_type: 4,
+          question_name: "part10_3_2",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 14,
+          question_type: 4,
+          question_name: "part10_4_1",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 15,
+          question_type: 4,
+          question_name: "part10_4_2",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 16,
+          question_type: 4,
+          question_name: "part10_4_3",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 17,
+          question_type: 4,
+          question_name: "part10_4_4",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 18,
+          question_type: 4,
+          question_name: "part10_4_5",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 19,
+          question_type: 4,
+          question_name: "part10_4_7",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 20,
+          question_type: 4,
+          question_name: "part10_5_1",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 21,
+          question_type: 4,
+          question_name: "part10_5_2",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 22,
+          question_type: 4,
+          question_name: "part10_5_3",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 23,
+          question_type: 4,
+          question_name: "part11_6_1",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 24,
+          question_type: 4,
+          question_name: "part11_6_2",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 25,
+          question_type: 4,
+          question_name: "part11_6_5",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 26,
+          question_type: 4,
+          question_name: "part11_6_6",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 27,
+          question_type: 4,
+          question_name: "part11_6_9",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 28,
+          question_type: 4,
+          question_name: "part11_7_1",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 29,
+          question_type: 4,
+          question_name: "part11_7_2",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 30,
+          question_type: 4,
+          question_name: "part11_7_3",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 31,
+          question_type: 4,
+          question_name: "part11_8_1",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 32,
+          question_type: 4,
+          question_name: "part11_8_2",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 33,
+          question_type: 4,
+          question_name: "part11_8_3",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 34,
+          question_type: 4,
+          question_name: "part11_8_4",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 35,
+          question_type: 4,
+          question_name: "part11_8_5",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 36,
+          question_type: 4,
+          question_name: "part11_8_6",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 37,
+          question_type: 4,
+          question_name: "part11_8_7",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 38,
+          question_type: 4,
+          question_name: "part11_8_8",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 39,
+          question_type: 4,
+          question_name: "part11_8_9",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 40,
+          question_type: 4,
+          question_name: "part11_9_2",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 41,
+          question_type: 4,
+          question_name: "part11_9_3",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 42,
+          question_type: 4,
+          question_name: "part11_9_4",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 43,
+          question_type: 4,
+          question_name: "part12_1_1",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 1,
+          question_id: 44,
+          question_type: 2,
+          question_name: "other",
+          answer_id: null,
+          answer_detail: null,
+        },
+      ],
+
+      dataform2: [
+        {
+          formtype: 2,
+          question_id: 45,
+          question_type: 2,
+          question_name: "stop_work_opportunity_and_why",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 2,
+          question_id: 46,
+          question_type: 2,
+          question_name: "possible_consequences",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 2,
+          question_id: 47,
+          question_type: 2,
+          question_name: "comments_responses",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 2,
+          question_id: 48,
+          question_type: 5,
+          question_name: "was_work_activity_resumed",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 2,
+          question_id: 49,
+          question_type: 5,
+          question_name: "was_swa_valid",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 2,
+          question_id: 50,
+          question_type: 5,
+          question_name: "was_issue_resolved",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 2,
+          question_id: 51,
+          question_type: 5,
+          question_name: "is_follow_up_action_required",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 2,
+          question_id: 52,
+          question_type: 2,
+          question_name: "actions_detail_explanation",
+          answer_id: null,
+          answer_detail: null,
+        },
+      ],
+
+      dataform3: [
+        {
+          formtype: 3,
+          question_id: 53,
+          question_type: 3,
+          question_name: "category",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 53,
+          question_type: 3,
+          question_name: "category",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 53,
+          question_type: 3,
+          question_name: "category",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 53,
+          question_type: 3,
+          question_name: "category",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 53,
+          question_type: 3,
+          question_name: "category",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 53,
+          question_type: 3,
+          question_name: "category",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 53,
+          question_type: 3,
+          question_name: "category",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 53,
+          question_type: 3,
+          question_name: "category",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 53,
+          question_type: 3,
+          question_name: "category",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 53,
+          question_type: 3,
+          question_name: "category",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 54,
+          question_type: 1,
+          question_name: "form3_category_other",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 56,
+          question_type: 1,
+          question_name: "related_other",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 57,
+          question_type: 2,
+          question_name: "description",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 58,
+          question_type: 4,
+          question_name: "severity",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 59,
+          question_type: 4,
+          question_name: "probability",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 60,
+          question_type: 3,
+          question_name: "situation",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 61,
+          question_type: 1,
+          question_name: "situation_other",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 62,
+          question_type: 2,
+          question_name: "recommendation",
+          answer_id: null,
+          answer_detail: null,
+        },
+      ],
+
+      store: [],
+
+      data1: [{ rd_row1: "" }],
 
       data: [
         { rd_row: "" },
@@ -281,9 +945,7 @@ export default class MainProfileScreen extends Component {
       radioformBBS: false,
       radioformSWA: false,
       radioformHazOb: false,
-      // radioformNearMiss: false,
-      radioformNeaM: false,
-      radioformOther: false,
+      radioformNearMiss: false,
 
       form_BBS: null,
       startDate: "DD/MM/YYYY",
@@ -299,19 +961,42 @@ export default class MainProfileScreen extends Component {
       worklo: "",
       selectlocation: [],
       selectlocationSub: [],
-      course: "",
-      courses: "",
+      location: "",
+      sublocation: "",
+      check: "",
+
+      storeRadio: -1,
+      //bbs
+      Detail: "",
+      Activated: -1,
+      improvement: "",
+      Otherbbs12: "",
+
+      //swa
+      StopWork: "",
+      Possible: "",
+      Comments: "",
+      Waswork: "",
+      WasSWA: "",
+      Wasissue: "",
+      Isfollow: "",
+      Actions: "",
+
+      //HazOB
+      Otherhazob1: "",
+      Otherhazob2: "",
+      Otherhazob3: "",
+      Description: "",
+      Severity: -1,
+      Probability: -1,
+      Recommendation: "",
     };
   }
 
   async componentDidMount() {
     let id = await AsyncStorage.getItem("userId");
-    // this.setState({
-    //   dateNow: this.formatDate(now()),
-    //   dateTimeNow: this.formatDateTime(now()),
-    //   dateThai: this.formatThai(now()),
-    //   dateEng: this.formatEng(now()),
-    // });
+    this.setState({ user_id: id });
+
     const res = await AsyncStorage.getItem("language");
     if (res === "EN") {
       this.setState({ lang: "EN", lang_id: 1 });
@@ -320,20 +1005,6 @@ export default class MainProfileScreen extends Component {
     }
 
     try {
-      // httpClient
-      //   .get(`/Training/TrainingFormCourse/${this.state.lang_id}`)
-      //   .then((response) => {
-      //     const result = response.data;
-      //     if (result != null) {
-      //       this.setState({
-      //         select_2: result,
-      //       });
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
-
       httpClient
         .get(`/Training/TrainingFormScreen/${id}`)
         .then((response) => {
@@ -342,7 +1013,7 @@ export default class MainProfileScreen extends Component {
           if (result != null) {
             for (let i = 0; i < result.length; i++) {
               var row = result[i];
-              console.log(row);
+              // console.log(row);
               this.setState({
                 profile: row,
                 firstname:
@@ -398,56 +1069,761 @@ export default class MainProfileScreen extends Component {
 
   onChange = (index, value) => {
     let data = this.state.data;
+    // let rd_row = this.state.rd_row
     data[index].rd_row = value;
     this.setState({ data: data });
-    console.log(data);
+    // console.log(data);
+  };
+  onChange1 = (index, value) => {
+    let data1 = this.state.data1;
+    data1[index].rd_row1 = value;
+    this.setState({ data1: data1 });
+    // console.log(data1);
   };
 
   radiocheck = (check) => {
     // console.log(check);
+    this.setState({ storeRadio: check });
     if (check === 0) {
       this.setState({
         radioformBBS: !this.state.radioformBBS,
         radioformSWA: false,
         radioformHazOb: false,
-        radioformOther: false,
-        radioformNeaM: false,
       });
     } else if (check === 1) {
       this.setState({
         radioformSWA: !this.state.radioformSWA,
         radioformBBS: false,
         radioformHazOb: false,
-        radioformOther: false,
-        radioformNeaM: false,
       });
     } else if (check === 2) {
       this.setState({
         radioformHazOb: !this.state.radioformHazOb,
         radioformBBS: false,
         radioformSWA: false,
-        radioformOther: false,
-        radioformNeaM: false,
       });
     } else if (check === 3) {
       this.setState({
-        radioformNeaM: !this.state.radioformNeaM,
-        radioformHazOb: false,
+        radioformHazOb: !this.state.radioformHazOb,
         radioformBBS: false,
         radioformSWA: false,
-        radioformOther: false,
       });
     } else if (check === 4) {
       this.setState({
-        radioformOther: !this.state.radioformOther,
-        radioformBBS: false,
+        radioformBBS: !this.state.radioformBBS,
         radioformSWA: false,
         radioformHazOb: false,
-        radioformNeaM: false,
       });
     }
   };
 
+  onPressSend() {
+    try {
+      const {
+        user_id,
+        startDate,
+        location,
+        sublocation,
+
+        storeRadio,
+
+        Detail,
+        Activated,
+        improvement,
+        data,
+        data1,
+
+        StopWork,
+        Possible,
+        Comments,
+        Waswork,
+        WasSWA,
+        Wasissue,
+        Isfollow,
+        Actions,
+        Otherbbs12,
+
+        Otherhazob1,
+        Otherhazob2,
+        Otherhazob3,
+        CheckboxCategory,
+        CheckboxCategory1,
+        CheckboxCategory2,
+        CheckboxCategory3,
+        CheckboxCategory4,
+        CheckboxCategory5,
+        CheckboxCategory6,
+        CheckboxCategory7,
+        CheckboxCategory8,
+        CheckboxCategory9,
+        CheckboxCategory10,
+        CheckboxRelated,
+        CheckboxRelated1,
+        CheckboxRelated2,
+        CheckboxRelated3,
+        CheckboxRelated4,
+        CheckboxRelated5,
+        CheckboxRelated6,
+        CheckboxRelated7,
+        CheckboxRelated8,
+        CheckboxRelated9,
+        CheckboxRelated10,
+        CheckboxRelated11,
+        CheckboxRelated12,
+        CheckboxRelated13,
+        Description,
+        Severity,
+        Probability,
+        Recommendation,
+        checkboxYesorNo,
+        checkboxYesorNo1,
+        checkboxYesorNo2,
+      } = this.state;
+      if (startDate == "DD/MM/YYYY") {
+        Alert.alert("กรุณากรอกวันที่");
+      } else if (location == "" || location == null) {
+        Alert.alert("กรุณาเลือกสถานที่/Location");
+      } else if (sublocation == "" || sublocation == null) {
+        Alert.alert("กรุณาเลือกสถานที่/Sublocation");
+      } else if (storeRadio == -1) {
+        Alert.alert("กรุณาเลือกประเภทของรายงาน");
+      } else {
+        switch (storeRadio) {
+          case 0:
+            if (Detail == "" || Detail == null) {
+              Alert.alert("กรุณากรอกข้อที่ 7 ");
+            } else if (Activated == -1) {
+              Alert.alert("กรุณาเลือกข้อที่ 8 ");
+            } else if (improvement == "" || improvement == null) {
+              Alert.alert("กรุณากรอกข้อที่ 9 ");
+            } else {
+              const dataform1 = this.state.dataform1;
+              const datachk1 = this.state.data;
+              const datachk2 = this.state.data1;
+              dataform1[0].answer_detail = Detail;
+              dataform1[1].answer_id = Activated;
+              dataform1[2].answer_detail = improvement;
+              dataform1[3].answer_id = datachk1[0].rd_row;
+              dataform1[4].answer_id = datachk1[1].rd_row;
+              dataform1[5].answer_id = datachk1[2].rd_row;
+              dataform1[6].answer_id = datachk1[3].rd_row;
+              dataform1[7].answer_id = datachk1[4].rd_row;
+              dataform1[8].answer_id = datachk1[5].rd_row;
+              dataform1[9].answer_id = datachk1[6].rd_row;
+              dataform1[10].answer_id = datachk1[7].rd_row;
+              dataform1[11].answer_id = datachk1[8].rd_row;
+              dataform1[12].answer_id = datachk1[9].rd_row;
+              dataform1[13].answer_id = datachk1[10].rd_row;
+              dataform1[14].answer_id = datachk1[11].rd_row;
+              dataform1[15].answer_id = datachk1[12].rd_row;
+              dataform1[16].answer_id = datachk1[13].rd_row;
+              dataform1[17].answer_id = datachk1[14].rd_row;
+              dataform1[18].answer_id = datachk1[15].rd_row;
+              dataform1[19].answer_id = datachk1[16].rd_row;
+              dataform1[20].answer_id = datachk1[17].rd_row;
+              dataform1[21].answer_id = datachk1[18].rd_row;
+              dataform1[22].answer_id = datachk1[19].rd_row;
+              dataform1[23].answer_id = datachk1[20].rd_row;
+              dataform1[24].answer_id = datachk1[21].rd_row;
+              dataform1[25].answer_id = datachk1[22].rd_row;
+              dataform1[26].answer_id = datachk1[23].rd_row;
+              dataform1[27].answer_id = datachk1[24].rd_row;
+              dataform1[28].answer_id = datachk1[25].rd_row;
+              dataform1[29].answer_id = datachk1[26].rd_row;
+              dataform1[30].answer_id = datachk1[27].rd_row;
+              dataform1[31].answer_id = datachk1[28].rd_row;
+              dataform1[32].answer_id = datachk1[29].rd_row;
+              dataform1[33].answer_id = datachk1[30].rd_row;
+              dataform1[34].answer_id = datachk1[31].rd_row;
+              dataform1[35].answer_id = datachk1[32].rd_row;
+              dataform1[36].answer_id = datachk1[33].rd_row;
+              dataform1[37].answer_id = datachk1[34].rd_row;
+              dataform1[38].answer_id = datachk1[35].rd_row;
+              dataform1[39].answer_id = datachk1[36].rd_row;
+              dataform1[40].answer_id = datachk1[37].rd_row;
+              dataform1[41].answer_id = datachk1[38].rd_row;
+              dataform1[42].answer_id = datachk2[0].rd_row1;
+              dataform1[43].answer_detail = Otherbbs12;
+
+              const params = {
+                user_id,
+                startDate,
+                location,
+                sublocation,
+                storeRadio,
+                dataform1,
+              };
+              const data = params;
+              console.log(data);
+
+              Alert.alert(
+                this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+                [
+                  {
+                    text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  ,
+                  {
+                    text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                    onPress: () => {
+                      httpClient
+                        .post(`/Profile/InsertProfile`, data)
+                        .then((response) => {
+                          const result = response.data;
+
+                          if (result === true) {
+                            Alert.alert(
+                              this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                              this.state.lang === "EN"
+                                ? "Problem reported"
+                                : "บันทึกแบบฟอร์มสำเร็จ",
+                              [
+                                {
+                                  text:
+                                    this.state.lang === "EN" ? "OK" : "ตกลง",
+                                  // onPress: () => this.reset(),
+                                },
+                              ],
+                              { cancelable: false }
+                            );
+                            this.props.navigation.navigate("ReportScreen");
+                          } else {
+                            Alert.alert(
+                              this.state.lang === "EN"
+                                ? `Can't save FlightBooking`
+                                : "ไม่สามารถบันทึกแบบฟอร์มได้"
+                            );
+                          }
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    },
+                  },
+                ]
+              );
+            }
+            break;
+          case 1:
+            if (StopWork == "" || StopWork == null) {
+              Alert.alert("กรุณากรอกข้อที่ 7 ");
+            } else if (Possible == "" || Possible == null) {
+              Alert.alert("กรุณากรอกข้อที่ 8 ");
+            } else if (Comments == "" || Comments == null) {
+              Alert.alert("กรุณากรอกข้อที่ 9 ");
+            } else if (Waswork == "" || Waswork == null) {
+              Alert.alert("กรุณาเลือกข้อที่ 10 ");
+            } else if (WasSWA == "" || WasSWA == null) {
+              Alert.alert("กรุณาเลือกข้อที่ 11 ");
+            } else if (Wasissue == "" || Wasissue == null) {
+              Alert.alert("กรุณาเลือกข้อที่ 12 ");
+            } else if (Isfollow == "" || Isfollow == null) {
+              Alert.alert("กรุณาเลือกข้อที่ 13 ");
+            } else if (Actions == "" || Actions == null) {
+              Alert.alert("กรุณากรอกข้อที่ 14 ");
+            } else {
+              const dataform2 = this.state.dataform2;
+              dataform2[0].answer_detail = StopWork;
+              dataform2[1].answer_detail = Possible;
+              dataform2[2].answer_detail = Comments;
+              dataform2[3].answer_id = Waswork;
+              dataform2[4].answer_id = WasSWA;
+              dataform2[5].answer_id = Wasissue;
+              dataform2[6].answer_id = Isfollow;
+              dataform2[7].answer_detail = Actions;
+
+              const params = {
+                user_id,
+                startDate,
+                location,
+                sublocation,
+                storeRadio,
+                dataform2,
+              };
+              const data = params;
+              console.log(data);
+
+              Alert.alert(
+                this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+                [
+                  {
+                    text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  ,
+                  {
+                    text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                    onPress: () => {
+                      httpClient
+                        .post(`/Profile/InsertProfile`, data)
+                        .then((response) => {
+                          const result = response.data;
+
+                          if (result === true) {
+                            Alert.alert(
+                              this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                              this.state.lang === "EN"
+                                ? "Problem reported"
+                                : "บันทึกแบบฟอร์มสำเร็จ",
+                              [
+                                {
+                                  text:
+                                    this.state.lang === "EN" ? "OK" : "ตกลง",
+                                  // onPress: () => this.reset(),
+                                },
+                              ],
+                              { cancelable: false }
+                            );
+                            this.props.navigation.navigate("ReportScreen");
+                          } else {
+                            Alert.alert(
+                              this.state.lang === "EN"
+                                ? `Can't save FlightBooking`
+                                : "ไม่สามารถบันทึกแบบฟอร์มได้"
+                            );
+                          }
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    },
+                  },
+                ]
+              );
+            }
+            break;
+          case 2:
+            if (
+              CheckboxCategory == false &&
+              CheckboxCategory1 == false &&
+              CheckboxCategory2 == false &&
+              CheckboxCategory3 == false &&
+              CheckboxCategory4 == false &&
+              CheckboxCategory5 == false &&
+              CheckboxCategory6 == false &&
+              CheckboxCategory7 == false &&
+              CheckboxCategory8 == false &&
+              CheckboxCategory9 == false &&
+              CheckboxCategory10 == false
+            ) {
+              Alert.alert("กรุณากรอกข้อที่ 8 ");
+            } else if (
+              CheckboxRelated == false &&
+              CheckboxRelated1 == false &&
+              CheckboxRelated2 == false &&
+              CheckboxRelated3 == false &&
+              CheckboxRelated4 == false &&
+              CheckboxRelated5 == false &&
+              CheckboxRelated6 == false &&
+              CheckboxRelated7 == false &&
+              CheckboxRelated8 == false &&
+              CheckboxRelated9 == false &&
+              CheckboxRelated10 == false &&
+              CheckboxRelated11 == false &&
+              CheckboxRelated12 == false &&
+              CheckboxRelated13 == false
+            ) {
+              Alert.alert("กรุณาเลือกข้อที่ 9 ");
+            } else if (Description == "" || Description == null) {
+              Alert.alert("กรุณาเลือกข้อที่ 10 ");
+            } else if (Severity == -1) {
+              Alert.alert("กรุณาเลือกข้อที่ 11 ");
+            } else if (Probability == -1) {
+              Alert.alert("กรุณาเลือกข้อที่ 12 ");
+            } else if (
+              checkboxYesorNo == false &&
+              checkboxYesorNo1 == false &&
+              checkboxYesorNo2 == false
+            ) {
+              Alert.alert("กรุณาเลือกข้อที่ 13 ");
+            } else if (Recommendation == "" || Recommendation == null) {
+              Alert.alert("กรุณากรอกข้อที่ 14 ");
+            } else {
+              const dataform3 = this.state.dataform3;
+              dataform3[0].answer_id = CheckboxCategory;
+              dataform3[1].answer_id = CheckboxCategory1;
+              dataform3[2].answer_id = CheckboxCategory2;
+              dataform3[3].answer_id = CheckboxCategory3;
+              dataform3[4].answer_id = CheckboxCategory4;
+              dataform3[5].answer_id = CheckboxCategory5;
+              dataform3[6].answer_id = CheckboxCategory6;
+              dataform3[7].answer_id = CheckboxCategory7;
+              dataform3[8].answer_id = CheckboxCategory8;
+              dataform3[9].answer_id = CheckboxCategory9;
+              dataform3[10].answer_id = CheckboxCategory10;
+              dataform3[11].answer_detail = Otherhazob1;
+              dataform3[12].answer_id = CheckboxRelated;
+              dataform3[13].answer_id = CheckboxRelated1;
+              dataform3[14].answer_id = CheckboxRelated2;
+              dataform3[15].answer_id = CheckboxRelated3;
+              dataform3[16].answer_id = CheckboxRelated4;
+              dataform3[17].answer_id = CheckboxRelated5;
+              dataform3[18].answer_id = CheckboxRelated6;
+              dataform3[19].answer_id = CheckboxRelated7;
+              dataform3[20].answer_id = CheckboxRelated8;
+              dataform3[21].answer_id = CheckboxRelated9;
+              dataform3[22].answer_id = CheckboxRelated10;
+              dataform3[23].answer_id = CheckboxRelated11;
+              dataform3[24].answer_id = CheckboxRelated12;
+              dataform3[25].answer_id = CheckboxRelated13;
+              dataform3[26].answer_detail = Otherhazob3;
+              dataform3[27].answer_id = checkboxYesorNo;
+              dataform3[28].answer_id = checkboxYesorNo1;
+              dataform3[29].answer_id = checkboxYesorNo2;
+              dataform3[30].answer_detail = Recommendation;
+
+              const params = {
+                user_id,
+                startDate,
+                location,
+                sublocation,
+                storeRadio,
+                dataform3,
+              };
+              const data = params;
+              console.log(data);
+
+              Alert.alert(
+                this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+                [
+                  {
+                    text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  ,
+                  {
+                    text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                    onPress: () => {
+                      httpClient
+                        .post(`/Profile/InsertProfile`, data)
+                        .then((response) => {
+                          const result = response.data;
+
+                          if (result === true) {
+                            Alert.alert(
+                              this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                              this.state.lang === "EN"
+                                ? "Problem reported"
+                                : "บันทึกแบบฟอร์มสำเร็จ",
+                              [
+                                {
+                                  text:
+                                    this.state.lang === "EN" ? "OK" : "ตกลง",
+                                  // onPress: () => this.reset(),
+                                },
+                              ],
+                              { cancelable: false }
+                            );
+                            this.props.navigation.navigate("ReportScreen");
+                          } else {
+                            Alert.alert(
+                              this.state.lang === "EN"
+                                ? `Can't save FlightBooking`
+                                : "ไม่สามารถบันทึกแบบฟอร์มได้"
+                            );
+                          }
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    },
+                  },
+                ]
+              );
+            }
+            break;
+          case 3:
+            if (
+              CheckboxCategory == false &&
+              CheckboxCategory1 == false &&
+              CheckboxCategory2 == false &&
+              CheckboxCategory3 == false &&
+              CheckboxCategory4 == false &&
+              CheckboxCategory5 == false &&
+              CheckboxCategory6 == false &&
+              CheckboxCategory7 == false &&
+              CheckboxCategory8 == false &&
+              CheckboxCategory9 == false &&
+              CheckboxCategory10 == false
+            ) {
+              Alert.alert("กรุณากรอกข้อที่ 8 ");
+            } else if (
+              CheckboxRelated == false &&
+              CheckboxRelated1 == false &&
+              CheckboxRelated2 == false &&
+              CheckboxRelated3 == false &&
+              CheckboxRelated4 == false &&
+              CheckboxRelated5 == false &&
+              CheckboxRelated6 == false &&
+              CheckboxRelated7 == false &&
+              CheckboxRelated8 == false &&
+              CheckboxRelated9 == false &&
+              CheckboxRelated10 == false &&
+              CheckboxRelated11 == false &&
+              CheckboxRelated12 == false &&
+              CheckboxRelated13 == false
+            ) {
+              Alert.alert("กรุณาเลือกข้อที่ 9 ");
+            } else if (Description == "" || Description == null) {
+              Alert.alert("กรุณาเลือกข้อที่ 10 ");
+            } else if (Severity == -1) {
+              Alert.alert("กรุณาเลือกข้อที่ 11 ");
+            } else if (Probability == -1) {
+              Alert.alert("กรุณาเลือกข้อที่ 12 ");
+            } else if (
+              checkboxYesorNo == false &&
+              checkboxYesorNo1 == false &&
+              checkboxYesorNo2 == false
+            ) {
+              Alert.alert("กรุณาเลือกข้อที่ 13 ");
+            } else if (Recommendation == "" || Recommendation == null) {
+              Alert.alert("กรุณากรอกข้อที่ 14 ");
+            } else {
+              const dataform3 = this.state.dataform3;
+              dataform3[0].answer_id = CheckboxCategory;
+              dataform3[1].answer_id = CheckboxCategory1;
+              dataform3[2].answer_id = CheckboxCategory2;
+              dataform3[3].answer_id = CheckboxCategory3;
+              dataform3[4].answer_id = CheckboxCategory4;
+              dataform3[5].answer_id = CheckboxCategory5;
+              dataform3[6].answer_id = CheckboxCategory6;
+              dataform3[7].answer_id = CheckboxCategory7;
+              dataform3[8].answer_id = CheckboxCategory8;
+              dataform3[9].answer_id = CheckboxCategory9;
+              dataform3[10].answer_id = CheckboxCategory10;
+              dataform3[11].answer_detail = Otherhazob1;
+              dataform3[12].answer_id = CheckboxRelated;
+              dataform3[13].answer_id = CheckboxRelated1;
+              dataform3[14].answer_id = CheckboxRelated2;
+              dataform3[15].answer_id = CheckboxRelated3;
+              dataform3[16].answer_id = CheckboxRelated4;
+              dataform3[17].answer_id = CheckboxRelated5;
+              dataform3[18].answer_id = CheckboxRelated6;
+              dataform3[19].answer_id = CheckboxRelated7;
+              dataform3[20].answer_id = CheckboxRelated8;
+              dataform3[21].answer_id = CheckboxRelated9;
+              dataform3[22].answer_id = CheckboxRelated10;
+              dataform3[23].answer_id = CheckboxRelated11;
+              dataform3[24].answer_id = CheckboxRelated12;
+              dataform3[25].answer_id = CheckboxRelated13;
+              dataform3[26].answer_detail = Otherhazob3;
+              dataform3[27].answer_id = checkboxYesorNo;
+              dataform3[28].answer_id = checkboxYesorNo1;
+              dataform3[29].answer_id = checkboxYesorNo2;
+              dataform3[30].answer_detail = Recommendation;
+
+              const params = {
+                user_id,
+                startDate,
+                location,
+                sublocation,
+                storeRadio,
+                dataform3,
+              };
+              const data = params;
+              console.log(data);
+
+              Alert.alert(
+                this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+                [
+                  {
+                    text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  ,
+                  {
+                    text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                    onPress: () => {
+                      httpClient
+                        .post(`/Profile/InsertProfile`, data)
+                        .then((response) => {
+                          const result = response.data;
+
+                          if (result === true) {
+                            Alert.alert(
+                              this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                              this.state.lang === "EN"
+                                ? "Problem reported"
+                                : "บันทึกแบบฟอร์มสำเร็จ",
+                              [
+                                {
+                                  text:
+                                    this.state.lang === "EN" ? "OK" : "ตกลง",
+                                  // onPress: () => this.reset(),
+                                },
+                              ],
+                              { cancelable: false }
+                            );
+                            this.props.navigation.navigate("ReportScreen");
+                          } else {
+                            Alert.alert(
+                              this.state.lang === "EN"
+                                ? `Can't save FlightBooking`
+                                : "ไม่สามารถบันทึกแบบฟอร์มได้"
+                            );
+                          }
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    },
+                  },
+                ]
+              );
+            }
+            break;
+          case 4:
+            if (Detail == "" || Detail == null) {
+              Alert.alert("กรุณากรอกข้อที่ 7 ");
+            } else if (Activated == -1) {
+              Alert.alert("กรุณาเลือกข้อที่ 8 ");
+            } else if (improvement == "" || improvement == null) {
+              Alert.alert("กรุณากรอกข้อที่ 9 ");
+            } else {
+              const dataform1 = this.state.dataform1;
+              const datachk1 = this.state.data;
+              const datachk2 = this.state.data1;
+              dataform1[0].answer_detail = Detail;
+              dataform1[1].answer_id = Activated;
+              dataform1[2].answer_detail = improvement;
+              dataform1[3].answer_id = datachk1[0].rd_row;
+              dataform1[4].answer_id = datachk1[1].rd_row;
+              dataform1[5].answer_id = datachk1[2].rd_row;
+              dataform1[6].answer_id = datachk1[3].rd_row;
+              dataform1[7].answer_id = datachk1[4].rd_row;
+              dataform1[8].answer_id = datachk1[5].rd_row;
+              dataform1[9].answer_id = datachk1[6].rd_row;
+              dataform1[10].answer_id = datachk1[7].rd_row;
+              dataform1[11].answer_id = datachk1[8].rd_row;
+              dataform1[12].answer_id = datachk1[9].rd_row;
+              dataform1[13].answer_id = datachk1[10].rd_row;
+              dataform1[14].answer_id = datachk1[11].rd_row;
+              dataform1[15].answer_id = datachk1[12].rd_row;
+              dataform1[16].answer_id = datachk1[13].rd_row;
+              dataform1[17].answer_id = datachk1[14].rd_row;
+              dataform1[18].answer_id = datachk1[15].rd_row;
+              dataform1[19].answer_id = datachk1[16].rd_row;
+              dataform1[20].answer_id = datachk1[17].rd_row;
+              dataform1[21].answer_id = datachk1[18].rd_row;
+              dataform1[22].answer_id = datachk1[19].rd_row;
+              dataform1[23].answer_id = datachk1[20].rd_row;
+              dataform1[24].answer_id = datachk1[21].rd_row;
+              dataform1[25].answer_id = datachk1[22].rd_row;
+              dataform1[26].answer_id = datachk1[23].rd_row;
+              dataform1[27].answer_id = datachk1[24].rd_row;
+              dataform1[28].answer_id = datachk1[25].rd_row;
+              dataform1[29].answer_id = datachk1[26].rd_row;
+              dataform1[30].answer_id = datachk1[27].rd_row;
+              dataform1[31].answer_id = datachk1[28].rd_row;
+              dataform1[32].answer_id = datachk1[29].rd_row;
+              dataform1[33].answer_id = datachk1[30].rd_row;
+              dataform1[34].answer_id = datachk1[31].rd_row;
+              dataform1[35].answer_id = datachk1[32].rd_row;
+              dataform1[36].answer_id = datachk1[33].rd_row;
+              dataform1[37].answer_id = datachk1[34].rd_row;
+              dataform1[38].answer_id = datachk1[35].rd_row;
+              dataform1[39].answer_id = datachk1[36].rd_row;
+              dataform1[40].answer_id = datachk1[37].rd_row;
+              dataform1[41].answer_id = datachk1[38].rd_row;
+              dataform1[42].answer_id = datachk2[0].rd_row1;
+              dataform1[43].answer_detail = Otherbbs12;
+
+              const params = {
+                user_id,
+                startDate,
+                location,
+                sublocation,
+                storeRadio,
+                dataform1,
+              };
+              const data = params;
+              console.log(data);
+
+              Alert.alert(
+                this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+                [
+                  {
+                    text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  ,
+                  {
+                    text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                    onPress: () => {
+                      httpClient
+                        .post(`/Profile/InsertProfile`, data)
+                        .then((response) => {
+                          const result = response.data;
+
+                          if (result === true) {
+                            Alert.alert(
+                              this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                              this.state.lang === "EN"
+                                ? "Problem reported"
+                                : "บันทึกแบบฟอร์มสำเร็จ",
+                              [
+                                {
+                                  text:
+                                    this.state.lang === "EN" ? "OK" : "ตกลง",
+                                  // onPress: () => this.reset(),
+                                },
+                              ],
+                              { cancelable: false }
+                            );
+                            this.props.navigation.navigate("ReportScreen");
+                          } else {
+                            Alert.alert(
+                              this.state.lang === "EN"
+                                ? `Can't save FlightBooking`
+                                : "ไม่สามารถบันทึกแบบฟอร์มได้"
+                            );
+                          }
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    },
+                  },
+                ]
+              );
+            }
+            break;
+
+          default:
+            break;
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  // reset = () => {
+  //   this.setState({
+  //     startDate: "DD/MM/YYYY",
+  //     location: "",
+  //     sublocation:"",
+  //     storeRadio:-1,
+  //     StopWork:"",
+  //     Possible:"",
+  //     Comments:"",
+  //     Waswork:"",
+  //     WasSWA:"",
+  //     Wasissue:"",
+  //     Isfollow:"",
+  //     Actions:"",
+  //   });
+  // };
   showDatePicker = (props) => {
     this.setState({ isDatePickerVisible: true });
     if (props == "start") {
@@ -457,7 +1833,7 @@ export default class MainProfileScreen extends Component {
 
   formatDate = (date) => {
     var d = new Date(date),
-      month = "" + d.getMonth(),
+      month = "" +parseInt( d.getMonth()+1),
       day = "" + d.getDate(),
       year = d.getFullYear();
     if (month.length < 2) month = "0" + month;
@@ -468,7 +1844,7 @@ export default class MainProfileScreen extends Component {
 
   formatDate1 = (date) => {
     let d = new Date(date),
-      month = "" + d.getMonth(),
+      month = "" + parseInt( d.getMonth()+1),
       day = "" + d.getDate(),
       year = d.getFullYear() + 1;
 
@@ -517,47 +1893,48 @@ export default class MainProfileScreen extends Component {
       return (
         <View>
           <View style={styles.textHead3}>
-            <Text
-              style={{ color: "#007aff", fontSize: "18%", fontWeight: "bold" }}
-            >
+            <Text style={{ color: "#007aff", fontSize: "20%" }}>
               BBS Observation การสังเกตพฤติกรรมความปลอดภัย
             </Text>
           </View>
+          <Divider style={{ marginTop: 5 }}></Divider>
 
-          <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
-
-          <Text style={styles.textHead5}>
+          <Text style={styles.textHead3}>
             7. Observation Detail / เรื่องที่เจอ
             <Text style={{ color: "red" }}> *</Text>
           </Text>
           <TextInput
-            style={styles.inputStyle2}
-            placeholder="อธิบายรายละเอียด..."
+            style={styles.inputStyle}
+            onChangeText={(text) => this.setState({ Detail: text })}
+            placeholder="อธิบายรายละเอียด"
+            // value={this.state.Detail}
           ></TextInput>
 
-          <Text style={styles.textHead5}>
+          <Text style={styles.textHead3}>
             8. Activated Stop Work ได้มีการหยุดงานหรือไม่
             <Text style={{ color: "red" }}> *</Text>
           </Text>
-          <View style={{ marginTop: 12, marginBottom: 5 }}>
+          <View>
             <RadioForm
               radio_props={radio1_props}
               initial={-1}
-              onPress={() => {}}
+              onPress={(text) => this.setState({ Activated: text })}
             />
           </View>
 
-          <Text style={styles.textHead5}>
+          <Text style={styles.textHead3}>
             9. Recommendation for improvement / การแก้ไขเพื่อไม่ให้เกิดขึ้นอีก
             หรือการสนับสนุนการปฏิบัติอย่างปลอดภัย
             <Text style={{ color: "red" }}> *</Text>
           </Text>
           <TextInput
-            style={styles.inputStyle2}
+            style={styles.inputStyle}
+            placeholder="อธิบายรายละเอียด"
+            onChangeText={(text) => this.setState({ improvement: text })}
             placeholder="อธิบายรายละเอียด"
           ></TextInput>
 
-          <Text style={styles.textHead5}>
+          <Text style={styles.textHead3}>
             10. Critical Behavior Inventory (CBI) 1-9
           </Text>
 
@@ -594,7 +1971,7 @@ export default class MainProfileScreen extends Component {
                       radio_props={radio_BBS}
                       formHorizontal={true}
                       initial={-1}
-                      onPress={(item) => this.onChange(index, item)}
+                      onPress={(item) => this.onChange1(index, item)}
                     />
                   </View>
                 </View>
@@ -604,8 +1981,9 @@ export default class MainProfileScreen extends Component {
 
           <Text style={styles.textHead3}>12. Other/อื่นๆ</Text>
           <TextInput
-            style={styles.inputStyle2}
+            style={styles.inputStyle}
             placeholder="อธิบายรายละเอียด"
+            onChangeText={(text) => this.setState({ Otherbbs12: text })}
           ></TextInput>
         </View>
       );
@@ -618,136 +1996,165 @@ export default class MainProfileScreen extends Component {
     if (this.state.radioformSWA) {
       return (
         <View>
-          <View style={styles.textHead3}>
+          <View style={styles.textHead4}>
             <Text
-              style={{
-                fontSize: "18%",
-                color: "#1E90FF",
-                marginBottom: 10,
-                fontWeight: "bold",
-              }}
+              style={{ fontSize: "20%", color: "#1E90FF", marginBottom: 10 }}
             >
               Stop Work Authority/Responsibility (SWA/SWR)
               การใช้อำนาจในการหยุดงาน
             </Text>
           </View>
 
-          <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
-          {/* <Divider style={styles.lineunder1}></Divider> */}
+          <Divider style={styles.lineunder1}></Divider>
 
-          <Text style={styles.textHead5}>
+          <Text style={styles.textHead3}>
             7. Stop Work Opportunity and Why อธิบายเหตุการณ์
             การกระทำหรือสภาพการณ์ที่ไม่ปลอดภัยและการใช้อำนาจในการหยุดงาน
             <Text style={{ color: "red" }}> *</Text>
           </Text>
           <TextInput
-            style={styles.inputStyle2}
-            placeholder="อธิบายรายละเอียด..."
+            style={styles.inputStyle}
+            placeholder="อธิบายรายละเอียด"
+            onChangeText={(text) => this.setState({ StopWork: text })}
           ></TextInput>
 
-          <Text style={styles.textHead5}>
+          <Text style={styles.textHead3}>
             8. Possible Consequences, if DO NOT STOP
             ผลกระทบต่อเนื่องที่อาจเกิดขึ้นตามมาถ้าไม่ใช้อำนาจในการหยุดงาน
             <Text style={{ color: "red" }}> *</Text>
           </Text>
           <TextInput
-            style={styles.inputStyle2}
-            placeholder="อธิบายรายละเอียด..."
+            style={styles.inputStyle}
+            placeholder="อธิบายรายละเอียด"
+            onChangeText={(text) => this.setState({ Possible: text })}
           ></TextInput>
 
-          <Text style={styles.textHead5}>
+          <Text style={styles.textHead3}>
             9. Comments/Responses คำชี้แจงหรือการแก้ไข
             <Text style={{ color: "red" }}> *</Text>
           </Text>
           <TextInput
-            style={styles.inputStyle2}
-            placeholder="อธิบายรายละเอียด..."
+            style={styles.inputStyle}
+            placeholder="อธิบายรายละเอียด"
+            onChangeText={(text) => this.setState({ Comments: text })}
           ></TextInput>
 
-          <Text style={styles.textHead6}>
+          <Text style={styles.textHead3}>
             10. Was work activity resumed? มีการทำงานต่อ
             หลังจากหาแนวทางแก้ไขแล้วหรือไม่
             <Text style={{ color: "red" }}> *</Text>
           </Text>
-          <DropDownPicker
-            items={[
-              { label: "Yes", value: "item1" },
-              { label: "No", value: "item2" },
-            ]}
-            placeholder="โปรดเลือกคำตอบ"
-            style={styles.dropdownstyle}
+          <Picker
+            mode="dropdown"
+            iosIcon={
+              <Icon
+                name="angle-down"
+                style={{ width: "8%", paddingHorizontal: 2 }}
+              />
+            }
+            style={styles.inputLightStyle}
             placeholderStyle={{ color: "#bfc6ea" }}
             placeholderIconColor="#007aff"
-            defaultIndex={0}
-            containerStyle={{ height: 40 }}
-            onChangeItem={(item) => console.log(item.label, item.value)}
-          />
+            selectedValue={this.state.Waswork}
+            onValueChange={(itemValue) => this.setState({ Waswork: itemValue })}
+            textStyle={{ fontSize: 14 }}
+            placeholder="โปรดเลือกตำตอบ"
+          >
+            <Picker.Item label={"Yes"} value={"Yes"} />
+            <Picker.Item label={"No"} value={"No"} />
+            <Picker.Item label={"N/A"} value={"N/A"} />
+          </Picker>
 
-          <Text style={styles.textHead7}>
+          <Text style={styles.textHead3}>
             11. Was SWA valid (real problem)? การหยุดงานครั้งนี้ถูกต้องแล้ว
             (มีปัญหาจริงหรือไม่)
             <Text style={{ color: "red" }}> *</Text>
           </Text>
-          <DropDownPicker
-            items={[
-              { label: "Yes", value: "item1" },
-              { label: "No", value: "item2" },
-            ]}
-            placeholder="โปรดเลือกคำตอบ"
-            style={styles.dropdownstyle}
+          <Picker
+            mode="dropdown"
+            iosIcon={
+              <Icon
+                name="angle-down"
+                style={{ width: "8%", paddingHorizontal: 2 }}
+              />
+            }
+            style={styles.inputLightStyle}
             placeholderStyle={{ color: "#bfc6ea" }}
             placeholderIconColor="#007aff"
-            defaultIndex={0}
-            containerStyle={{ height: 40 }}
-            onChangeItem={(item) => console.log(item.label, item.value)}
-          />
+            selectedValue={this.state.WasSWA}
+            onValueChange={(itemValue) => this.setState({ WasSWA: itemValue })}
+            textStyle={{ fontSize: 14 }}
+            placeholder="โปรดเลือกตำตอบ"
+          >
+            <Picker.Item label={"Yes"} value={"Yes"} />
+            <Picker.Item label={"No"} value={"No"} />
+            <Picker.Item label={"N/A"} value={"N/A"} />
+          </Picker>
 
-          <Text style={styles.textHead7}>
+          <Text style={styles.textHead3}>
             12. Was issue resolved? มีการแก้ปัญหาเรียบร้อยแล้ว
             (หรือต้องทำในระยะยาว)
             <Text style={{ color: "red" }}> *</Text>
           </Text>
-          <DropDownPicker
-            items={[
-              { label: "Yes", value: "item1" },
-              { label: "No", value: "item2" },
-            ]}
-            placeholder="โปรดเลือกคำตอบ"
-            style={styles.dropdownstyle}
+          <Picker
+            mode="dropdown"
+            iosIcon={
+              <Icon
+                name="angle-down"
+                style={{ width: "8%", paddingHorizontal: 2 }}
+              />
+            }
+            style={styles.inputLightStyle}
             placeholderStyle={{ color: "#bfc6ea" }}
             placeholderIconColor="#007aff"
-            defaultIndex={0}
-            containerStyle={{ height: 40 }}
-            onChangeItem={(item) => console.log(item.label, item.value)}
-          />
+            selectedValue={this.state.Wasissue}
+            onValueChange={(itemValue) =>
+              this.setState({ Wasissue: itemValue })
+            }
+            textStyle={{ fontSize: 14 }}
+            placeholder="โปรดเลือกตำตอบ"
+          >
+            <Picker.Item label={"Yes"} value={"Yes"} />
+            <Picker.Item label={"No"} value={"No"} />
+            <Picker.Item label={"N/A"} value={"N/A"} />
+          </Picker>
 
-          <Text style={styles.textHead7}>
+          <Text style={styles.textHead3}>
             13. Is follow up action required? if yes explain:
             มีการติดตามผลหรือไม่ โปรดอธิบาย ในข้อถัดไป
             <Text style={{ color: "red" }}> *</Text>
           </Text>
-          <DropDownPicker
-            items={[
-              { label: "Yes", value: "item1" },
-              { label: "No", value: "item2" },
-              { label: "N/A", value: "item3" },
-            ]}
-            placeholder="โปรดเลือกคำตอบ"
-            style={styles.dropdownstyle}
+          <Picker
+            mode="dropdown"
+            iosIcon={
+              <Icon
+                name="angle-down"
+                style={{ width: "8%", paddingHorizontal: 2 }}
+              />
+            }
+            style={styles.inputLightStyle}
             placeholderStyle={{ color: "#bfc6ea" }}
             placeholderIconColor="#007aff"
-            defaultIndex={0}
-            containerStyle={{ height: 40 }}
-            onChangeItem={(item) => console.log(item.label, item.value)}
-          />
+            selectedValue={this.state.Isfollow}
+            onValueChange={(itemValue) =>
+              this.setState({ Isfollow: itemValue })
+            }
+            textStyle={{ fontSize: 14 }}
+            placeholder="โปรดเลือกตำตอบ"
+          >
+            <Picker.Item label={"Yes"} value={"Yes"} />
+            <Picker.Item label={"No"} value={"No"} />
+            <Picker.Item label={"N/A"} value={"N/A"} />
+          </Picker>
 
           <Text style={styles.textHead3}>
             14. Actions detail Explanation
             <Text style={{ color: "red" }}> *</Text>
           </Text>
           <TextInput
-            style={styles.inputStyle2}
-            placeholder="อธิบายรายละเอียด..."
+            style={styles.inputStyle}
+            placeholder="อธิบายรายละเอียด"
+            onChangeText={(text) => this.setState({ Actions: text })}
           ></TextInput>
         </View>
       );
@@ -756,134 +2163,21 @@ export default class MainProfileScreen extends Component {
     }
   };
 
-formOther = () => {
-  if (this.state.radioformOther) {
-    return (
-     <View> 
-       <TextInput
-          style={styles.inputStyle2}
-          placeholder="Other...."
-        ></TextInput>
-      
-        <View style={styles.textHead3}>
-          <Text
-            style={{ color: "#007aff", fontSize: "18%", fontWeight: "bold" }}
-          >
-            BBS Observation การสังเกตพฤติกรรมความปลอดภัย
-          </Text>
-        </View>
-
-        <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
-
-        <Text style={styles.textHead5}>
-          7. Observation Detail / เรื่องที่เจอ
-          <Text style={{ color: "red" }}> *</Text>
-        </Text>
-        <TextInput
-          style={styles.inputStyle2}
-          placeholder="อธิบายรายละเอียด..."
-        ></TextInput>
-
-        <Text style={styles.textHead5}>
-          8. Activated Stop Work ได้มีการหยุดงานหรือไม่
-          <Text style={{ color: "red" }}> *</Text>
-        </Text>
-        <View style={{ marginTop: 12, marginBottom: 5 }}>
-          <RadioForm
-            radio_props={radio1_props}
-            initial={-1}
-            onPress={() => {}}
-          />
-        </View>
-
-        <Text style={styles.textHead5}>
-          9. Recommendation for improvement / การแก้ไขเพื่อไม่ให้เกิดขึ้นอีก
-          หรือการสนับสนุนการปฏิบัติอย่างปลอดภัย
-          <Text style={{ color: "red" }}> *</Text>
-        </Text>
-        <TextInput
-          style={styles.inputStyle2}
-          placeholder="อธิบายรายละเอียด"
-        ></TextInput>
-
-        <Text style={styles.textHead5}>
-          10. Critical Behavior Inventory (CBI) 1-9
-        </Text>
-
-        <View style={styles.containerSec}>
-          {accounts.map((account, index) => {
-            return (
-              <View key={account.accNumber}>
-                <Text style={{ marginVertical: 10, paddingLeft: 8 }}>
-                  {account.accNumber}
-                </Text>
-                <View style={{ marginVertical: 2, marginHorizontal: 24 }}>
-                  <RadioForm
-                    radio_props={radio_BBS}
-                    formHorizontal={true}
-                    initial={-1}
-                    onPress={(item) => this.onChange(index, item)}
-                  />
-                </View>
-              </View>
-            );
-          })}
-        </View>
-
-        <Text style={styles.textHead3}>11. Other/อื่นๆ</Text>
-        <View style={styles.containerSec}>
-          {accounts1.map((account, index) => {
-            return (
-              <View key={account.accNumber}>
-                <Text style={{ marginVertical: 10, paddingLeft: 8 }}>
-                  {account.accNumber}
-                </Text>
-                <View style={{ marginVertical: 2, marginHorizontal: 24 }}>
-                  <RadioForm
-                    radio_props={radio_BBS}
-                    formHorizontal={true}
-                    initial={-1}
-                    onPress={(item) => this.onChange(index, item)}
-                  />
-                </View>
-              </View>
-            );
-          })}
-        </View>
-
-        <Text style={styles.textHead3}>12. Other/อื่นๆ</Text>
-        <TextInput
-          style={styles.inputStyle2}
-          placeholder="อธิบายรายละเอียด"
-        ></TextInput>
-      </View>
-    );
-  } else {
-    return null;
-  }
-};
-
   formHazOb = () => {
     if (this.state.radioformHazOb) {
       return (
         <View>
-          <View style={styles.textHead3}>
+          <View style={styles.textHead4}>
             <Text
-              style={{
-                fontSize: "18%",
-                color: "#1E90FF",
-                marginBottom: 10,
-                fontWeight: "bold",
-              }}
+              style={{ fontSize: "20%", color: "#1E90FF", marginBottom: 10 }}
             >
               HazOb & Near Miss Report
             </Text>
           </View>
 
-          <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
-          {/* <Divider style={styles.lineunder1}></Divider> */}
+          <Divider style={styles.lineunder1}></Divider>
 
-          <Text style={styles.textHead5}>
+          <Text style={styles.textHead3}>
             8. Category ประเภท
             <Text style={{ color: "red" }}> *</Text>
           </Text>
@@ -1027,6 +2321,7 @@ formOther = () => {
                 <TextInput
                   style={styles.inputStyle}
                   placeholder="อธิบายรายละเอียด"
+                  onChangeText={(text) => this.setState({ Otherhazob1: text })}
                 ></TextInput>
               </View>
             )}
@@ -1222,6 +2517,7 @@ formOther = () => {
                 <TextInput
                   style={styles.inputStyle}
                   placeholder="อธิบายรายละเอียด"
+                  onChangeText={(text) => this.setState({ Otherhazob2: text })}
                 ></TextInput>
               </View>
             )}
@@ -1232,32 +2528,30 @@ formOther = () => {
             <Text style={{ color: "red" }}> *</Text>
           </Text>
           <TextInput
-            style={styles.inputStyle2}
+            style={styles.inputStyle}
             placeholder="อธิบายรายละเอียด"
+            onChangeText={(text) => this.setState({ Description: text })}
           ></TextInput>
 
-          <Text style={styles.textHead6}>
+          <Text style={styles.textHead3}>
             11. Severity - Impact ความรุนแรง - ผลกระทบ
             <Text style={{ color: "red" }}> *</Text>
           </Text>
-          <View >
-            <RadioForm
-              radio_props={radio_severity}
-              initial={-1}
-              onPress={() => {}}
-            />
-          </View>
+          <RadioForm
+            radio_props={radio_severity}
+            initial={-1}
+            onPress={(itemValue) => this.setState({ Severity: itemValue })}
+          />
+
           <Text style={styles.textHead3}>
             12. Probability - Likelihood โอกาสที่จะเกิด
             <Text style={{ color: "red" }}> *</Text>
           </Text>
-          <View style={{ marginTop: 10 }}>
-            <RadioForm
-              radio_props={radio_probability}
-              initial={-1}
-              onPress={() => {}}
-            />
-          </View>
+          <RadioForm
+            radio_props={radio_probability}
+            initial={-1}
+            onPress={(itemValue) => this.setState({ Probability: itemValue })}
+          />
 
           <Text style={styles.textHead3}>
             13. Does the same situation exist in other area?
@@ -1306,6 +2600,7 @@ formOther = () => {
                 <TextInput
                   style={styles.inputStyle}
                   placeholder="อธิบายรายละเอียด"
+                  onPress={(text) => this.setState({ Otherhazob3: text })}
                 ></TextInput>
               </View>
             )}
@@ -1316,478 +2611,9 @@ formOther = () => {
             <Text style={{ color: "red" }}> *</Text>
           </Text>
           <TextInput
-            style={styles.inputStyle2}
-            placeholder="อธิบายรายละเอียด..."
-          ></TextInput>
-        </View>
-      );
-    }
-  };
-  //   showRdio(){
-  //     return( <View>
-  //       <RadioForm
-  //         radio_props={radio_table}
-  //         initial={this.state.abc}
-  // onPress={()=>this.setState({abc:-1})}
-  //       />
-  //     </View>)
-  //   }
-
-  formNeaM = () => {
-    if (this.state.radioformNeaM) {
-      return (
-        <View>
-          <View style={styles.textHead3}>
-            <Text
-              style={{
-                fontSize: "18%",
-                color: "#1E90FF",
-                marginBottom: 10,
-                fontWeight: "bold",
-              }}
-            >
-              HazOb & Near Miss Report
-            </Text>
-          </View>
-
-          <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
-          {/* <Divider style={styles.lineunder1}></Divider> */}
-
-          <Text style={styles.textHead5}>
-            8. Category ประเภท
-            <Text style={{ color: "red" }}> *</Text>
-          </Text>
-
-          {/* checkbox */}
-          {/* ส่วนของ Category  */}
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxCategory}
-              onPress={() => {
-                this.setState({
-                  CheckboxCategory: !this.state.CheckboxCategory,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Aviation Operations / ปฏิบัติการอากาศยาน"}
-            />
-          </View>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxCategory1}
-              onPress={() => {
-                this.setState({
-                  CheckboxCategory1: !this.state.CheckboxCategory1,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Environment Impact / ผลกระทบต่อสิ่งแวดล้อม"}
-            />
-          </View>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxCategory2}
-              onPress={() => {
-                this.setState({
-                  CheckboxCategory2: !this.state.CheckboxCategory2,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Fire & Explosion / ไฟไหม้และการระเบิด"}
-            />
-          </View>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxCategory3}
-              onPress={() => {
-                this.setState({
-                  CheckboxCategory3: !this.state.CheckboxCategory3,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Injury & Illness / บาดเจ็บและการเจ็บป่วย"}
-            />
-          </View>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxCategory4}
-              onPress={() => {
-                this.setState({
-                  CheckboxCategory4: !this.state.CheckboxCategory4,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Marine Accident / อุบัติเหตุทางทะเล"}
-            />
-          </View>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxCategory5}
-              onPress={() => {
-                this.setState({
-                  CheckboxCategory5: !this.state.CheckboxCategory5,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Motor Vehicle Crash / อุบัติเหตุด้านยานพาหนะ"}
-            />
-          </View>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxCategory6}
-              onPress={() => {
-                this.setState({
-                  CheckboxCategory6: !this.state.CheckboxCategory6,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Policy, Law Non-Compliance / การละเมิดกฎฯ"}
-            />
-          </View>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxCategory7}
-              onPress={() => {
-                this.setState({
-                  CheckboxCategory7: !this.state.CheckboxCategory7,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Process Upset / ระบบกระบวนการผลิตขัดข้อง"}
-            />
-          </View>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxCategory8}
-              onPress={() => {
-                this.setState({
-                  CheckboxCategory8: !this.state.CheckboxCategory8,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Property, Equipment Damage / ทรัพย์สินเสียหาย"}
-            />
-          </View>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxCategory9}
-              onPress={() => {
-                this.setState({
-                  CheckboxCategory9: !this.state.CheckboxCategory9,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Splill or Release / การรั่วไหลของก๊าซและของแหลว"}
-            />
-          </View>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxCategory10}
-              onPress={() => {
-                this.setState({
-                  CheckboxCategory10: !this.state.CheckboxCategory10,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Other"}
-            />
-            {this.state.CheckboxCategory10 == true && (
-              <View>
-                <TextInput
-                  style={styles.inputStyle}
-                  placeholder="อธิบายรายละเอียด"
-                ></TextInput>
-              </View>
-            )}
-          </View>
-
-          {/* ส่วนของ Related   */}
-
-          <Text style={styles.textHead3}>
-            9. Related with / เกี่ยวเนื่องกัน
-            <Text style={{ color: "red" }}> *</Text>
-          </Text>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated}
-              onPress={() => {
-                this.setState({ CheckboxRelated: !this.state.CheckboxRelated });
-              }}
-              style={styles.checkbox}
-              title={"Chemical / สารเคมี"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated1}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated1: !this.state.CheckboxRelated1,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Electrical / ไฟฟ้า"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated2}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated2: !this.state.CheckboxRelated2,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Fall Hazard Management / การจัดการงานบนที่สูง"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated3}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated3: !this.state.CheckboxRelated3,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Houskeeping / ความเป็นระเบียบเรียบร้อย"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated4}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated4: !this.state.CheckboxRelated4,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Hygiene, Sanitation / อนามัยและความสะอาด"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated5}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated5: !this.state.CheckboxRelated5,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Labeling, Marketing & Signs / ฉลาก, เครื่องหมาย ป้าย"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated6}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated6: !this.state.CheckboxRelated6,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Lifting Appliances / อุปกรณ์การยก, ผูก และเคลื่อนย้าย"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated7}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated7: !this.state.CheckboxRelated7,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Mechanical / เครื่องจักรกล"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated8}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated8: !this.state.CheckboxRelated8,
-                });
-              }}
-              style={styles.checkbox}
-              title={"PPE / อุปกรณ์ป้องกันอันตรายส่วนบุคคล"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated9}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated9: !this.state.CheckboxRelated9,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Safety, Life Saving Eqipment / อุปกรณ์ความปลอดภัย"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated10}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated10: !this.state.CheckboxRelated10,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Vehicles / ยานพาหนะ, การขนส่ง"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated11}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated11: !this.state.CheckboxRelated11,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Welding, Burning / งานเชื่อม. งานเกี่ยวกับความร้อน"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated12}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated12: !this.state.CheckboxRelated12,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Walking Surface, Railings, Ladders / ทางเดิน, บันได"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.CheckboxRelated13}
-              onPress={() => {
-                this.setState({
-                  CheckboxRelated13: !this.state.CheckboxRelated13,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Other"}
-            />
-            {this.state.CheckboxRelated13 == true && (
-              <View>
-                <TextInput
-                  style={styles.inputStyle}
-                  placeholder="อธิบายรายละเอียด"
-                ></TextInput>
-              </View>
-            )}
-          </View>
-
-          <Text style={styles.textHead3}>
-            10. Description / รายละเอียด- โปรดอธิบาย
-            <Text style={{ color: "red" }}> *</Text>
-          </Text>
-          <TextInput
-            style={styles.inputStyle2}
+            style={styles.inputStyle}
             placeholder="อธิบายรายละเอียด"
-          ></TextInput>
-
-          <Text style={styles.textHead6}>
-            11. Severity - Impact ความรุนแรง - ผลกระทบ
-            <Text style={{ color: "red" }}> *</Text>
-          </Text>
-          <View >
-            <RadioForm
-              radio_props={radio_severity}
-              initial={-1}
-              onPress={() => {}}
-            />
-          </View>
-          <Text style={styles.textHead3}>
-            12. Probability - Likelihood โอกาสที่จะเกิด
-            <Text style={{ color: "red" }}> *</Text>
-          </Text>
-          <View style={{ marginTop: 10 }}>
-            <RadioForm
-              radio_props={radio_probability}
-              initial={-1}
-              onPress={() => {}}
-            />
-          </View>
-
-          <Text style={styles.textHead3}>
-            13. Does the same situation exist in other area?
-            มีโอกาสพบความเสี่ยงดังกล่าวในสถานที่อื่นหรือไม่?
-            <Text style={{ color: "red" }}> *</Text>
-          </Text>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.checkboxYesorNo}
-              onPress={() => {
-                this.setState({ checkboxYesorNo: !this.state.checkboxYesorNo });
-              }}
-              style={styles.checkbox}
-              title={"No / ไม่ใช่"}
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.checkboxYesorNo1}
-              onPress={() => {
-                this.setState({
-                  checkboxYesorNo1: !this.state.checkboxYesorNo1,
-                });
-              }}
-              style={styles.checkbox}
-              title={
-                "Yes / ใช่ (Please provide detail / กรุณาระบุรายละเอียดใน Other"
-              }
-            />
-          </View>
-
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={this.state.checkboxYesorNo2}
-              onPress={() => {
-                this.setState({
-                  checkboxYesorNo2: !this.state.checkboxYesorNo2,
-                });
-              }}
-              style={styles.checkbox}
-              title={"Other"}
-            />
-            {this.state.checkboxYesorNo2 == true && (
-              <View>
-                <TextInput
-                  style={styles.inputStyle}
-                  placeholder="อธิบายรายละเอียด"
-                ></TextInput>
-              </View>
-            )}
-          </View>
-
-          <Text style={styles.textHead3}>
-            14. Recommendation Action / ข้อแนะนำเพื่อการแก้ไข
-            <Text style={{ color: "red" }}> *</Text>
-          </Text>
-          <TextInput
-            style={styles.inputStyle2}
-            placeholder="อธิบายรายละเอียด..."
+            onChangeText={(text) => this.setState({ Recommendation: text })}
           ></TextInput>
         </View>
       );
@@ -1798,15 +2624,11 @@ formOther = () => {
     const state = this.state;
 
     const radioData = this.state;
-    // console.log("##########################");
-    // console.log(radioData);
 
     return (
       <ScrollView styles={styles.background}>
         <View style={styles.textHead1}>
-          <Text
-            style={{ fontSize: "24%", color: "#1E90FF", fontWeight: "bold" }}
-          >
+          <Text style={{ fontSize: "20%", color: "#1E90FF" }}>
             แบบฟอร์มรายงาน
           </Text>
         </View>
@@ -1818,9 +2640,7 @@ formOther = () => {
         </View>
 
         <View style={styles.containerSec1}>
-          <Text
-            style={{ fontSize: "18%", color: "#1E90FF", fontWeight: "bold" }}
-          >
+          <Text style={{ fontSize: "15%", color: "#1E90FF" }}>
             Observer/ข้อมูลผู้รายงาน
           </Text>
 
@@ -1832,31 +2652,31 @@ formOther = () => {
               value={this.state.firstname + " " + this.state.lastname}
             />
           </View>
-          {/* <Divider style={styles.lineunder} /> */}
+          <Divider style={styles.lineunder} />
 
-          <Text style={styles.textHead5}>Position :</Text>
+          <Text style={styles.textHead3}>Position :</Text>
           <TextInput style={styles.inputStyle1} value={this.state.position} />
 
-          {/* <Divider style={styles.lineunder} /> */}
+          <Divider style={styles.lineunder} />
 
-          <Text style={styles.textHead5}>Dept :</Text>
+          <Text style={styles.textHead3}>Dept :</Text>
           <TextInput style={styles.inputStyle1} value={this.state.dept} />
 
-          {/* <Divider style={styles.lineunder} /> */}
+          <Divider style={styles.lineunder} />
 
-          <Text style={styles.textHead5}>Staff's residence :</Text>
+          <Text style={styles.textHead3}>Staff's residence :</Text>
           <TextInput style={styles.inputStyle1} value={this.state.staff} />
 
-          {/* <Divider style={styles.lineunder} /> */}
+          <Divider style={styles.lineunder} />
 
-          <Text style={styles.textHead5}>Work location :</Text>
+          <Text style={styles.textHead3}>Work location :</Text>
           <TextInput style={styles.inputStyle1} value={this.state.worklo} />
 
-          {/* <Divider style={styles.lineunder} /> */}
+          <Divider style={styles.lineunder} />
         </View>
 
-        <View style={styles.containerSec2}>
-          <Text style={styles.textHead5}>
+        <View style={styles.containerSec1}>
+          <Text style={styles.textHead3}>
             Observation date / วันที่พบเห็น{" "}
             <Text style={{ color: "red" }}>*</Text>
           </Text>
@@ -1867,7 +2687,6 @@ formOther = () => {
           </TouchableOpacity>
 
           <DateTimePickerModal
-          locale="th"
             onChange={(e) => {
               console.log(e);
             }}
@@ -1878,7 +2697,7 @@ formOther = () => {
           />
 
           <View>
-            <Text style={styles.textHead5}>
+            <Text>
               Location/สถานที่พบเหตุการณ์{" "}
               <Text style={{ color: "red" }}>*</Text>
             </Text>
@@ -1893,8 +2712,10 @@ formOther = () => {
               style={styles.inputLightStyle}
               placeholderStyle={{ color: "#bfc6ea" }}
               placeholderIconColor="#007aff"
-              selectedValue={this.state.course}
-              onValueChange={(text) => this.setState({ course: text })}
+              selectedValue={this.state.location}
+              onValueChange={(itemValue) =>
+                this.setState({ location: itemValue })
+              }
               textStyle={{ fontSize: 14 }}
               placeholder="เลือกสถานที่พบเหตุการณ์"
             >
@@ -1911,7 +2732,7 @@ formOther = () => {
           </View>
 
           <View>
-            <Text style={styles.textHead5}>
+            <Text>
               Sub Location/สถานที่พบเหตุการณ์{" "}
               <Text style={{ color: "red" }}>*</Text>
             </Text>
@@ -1926,8 +2747,8 @@ formOther = () => {
               style={styles.inputLightStyle}
               placeholderStyle={{ color: "#bfc6ea" }}
               placeholderIconColor="#007aff"
-              selectedValue={this.state.courses}
-              onValueChange={(text) => this.setState({ courses: text })}
+              selectedValue={this.state.sublocation}
+              onValueChange={(text) => this.setState({ sublocation: text })}
               textStyle={{ fontSize: 14 }}
               placeholder="เลือกสถานที่พบเหตุการณ์"
             >
@@ -1945,7 +2766,7 @@ formOther = () => {
 
           <View
             style={{
-              marginVertical: 30,
+              marginVertical: 40,
               flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
@@ -1956,16 +2777,13 @@ formOther = () => {
             <Divider style={{ paddingBottom: 1, flex: 1 }} />
           </View>
 
-          <View style={styles.textHead5}>
-            <Text
-              style={{ fontSize: "18%", color: "#007aff", fontWeight: "bold" }}
-            >
+          <View style={styles.textHead4}>
+            <Text style={{ fontSize: "20%", color: "#007aff" }}>
               Report Type ประเภทของรายงาน
             </Text>
           </View>
 
-          <Divider style={styles.lineunder} />
-          {/* <Divider style={{ marginTop: 20 }}></Divider> */}
+          <Divider style={{ marginTop: 20 }}></Divider>
 
           {/* <ส่วน Radio ที่1> */}
 
@@ -1973,12 +2791,13 @@ formOther = () => {
             What kind of report/ประเภทของรายงาน{" "}
             <Text style={{ color: "red" }}> *</Text>
           </Text>
-          <View style={{ marginTop: 12 }}>
+          <View>
             <RadioForm
               radio_props={radio_props}
               initial={-1}
-              onPress={(item) => this.radiocheck(item)}
-              style={{ marginHorizontal: 4 }}
+              onPress={(item) => {
+                this.radiocheck(item);
+              }}
             />
           </View>
 
@@ -1990,13 +2809,10 @@ formOther = () => {
 
           {/* ส่วนของ HazOb */}
           {this.formHazOb()}
-
-          {/* ส่วนของ NeaM */}
-          {this.formNeaM()}
-
-          {/* ส่วนของ Other */}
-          {this.formOther()}
         </View>
+        <Button style={styles.submitButton} onPress={() => this.onPressSend()}>
+          <Text style={{ color: "#fff" }}>Submit</Text>
+        </Button>
       </ScrollView>
     );
   }
@@ -2010,7 +2826,7 @@ const styles = StyleSheet.create({
 
   lineunder: {
     paddingBottom: 1,
-    marginTop: 10,
+    marginTop: 1,
     marginBottom: 1,
   },
 
@@ -2031,23 +2847,12 @@ const styles = StyleSheet.create({
   },
 
   textHead3: {
-    marginTop: 15,
-    // marginBottom: 5,
+    marginTop: 20,
+    marginBottom: 5,
   },
   textHead4: {
     marginTop: 20,
     // marginBottom: 20,
-  },
-  textHead5: {
-    marginTop: 5,
-  },
-  textHead6: {
-    marginTop: 5,
-    marginBottom: 10,
-  },
-  textHead7: {
-    marginTop: 14,
-    marginBottom: 10,
   },
 
   containerSec1: {
@@ -2056,17 +2861,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 20,
     marginTop: 20,
-    marginBottom: 20,
-    borderColor: "#398DDD",
-  },
-  containerSec2: {
-    borderWidth: 1,
-    padding: 12,
-    borderRadius: 8,
-    marginHorizontal: 20,
-    // marginTop: 12,
-    marginBottom: 50,
-    borderColor: "#398DDD",
+    marginBottom: 5,
   },
 
   inputDate: {
@@ -2092,11 +2887,9 @@ const styles = StyleSheet.create({
     borderColor: "#007aff",
   },
   dropdownstyle: {
-    borderWidth: 1,
-    // borderRadius: 15,
+    borderRadius: 10,
     borderColor: "#007aff",
-    // marginBottom: 10,
-    // paddingVertical: 16
+    color: "black",
   },
   inputStyle: {
     borderColor: "#DCDCDC",
@@ -2152,7 +2945,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     borderRadius: 20,
-    marginTop: 10,
   },
 
   container1: {
@@ -2172,16 +2964,15 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     height: HEIGHT / 20,
     marginTop: 10,
-    paddingLeft: 16,
+    paddingLeft: 10,
     marginBottom: 10,
   },
-  inputStyle2: {
-    borderColor: "#007aff",
-    borderWidth: 1,
-    borderRadius: 15,
-    height: HEIGHT / 20,
-    marginTop: 10,
-    paddingLeft: 16,
-    marginBottom: 10,
+
+  submitButton: {
+    alignSelf: "center",
+    marginVertical: 20,
+    backgroundColor: "#3BB54A",
+    marginTop: 20,
+    marginBottom: 50,
   },
 });
