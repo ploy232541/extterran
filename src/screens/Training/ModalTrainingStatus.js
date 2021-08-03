@@ -287,7 +287,20 @@ const HEIGHT = Dimensions.get("window").height;
                     <View style={{ paddingTop: 20 }}>
                       <Text>Acknowledged By HR:</Text>
                     </View>
-
+ <View style={styles.confirmStyle}>
+                      <Text style={{ textAlign: "center" }}>
+                        {item.human_resources_manager != null
+                          ? item.human_resources_manager
+                          : ""}
+                      </Text>
+                      <Divider
+                        style={{ paddingBottom: 1, backgroundColor: "blue" }}
+                      />
+                      <View style={styles.textConfirm}>
+                        <Text>Human Resources Manager</Text>
+                        <Text>ผู้จัดการฝ่ายทรัพยากรบุคคล</Text>
+                      </View>
+                    </View>
                     <View style={styles.confirmStyle}>
                       <Text style={{ textAlign: "center" }}>
                         {item.hr_training_coordinator != null
@@ -302,20 +315,7 @@ const HEIGHT = Dimensions.get("window").height;
                         <Text>เจ้าหน้าที่</Text>
                       </View>
                     </View>
-                    <View style={styles.confirmStyle}>
-                      <Text style={{ textAlign: "center" }}>
-                        {item.human_resources_manager != null
-                          ? item.human_resources_manager
-                          : ""}
-                      </Text>
-                      <Divider
-                        style={{ paddingBottom: 1, backgroundColor: "blue" }}
-                      />
-                      <View style={styles.textConfirm}>
-                        <Text>Human Resources Manager</Text>
-                        <Text>ผู้จัดการฝ่ายทรัพยากรบุคคล</Text>
-                      </View>
-                    </View>
+                   
                   </View>
 
                   <View

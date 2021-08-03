@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-native";
 // import AsyncStorage1 from "@react-native-async-storage/async-storage"; //--
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Divider } from "react-native-elements";
 import AntIcon from "react-native-vector-icons/AntDesign";
@@ -379,22 +379,6 @@ const TrainingApproveFormScreen = (props) => {
               <View style={{ paddingTop: 20 }}>
                 <Text>Acknowledged By HR:</Text>
               </View>
-
-              <View style={styles.confirmStyle}>
-                <Text style={{ textAlign: "center" }}>
-                  {dataArray.hr_training_coordinator != null
-                    ? dataArray.hr_training_coordinator
-                    : ""}
-                </Text>
-                <Divider
-                  style={{ paddingBottom: 1, backgroundColor: "blue" }}
-                />
-                <View style={styles.textConfirm}>
-                  <Text>HR Training Coordinator</Text>
-                  <Text>เจ้าหน้าที่</Text>
-                </View>
-              </View>
-
               <View style={styles.confirmStyle}>
                 <Text style={{ textAlign: "center" }}>
                   {dataArray.human_resources_manager != null
@@ -407,6 +391,20 @@ const TrainingApproveFormScreen = (props) => {
                 <View style={styles.textConfirm}>
                   <Text>Human Resources Manager</Text>
                   <Text>ผู้จัดการฝ่ายทรัพยากรบุคคล</Text>
+                </View>
+              </View>
+              <View style={styles.confirmStyle}>
+                <Text style={{ textAlign: "center" }}>
+                  {dataArray.hr_training_coordinator != null
+                    ? dataArray.hr_training_coordinator
+                    : ""}
+                </Text>
+                <Divider
+                  style={{ paddingBottom: 1, backgroundColor: "blue" }}
+                />
+                <View style={styles.textConfirm}>
+                  <Text>HR Training Coordinator</Text>
+                  <Text>เจ้าหน้าที่</Text>
                 </View>
               </View>
             </View>

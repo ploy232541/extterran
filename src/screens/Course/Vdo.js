@@ -229,6 +229,7 @@ class Vdo extends Component {
 
   /////////////////////////////////Start all function learm Video////////////////////////////////////
   _renderHeaderVideo(item, expanded) {
+ 
     return (
       <View
         style={{
@@ -276,8 +277,8 @@ class Vdo extends Component {
 
   handlePlaybackStatusUpdate = (e, status, item) => {
     this.setState({ statuss: e });
-    
-    // console.log(this.player);
+    // console.log(item.startcourse_id);
+this.setState({note_gen_id:item.startcourse_id})
 
     // if(status != 's'){
 
@@ -349,60 +350,6 @@ class Vdo extends Component {
                 this.handlePlaybackStatusUpdate(e, status, item)
               }
             />
-
-            {/* <MediaControls
-                  duration={this.state.duration}
-                  isLoading={this.state.isLoading}
-                  mainColor="#333"
-                  onFullScreen={this.onFullScreen}
-                  onPaused={this.onPaused}
-                  onReplay={this.onReplay}
-                  onSeek={this.onSeek}
-                  onSeeking={this.onSeeking}
-                  playerState={this.state.playerState}
-                  progress={this.state.currentTime}
-                  toolbar={this.renderToolbar()}
-                /> */}
-            {/* <Video
-                      // ref={(r) => {
-                      //   videoRef.current = r;
-                      // }}
-                      source={{ uri: 'http://localhost/lms_exterran/uploads/lesson/3212222722-1.mp4' }}
-                      // source={{ uri: item.vdo }}
-                      rate={1.0}
-                      volume={1.0}
-                      isMuted={false}
-                      resizeMode="contain"
-                      shouldPlay={true}
-                      isLooping={false}
-                      useNativeControls
-                      style={styles.mediaPlayer}
-                      // progressUpdateIntervalMillis={1000}
-                    /> */}
-
-            {/* <JWPlayer
-                      ref={p => (this.JWPlayer = p)}
-                      style={styles.player}
-                      playlistItem={{
-                        mediaId: "1",
-                        file: item.vdo,
-                        autostart: false,
-                        startTime: item.status != null && item.status != 's' && item.status != 'l' ? parseInt(item.status) : 0
-                      }}
-
-                      onPlay={() => this.onPlay(item, 'video')}
-                      onComplete={() => this.onComplete(item, 'video')}
-                      onTime={(e) => this.onTime(e, item, 'video', item.status)}
-                      onSeek={(e) => this.onSeek(e)}
-                      onPause={() => this.onPause()}
-                      nativeFullScreen={true} 
-                      onFullScreen={() => this.onFullScreen()}
-                      onFullScreenExit={() => this.onFullScreenExit()}
-                      // landscapeOnFullScreen={true}
-                      // portraitOnExitFullScreen={true}
-                      // fullScreenOnLandscape={true}
-                      // exitFullScreenOnPortrait={true}
-                    /> */}
           </View>
         </View>
 
@@ -888,7 +835,7 @@ class Vdo extends Component {
     if (status != "s") {
       if (e == "ended") {
         //play end
-        // console.log("เรียนผ่านแล้ว");
+        console.log("เรียนผ่านแล้ว");
         let params = {
           lesson_id: lesson_id,
           file_id: file_id,
@@ -912,7 +859,7 @@ class Vdo extends Component {
             console.log(error);
           });
       } else {
-        // console.log("กำลังเรียนเรียน");
+        console.log("กำลังเรียนเรียน");
         let params = {
           lesson_id: lesson_id,
           file_id: file_id,
@@ -1130,17 +1077,17 @@ class Vdo extends Component {
       note_file_id,
       note_text,
       note_time,
-      startcourse_id,
+      note_gen_id,
       user_id,
     } = this.state;
-    console.log(startcourse_id ? startcourse_id : "ไม่พบ");
+    console.log(note_gen_id ? note_gen_id : "ไม่พบ");
     if (note_text != "") {
       let params = {
         note_lesson_id: note_lesson_id,
         note_file_id: note_file_id,
         note_text: note_text,
         note_time: note_time,
-        note_gen_id: startcourse_id,
+        note_gen_id: note_gen_id,
         user_id: user_id,
       };
       httpClient

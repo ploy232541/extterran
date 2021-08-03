@@ -1893,7 +1893,7 @@ export default class MainProfileScreen extends Component {
       return (
         <View>
           <View style={styles.textHead3}>
-            <Text style={{ color: "#007aff", fontSize: "20%" }}>
+            <Text style={{ color: "#007aff", fontSize: 20 }}>
               BBS Observation การสังเกตพฤติกรรมความปลอดภัย
             </Text>
           </View>
@@ -1998,7 +1998,7 @@ export default class MainProfileScreen extends Component {
         <View>
           <View style={styles.textHead4}>
             <Text
-              style={{ fontSize: "20%", color: "#1E90FF", marginBottom: 10 }}
+              style={{ fontSize: 20, color: "#1E90FF", marginBottom: 10 }}
             >
               Stop Work Authority/Responsibility (SWA/SWR)
               การใช้อำนาจในการหยุดงาน
@@ -2169,7 +2169,7 @@ export default class MainProfileScreen extends Component {
         <View>
           <View style={styles.textHead4}>
             <Text
-              style={{ fontSize: "20%", color: "#1E90FF", marginBottom: 10 }}
+              style={{ fontSize: 20, color: "#1E90FF", marginBottom: 10 }}
             >
               HazOb & Near Miss Report
             </Text>
@@ -2628,7 +2628,7 @@ export default class MainProfileScreen extends Component {
     return (
       <ScrollView styles={styles.background}>
         <View style={styles.textHead1}>
-          <Text style={{ fontSize: "20%", color: "#1E90FF" }}>
+          <Text style={{ fontSize: 20, color: "#1E90FF" }}>
             แบบฟอร์มรายงาน
           </Text>
         </View>
@@ -2640,7 +2640,7 @@ export default class MainProfileScreen extends Component {
         </View>
 
         <View style={styles.containerSec1}>
-          <Text style={{ fontSize: "15%", color: "#1E90FF" }}>
+          <Text style={{ fontSize: 15, color: "#1E90FF" }}>
             Observer/ข้อมูลผู้รายงาน
           </Text>
 
@@ -2778,7 +2778,7 @@ export default class MainProfileScreen extends Component {
           </View>
 
           <View style={styles.textHead4}>
-            <Text style={{ fontSize: "20%", color: "#007aff" }}>
+            <Text style={{ fontSize: 20, color: "#007aff" }}>
               Report Type ประเภทของรายงาน
             </Text>
           </View>

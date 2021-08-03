@@ -14,6 +14,7 @@ import OutfitScreen from "../screens/Profile/OutfitScreen";
 import SafetyBootsScreen from "../screens/Profile/SafetyBootsScreen";
 import MedicalCheckupsScreen from "../screens/Profile/MedicalCheckupsScreen";
 import MainProfileScreen from "../screens/Profile/MainProfileScreen";
+import MainProfileListScreen from "../screens/Profile/MainProfileListScreen";
 
 import TrainingScreen from "../screens/Training/TrainingScreen";
 import TrainingFormScreen from "../screens/Training/TrainingFormScreen";
@@ -97,6 +98,9 @@ const routes = {
   MainProfileScreen: {
     title: " ",
     component: MainProfileScreen,
+  },MainProfileListScreen: {
+    title: " ",
+    component: MainProfileListScreen,
   },
 
   TrainingScreen: { title: " ", component: TrainingScreen },
