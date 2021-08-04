@@ -86,7 +86,7 @@ export default class TrainingFormScreen extends Component {
       profile: [],
       culMonths: "",
       courseComfrom: [],
-
+      select_all:[],
       tableData: [
         [
           "Training / Seminar / Education Costs (THB) \nค่าใช้จ่ายการฝึกอบรม/การศึกษา (บาท)",
@@ -556,7 +556,7 @@ export default class TrainingFormScreen extends Component {
                                         this.state.lang === "EN"
                                           ? "OK"
                                           : "ตกลง",
-                                      onPress: () => this.reset(),
+                                      onPress: () => this.props.navigation.goBack(),
                                     },
                                   ],
                                   { cancelable: false }
@@ -649,9 +649,12 @@ export default class TrainingFormScreen extends Component {
   onPickerValueChanges = (v) => {
     this.setState({ courseselect: v, nameplace_etc: "" });
     if (v != "") {
-      let result = this.state.select_1.find((member) => {
-        return member.course_id === v;
+    let ck=this.state.lang_id==1?v:(Number(v)-1)
+    console.log(ck);
+      let result = this.state.select_all.find((member) => {
+        return member.course_id ==ck;
       });
+      console.log(result);
       this.setState({
         courseComfrom: result,
       });
@@ -711,6 +714,22 @@ export default class TrainingFormScreen extends Component {
           if (result != null) {
             this.setState({
               select_1: result,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+        httpClient
+        .get(
+          `/Training/TrainingFormNameCourseAllLang/${user_id}/${this.state.lang_id}/${value}`
+        )
+        .then((response) => {
+          const result = response.data;
+
+          if (result != null) {
+            this.setState({
+              select_all: result,
             });
           }
         })
@@ -1094,7 +1113,7 @@ export default class TrainingFormScreen extends Component {
           {/* ส่วนที่2 */}
           <View style={styles.containerSec2}>
             <View style={styles.contentInSec2}>
-              <Text style={styles.textInputEng}>Name of Course :</Text>
+              <Text style={styles.textInputEng}>Name of Course :<Text style={{ color: "red" }}>*</Text></Text>
               <Text style={styles.textInputThai}>ชื่อหลักสูตร</Text>
 
               <Picker
@@ -1193,7 +1212,7 @@ export default class TrainingFormScreen extends Component {
               {this.state.showinputExpense && (
                 <View>
                   <Text style={styles.textInputEng}>
-                    Expense (excluded vat) :
+                    Expense (excluded vat) :<Text style={{ color: "red" }}>*</Text>
                   </Text>
                   <Text style={styles.textInputThai}>
                     ค่าใช้จ่ายต่อบุคคล (ไม่รวมภาษี)
@@ -1201,10 +1220,11 @@ export default class TrainingFormScreen extends Component {
 
                   <TextInput
                     style={styles.inputStyle1}
-                    keyboardType={"numeric"}
-                    onChangeText={(text) => this.setState({ expense: text })}
+                    keyboardType={"number-pad"}
+                    onChangeText={(text) => this.setState({ expense: Number(text.replace(/,/g, "")) })}
+                    maxLength={8}
                     placeholder="กรุณากรอกจำนวนเงิน"
-                    value={this.state.expense}
+                    value={new Intl.NumberFormat().format(this.state.expense)}
                     onBlur={(e) => this.checkcourse(this.state.expense)}
                   />
                 </View>
@@ -1214,7 +1234,7 @@ export default class TrainingFormScreen extends Component {
                 {this.state.showuninputExpense && (
                   <TextInput
                     style={styles.inputStyle}
-                    value={this.state.expense}
+                    value={new Intl.NumberFormat().format(this.state.expense)}
                   />
                 )}
               </View>
@@ -1278,7 +1298,7 @@ export default class TrainingFormScreen extends Component {
                 value={this.state.total}
               />
 
-              <Text style={styles.textInputEng}>Place :</Text>
+              <Text style={styles.textInputEng}>Place :<Text style={{ color: "red" }}>*</Text></Text>
               <Text style={styles.textInputThai}>สถานที่ฝึกอบรม</Text>
               {this.state.showuninputExpense && (
                 <Picker
@@ -1323,14 +1343,15 @@ export default class TrainingFormScreen extends Component {
                   keyboardType="text"
                   value={this.state.nameplace_etc}
                   style={styles.inputStyle1}
+                  maxLength={100}
                   onChangeText={this.changPlace}
                   placeholder="กรุณากรอกสถานที่"
                 />
               )}
 
               <View>
-                <Text style={styles.textInputEng}>File :</Text>
-                <Text style={styles.textInputThai}>แนบไฟล์</Text>
+                <Text style={styles.textInputEng}>File :<Text style={{ color: "red" }}>*</Text></Text>
+                <Text style={styles.textInputThai}>แนปไฟล์</Text>
                 <View style={{ marginTop: 5, marginBottom: 20 }}>
                   <Button
                     style={{
@@ -1407,6 +1428,7 @@ export default class TrainingFormScreen extends Component {
                   keyboardType="text"
                   style={styles.inputStyle2}
                   value={this.state.pre_requerse}
+                  maxLength={100}
                   onChangeText={(text) => this.setState({ pre_requerse: text })}
                 />
                 <View
@@ -1450,6 +1472,7 @@ export default class TrainingFormScreen extends Component {
                         style={styles.inputStyle2}
                         name={index}
                         value={item}
+                        maxLength={100}
                         onChangeText={(text) => {
                           let courseItem = [...this.state.courseItem];
                           let item = { ...courseItem[index] };
@@ -1498,6 +1521,7 @@ export default class TrainingFormScreen extends Component {
                   keyboardType="text"
                   style={styles.inputStyle2}
                   value={this.state.pre_requerse2}
+                  maxLength={100}
                   onChangeText={(text) =>
                     this.setState({ pre_requerse2: text })
                   }
@@ -1542,6 +1566,7 @@ export default class TrainingFormScreen extends Component {
                         keyboardType="text"
                         style={styles.inputStyle2}
                         value={item}
+                        maxLength={100}
                         onChangeText={(text) => {
                           let courseItem2 = [...this.state.courseItem2];
                           let item = { ...courseItem2[index] };
@@ -2084,7 +2109,7 @@ export default class TrainingFormScreen extends Component {
                   <CheckBox
                     checked
                     style={stylescheckbox.checkbox}
-                    title="I accept the terms "
+                    title={this.state.lang_id==1?"I accept the terms ":"ยอมรับเงื่อนไข"}
                   />
 
                   {/* เอก */}
@@ -2105,11 +2130,11 @@ export default class TrainingFormScreen extends Component {
                 </View>
 
                 <View style={styles.pickerContainer2}>
-                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
+                  <View style={{ flex: 0.1, borderWidth: 0 }}></View>
                   <View
                     style={{
                       flex: 4,
-                      borderWidth: 2,
+                      borderWidth: 0,
                       alignItems: "flex-start",
                       justifyContent: "center",
                     }}
@@ -2119,7 +2144,7 @@ export default class TrainingFormScreen extends Component {
                         // textAlign: "justify",
                         marginLeft: 6,
                         textDecorationLine: "underline",
-                        borderWidth: 2,
+                        borderWidth: 0,
                       }}
                     >
                       {this.state.profile.firstname +
@@ -2129,7 +2154,7 @@ export default class TrainingFormScreen extends Component {
                   </View>
 
                   <View style={{ flexDirection: "column" }}>
-                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                    <View style={{ flex: 1, borderWidth: 0 }}></View>
                     <View
                       style={{
                         alignItems: "flex-start",
@@ -2141,7 +2166,7 @@ export default class TrainingFormScreen extends Component {
                         style={{
                           // textAlign: "justify",
                           // marginHorizontal: 8,
-                          borderWidth: 2,
+                          borderWidth: 0,
                         }}
                       >
                         Date:
@@ -2150,7 +2175,7 @@ export default class TrainingFormScreen extends Component {
 
                     <View
                       style={{
-                        borderWidth: 2,
+                        borderWidth: 0,
                         alignItems: "flex-start",
                         justifyContent: "center",
                       }}
@@ -2158,15 +2183,15 @@ export default class TrainingFormScreen extends Component {
                       <Text
                         style={{
                           textDecorationLine: "underline",
-                          borderWidth: 2,
+                          borderWidth: 0,
                         }}
                       >
                         {this.state.dateTimeNow}
                       </Text>
                     </View>
-                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                    <View style={{ flex: 1, borderWidth: 0}}></View>
                   </View>
-                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
+                  <View style={{ flex: 0.1, borderWidth: 0 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
@@ -2215,8 +2240,8 @@ export default class TrainingFormScreen extends Component {
                 </View>
 
                 <View style={styles.pickerContainer2}>
-                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
-                  <View style={{ flex: 4, borderWidth: 2 }}>
+                  <View style={{ flex: 0.1, borderWidth: 0 }}></View>
+                  <View style={{ flex: 4, borderWidth: 0 }}>
                     {/* <Text style={{ textAlign: "justify", marginHorizontal: 8 }}> */}
                     {/* <Text style={{ textDecorationLine: "underline" }}> */}
                     <Image
@@ -2234,12 +2259,12 @@ export default class TrainingFormScreen extends Component {
                   </View> */}
 
                   <View style={{ flexDirection: "column" }}>
-                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                    <View style={{ flex: 1, borderWidth: 0 }}></View>
                     <View
                       style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
-                        borderWidth: 2,
+                        borderWidth: 0,
                       }}
                     >
                       {/* <View style={{ paddingLeft: "25%" }}> */}
@@ -2247,7 +2272,7 @@ export default class TrainingFormScreen extends Component {
                         style={{
                           // textAlign: "justify",
                           // marginHorizontal: 8,
-                          borderWidth: 2,
+                          borderWidth: 0,
                         }}
                       >
                         Date:
@@ -2256,7 +2281,7 @@ export default class TrainingFormScreen extends Component {
 
                     <View
                       style={{
-                        borderWidth: 2,
+                        borderWidth: 0,
                         alignItems: "flex-start",
                         justifyContent: "center",
                       }}
@@ -2264,16 +2289,16 @@ export default class TrainingFormScreen extends Component {
                       <Text
                         style={{
                           textDecorationLine: "underline",
-                          borderWidth: 2,
+                          borderWidth: 0,
                         }}
                       >
                         {this.state.dateTimeNow}
                       </Text>
                     </View>
-                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                    <View style={{ flex: 1, borderWidth: 0 }}></View>
                   </View>
 
-                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
+                  <View style={{ flex: 0.1, borderWidth: 0 }}></View>
                 </View>
 
                 {/* <View
@@ -2344,8 +2369,8 @@ export default class TrainingFormScreen extends Component {
                 <View style={styles.pickerContainer2}>
                   {/* <Text style={{ textAlign: "justify", marginHorizontal: 8 }}>
                     <Text style={{ textDecorationLine: "underline" }}> */}
-                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
-                  <View style={{ flex: 4, borderWidth: 2 }}>
+                  <View style={{ flex: 0.1, borderWidth: 0}}></View>
+                  <View style={{ flex: 4, borderWidth: 0 }}>
                     <Image
                       style={styles.logo}
                       source={{
@@ -2357,12 +2382,12 @@ export default class TrainingFormScreen extends Component {
                   </Text> */}
 
                   <View style={{ flexDirection: "column" }}>
-                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                    <View style={{ flex: 1, borderWidth: 0 }}></View>
                     <View
                       style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
-                        borderWidth: 2,
+                        borderWidth: 0,
                       }}
                     >
                       {/* <View style={{ paddingLeft: "25%" }}> */}
@@ -2370,7 +2395,7 @@ export default class TrainingFormScreen extends Component {
                         style={{
                           // textAlign: "justify",
                           // marginHorizontal: 8,
-                          borderWidth: 2,
+                          borderWidth: 0,
                         }}
                       >
                         Date:
@@ -2379,7 +2404,7 @@ export default class TrainingFormScreen extends Component {
 
                     <View
                       style={{
-                        borderWidth: 2,
+                        borderWidth: 0,
                         alignItems: "flex-start",
                         justifyContent: "center",
                       }}
@@ -2387,15 +2412,15 @@ export default class TrainingFormScreen extends Component {
                       <Text
                         style={{
                           textDecorationLine: "underline",
-                          borderWidth: 2,
+                          borderWidth: 0,
                         }}
                       >
                         {this.state.dateTimeNow}
                       </Text>
                     </View>
-                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                    <View style={{ flex: 1, borderWidth: 0 }}></View>
                   </View>
-                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
+                  <View style={{ flex: 0.1, borderWidth: 0 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
@@ -2457,8 +2482,8 @@ export default class TrainingFormScreen extends Component {
                 <View style={styles.pickerContainer2}>
                   {/* <Text style={{ textAlign: "justify", marginHorizontal: 8 }}>
                     <Text style={{ textDecorationLine: "underline" }}> */}
-                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
-                  <View style={{ flex: 4, borderWidth: 2 }}>
+                  <View style={{ flex: 0.1, borderWidth: 0 }}></View>
+                  <View style={{ flex: 4, borderWidth: 0 }}>
                     <Image
                       style={styles.logo}
                       source={{
@@ -2469,12 +2494,12 @@ export default class TrainingFormScreen extends Component {
                   {/* </Text>
                   </Text> */}
                   <View style={{ flexDirection: "column" }}>
-                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                    <View style={{ flex: 1, borderWidth: 0 }}></View>
                     <View
                       style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
-                        borderWidth: 2,
+                        borderWidth: 0,
                       }}
                     >
                       {/* <View style={{ paddingLeft: "25%" }}> */}
@@ -2482,7 +2507,7 @@ export default class TrainingFormScreen extends Component {
                         style={{
                           // textAlign: "justify",
                           // marginHorizontal: 8,
-                          borderWidth: 2,
+                          borderWidth: 0,
                         }}
                       >
                         Date:
@@ -2491,7 +2516,7 @@ export default class TrainingFormScreen extends Component {
 
                     <View
                       style={{
-                        borderWidth: 2,
+                        borderWidth: 0,
                         alignItems: "flex-start",
                         justifyContent: "center",
                       }}
@@ -2499,15 +2524,15 @@ export default class TrainingFormScreen extends Component {
                       <Text
                         style={{
                           textDecorationLine: "underline",
-                          borderWidth: 2,
+                          borderWidth: 0,
                         }}
                       >
                         {this.state.dateTimeNow}
                       </Text>
                     </View>
-                    <View style={{ flex: 1, borderWidth: 2 }}></View>
+                    <View style={{ flex: 1, borderWidth: 0 }}></View>
                   </View>
-                  <View style={{ flex: 0.1, borderWidth: 2 }}></View>
+                  <View style={{ flex: 0.1, borderWidth: 0 }}></View>
                 </View>
 
                 <View style={{ flexDirection: "row" }}>
@@ -2574,7 +2599,9 @@ export default class TrainingFormScreen extends Component {
               </Text>
             </Pressable>
             <Pressable style={[styles.button, styles.buttonCancel]} 
-            onPress={() => this.reset()}
+            onPress={() => {
+              this.props.navigation.goBack()
+            }}
             >
               <Text style={styles.textStyle}>
                 {this.state.lang === "EN" ? "Cancel" : "ยกเลิก"}
