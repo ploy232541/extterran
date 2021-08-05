@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Exterran e-Learning",
+    "name": "Smartxlearning",
     "slug": "Exterran-e-Learning",
-    "version": "4.0.0",
+    "version": "5.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -18,12 +18,12 @@
     ],
     "ios": {
       "bundleIdentifier": "com.exterran.elearnings",
-      "buildNumber": "1.0.1",
+      "buildNumber": "1.0.2",
       "supportsTablet": true
     },
     "android": {
       "package": "com.exterran.elearning",
-      "versionCode": 11,
+      "versionCode": 12,
       "permissions": []
     },
     "web": {

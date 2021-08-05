@@ -26,6 +26,9 @@ import HTML from "react-native-render-html";
 import { Rows, Table } from "react-native-table-component";
 import FormData from "form-data";
 import { number } from "prop-types";
+import NumberFormat from "react-number-format";
+import 'intl';
+import 'intl/locale-data/jsonp/en';
 
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
@@ -1217,12 +1220,13 @@ export default class TrainingFormScreen extends Component {
                   <Text style={styles.textInputThai}>
                     ค่าใช้จ่ายต่อบุคคล (ไม่รวมภาษี)
                   </Text>
-
+               
                   <TextInput
                     style={styles.inputStyle1}
-                    keyboardType={"number-pad"}
-                    onChangeText={(text) => this.setState({ expense: Number(text.replace(/,/g, "")) })}
-                    maxLength={8}
+                    keyboardType={"phone-pad"}
+                    
+                    onChangeText={(text) => {this.setState({ expense: Number(text.replace(/,/g, "")) })}}
+                   
                     placeholder="กรุณากรอกจำนวนเงิน"
                     value={new Intl.NumberFormat().format(this.state.expense)}
                     onBlur={(e) => this.checkcourse(this.state.expense)}
