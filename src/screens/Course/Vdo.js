@@ -102,7 +102,7 @@ class Vdo extends Component {
       lastPlayPosition: 0,
       maxPlayPosition: 0,
       statuss: {},
-      second:0,
+      second: 0,
     };
   }
 
@@ -147,7 +147,6 @@ class Vdo extends Component {
   async getNote() {
     const { user_id } = this.state;
     const { lesson_id, file_id, course_id } = this.props.route.params;
-
     await httpClient
       .get(
         `/Learn/getLearnNote/${lesson_id}/${file_id}/${course_id}/${user_id}`
@@ -174,8 +173,9 @@ class Vdo extends Component {
   };
 
   onSeek = (seek) => {
-    //Handler for change in seekbar
-    this.videoPlayer.seek(seek);
+    this.player.playFromPositionAsync(Number(seek));
+
+    console.log("ทดลอง", seek);
   };
 
   onPaused = (playerState) => {
@@ -229,7 +229,6 @@ class Vdo extends Component {
 
   /////////////////////////////////Start all function learm Video////////////////////////////////////
   _renderHeaderVideo(item, expanded) {
- 
     return (
       <View
         style={{
@@ -269,16 +268,10 @@ class Vdo extends Component {
     );
   }
 
-  // onPressImageToVideo(item){
-  //   this.setState({uirSildeImage: item.image})
-  //   this.JWPlayer.seekTo(parseInt(item.image_slide_time));
-  //   this.JWPlayer.pause()
-  // }
-
   handlePlaybackStatusUpdate = (e, status, item) => {
     this.setState({ statuss: e });
     // console.log(item.startcourse_id);
-this.setState({note_gen_id:item.startcourse_id})
+    this.setState({ note_gen_id: item.startcourse_id });
 
     // if(status != 's'){
 
@@ -292,16 +285,11 @@ this.setState({note_gen_id:item.startcourse_id})
       if (e.positionMillis > maxPlayPosition) {
         if (!isResettingTime && !e.isBuffering) {
           isResettingTime = true;
-          // this.player.pauseAsync().then(()=> {
-          //   console.log("paused");
           setTimeout(() => {
             this.player.setPositionAsync(maxPlayPosition).then(() => {
               console.log("set position " + maxPlayPosition);
 
               isResettingTime = false;
-              // this.player.playAsync().then(()=>{
-              //   isResettingTime = false
-              // })
             });
           }, 1000);
 
@@ -311,22 +299,20 @@ this.setState({note_gen_id:item.startcourse_id})
     }
 
     /////////บันทึกวีดีโอทุก 6 วิ//////////
-    if(e.positionMillis > 0){
-      if(Math.floor(e.positionMillis) % 6000 == 0){
-        this.setState({second:e.position*0.001})
+    if (e.positionMillis > 0) {
+      if (Math.floor(e.positionMillis) % 6000 == 0) {
+        this.setState({ second: e.position * 0.001 });
         console.log("บันทึกวีดีโอทุก 6 วิ");
-        console.log((Math.floor(e.positionMillis)*0.001)+" วินาที");
-        this.setState({second:(Math.floor(e.positionMillis)*0.001)})
-        if (e.positionMillis>this.state.lastPlayPosition) {
-          
+        console.log(Math.floor(e.positionMillis) * 0.001 + " วินาที");
+        this.setState({ second: Math.floor(e.positionMillis) * 0.001 });
+        if (e.positionMillis > this.state.lastPlayPosition) {
         }
-
       }
     }
 
     /////////บันทึกวีดีโอจบ//////////
-    if(e.didJustFinish){
-      console.log('====End video====')
+    if (e.didJustFinish) {
+      console.log("====End video====");
     }
     // }
   };
@@ -617,17 +603,6 @@ this.setState({note_gen_id:item.startcourse_id})
     );
   }
   _renderContentPDF = (item) => {
-    // let arrlist = []
-    // for(i in item.data){
-    //   val = item.data[i]
-    //   var value = {
-    //     image: val.image,
-    //     file_id: val.file_id,
-    //     lesson_id: val.lesson_id,
-    //     gen_id: val.gen_id,
-    //   }
-    //   arrlist.push(value)
-    // }
     let arrlist = [];
     for (i in item.data) {
       val = item.data[i];
@@ -791,33 +766,7 @@ this.setState({note_gen_id:item.startcourse_id})
     return (
       <View>
         <View style={styles.subContainer}>
-          <View style={styles.playerContainer}>
-            {/* <JWPlayer
-                  ref={p => (this.JWPlayer = p)}
-                  style={styles.player}
-                  playlistItem={{
-                    image: 'http://thorconn.com/themes/template2/images/audio-exterran.jpg',
-                    mediaId: "1",
-                    file: item.audio,
-                    autostart: false,
-                    startTime: item.status != null && item.status != 's' && item.status != 'l' ? parseInt(item.status) : 0
-                  }}
-                  
-                  onPlay={() => this.onPlay(item, 'audio')}
-                  onComplete={() => this.onComplete(item, 'audio')}
-                  onTime={(e) => this.onTime(e, item, 'audio', item.status)}
-                  onPause={() => this.onPause()}
-                  onSeek={(e) => this.onSeek(e)}
-                  nativeFullScreen={true} // when undefined or false you will need to handle the player styles in onFullScreen & onFullScreenExit callbacks
-                  fullScreenOnLandscape={true}
-                  onFullScreen={() => this.onFullScreen()}
-                  onFullScreenExit={() => this.onFullScreenExit()}
-                  // landscapeOnFullScreen={true}
-                  // portraitOnExitFullScreen={true}
-                  // fullScreenOnLandscape={true}
-                  // exitFullScreenOnPortrait={true}
-                /> */}
-          </View>
+          <View style={styles.playerContainer}></View>
         </View>
       </View>
     );
@@ -1070,7 +1019,6 @@ this.setState({note_gen_id:item.startcourse_id})
   /////////////////////////////////Start all function note////////////////////////////////////
   saveNote() {
     console.log("คลิกปุ่มจดบันทึก");
-
     this.onPlay();
     let {
       note_lesson_id,
@@ -1081,8 +1029,7 @@ this.setState({note_gen_id:item.startcourse_id})
       user_id,
       course_id,
     } = this.state;
-   
-    
+
     if (note_text != "") {
       let params = {
         note_lesson_id: note_lesson_id,
@@ -1091,15 +1038,15 @@ this.setState({note_gen_id:item.startcourse_id})
         note_time: note_time,
         note_gen_id: note_gen_id,
         user_id: user_id,
-        course_id:course_id,
-        note_id:"",
+        course_id: course_id,
+        note_id: "",
       };
       httpClient
         .post("/Learn/LearnNoteSave", params)
         .then((response) => {
           const result = response.data;
-          // console.log(result);
-          if (result != null) {
+          console.log(result);
+          if (result ==true) {
             this.setState({ dataArrayNote: result, note_text: "" });
             this.getNote();
           }
@@ -1124,7 +1071,7 @@ this.setState({note_gen_id:item.startcourse_id})
       })
       .then((response) => {
         const result = response.data;
-        if (result.success == "success") {
+        if (result == true) {
           this.setState({ modalVisible: false });
           this.getNote();
         }
@@ -1179,7 +1126,7 @@ this.setState({note_gen_id:item.startcourse_id})
               .post("/Learn/LearnNoteDelete", { note_id: note_id })
               .then((response) => {
                 const result = response.data;
-                if (result == "success") {
+                if (result == true) {
                   this.getNote();
                 }
               })
@@ -1203,7 +1150,6 @@ this.setState({note_gen_id:item.startcourse_id})
   onPlay() {
     this.player.playAsync();
   }
-
   zeroPad(nr, base) {
     var len = String(base).length - String(nr).length + 1;
     return len > 0 ? new Array(len).join("0") + nr : nr;
@@ -1217,8 +1163,6 @@ this.setState({note_gen_id:item.startcourse_id})
           padding: 10,
           alignItems: "center",
           backgroundColor: "#cccccc",
-          //borderWidth: 1,
-          //borderColor: '#cccccc',
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -1230,9 +1174,11 @@ this.setState({note_gen_id:item.startcourse_id})
       </View>
     );
   };
-
+  noteTimeToVideo = (time) => {
+    console.log("ต้องไปตำแหน่งที่เวลานั้น");
+    this.onSeek(time);
+  };
   _renderContentNote = (item) => {
-   
     return (
       <View style={{ backgroundColor: "#fff", padding: 30 }}>
         <Textarea
@@ -1264,7 +1210,6 @@ this.setState({note_gen_id:item.startcourse_id})
             {this.state.lang == "EN" ? "Save" : "จดบันทึก"}
           </Text>
         </TouchableOpacity>
-
         {item.list ? (
           <View>
             <View
@@ -1306,15 +1251,11 @@ this.setState({note_gen_id:item.startcourse_id})
                         )}
                       >
                         <Text style={{ color: "#000080" }}>
-                          {data.note_time <= 60
-                            ? "00:" +
-                              this.zeroPad(Math.floor(data.note_time % 60), 60)
-                            : this.zeroPad(
-                                Math.floor(data.note_time / 60),
-                                60
-                              ) +
-                              ":" +
-                              this.zeroPad(Math.floor(data.note_time % 60), 60)}
+                          {Math.floor((data.note_time * 0.001) / 3600) +
+                            ":" +
+                            Math.floor(((data.note_time * 0.001) % 3600) / 60) +
+                            ":" +
+                            Math.floor(((data.note_time * 0.001) % 3600) % 60)}
                         </Text>
                       </TouchableOpacity>
                     </View>
