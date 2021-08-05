@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { Divider, CheckBox } from "react-native-elements";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Button, Picker } from "native-base";
-import { Avatar } from "react-native-paper";
+import { Avatar, RadioButton } from "react-native-paper";
 import RadioForm from "react-native-simple-radio-button";
 import { AsyncStorage } from "react-native";
 import { httpClient } from "../../core/HttpClient";
@@ -186,12 +186,14 @@ const accounts = [
   },
 ];
 
-export default class MainProfileScreen extends Component {
+export default class ReportView extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       user_id: "",
+      formId: props.route.params.formId,
+      inputFormType: null,
       dataform1: [
         {
           formtype: 1,
@@ -994,7 +996,9 @@ export default class MainProfileScreen extends Component {
   }
 
   async componentDidMount() {
+    // const { navigation } = this.props;
     let id = await AsyncStorage.getItem("userId");
+    let formId = this.state.formId;
     this.setState({ user_id: id });
 
     const res = await AsyncStorage.getItem("language");
@@ -1062,6 +1066,55 @@ export default class MainProfileScreen extends Component {
         .catch((error) => {
           console.log(error);
         });
+
+      httpClient
+        .get(`/Profile/ReportView/${formId}`)
+        .then((response) => {
+          const result = response.data;
+          const dataform1 = this.state.dataform1;
+          const dataform2 = this.state.dataform2;
+          const dataform3 = this.state.dataform3;
+          // console.log("ReportView",result);
+          this.setState({
+            worklo: result.workLocation,
+            location: result.Location,
+            sublocation: result.subLocation,
+            startDate: this.formatDate(result.observationDate),
+            inputFormType: result.formType,
+          });
+          this.radiocheck(result.formType - 1);
+          if (result.formType == 1) {
+            for (let i = 0; i < dataform1.length; i++) {
+              // console.log(result.answer[i].answerId);
+              dataform1[i].answer_id = result.answer[i].answerId;
+              dataform1[i].answer_detail = result.answer[i].answerDetail;
+            }
+            // console.log(dataform1);
+            this.setState({ dataform1: dataform1 });
+          } else if (result.formType == 2) {
+            for (let i = 0; i < dataform2.length; i++) {
+              dataform2[i].answer_id = result.answer[i].answerId;
+              dataform2[i].answer_detail = result.answer[i].answerDetail;
+            }
+            this.setState({ dataform2: dataform2 });
+          } else if (result.formType == 3) {
+            for (let i = 0; i < dataform3.length; i++) {
+              dataform3[i].answer_id = result.answer[i].answerId;
+              dataform3[i].answer_detail = result.answer[i].answerDetail;
+            }
+            this.setState({ dataform3: dataform3 });
+          } else {
+            console.log(result.formType);
+          }
+          // if (result != null) {
+          //   this.setState({
+          //     selectlocationSub: result,
+          //   });
+          // }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } catch (err) {
       Alert.alert(err);
     }
@@ -1117,697 +1170,6 @@ export default class MainProfileScreen extends Component {
     }
   };
 
-  onPressSend() {
-    try {
-      const {
-        user_id,
-        startDate,
-        location,
-        sublocation,
-
-        storeRadio,
-
-        Detail,
-        Activated,
-        improvement,
-        data,
-        data1,
-
-        StopWork,
-        Possible,
-        Comments,
-        Waswork,
-        WasSWA,
-        Wasissue,
-        Isfollow,
-        Actions,
-        Otherbbs12,
-
-        Otherhazob1,
-        Otherhazob2,
-        Otherhazob3,
-        CheckboxCategory,
-        CheckboxCategory1,
-        CheckboxCategory2,
-        CheckboxCategory3,
-        CheckboxCategory4,
-        CheckboxCategory5,
-        CheckboxCategory6,
-        CheckboxCategory7,
-        CheckboxCategory8,
-        CheckboxCategory9,
-        CheckboxCategory10,
-        CheckboxRelated,
-        CheckboxRelated1,
-        CheckboxRelated2,
-        CheckboxRelated3,
-        CheckboxRelated4,
-        CheckboxRelated5,
-        CheckboxRelated6,
-        CheckboxRelated7,
-        CheckboxRelated8,
-        CheckboxRelated9,
-        CheckboxRelated10,
-        CheckboxRelated11,
-        CheckboxRelated12,
-        CheckboxRelated13,
-        Description,
-        Severity,
-        Probability,
-        Recommendation,
-        checkboxYesorNo,
-        checkboxYesorNo1,
-        checkboxYesorNo2,
-      } = this.state;
-      if (startDate == "DD/MM/YYYY") {
-        Alert.alert("กรุณากรอกวันที่");
-      } else if (location == "" || location == null) {
-        Alert.alert("กรุณาเลือกสถานที่/Location");
-      } else if (sublocation == "" || sublocation == null) {
-        Alert.alert("กรุณาเลือกสถานที่/Sublocation");
-      } else if (storeRadio == -1) {
-        Alert.alert("กรุณาเลือกประเภทของรายงาน");
-      } else {
-        switch (storeRadio) {
-          case 0:
-            if (Detail == "" || Detail == null) {
-              Alert.alert("กรุณากรอกข้อที่ 7 ");
-            } else if (Activated == -1) {
-              Alert.alert("กรุณาเลือกข้อที่ 8 ");
-            } else if (improvement == "" || improvement == null) {
-              Alert.alert("กรุณากรอกข้อที่ 9 ");
-            } else {
-              const dataform1 = this.state.dataform1;
-              const datachk1 = this.state.data;
-              const datachk2 = this.state.data1;
-              dataform1[0].answer_detail = Detail;
-              dataform1[1].answer_id = Activated;
-              dataform1[2].answer_detail = improvement;
-              dataform1[3].answer_id = datachk1[0].rd_row;
-              dataform1[4].answer_id = datachk1[1].rd_row;
-              dataform1[5].answer_id = datachk1[2].rd_row;
-              dataform1[6].answer_id = datachk1[3].rd_row;
-              dataform1[7].answer_id = datachk1[4].rd_row;
-              dataform1[8].answer_id = datachk1[5].rd_row;
-              dataform1[9].answer_id = datachk1[6].rd_row;
-              dataform1[10].answer_id = datachk1[7].rd_row;
-              dataform1[11].answer_id = datachk1[8].rd_row;
-              dataform1[12].answer_id = datachk1[9].rd_row;
-              dataform1[13].answer_id = datachk1[10].rd_row;
-              dataform1[14].answer_id = datachk1[11].rd_row;
-              dataform1[15].answer_id = datachk1[12].rd_row;
-              dataform1[16].answer_id = datachk1[13].rd_row;
-              dataform1[17].answer_id = datachk1[14].rd_row;
-              dataform1[18].answer_id = datachk1[15].rd_row;
-              dataform1[19].answer_id = datachk1[16].rd_row;
-              dataform1[20].answer_id = datachk1[17].rd_row;
-              dataform1[21].answer_id = datachk1[18].rd_row;
-              dataform1[22].answer_id = datachk1[19].rd_row;
-              dataform1[23].answer_id = datachk1[20].rd_row;
-              dataform1[24].answer_id = datachk1[21].rd_row;
-              dataform1[25].answer_id = datachk1[22].rd_row;
-              dataform1[26].answer_id = datachk1[23].rd_row;
-              dataform1[27].answer_id = datachk1[24].rd_row;
-              dataform1[28].answer_id = datachk1[25].rd_row;
-              dataform1[29].answer_id = datachk1[26].rd_row;
-              dataform1[30].answer_id = datachk1[27].rd_row;
-              dataform1[31].answer_id = datachk1[28].rd_row;
-              dataform1[32].answer_id = datachk1[29].rd_row;
-              dataform1[33].answer_id = datachk1[30].rd_row;
-              dataform1[34].answer_id = datachk1[31].rd_row;
-              dataform1[35].answer_id = datachk1[32].rd_row;
-              dataform1[36].answer_id = datachk1[33].rd_row;
-              dataform1[37].answer_id = datachk1[34].rd_row;
-              dataform1[38].answer_id = datachk1[35].rd_row;
-              dataform1[39].answer_id = datachk1[36].rd_row;
-              dataform1[40].answer_id = datachk1[37].rd_row;
-              dataform1[41].answer_id = datachk1[38].rd_row;
-              dataform1[42].answer_id = datachk2[0].rd_row1;
-              dataform1[43].answer_detail = Otherbbs12;
-
-              const params = {
-                user_id,
-                startDate,
-                location,
-                sublocation,
-                storeRadio,
-                dataform1,
-              };
-              const data = params;
-              console.log(data);
-
-              Alert.alert(
-                this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
-                [
-                  {
-                    text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  ,
-                  {
-                    text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                    onPress: () => {
-                      httpClient
-                        .post(`/Profile/InsertProfile`, data)
-                        .then((response) => {
-                          const result = response.data;
-
-                          if (result === true) {
-                            Alert.alert(
-                              this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                              this.state.lang === "EN"
-                                ? "Problem reported"
-                                : "บันทึกแบบฟอร์มสำเร็จ",
-                              [
-                                {
-                                  text:
-                                    this.state.lang === "EN" ? "OK" : "ตกลง",
-                                  // onPress: () => this.reset(),
-                                },
-                              ],
-                              { cancelable: false }
-                            );
-                            this.props.navigation.navigate("ReportScreen");
-                          } else {
-                            Alert.alert(
-                              this.state.lang === "EN"
-                                ? `Can't save FlightBooking`
-                                : "ไม่สามารถบันทึกแบบฟอร์มได้"
-                            );
-                          }
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        });
-                    },
-                  },
-                ]
-              );
-            }
-            break;
-          case 1:
-            if (StopWork == "" || StopWork == null) {
-              Alert.alert("กรุณากรอกข้อที่ 7 ");
-            } else if (Possible == "" || Possible == null) {
-              Alert.alert("กรุณากรอกข้อที่ 8 ");
-            } else if (Comments == "" || Comments == null) {
-              Alert.alert("กรุณากรอกข้อที่ 9 ");
-            } else if (Waswork == "" || Waswork == null) {
-              Alert.alert("กรุณาเลือกข้อที่ 10 ");
-            } else if (WasSWA == "" || WasSWA == null) {
-              Alert.alert("กรุณาเลือกข้อที่ 11 ");
-            } else if (Wasissue == "" || Wasissue == null) {
-              Alert.alert("กรุณาเลือกข้อที่ 12 ");
-            } else if (Isfollow == "" || Isfollow == null) {
-              Alert.alert("กรุณาเลือกข้อที่ 13 ");
-            } else if (Actions == "" || Actions == null) {
-              Alert.alert("กรุณากรอกข้อที่ 14 ");
-            } else {
-              const dataform2 = this.state.dataform2;
-              dataform2[0].answer_detail = StopWork;
-              dataform2[1].answer_detail = Possible;
-              dataform2[2].answer_detail = Comments;
-              dataform2[3].answer_id = Waswork;
-              dataform2[4].answer_id = WasSWA;
-              dataform2[5].answer_id = Wasissue;
-              dataform2[6].answer_id = Isfollow;
-              dataform2[7].answer_detail = Actions;
-
-              const params = {
-                user_id,
-                startDate,
-                location,
-                sublocation,
-                storeRadio,
-                dataform2,
-              };
-              const data = params;
-              console.log(data);
-
-              Alert.alert(
-                this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
-                [
-                  {
-                    text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  ,
-                  {
-                    text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                    onPress: () => {
-                      httpClient
-                        .post(`/Profile/InsertProfile`, data)
-                        .then((response) => {
-                          const result = response.data;
-
-                          if (result === true) {
-                            Alert.alert(
-                              this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                              this.state.lang === "EN"
-                                ? "Problem reported"
-                                : "บันทึกแบบฟอร์มสำเร็จ",
-                              [
-                                {
-                                  text:
-                                    this.state.lang === "EN" ? "OK" : "ตกลง",
-                                  // onPress: () => this.reset(),
-                                },
-                              ],
-                              { cancelable: false }
-                            );
-                            this.props.navigation.navigate("ReportScreen");
-                          } else {
-                            Alert.alert(
-                              this.state.lang === "EN"
-                                ? `Can't save FlightBooking`
-                                : "ไม่สามารถบันทึกแบบฟอร์มได้"
-                            );
-                          }
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        });
-                    },
-                  },
-                ]
-              );
-            }
-            break;
-          case 2:
-            if (
-              CheckboxCategory == false &&
-              CheckboxCategory1 == false &&
-              CheckboxCategory2 == false &&
-              CheckboxCategory3 == false &&
-              CheckboxCategory4 == false &&
-              CheckboxCategory5 == false &&
-              CheckboxCategory6 == false &&
-              CheckboxCategory7 == false &&
-              CheckboxCategory8 == false &&
-              CheckboxCategory9 == false &&
-              CheckboxCategory10 == false
-            ) {
-              Alert.alert("กรุณากรอกข้อที่ 8 ");
-            } else if (
-              CheckboxRelated == false &&
-              CheckboxRelated1 == false &&
-              CheckboxRelated2 == false &&
-              CheckboxRelated3 == false &&
-              CheckboxRelated4 == false &&
-              CheckboxRelated5 == false &&
-              CheckboxRelated6 == false &&
-              CheckboxRelated7 == false &&
-              CheckboxRelated8 == false &&
-              CheckboxRelated9 == false &&
-              CheckboxRelated10 == false &&
-              CheckboxRelated11 == false &&
-              CheckboxRelated12 == false &&
-              CheckboxRelated13 == false
-            ) {
-              Alert.alert("กรุณาเลือกข้อที่ 9 ");
-            } else if (Description == "" || Description == null) {
-              Alert.alert("กรุณาเลือกข้อที่ 10 ");
-            } else if (Severity == -1) {
-              Alert.alert("กรุณาเลือกข้อที่ 11 ");
-            } else if (Probability == -1) {
-              Alert.alert("กรุณาเลือกข้อที่ 12 ");
-            } else if (
-              checkboxYesorNo == false &&
-              checkboxYesorNo1 == false &&
-              checkboxYesorNo2 == false
-            ) {
-              Alert.alert("กรุณาเลือกข้อที่ 13 ");
-            } else if (Recommendation == "" || Recommendation == null) {
-              Alert.alert("กรุณากรอกข้อที่ 14 ");
-            } else {
-              const dataform3 = this.state.dataform3;
-              dataform3[0].answer_id = CheckboxCategory;
-              dataform3[1].answer_id = CheckboxCategory1;
-              dataform3[2].answer_id = CheckboxCategory2;
-              dataform3[3].answer_id = CheckboxCategory3;
-              dataform3[4].answer_id = CheckboxCategory4;
-              dataform3[5].answer_id = CheckboxCategory5;
-              dataform3[6].answer_id = CheckboxCategory6;
-              dataform3[7].answer_id = CheckboxCategory7;
-              dataform3[8].answer_id = CheckboxCategory8;
-              dataform3[9].answer_id = CheckboxCategory9;
-              dataform3[10].answer_id = CheckboxCategory10;
-              dataform3[11].answer_detail = Otherhazob1;
-              dataform3[12].answer_id = CheckboxRelated;
-              dataform3[13].answer_id = CheckboxRelated1;
-              dataform3[14].answer_id = CheckboxRelated2;
-              dataform3[15].answer_id = CheckboxRelated3;
-              dataform3[16].answer_id = CheckboxRelated4;
-              dataform3[17].answer_id = CheckboxRelated5;
-              dataform3[18].answer_id = CheckboxRelated6;
-              dataform3[19].answer_id = CheckboxRelated7;
-              dataform3[20].answer_id = CheckboxRelated8;
-              dataform3[21].answer_id = CheckboxRelated9;
-              dataform3[22].answer_id = CheckboxRelated10;
-              dataform3[23].answer_id = CheckboxRelated11;
-              dataform3[24].answer_id = CheckboxRelated12;
-              dataform3[25].answer_id = CheckboxRelated13;
-              dataform3[26].answer_detail = Otherhazob3;
-              dataform3[27].answer_id = checkboxYesorNo;
-              dataform3[28].answer_id = checkboxYesorNo1;
-              dataform3[29].answer_id = checkboxYesorNo2;
-              dataform3[30].answer_detail = Recommendation;
-
-              const params = {
-                user_id,
-                startDate,
-                location,
-                sublocation,
-                storeRadio,
-                dataform3,
-              };
-              const data = params;
-              console.log(data);
-
-              Alert.alert(
-                this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
-                [
-                  {
-                    text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  ,
-                  {
-                    text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                    onPress: () => {
-                      httpClient
-                        .post(`/Profile/InsertProfile`, data)
-                        .then((response) => {
-                          const result = response.data;
-
-                          if (result === true) {
-                            Alert.alert(
-                              this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                              this.state.lang === "EN"
-                                ? "Problem reported"
-                                : "บันทึกแบบฟอร์มสำเร็จ",
-                              [
-                                {
-                                  text:
-                                    this.state.lang === "EN" ? "OK" : "ตกลง",
-                                  // onPress: () => this.reset(),
-                                },
-                              ],
-                              { cancelable: false }
-                            );
-                            this.props.navigation.navigate("ReportScreen");
-                          } else {
-                            Alert.alert(
-                              this.state.lang === "EN"
-                                ? `Can't save FlightBooking`
-                                : "ไม่สามารถบันทึกแบบฟอร์มได้"
-                            );
-                          }
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        });
-                    },
-                  },
-                ]
-              );
-            }
-            break;
-          case 3:
-            if (
-              CheckboxCategory == false &&
-              CheckboxCategory1 == false &&
-              CheckboxCategory2 == false &&
-              CheckboxCategory3 == false &&
-              CheckboxCategory4 == false &&
-              CheckboxCategory5 == false &&
-              CheckboxCategory6 == false &&
-              CheckboxCategory7 == false &&
-              CheckboxCategory8 == false &&
-              CheckboxCategory9 == false &&
-              CheckboxCategory10 == false
-            ) {
-              Alert.alert("กรุณากรอกข้อที่ 8 ");
-            } else if (
-              CheckboxRelated == false &&
-              CheckboxRelated1 == false &&
-              CheckboxRelated2 == false &&
-              CheckboxRelated3 == false &&
-              CheckboxRelated4 == false &&
-              CheckboxRelated5 == false &&
-              CheckboxRelated6 == false &&
-              CheckboxRelated7 == false &&
-              CheckboxRelated8 == false &&
-              CheckboxRelated9 == false &&
-              CheckboxRelated10 == false &&
-              CheckboxRelated11 == false &&
-              CheckboxRelated12 == false &&
-              CheckboxRelated13 == false
-            ) {
-              Alert.alert("กรุณาเลือกข้อที่ 9 ");
-            } else if (Description == "" || Description == null) {
-              Alert.alert("กรุณาเลือกข้อที่ 10 ");
-            } else if (Severity == -1) {
-              Alert.alert("กรุณาเลือกข้อที่ 11 ");
-            } else if (Probability == -1) {
-              Alert.alert("กรุณาเลือกข้อที่ 12 ");
-            } else if (
-              checkboxYesorNo == false &&
-              checkboxYesorNo1 == false &&
-              checkboxYesorNo2 == false
-            ) {
-              Alert.alert("กรุณาเลือกข้อที่ 13 ");
-            } else if (Recommendation == "" || Recommendation == null) {
-              Alert.alert("กรุณากรอกข้อที่ 14 ");
-            } else {
-              const dataform3 = this.state.dataform3;
-              dataform3[0].answer_id = CheckboxCategory;
-              dataform3[1].answer_id = CheckboxCategory1;
-              dataform3[2].answer_id = CheckboxCategory2;
-              dataform3[3].answer_id = CheckboxCategory3;
-              dataform3[4].answer_id = CheckboxCategory4;
-              dataform3[5].answer_id = CheckboxCategory5;
-              dataform3[6].answer_id = CheckboxCategory6;
-              dataform3[7].answer_id = CheckboxCategory7;
-              dataform3[8].answer_id = CheckboxCategory8;
-              dataform3[9].answer_id = CheckboxCategory9;
-              dataform3[10].answer_id = CheckboxCategory10;
-              dataform3[11].answer_detail = Otherhazob1;
-              dataform3[12].answer_id = CheckboxRelated;
-              dataform3[13].answer_id = CheckboxRelated1;
-              dataform3[14].answer_id = CheckboxRelated2;
-              dataform3[15].answer_id = CheckboxRelated3;
-              dataform3[16].answer_id = CheckboxRelated4;
-              dataform3[17].answer_id = CheckboxRelated5;
-              dataform3[18].answer_id = CheckboxRelated6;
-              dataform3[19].answer_id = CheckboxRelated7;
-              dataform3[20].answer_id = CheckboxRelated8;
-              dataform3[21].answer_id = CheckboxRelated9;
-              dataform3[22].answer_id = CheckboxRelated10;
-              dataform3[23].answer_id = CheckboxRelated11;
-              dataform3[24].answer_id = CheckboxRelated12;
-              dataform3[25].answer_id = CheckboxRelated13;
-              dataform3[26].answer_detail = Otherhazob3;
-              dataform3[27].answer_id = checkboxYesorNo;
-              dataform3[28].answer_id = checkboxYesorNo1;
-              dataform3[29].answer_id = checkboxYesorNo2;
-              dataform3[30].answer_detail = Recommendation;
-
-              const params = {
-                user_id,
-                startDate,
-                location,
-                sublocation,
-                storeRadio,
-                dataform3,
-              };
-              const data = params;
-              console.log(data);
-
-              Alert.alert(
-                this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
-                [
-                  {
-                    text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  ,
-                  {
-                    text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                    onPress: () => {
-                      httpClient
-                        .post(`/Profile/InsertProfile`, data)
-                        .then((response) => {
-                          const result = response.data;
-
-                          if (result === true) {
-                            Alert.alert(
-                              this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                              this.state.lang === "EN"
-                                ? "Problem reported"
-                                : "บันทึกแบบฟอร์มสำเร็จ",
-                              [
-                                {
-                                  text:
-                                    this.state.lang === "EN" ? "OK" : "ตกลง",
-                                  // onPress: () => this.reset(),
-                                },
-                              ],
-                              { cancelable: false }
-                            );
-                            this.props.navigation.navigate("ReportScreen");
-                          } else {
-                            Alert.alert(
-                              this.state.lang === "EN"
-                                ? `Can't save FlightBooking`
-                                : "ไม่สามารถบันทึกแบบฟอร์มได้"
-                            );
-                          }
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        });
-                    },
-                  },
-                ]
-              );
-            }
-            break;
-          case 4:
-            if (Detail == "" || Detail == null) {
-              Alert.alert("กรุณากรอกข้อที่ 7 ");
-            } else if (Activated == -1) {
-              Alert.alert("กรุณาเลือกข้อที่ 8 ");
-            } else if (improvement == "" || improvement == null) {
-              Alert.alert("กรุณากรอกข้อที่ 9 ");
-            } else {
-              const dataform1 = this.state.dataform1;
-              const datachk1 = this.state.data;
-              const datachk2 = this.state.data1;
-              dataform1[0].answer_detail = Detail;
-              dataform1[1].answer_id = Activated;
-              dataform1[2].answer_detail = improvement;
-              dataform1[3].answer_id = datachk1[0].rd_row;
-              dataform1[4].answer_id = datachk1[1].rd_row;
-              dataform1[5].answer_id = datachk1[2].rd_row;
-              dataform1[6].answer_id = datachk1[3].rd_row;
-              dataform1[7].answer_id = datachk1[4].rd_row;
-              dataform1[8].answer_id = datachk1[5].rd_row;
-              dataform1[9].answer_id = datachk1[6].rd_row;
-              dataform1[10].answer_id = datachk1[7].rd_row;
-              dataform1[11].answer_id = datachk1[8].rd_row;
-              dataform1[12].answer_id = datachk1[9].rd_row;
-              dataform1[13].answer_id = datachk1[10].rd_row;
-              dataform1[14].answer_id = datachk1[11].rd_row;
-              dataform1[15].answer_id = datachk1[12].rd_row;
-              dataform1[16].answer_id = datachk1[13].rd_row;
-              dataform1[17].answer_id = datachk1[14].rd_row;
-              dataform1[18].answer_id = datachk1[15].rd_row;
-              dataform1[19].answer_id = datachk1[16].rd_row;
-              dataform1[20].answer_id = datachk1[17].rd_row;
-              dataform1[21].answer_id = datachk1[18].rd_row;
-              dataform1[22].answer_id = datachk1[19].rd_row;
-              dataform1[23].answer_id = datachk1[20].rd_row;
-              dataform1[24].answer_id = datachk1[21].rd_row;
-              dataform1[25].answer_id = datachk1[22].rd_row;
-              dataform1[26].answer_id = datachk1[23].rd_row;
-              dataform1[27].answer_id = datachk1[24].rd_row;
-              dataform1[28].answer_id = datachk1[25].rd_row;
-              dataform1[29].answer_id = datachk1[26].rd_row;
-              dataform1[30].answer_id = datachk1[27].rd_row;
-              dataform1[31].answer_id = datachk1[28].rd_row;
-              dataform1[32].answer_id = datachk1[29].rd_row;
-              dataform1[33].answer_id = datachk1[30].rd_row;
-              dataform1[34].answer_id = datachk1[31].rd_row;
-              dataform1[35].answer_id = datachk1[32].rd_row;
-              dataform1[36].answer_id = datachk1[33].rd_row;
-              dataform1[37].answer_id = datachk1[34].rd_row;
-              dataform1[38].answer_id = datachk1[35].rd_row;
-              dataform1[39].answer_id = datachk1[36].rd_row;
-              dataform1[40].answer_id = datachk1[37].rd_row;
-              dataform1[41].answer_id = datachk1[38].rd_row;
-              dataform1[42].answer_id = datachk2[0].rd_row1;
-              dataform1[43].answer_detail = Otherbbs12;
-
-              const params = {
-                user_id,
-                startDate,
-                location,
-                sublocation,
-                storeRadio,
-                dataform1,
-              };
-              const data = params;
-              console.log(data);
-
-              Alert.alert(
-                this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
-                [
-                  {
-                    text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  ,
-                  {
-                    text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                    onPress: () => {
-                      httpClient
-                        .post(`/Profile/InsertProfile`, data)
-                        .then((response) => {
-                          const result = response.data;
-
-                          if (result === true) {
-                            Alert.alert(
-                              this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                              this.state.lang === "EN"
-                                ? "Problem reported"
-                                : "บันทึกแบบฟอร์มสำเร็จ",
-                              [
-                                {
-                                  text:
-                                    this.state.lang === "EN" ? "OK" : "ตกลง",
-                                  // onPress: () => this.reset(),
-                                },
-                              ],
-                              { cancelable: false }
-                            );
-                            this.props.navigation.navigate("ReportScreen");
-                          } else {
-                            Alert.alert(
-                              this.state.lang === "EN"
-                                ? `Can't save FlightBooking`
-                                : "ไม่สามารถบันทึกแบบฟอร์มได้"
-                            );
-                          }
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        });
-                    },
-                  },
-                ]
-              );
-            }
-            break;
-
-          default:
-            break;
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
   // reset = () => {
   //   this.setState({
   //     startDate: "DD/MM/YYYY",
@@ -1833,7 +1195,7 @@ export default class MainProfileScreen extends Component {
 
   formatDate = (date) => {
     var d = new Date(date),
-      month = "" + parseInt(d.getMonth() + 1),
+      month = "" + d.getMonth(),
       day = "" + d.getDate(),
       year = d.getFullYear();
     if (month.length < 2) month = "0" + month;
@@ -1844,7 +1206,7 @@ export default class MainProfileScreen extends Component {
 
   formatDate1 = (date) => {
     let d = new Date(date),
-      month = "" + parseInt(d.getMonth() + 1),
+      month = "" + d.getMonth(),
       day = "" + d.getDate(),
       year = d.getFullYear() + 1;
 
@@ -1860,8 +1222,8 @@ export default class MainProfileScreen extends Component {
   handleConfirm = (dates) => {
     var date = this.formatDate(dates);
     var date1 = this.formatDate1(dates);
-    console.log(radio_props);
-    console.log(date);
+    // console.log(radio_props);
+    // console.log(date);
     if (this.state.isStart) {
       this.setState({
         startDate: date,
@@ -1890,6 +1252,42 @@ export default class MainProfileScreen extends Component {
 
   formBBS = () => {
     if (this.state.radioformBBS) {
+      let InputIndex = this.state.dataform1[1].answer_id;
+      var inputRadio8 = [];
+      if (InputIndex != null) {
+        inputRadio8.push(
+          <RadioForm
+            radio_props={radio1_props}
+            initial={InputIndex}
+            // onPress = {() => this.radiocheck(formType)}
+          />
+        );
+      }
+      var inputradio10 = [];
+      const dataformbbs = this.state.dataform1;
+      // const dataaccounts = accounts;
+      // console.log(accounts.length);
+      // console.log(dataformbbs.length);
+      let number = 0;
+      for (let i = 3; i < 42; i++) {
+        const initnumber = dataformbbs[i].answer_id;
+        inputradio10.push(
+          <View>
+            <Text style={{ marginVertical: 10, paddingLeft: 8 }}>
+              {accounts[number].accNumber}
+            </Text>
+            <View style={{ marginVertical: 2, marginHorizontal: 24 }}>
+              <RadioForm
+                radio_props={radio_BBS}
+                formHorizontal={true}
+                initial={initnumber}
+              />
+            </View>
+          </View>
+        );
+        number++;
+      }
+      console.log(inputradio10);
       return (
         <View>
           <View style={styles.textHead3}>
@@ -1905,7 +1303,8 @@ export default class MainProfileScreen extends Component {
           </Text>
           <TextInput
             style={styles.inputStyle}
-            onChangeText={(text) => this.setState({ Detail: text })}
+            value={this.state.dataform1[0].answer_detail}
+            // onChangeText={(text) => this.setState({ Detail: text })}
             placeholder="อธิบายรายละเอียด"
             // value={this.state.Detail}
           ></TextInput>
@@ -1915,11 +1314,12 @@ export default class MainProfileScreen extends Component {
             <Text style={{ color: "red" }}> *</Text>
           </Text>
           <View>
-            <RadioForm
+            {/* <RadioForm
               radio_props={radio1_props}
               initial={-1}
-              onPress={(text) => this.setState({ Activated: text })}
-            />
+              offPress={(text) => this.setState({ Activated: text })}
+            /> */}
+            {inputRadio8}
           </View>
 
           <Text style={styles.textHead3}>
@@ -1930,7 +1330,8 @@ export default class MainProfileScreen extends Component {
           <TextInput
             style={styles.inputStyle}
             placeholder="อธิบายรายละเอียด"
-            onChangeText={(text) => this.setState({ improvement: text })}
+            value={this.state.dataform1[2].answer_detail}
+            // onChangeText={(text) => this.setState({ improvement: text })}
             placeholder="อธิบายรายละเอียด"
           ></TextInput>
 
@@ -1939,7 +1340,7 @@ export default class MainProfileScreen extends Component {
           </Text>
 
           <View style={styles.containerSec}>
-            {accounts.map((account, index) => {
+            {/* {accounts.map((account, index) => {
               return (
                 <View key={account.accNumber}>
                   <Text style={{ marginVertical: 10, paddingLeft: 8 }}>
@@ -1950,12 +1351,13 @@ export default class MainProfileScreen extends Component {
                       radio_props={radio_BBS}
                       formHorizontal={true}
                       initial={-1}
-                      onPress={(item) => this.onChange(index, item)}
+                      offPress={(item) => this.onChange(index, item)}
                     />
                   </View>
                 </View>
               );
-            })}
+            })} */}
+            {inputradio10}
           </View>
 
           <Text style={styles.textHead3}>11. Other/อื่นๆ</Text>
@@ -1971,7 +1373,7 @@ export default class MainProfileScreen extends Component {
                       radio_props={radio_BBS}
                       formHorizontal={true}
                       initial={-1}
-                      onPress={(item) => this.onChange1(index, item)}
+                      offPress={(item) => this.onChange1(index, item)}
                     />
                   </View>
                 </View>
@@ -2013,7 +1415,8 @@ export default class MainProfileScreen extends Component {
           <TextInput
             style={styles.inputStyle}
             placeholder="อธิบายรายละเอียด"
-            onChangeText={(text) => this.setState({ StopWork: text })}
+            value={this.state.dataform2[0].answer_detail}
+            // onChangeText={(text) => this.setState({ StopWork: text })}
           ></TextInput>
 
           <Text style={styles.textHead3}>
@@ -2024,7 +1427,8 @@ export default class MainProfileScreen extends Component {
           <TextInput
             style={styles.inputStyle}
             placeholder="อธิบายรายละเอียด"
-            onChangeText={(text) => this.setState({ Possible: text })}
+            value={this.state.dataform2[1].answer_detail}
+            // onChangeText={(text) => this.setState({ Possible: text })}
           ></TextInput>
 
           <Text style={styles.textHead3}>
@@ -2034,7 +1438,8 @@ export default class MainProfileScreen extends Component {
           <TextInput
             style={styles.inputStyle}
             placeholder="อธิบายรายละเอียด"
-            onChangeText={(text) => this.setState({ Comments: text })}
+            value={this.state.dataform2[2].answer_detail}
+            // onChangeText={(text) => this.setState({ Comments: text })}
           ></TextInput>
 
           <Text style={styles.textHead3}>
@@ -2053,14 +1458,15 @@ export default class MainProfileScreen extends Component {
             style={styles.inputLightStyle}
             placeholderStyle={{ color: "#bfc6ea" }}
             placeholderIconColor="#007aff"
-            selectedValue={this.state.Waswork}
-            onValueChange={(itemValue) => this.setState({ Waswork: itemValue })}
+            enabled={false}
+            selectedValue={this.state.dataform2[3].answer_id}
+            // onValueChange={(itemValue) => this.setState({ Waswork: itemValue })}
             textStyle={{ fontSize: 14 }}
             placeholder="โปรดเลือกตำตอบ"
           >
-            <Picker.Item label={"Yes"} value={"Yes"} />
-            <Picker.Item label={"No"} value={"No"} />
-            <Picker.Item label={"N/A"} value={"N/A"} />
+            <Picker.Item label={"Yes"} value={0} />
+            <Picker.Item label={"No"} value={1} />
+            <Picker.Item label={"N/A"} value={2} />
           </Picker>
 
           <Text style={styles.textHead3}>
@@ -2079,14 +1485,15 @@ export default class MainProfileScreen extends Component {
             style={styles.inputLightStyle}
             placeholderStyle={{ color: "#bfc6ea" }}
             placeholderIconColor="#007aff"
-            selectedValue={this.state.WasSWA}
-            onValueChange={(itemValue) => this.setState({ WasSWA: itemValue })}
+            enabled={false}
+            selectedValue={this.state.dataform2[4].answer_id}
+            // onValueChange={(itemValue) => this.setState({ WasSWA: itemValue })}
             textStyle={{ fontSize: 14 }}
             placeholder="โปรดเลือกตำตอบ"
           >
-            <Picker.Item label={"Yes"} value={"Yes"} />
-            <Picker.Item label={"No"} value={"No"} />
-            <Picker.Item label={"N/A"} value={"N/A"} />
+            <Picker.Item label={"Yes"} value={0} />
+            <Picker.Item label={"No"} value={1} />
+            <Picker.Item label={"N/A"} value={2} />
           </Picker>
 
           <Text style={styles.textHead3}>
@@ -2105,16 +1512,17 @@ export default class MainProfileScreen extends Component {
             style={styles.inputLightStyle}
             placeholderStyle={{ color: "#bfc6ea" }}
             placeholderIconColor="#007aff"
-            selectedValue={this.state.Wasissue}
-            onValueChange={(itemValue) =>
-              this.setState({ Wasissue: itemValue })
-            }
+            enabled={false}
+            selectedValue={this.state.dataform2[5].answer_id}
+            // onValueChange={(itemValue) =>
+            //   this.setState({ Wasissue: itemValue })
+            // }
             textStyle={{ fontSize: 14 }}
             placeholder="โปรดเลือกตำตอบ"
           >
-            <Picker.Item label={"Yes"} value={"Yes"} />
-            <Picker.Item label={"No"} value={"No"} />
-            <Picker.Item label={"N/A"} value={"N/A"} />
+            <Picker.Item label={"Yes"} value={0} />
+            <Picker.Item label={"No"} value={1} />
+            <Picker.Item label={"N/A"} value={2} />
           </Picker>
 
           <Text style={styles.textHead3}>
@@ -2133,16 +1541,17 @@ export default class MainProfileScreen extends Component {
             style={styles.inputLightStyle}
             placeholderStyle={{ color: "#bfc6ea" }}
             placeholderIconColor="#007aff"
-            selectedValue={this.state.Isfollow}
-            onValueChange={(itemValue) =>
-              this.setState({ Isfollow: itemValue })
-            }
+            enabled={false}
+            selectedValue={this.state.dataform2[6].answer_id}
+            // onValueChange={(itemValue) =>
+            //   this.setState({ Isfollow: itemValue })
+            // }
             textStyle={{ fontSize: 14 }}
             placeholder="โปรดเลือกตำตอบ"
           >
-            <Picker.Item label={"Yes"} value={"Yes"} />
-            <Picker.Item label={"No"} value={"No"} />
-            <Picker.Item label={"N/A"} value={"N/A"} />
+            <Picker.Item label={"Yes"} value={0} />
+            <Picker.Item label={"No"} value={1} />
+            <Picker.Item label={"N/A"} value={2} />
           </Picker>
 
           <Text style={styles.textHead3}>
@@ -2152,7 +1561,8 @@ export default class MainProfileScreen extends Component {
           <TextInput
             style={styles.inputStyle}
             placeholder="อธิบายรายละเอียด"
-            onChangeText={(text) => this.setState({ Actions: text })}
+            // onChangeText={(text) => this.setState({ Actions: text })}
+            value={this.state.dataform2[7].answer_detail}
           ></TextInput>
         </View>
       );
@@ -2184,7 +1594,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxCategory}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxCategory: !this.state.CheckboxCategory,
                 });
@@ -2196,7 +1606,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxCategory1}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxCategory1: !this.state.CheckboxCategory1,
                 });
@@ -2208,7 +1618,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxCategory2}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxCategory2: !this.state.CheckboxCategory2,
                 });
@@ -2220,7 +1630,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxCategory3}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxCategory3: !this.state.CheckboxCategory3,
                 });
@@ -2232,7 +1642,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxCategory4}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxCategory4: !this.state.CheckboxCategory4,
                 });
@@ -2244,7 +1654,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxCategory5}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxCategory5: !this.state.CheckboxCategory5,
                 });
@@ -2256,7 +1666,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxCategory6}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxCategory6: !this.state.CheckboxCategory6,
                 });
@@ -2268,7 +1678,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxCategory7}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxCategory7: !this.state.CheckboxCategory7,
                 });
@@ -2280,7 +1690,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxCategory8}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxCategory8: !this.state.CheckboxCategory8,
                 });
@@ -2292,7 +1702,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxCategory9}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxCategory9: !this.state.CheckboxCategory9,
                 });
@@ -2304,7 +1714,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxCategory10}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxCategory10: !this.state.CheckboxCategory10,
                 });
@@ -2333,7 +1743,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated}
-              onPress={() => {
+              offPress={() => {
                 this.setState({ CheckboxRelated: !this.state.CheckboxRelated });
               }}
               style={styles.checkbox}
@@ -2344,7 +1754,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated1}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated1: !this.state.CheckboxRelated1,
                 });
@@ -2357,7 +1767,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated2}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated2: !this.state.CheckboxRelated2,
                 });
@@ -2370,7 +1780,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated3}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated3: !this.state.CheckboxRelated3,
                 });
@@ -2383,7 +1793,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated4}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated4: !this.state.CheckboxRelated4,
                 });
@@ -2396,7 +1806,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated5}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated5: !this.state.CheckboxRelated5,
                 });
@@ -2409,7 +1819,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated6}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated6: !this.state.CheckboxRelated6,
                 });
@@ -2422,7 +1832,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated7}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated7: !this.state.CheckboxRelated7,
                 });
@@ -2435,7 +1845,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated8}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated8: !this.state.CheckboxRelated8,
                 });
@@ -2448,7 +1858,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated9}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated9: !this.state.CheckboxRelated9,
                 });
@@ -2461,7 +1871,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated10}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated10: !this.state.CheckboxRelated10,
                 });
@@ -2474,7 +1884,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated11}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated11: !this.state.CheckboxRelated11,
                 });
@@ -2487,7 +1897,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated12}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated12: !this.state.CheckboxRelated12,
                 });
@@ -2500,7 +1910,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.CheckboxRelated13}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   CheckboxRelated13: !this.state.CheckboxRelated13,
                 });
@@ -2536,7 +1946,7 @@ export default class MainProfileScreen extends Component {
           <RadioForm
             radio_props={radio_severity}
             initial={-1}
-            onPress={(itemValue) => this.setState({ Severity: itemValue })}
+            offPress={(itemValue) => this.setState({ Severity: itemValue })}
           />
 
           <Text style={styles.textHead3}>
@@ -2546,7 +1956,7 @@ export default class MainProfileScreen extends Component {
           <RadioForm
             radio_props={radio_probability}
             initial={-1}
-            onPress={(itemValue) => this.setState({ Probability: itemValue })}
+            offPress={(itemValue) => this.setState({ Probability: itemValue })}
           />
 
           <Text style={styles.textHead3}>
@@ -2557,7 +1967,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.checkboxYesorNo}
-              onPress={() => {
+              offPress={() => {
                 this.setState({ checkboxYesorNo: !this.state.checkboxYesorNo });
               }}
               style={styles.checkbox}
@@ -2568,7 +1978,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.checkboxYesorNo1}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   checkboxYesorNo1: !this.state.checkboxYesorNo1,
                 });
@@ -2583,7 +1993,7 @@ export default class MainProfileScreen extends Component {
           <View style={styles.checkboxContainer}>
             <CheckBox
               checked={this.state.checkboxYesorNo2}
-              onPress={() => {
+              offPress={() => {
                 this.setState({
                   checkboxYesorNo2: !this.state.checkboxYesorNo2,
                 });
@@ -2596,7 +2006,7 @@ export default class MainProfileScreen extends Component {
                 <TextInput
                   style={styles.inputStyle}
                   placeholder="อธิบายรายละเอียด"
-                  onPress={(text) => this.setState({ Otherhazob3: text })}
+                  offPress={(text) => this.setState({ Otherhazob3: text })}
                 ></TextInput>
               </View>
             )}
@@ -2618,8 +2028,21 @@ export default class MainProfileScreen extends Component {
 
   render() {
     const state = this.state;
-
+    let formType = this.state.inputFormType;
     const radioData = this.state;
+    // console.log(formType);
+    console.log(this.state.dataform3);
+    var formRadio = [];
+    if (formType != null) {
+      formType -= 1;
+      formRadio.push(
+        <RadioForm
+          radio_props={radio_props}
+          initial={formType}
+          // onPress = {() => this.radiocheck(formType)}
+        />
+      );
+    }
 
     return (
       <ScrollView styles={styles.background}>
@@ -2674,7 +2097,7 @@ export default class MainProfileScreen extends Component {
             Observation date / วันที่พบเห็น{" "}
             <Text style={{ color: "red" }}>*</Text>
           </Text>
-          <TouchableOpacity onPress={() => this.showDatePicker("start")}>
+          <TouchableOpacity offPress={() => this.showDatePicker("start")}>
             <View style={styles.inputDate}>
               <Text style={{ paddingLeft: 10 }}>{this.state.startDate}</Text>
             </View>
@@ -2786,13 +2209,14 @@ export default class MainProfileScreen extends Component {
             <Text style={{ color: "red" }}> *</Text>
           </Text>
           <View>
-            <RadioForm
+            {/* <RadioForm
               radio_props={radio_props}
-              initial={-1}
+              initial={formType}
               onPress={(item) => {
                 this.radiocheck(item);
               }}
-            />
+            /> */}
+            {formRadio}
           </View>
 
           {/* ส่วน BBS */}
@@ -2804,7 +2228,7 @@ export default class MainProfileScreen extends Component {
           {/* ส่วนของ HazOb */}
           {this.formHazOb()}
         </View>
-        <Button style={styles.submitButton} onPress={() => this.onPressSend()}>
+        <Button style={styles.submitButton} offPress={() => this.onPressSend()}>
           <Text style={{ color: "#fff" }}>Submit</Text>
         </Button>
       </ScrollView>

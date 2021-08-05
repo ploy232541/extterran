@@ -1079,8 +1079,10 @@ this.setState({note_gen_id:item.startcourse_id})
       note_time,
       note_gen_id,
       user_id,
+      course_id,
     } = this.state;
-    console.log(note_gen_id ? note_gen_id : "ไม่พบ");
+   
+    
     if (note_text != "") {
       let params = {
         note_lesson_id: note_lesson_id,
@@ -1089,6 +1091,8 @@ this.setState({note_gen_id:item.startcourse_id})
         note_time: note_time,
         note_gen_id: note_gen_id,
         user_id: user_id,
+        course_id:course_id,
+        note_id:"",
       };
       httpClient
         .post("/Learn/LearnNoteSave", params)

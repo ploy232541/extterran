@@ -14,7 +14,8 @@ import OutfitScreen from "../screens/Profile/OutfitScreen";
 import SafetyBootsScreen from "../screens/Profile/SafetyBootsScreen";
 import MedicalCheckupsScreen from "../screens/Profile/MedicalCheckupsScreen";
 import MainProfileScreen from "../screens/Profile/MainProfileScreen";
-import MainProfileListScreen from "../screens/Profile/MainProfileListScreen";
+import ReportScreen from "../screens/Profile/ReportScreen";
+import ReportView from "../screens/Profile/ReportView";
 
 import TrainingScreen from "../screens/Training/TrainingScreen";
 import TrainingFormScreen from "../screens/Training/TrainingFormScreen";
@@ -64,7 +65,7 @@ import StaffCourseGeneralScreen from '../screens/Staff/StaffCourseGeneralScreen'
 
 import ConfirmBookingScreen from '../screens/Staff/ConfirmBookingScreen'
 import ConfirmTrainingScreen from '../screens/Staff/ConfirmTrainingScreen'
-// import StaffForm from '../screens/Staff/StaffForm'
+
 import TrainingApproveFormScreen from '../screens/Staff/TrainingApproveFormScreen'
 import StaffFormFlight from '../screens/Staff/StaffFormFlight'
 import StaffFormAccom from '../screens/Staff/StaffFormAccom'
@@ -72,6 +73,7 @@ import StaffFormGround from '../screens/Staff/StaffFormGround'
 import FeedBackCourseInScreen from '../screens/FeedBack/FeedBackCourseInScreen'
 import FeedBackCourseGeneralScreen from '../screens/FeedBack/FeedBackCourseGeneralScreen'
 import CourseScreenDetailOut from '../screens/Course/CourseScreenDetailOut'
+import ProfileInfor from '../screens/Profile/ProfileInfor';
 
 const routes = {
   HomeScreen: { title: " ", component: HomeScreen },
@@ -98,9 +100,6 @@ const routes = {
   MainProfileScreen: {
     title: " ",
     component: MainProfileScreen,
-  },MainProfileListScreen: {
-    title: " ",
-    component: MainProfileListScreen,
   },
 
   TrainingScreen: { title: " ", component: TrainingScreen },
@@ -294,7 +293,19 @@ const routes = {
     component:TrainingApproveFormScreen
   },
 
-  
+  ReportScreen: {
+    title: " ",
+    component: ReportScreen,
+  },
+
+  ReportView: {
+    title: " ",
+    component: ReportView,
+  },
+  ProfileInfor: {
+    title: " ",
+    component: ProfileInfor,
+  },
 };
 
 export default routes;

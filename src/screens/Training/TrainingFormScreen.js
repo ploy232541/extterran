@@ -1224,9 +1224,7 @@ export default class TrainingFormScreen extends Component {
                   <TextInput
                     style={styles.inputStyle1}
                     keyboardType={"phone-pad"}
-                    
                     onChangeText={(text) => {this.setState({ expense: Number(text.replace(/,/g, "")) })}}
-                   
                     placeholder="กรุณากรอกจำนวนเงิน"
                     value={new Intl.NumberFormat().format(this.state.expense)}
                     onBlur={(e) => this.checkcourse(this.state.expense)}
