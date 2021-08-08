@@ -616,6 +616,7 @@ class TabCourse extends Component {
                           height: 35,
                           padding: 4
                         }}
+                        
                         onPress={this.state.can_next_step == 2 ? this.AlertNotPermission.bind(this) : () => navigation.navigate('Vdo', {lesson_id: data.lesson_id, file_id: data.file_id, course_id: this.state.course_id})}
                         >
                         <Text style={{fontSize: 12, color: '#fff',}}>{this.state.lang === "EN" ? "Start" : "เข้าสู่บทเรียน"}</Text>

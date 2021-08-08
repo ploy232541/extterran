@@ -44,8 +44,7 @@ const BannerHeight = 200;
 const HEIGHT = Dimensions.get("window").height;
 
 var maxPlayPosition = 0.0;
-var isResettingTime = false;
-var seeking = false;
+var lastPlayPosition = 0;
 
 var SLIDER_1_FIRST_ITEM = 0;
 
@@ -99,17 +98,15 @@ class Vdo extends Component {
       screenType: "content",
       //////new video expo////
 
-      lastPlayPosition: 0,
-      maxPlayPosition: 0,
       statuss: {},
-      second: 0,
+      current_time: 0,
     };
   }
 
   async componentDidMount() {
     try {
       const lesson_id = this.props.route.params.lesson_id;
-      console.log(this.props.route.params);
+      // console.log(this.props.route.params)
 
       const file_id = this.props.route.params.file_id;
       this.setState({ note_lesson_id: lesson_id, note_file_id: file_id });
@@ -129,6 +126,10 @@ class Vdo extends Component {
         .then(async (response) => {
           const result = response.data;
           if (result != null) {
+            maxPlayPosition =
+              result.last > 0 && result.last != "s" ? result.last * 1000 : 0;
+            lastPlayPosition = result.last != "s" ? result.last : "s";
+            console.log("ค่ามากสุด", maxPlayPosition);
             this.setState({
               dataArray: result,
               status: result.last,
@@ -174,8 +175,6 @@ class Vdo extends Component {
 
   onSeek = (seek) => {
     this.player.playFromPositionAsync(Number(seek));
-
-    console.log("ทดลอง", seek);
   };
 
   onPaused = (playerState) => {
@@ -270,49 +269,96 @@ class Vdo extends Component {
 
   handlePlaybackStatusUpdate = (e, status, item) => {
     this.setState({ statuss: e });
-    // console.log(item.startcourse_id);
     this.setState({ note_gen_id: item.startcourse_id });
 
-    // if(status != 's'){
-
-    // console.log(maxPlayPosition)
-    if (e.isPlaying == true && e.positionMillis > maxPlayPosition) {
+    if (
+      e.isPlaying == true &&
+      e.positionMillis > maxPlayPosition &&
+      lastPlayPosition != "s"
+    ) {
       if (e.positionMillis - maxPlayPosition < 2000) {
         maxPlayPosition = e.positionMillis;
       }
     }
-    if (e.isPlaying == false) {
-      if (e.positionMillis > maxPlayPosition) {
-        if (!isResettingTime && !e.isBuffering) {
-          isResettingTime = true;
-          setTimeout(() => {
-            this.player.setPositionAsync(maxPlayPosition).then(() => {
-              console.log("set position " + maxPlayPosition);
-
-              isResettingTime = false;
-            });
-          }, 1000);
-
-          // })
-        }
+    //เช็คว่ามีการเล่นไหม
+    if (e.isPlaying == false && lastPlayPosition != "s") {
+      //ถ้าเวลาปัจจุบันมากกว่าค่าสูงสุดที่บันทึกไว้
+      if (e.positionMillis > maxPlayPosition && e.isBuffering) {
+        console.log("ค่าปัจจุบันมากกว่าค่า max");
+        this.player.playFromPositionAsync(maxPlayPosition);
       }
     }
 
-    /////////บันทึกวีดีโอทุก 6 วิ//////////
-    if (e.positionMillis > 0) {
+    //บันทึกวีดีโอทุก 6 วิ
+    if (e.positionMillis > 0 && lastPlayPosition != "s") {
       if (Math.floor(e.positionMillis) % 6000 == 0) {
         this.setState({ second: e.position * 0.001 });
         console.log("บันทึกวีดีโอทุก 6 วิ");
+        console.log(this.state.status);
         console.log(Math.floor(e.positionMillis) * 0.001 + " วินาที");
-        this.setState({ second: Math.floor(e.positionMillis) * 0.001 });
-        if (e.positionMillis > this.state.lastPlayPosition) {
+        this.setState({ current_time: Math.floor(e.positionMillis) * 0.001 });
+        if (this.state.current_time > lastPlayPosition) {
+          console.log("บันทึกวีดีโอ ลงในฐานข้อมูลได้");
+          let {
+            note_file_id,
+            note_lesson_id,
+            user_id,
+            course_id,
+            current_time,
+            note_gen_id,
+          } = this.state;
+          let params = {
+            lesson_id: note_lesson_id,
+            file_id: note_file_id,
+            user_id: user_id,
+            gen_id: note_gen_id,
+            course_id: course_id,
+            current_time: current_time,
+            type: item.type,
+          };
+          console.log(params);
+          httpClient
+            .post("/Learn/LearnSaveVdo/UpdateTime", params)
+            .then((res) => this.componentDidMount())
+
+            .catch((error) => {
+              console.log(error);
+            });
         }
       }
     }
 
-    /////////บันทึกวีดีโอจบ//////////
-    if (e.didJustFinish) {
-      console.log("====End video====");
+    //บันทึกวีดีโอจบ
+    if (e.didJustFinish && lastPlayPosition != "s") {
+      console.log("ตรงนี้บันทึกวีดีโอจบ");
+      let {
+        note_file_id,
+        note_lesson_id,
+        user_id,
+        course_id,
+        current_time,
+        note_gen_id,
+      } = this.state;
+      let params = {
+        lesson_id: note_lesson_id,
+        file_id: note_file_id,
+        user_id: user_id,
+        gen_id: note_gen_id,
+        course_id: course_id,
+        current_time: current_time,
+        type: item.type,
+      };
+      httpClient
+        .post("/Learn/LearnSaveVdo/Complete", params)
+        .then((response) => {
+          const result = response.data;
+          console.log(result);
+          // console.log(result);
+          this.componentDidMount();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
     // }
   };
@@ -1045,9 +1091,9 @@ class Vdo extends Component {
         .post("/Learn/LearnNoteSave", params)
         .then((response) => {
           const result = response.data;
-          console.log(result);
-          if (result ==true) {
-            this.setState({ dataArrayNote: result, note_text: "" });
+
+          if (result == true) {
+            this.setState({ note_text: "" });
             this.getNote();
           }
         })
