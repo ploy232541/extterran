@@ -915,7 +915,7 @@ mimetype = (name) => {
                                           this.state.lang === "EN"
                                             ? "OK"
                                             : "ตกลง",
-                                        onPress: () => this.reset(),
+                                        onPress: () =>  this.props.navigation.goBack(),
                                       },
                                     ],
                                     { cancelable: false }
@@ -1053,7 +1053,7 @@ mimetype = (name) => {
                                                 this.state.lang === "EN"
                                                   ? "OK"
                                                   : "ตกลง",
-                                              onPress: () => this.reset(),
+                                                  onPress: () =>  this.props.navigation.goBack(),
                                             },
                                           ],
                                           { cancelable: false }
@@ -1313,28 +1313,12 @@ mimetype = (name) => {
           <View style={styles.checkboxContainer}>
             <CheckBox
               disabled = {this.state.getmedical}
-              //value={this.state.chk_other}
-              //style={styles.checkbox}
+
               checked={this.state.chk_other}
               onPress={() => this.setState({chk_other: !this.state.chk_other})}
             />
             <Text style={styles.checkbox}>โรงพยาบาลอื่นๆ</Text>
           </View>
-          
-          {/* <View style={styles.container}>
-          <Text>Is CheckBox selected: {this.state.chk_other ? "👍" : "👎"}</Text>
-          </View> */}
-
-          {/* <Text>
-            Medical Examination Provider <Text style={{ color: "red" }}>*</Text>
-          </Text>
-          <Text>(Hospital Name, Location)</Text>
-          <TextInput style={styles.inputStyle} />
-
-          <Text>
-            Occupational Medicine Doctor <Text style={{ color: "red" }}>*</Text>
-          </Text>
-          <TextInput style={styles.inputStyle} /> */}
 
           <Text>
             Abnormal Finding <Text style={{ color: "red" }}>*</Text>
@@ -1378,13 +1362,49 @@ mimetype = (name) => {
             Fitness for Duty Certificate <Text style={{ color: "red" }}>*</Text>
           </Text>
           <View style={{ marginTop: 10, marginBottom: 8 }}>
-            <RadioForm
+            {this.state.fitness==1&&(<View><RadioForm
               disabled = {this.state.getmedical}
               radio_props={radio_props}
-              initial={Number(this.state.fitness) -1}
+              initial={0}
               onPress={(item) => this.radiocheck(item)}
               style={{ marginHorizontal: 4 }}
-            />
+            /></View>)}
+            {this.state.fitness==2&&(<View><RadioForm
+              disabled = {this.state.getmedical}
+              radio_props={radio_props}
+              initial={1}
+              onPress={(item) => this.radiocheck(item)}
+              style={{ marginHorizontal: 4 }}
+            /></View>)}
+            {this.state.fitness==3&&(<View><RadioForm
+              disabled = {this.state.getmedical}
+              radio_props={radio_props}
+              initial={2}
+              onPress={(item) => this.radiocheck(item)}
+              style={{ marginHorizontal: 4 }}
+            /></View>)}
+            {this.state.fitness==4&&(<View><RadioForm
+              disabled = {this.state.getmedical}
+              radio_props={radio_props}
+              initial={3}
+              onPress={(item) => this.radiocheck(item)}
+              style={{ marginHorizontal: 4 }}
+            /></View>)}
+               {this.state.fitness==-1&&(<View><RadioForm
+              disabled = {this.state.getmedical}
+              radio_props={radio_props}
+              initial={0}
+              onPress={(item) => this.radiocheck(item)}
+              style={{ marginHorizontal: 4 }}
+            /></View>)}
+                {!this.state.fitness&&(<View><RadioForm
+              disabled = {this.state.getmedical}
+              radio_props={radio_props}
+              initial={-1}
+              onPress={(item) => this.radiocheck(item)}
+              style={{ marginHorizontal: 4 }}
+            /></View>)}
+         
           </View>
 
           {/* ส่วน formA */}
@@ -1419,35 +1439,10 @@ mimetype = (name) => {
             </Text>
           </View>
 
-          {/* <Text>Comments:</Text>
-          <TextInput style={styles.inputStyle} />
-
-          <Text>
-            Upload File : <Text style={{ color: "red" }}>*</Text>
-          </Text>
-          <Text style={styles.textInput}>(กรุณาแนบไฟล์ใหม่ทุกรอบ)</Text>
-          <TouchableOpacity
-            style={{
-              backgroundColor: "#DCDCDC",
-              width: "30%",
-              marginTop: 10,
-              height: HEIGHT / 25,
-            }}
-          >
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                flex: 1,
-              }}
-            >
-              <Text>Choose File</Text>
-            </View>
-          </TouchableOpacity> */}
-
             <Button
               onPress={() => this.onPressSend()}
               mode="contained"
+              disabled = {this.state.getmedical}
               style={styles.submitButton}
             >
               Submit
