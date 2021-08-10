@@ -45,6 +45,8 @@ const HEIGHT = Dimensions.get("window").height;
 
 var maxPlayPosition = 0.0;
 var lastPlayPosition = 0;
+var fristTime = false;
+var current_time = 0;
 
 var SLIDER_1_FIRST_ITEM = 0;
 
@@ -99,11 +101,13 @@ class Vdo extends Component {
       //////new video expo////
 
       statuss: {},
-      current_time: 0,
     };
   }
 
   async componentDidMount() {
+    if (fristTime != false) {
+      fristTime = false;
+    }
     try {
       const lesson_id = this.props.route.params.lesson_id;
       // console.log(this.props.route.params)
@@ -129,6 +133,7 @@ class Vdo extends Component {
             maxPlayPosition =
               result.last > 0 && result.last != "s" ? result.last * 1000 : 0;
             lastPlayPosition = result.last != "s" ? result.last : "s";
+
             console.log("ค่ามากสุด", maxPlayPosition);
             this.setState({
               dataArray: result,
@@ -268,6 +273,13 @@ class Vdo extends Component {
   }
 
   handlePlaybackStatusUpdate = (e, status, item) => {
+    if (fristTime == false && e.isPlaying == false) {
+      console.log("ครั้งแรก");
+      this.player.playAsync();
+      fristTime = true;
+
+      this.player.playFromPositionAsync(maxPlayPosition);
+    }
     this.setState({ statuss: e });
     this.setState({ note_gen_id: item.startcourse_id });
 
@@ -291,20 +303,19 @@ class Vdo extends Component {
 
     //บันทึกวีดีโอทุก 6 วิ
     if (e.positionMillis > 0 && lastPlayPosition != "s") {
+      setTimeout(() => {
+        current_time = Math.floor(e.positionMillis) * 0.001;
+     
+      }, 1000);
+
       if (Math.floor(e.positionMillis) % 6000 == 0) {
-        this.setState({ second: e.position * 0.001 });
-        console.log("บันทึกวีดีโอทุก 6 วิ");
-        console.log(this.state.status);
-        console.log(Math.floor(e.positionMillis) * 0.001 + " วินาที");
-        this.setState({ current_time: Math.floor(e.positionMillis) * 0.001 });
-        if (this.state.current_time > lastPlayPosition) {
+        if (current_time > lastPlayPosition) {
           console.log("บันทึกวีดีโอ ลงในฐานข้อมูลได้");
           let {
             note_file_id,
             note_lesson_id,
             user_id,
             course_id,
-            current_time,
             note_gen_id,
           } = this.state;
           let params = {
@@ -327,16 +338,15 @@ class Vdo extends Component {
         }
       }
     }
-
     //บันทึกวีดีโอจบ
-    if (e.didJustFinish && lastPlayPosition != "s") {
+    if (e.didJustFinish && lastPlayPosition != "s"&& !e.isBuffering) {
       console.log("ตรงนี้บันทึกวีดีโอจบ");
       let {
         note_file_id,
         note_lesson_id,
         user_id,
         course_id,
-        current_time,
+
         note_gen_id,
       } = this.state;
       let params = {
