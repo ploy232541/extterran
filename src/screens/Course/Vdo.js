@@ -273,7 +273,7 @@ class Vdo extends Component {
   }
 
   handlePlaybackStatusUpdate = (e, status, item) => {
-    if (fristTime == false && e.isPlaying == false) {
+    if (fristTime == false && e.isPlaying == false && lastPlayPosition != "s") {
       console.log("ครั้งแรก");
       this.player.playAsync();
       fristTime = true;
@@ -290,65 +290,88 @@ class Vdo extends Component {
     ) {
       if (e.positionMillis - maxPlayPosition < 2000) {
         maxPlayPosition = e.positionMillis;
+        
       }
     }
+    
     //เช็คว่ามีการเล่นไหม
     if (e.isPlaying == false && lastPlayPosition != "s") {
       //ถ้าเวลาปัจจุบันมากกว่าค่าสูงสุดที่บันทึกไว้
       if (e.positionMillis > maxPlayPosition && e.isBuffering) {
-        console.log("ค่าปัจจุบันมากกว่าค่า max");
-        this.player.playFromPositionAsync(maxPlayPosition);
+        console.log("ค่าปัจจุบันมากกว่าค่า", maxPlayPosition);
+        setTimeout(() => {
+          this.player.playFromPositionAsync(maxPlayPosition);
+          if (e.isPlaying == false) {
+            this.player.playAsync();
+          }
+        }, 1000);
       }
     }
-
+    if (!maxPlayPosition > 0&&
+      lastPlayPosition != "s" ) {
+        console.log("ครั้งแรก");
+        let { note_file_id, note_lesson_id, user_id, course_id, note_gen_id } =
+        this.state;
+      let params = {
+        lesson_id: note_lesson_id,
+        file_id: note_file_id,
+        user_id: user_id,
+        gen_id: note_gen_id,
+        course_id: course_id,
+        current_time: current_time,
+        type: item.type,
+      };
+   
+      httpClient
+        .post("/Learn/LearnSaveVdo/UpdateTime", params)
+      
+        .catch((error) => {
+          console.log(error);
+        });
+    
+    }
     //บันทึกวีดีโอทุก 6 วิ
-    if (e.positionMillis > 0 && lastPlayPosition != "s") {
-      setTimeout(() => {
+    if (
+      maxPlayPosition > 0&&
+      lastPlayPosition != "s" 
+    ) {
+      // if (Math.floor(e.positionMillis) % 6000 == 0) 
+      if (e.positionMillis  - lastPlayPosition * 1000 > 6000 && e.positionMillis - maxPlayPosition < 2000) {
+        lastPlayPosition=Math.floor(e.positionMillis) * 0.001;
         current_time = Math.floor(e.positionMillis) * 0.001;
-     
-      }, 1000);
+        console.log("บันทึกวีดีโอ ลงในฐานข้อมูลได้");
+        let { note_file_id, note_lesson_id, user_id, course_id, note_gen_id } =
+          this.state;
+        let params = {
+          lesson_id: note_lesson_id,
+          file_id: note_file_id,
+          user_id: user_id,
+          gen_id: note_gen_id,
+          course_id: course_id,
+          current_time: current_time,
+          type: item.type,
+        };
 
-      if (Math.floor(e.positionMillis) % 6000 == 0) {
-        if (current_time > lastPlayPosition) {
-          console.log("บันทึกวีดีโอ ลงในฐานข้อมูลได้");
-          let {
-            note_file_id,
-            note_lesson_id,
-            user_id,
-            course_id,
-            note_gen_id,
-          } = this.state;
-          let params = {
-            lesson_id: note_lesson_id,
-            file_id: note_file_id,
-            user_id: user_id,
-            gen_id: note_gen_id,
-            course_id: course_id,
-            current_time: current_time,
-            type: item.type,
-          };
-          console.log(params);
-          httpClient
-            .post("/Learn/LearnSaveVdo/UpdateTime", params)
-            .then((res) => this.componentDidMount())
+        httpClient
+          .post("/Learn/LearnSaveVdo/UpdateTime", params)
+          .then((res) => this.componentDidMount())
 
-            .catch((error) => {
-              console.log(error);
-            });
-        }
+          .catch((error) => {
+            console.log(error);
+          });
       }
+      // }
     }
     //บันทึกวีดีโอจบ
-    if (e.didJustFinish && lastPlayPosition != "s"&& !e.isBuffering) {
+    if (
+      e.didJustFinish &&
+      lastPlayPosition != "s" &&
+      !e.isBuffering &&
+      e.positionMillis - maxPlayPosition < 2000
+    ) {
       console.log("ตรงนี้บันทึกวีดีโอจบ");
-      let {
-        note_file_id,
-        note_lesson_id,
-        user_id,
-        course_id,
-
-        note_gen_id,
-      } = this.state;
+      let { note_file_id, note_lesson_id, user_id, course_id, note_gen_id } =
+        this.state;
       let params = {
         lesson_id: note_lesson_id,
         file_id: note_file_id,
@@ -362,15 +385,13 @@ class Vdo extends Component {
         .post("/Learn/LearnSaveVdo/Complete", params)
         .then((response) => {
           const result = response.data;
-          console.log(result);
-          // console.log(result);
+
           this.componentDidMount();
         })
         .catch((error) => {
           console.log(error);
         });
     }
-    // }
   };
 
   _renderContentVideo = (item) => {
@@ -537,7 +558,7 @@ class Vdo extends Component {
         .post("/Learn/LearnSavePdf", params)
         .then(async (response) => {
           const result = await response.data;
-          // console.log(result);
+ 
           if (result.timeNext != null || result.timeNext != undefined) {
             this.setState({
               slider1ActiveSlide: index + 1,
