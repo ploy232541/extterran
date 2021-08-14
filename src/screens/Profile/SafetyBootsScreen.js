@@ -56,7 +56,7 @@ export default class SafetyBootsScreen extends Component {
 
     let n = new Date().getMonth();
     this.setState({ user_id: id, month: n });
-    if (this.state.month > 10) {
+    if (this.state.month < 10) {
       this.setState({ select_boots: true });
     }
     const res = await AsyncStorage.getItem("language");

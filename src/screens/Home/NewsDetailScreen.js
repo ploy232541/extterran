@@ -44,8 +44,8 @@ const NewsDetailScreen = (props) => {
                 </Card.Content>
                 <Card.Content style={{ marginTop: 18 }}>
                     {
-                        link != '' ? 
-                        <TouchableOpacity onPress={()=> openLink(link)}>
+                        link != '' &&link != null? 
+                        <TouchableOpacity onPress={(e)=> openLink(link)}>
                             <Paragraph>{lang === 'EN' ? 'More links' : 'ลิ้งค์เพิ่มเติม'}</Paragraph>
                         </TouchableOpacity>
                         :

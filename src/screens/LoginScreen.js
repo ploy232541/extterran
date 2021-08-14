@@ -24,9 +24,27 @@ import {
   requestTrackingPermissionsAsync,
   getTrackingPermissionsAsync,
 } from 'expo-tracking-transparency';
+import {
+  useFonts,
+  Pridi_200ExtraLight,
+  Pridi_300Light,
+  Pridi_400Regular,
+  Pridi_500Medium,
+  Pridi_600SemiBold,
+  Pridi_700Bold,
+} from '@expo-google-fonts/pridi';
+import { AppLoading } from 'expo';
+
 
   function LoginScreen() {
- 
+    let [fontsLoaded] = useFonts({
+      Pridi_200ExtraLight,
+      Pridi_300Light,
+      Pridi_400Regular,
+      Pridi_500Medium,
+      Pridi_600SemiBold,
+      Pridi_700Bold,
+    });
     const navigation = useNavigation()
     const [lang, setLang] = useState('TH');
     const [username, setUsername] = useState('');
@@ -91,7 +109,9 @@ import {
       console.log(err);
     }
     };
-
+    if (!fontsLoaded) {
+      return <AppLoading />;
+    } else {
 
     return (
       <View style={{flex: 1, backgroundColor: '#f2f2f2'}}>
@@ -113,12 +133,12 @@ import {
                 <TouchableOpacity onPress={onPressTH}>
                   <Text
                     style={
-                      lang === 'TH' ? styles.active : styles.noActive
+                      lang === 'TH' ? styles.active : styles.noActive,{fontFamily: 'Pridi_400Regular',}
                     }>
                     TH
                   </Text>
                 </TouchableOpacity>
-                <Text style={{fontSize: 18}}> / </Text>
+                <Text style={{fontSize: 18,  fontFamily: 'Pridi_400Regular'}}> / </Text>
                 <TouchableOpacity onPress={onPressEN}>
                   <Text
                     style={
@@ -199,7 +219,7 @@ import {
             </Card>
           </View>
       </View>
-    );
+    );}
   }
 
   const stylesdialog = StyleSheet.create({
@@ -275,12 +295,14 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   text1: {
+    fontFamily: 'Pridi_400Regular',
     marginTop: 20,
     alignSelf: 'center',
     fontWeight: 'bold',
     fontSize: 25,
     color: '#002266',
     marginBottom: 30,
+    
   },
   input: {
     height: 50,
@@ -335,6 +357,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#002266',
     alignSelf: 'center',
+    fontFamily: 'Pridi_400Regular',
   },
   heading: {
     fontSize: 30,

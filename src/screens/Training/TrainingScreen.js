@@ -1,14 +1,12 @@
 import * as React from "react";
-import {
-  View,
-  StyleSheet,
-  FlatList,
-} from "react-native";
+import { useState ,useEffect} from "react";
+import { AsyncStorage } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
+import { httpClient } from "../../core/HttpClient";
 import ButtonCard from "../../shared/ButtonCard";
 
-
-
 function TrainingScreen() {
+  const [team, setTeam] = useState(null)
   const formatDataList = (dataList, numberColumns) => {
     const totalRows = Math.floor(dataList.length / numberColumns);
     let totalLastRow = dataList.length - totalRows * numberColumns;
@@ -19,59 +17,84 @@ function TrainingScreen() {
     }
     return dataList;
   };
+ 
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const user_id = await AsyncStorage.getItem('userId');
 
-  const TrainingHeader = [
-    {
-      id: 1,
-      title: "ใบคำขอฝึกอบรม",
-      //imgSource: "https://picsum.photos/700",
-      icon: "edit",
-     
-      to: "TrainingFormScreen",
-    },
-    {
-      id: 2,
-      title: "สถานะการอนุมัติ",
-      //imgSource: "https://picsum.photos/700",
-      icon: "user",
-      
-      to: "TrainingStatusScreen",
-    },
-    {
+        httpClient
+          .get(`/Team/getMenuTeam/${user_id}`)
+          .then(async response => {
+            const res = response.data;
+            setTeam(res)
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } catch (e) {
+        console.log(e)
+      }
+    };
+    run();
+  }, []);
+
+  
+  const TrainingHeader = [];
+  TrainingHeader.push({
+    id: 1,
+    title: "ใบคำขอฝึกอบรม",
+    icon: "edit",
+    to: "TrainingFormScreen",
+  });
+  TrainingHeader.push({
+    id: 2,
+    title: "สถานะการอนุมัติ",
+    icon: "user",
+    to: "TrainingStatusScreen",
+  });
+  if (team == true) {
+    TrainingHeader.push({
       id: 3,
       title: "สถานะการอนุมัติทีมงาน",
-      //imgSource: "https://picsum.photos/700",
       icon: "users",
-     
+
       to: "TrainingStaffStatusScreen",
-    },
-    {
+    });
+  }
+
+  var d = new Date();
+  if (d.getMonth() == 7) {
+    TrainingHeader.push({
       id: 4,
       title: "Training Need",
-      //imgSource: "https://picsum.photos/700",
       icon: "newspaper",
       to: "TrainingNeedScreen",
-    },
-    {
-      id: 5,
-      title: "Booking",
-      //imgSource: "https://picsum.photos/700",
-      icon: "address-book",
-      to: "BookingScreen",
-    },
-  ];
+    });
+  }
+  TrainingHeader.push({
+    id: 5,
+    title: "Booking",
+    icon: "address-book",
+    to: "BookingScreen",
+  });
 
   const training_renderItem = ({ item }) => {
     if (item.empty) {
       return (
         <View
-          style={{ flex: 1, margin: 12, backgroundColor: "transparent"                                                                                         }}
+          style={{ flex: 1, margin: 12, backgroundColor: "transparent" }}
         ></View>
       );
     }
     return (
-      <View style={{ flex: 1, marginTop: 22 , marginLeft: 10, marginRight: 10,}}>
-        <ButtonCard title={item.title} to={item.to} src={item.imgSource} icon={item.icon} />
+      <View style={{ flex: 1, marginTop: 22, marginLeft: 10, marginRight: 10 }}>
+        <ButtonCard
+          title={item.title}
+          to={item.to}
+          src={item.imgSource}
+          icon={item.icon}
+        />
       </View>
     );
   };
@@ -79,7 +102,7 @@ function TrainingScreen() {
   const trainingNumColumn = 2;
 
   return (
-    <View style={{backgroundColor:"white", height: "200%"}}>
+    <View style={{ backgroundColor: "white", height: "200%" }}>
       <FlatList
         data={formatDataList(TrainingHeader, trainingNumColumn)}
         renderItem={training_renderItem}
@@ -88,12 +111,8 @@ function TrainingScreen() {
       />
     </View>
   );
-  
 }
 
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});
 
 export default TrainingScreen;
-

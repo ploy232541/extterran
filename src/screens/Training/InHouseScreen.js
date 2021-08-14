@@ -490,7 +490,9 @@ export default class InHouseScreen extends Component {
 
             <View style={{ flex: 4 }}>
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.btnCancelStyle}>
+                <TouchableOpacity style={styles.btnCancelStyle}
+                onPress={e=>this.props.navigation.goBack()}
+                >
                   <Text style={{ color: "white" }}>ยกเลิก</Text>
                 </TouchableOpacity>
               </View>

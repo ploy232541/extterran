@@ -80,7 +80,7 @@ export default class OutfitScreen extends Component {
 
     let n = new Date().getMonth();
     this.setState({ user_id: id, month: n });
-    if (this.state.month > 10) {
+    if (this.state.month <10) {
       this.setState({ select_uniform: true });
     }
     const res = await AsyncStorage.getItem("language");

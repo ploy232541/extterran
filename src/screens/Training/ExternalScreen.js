@@ -1013,7 +1013,8 @@ export default class ExternalScreen extends Component {
             <View style={styles.buttonContainer}>
               <Button
                 style={styles.btnCancelStyle}
-                onPress={() => this.setState({ trainingNeed: [] })}
+                onPress={e=>this.props.navigation.goBack()}
+                // onPress={() => this.setState({ trainingNeed: [] })}
               >
                 <Text style={{ color: "white" }}>
                   {this.state.lang === "EN" ? "Cancle" : "ยกเลิก"}
