@@ -1,12 +1,12 @@
 import * as React from "react";
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import { AsyncStorage } from "react-native";
 import { View, StyleSheet, FlatList } from "react-native";
 import { httpClient } from "../../core/HttpClient";
 import ButtonCard from "../../shared/ButtonCard";
 
 function TrainingScreen() {
-  const [team, setTeam] = useState(null)
+  const [team, setTeam] = useState(null);
   const formatDataList = (dataList, numberColumns) => {
     const totalRows = Math.floor(dataList.length / numberColumns);
     let totalLastRow = dataList.length - totalRows * numberColumns;
@@ -17,29 +17,28 @@ function TrainingScreen() {
     }
     return dataList;
   };
- 
+
   useEffect(() => {
     const run = async () => {
       try {
-        const user_id = await AsyncStorage.getItem('userId');
+        const user_id = await AsyncStorage.getItem("userId");
 
         httpClient
           .get(`/Team/getMenuTeam/${user_id}`)
-          .then(async response => {
+          .then(async (response) => {
             const res = response.data;
-            setTeam(res)
+            setTeam(res);
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           });
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
     };
     run();
   }, []);
 
-  
   const TrainingHeader = [];
   TrainingHeader.push({
     id: 1,
@@ -64,7 +63,7 @@ function TrainingScreen() {
   }
 
   var d = new Date();
-  if (d.getMonth() == 7) {
+  if (d.getMonth() == 9) {
     TrainingHeader.push({
       id: 4,
       title: "Training Need",

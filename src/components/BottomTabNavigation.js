@@ -6,11 +6,40 @@ import MyProgramsScreen from "../screens/MyProgramsScreen";
 import SearchScreen from "../screens/SearchScreen";
 import ProfileScreen from "../screens/Profile/ProfileScreen";
 import { AsyncStorage } from "react-native"
-
+import {
+  useFonts,
+  BaiJamjuree_200ExtraLight,
+  BaiJamjuree_200ExtraLight_Italic,
+  BaiJamjuree_300Light,
+  BaiJamjuree_300Light_Italic,
+  BaiJamjuree_400Regular,
+  BaiJamjuree_400Regular_Italic,
+  BaiJamjuree_500Medium,
+  BaiJamjuree_500Medium_Italic,
+  BaiJamjuree_600SemiBold,
+  BaiJamjuree_600SemiBold_Italic,
+  BaiJamjuree_700Bold,
+  BaiJamjuree_700Bold_Italic,
+} from '@expo-google-fonts/bai-jamjuree';
+import { AppLoading } from 'expo';
 
 const Tab = createBottomTabNavigator();
 
 function BottomTabNavigation({ initRoute }) {
+  let [fontsLoaded] = useFonts({
+    BaiJamjuree_200ExtraLight,
+    BaiJamjuree_200ExtraLight_Italic,
+    BaiJamjuree_300Light,
+    BaiJamjuree_300Light_Italic,
+    BaiJamjuree_400Regular,
+    BaiJamjuree_400Regular_Italic,
+    BaiJamjuree_500Medium,
+    BaiJamjuree_500Medium_Italic,
+    BaiJamjuree_600SemiBold,
+    BaiJamjuree_600SemiBold_Italic,
+    BaiJamjuree_700Bold,
+    BaiJamjuree_700Bold_Italic,
+  });
   const [lang, setLang] = useState('');
   useEffect(() => {
       const run = async () => {
@@ -24,9 +53,13 @@ function BottomTabNavigation({ initRoute }) {
       run();
       
     }, []);
+    if (!fontsLoaded) {
+      return <AppLoading />;
+    } else {
   return (
     <Tab.Navigator initialRouteName={initRoute}>
       <Tab.Screen
+      style={{fontFamily:'BaiJamjuree_400Regular'}}
         name="HomeTab"
         component={HomeScreen}
         options={{
@@ -59,6 +92,7 @@ function BottomTabNavigation({ initRoute }) {
       <Tab.Screen
         name="ProfileTab"
         component={ProfileScreen}
+        style={{fontFamily:'BaiJamjuree_400Regular'}}
         options={{
           tabBarLabel: lang == 'EN' ? 'User' : "ผู้ใช้",
           tabBarIcon: ({ color, size }) => (
@@ -67,7 +101,7 @@ function BottomTabNavigation({ initRoute }) {
         }}
       />
     </Tab.Navigator>
-  );
+  );}
 }
 
 export default BottomTabNavigation;

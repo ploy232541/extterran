@@ -22,6 +22,22 @@ import { FULLSCREEN_UPDATE_PLAYER_DID_DISMISS, FULLSCREEN_UPDATE_PLAYER_DID_PRES
 import {httpClient} from '../../core/HttpClient';
 import { WebView } from 'react-native-webview';
 import YoutubePlayer from "react-native-youtube-iframe";
+import {
+    useFonts,
+    BaiJamjuree_200ExtraLight,
+    BaiJamjuree_200ExtraLight_Italic,
+    BaiJamjuree_300Light,
+    BaiJamjuree_300Light_Italic,
+    BaiJamjuree_400Regular,
+    BaiJamjuree_400Regular_Italic,
+    BaiJamjuree_500Medium,
+    BaiJamjuree_500Medium_Italic,
+    BaiJamjuree_600SemiBold,
+    BaiJamjuree_600SemiBold_Italic,
+    BaiJamjuree_700Bold,
+    BaiJamjuree_700Bold_Italic,
+  } from '@expo-google-fonts/bai-jamjuree';
+  import { AppLoading } from 'expo';
 
 const vdo = require('../../video/benner_video.mp4');
 const HEIGHT = Dimensions.get('window').height;
@@ -74,6 +90,20 @@ const renderPage = (image, index) => {
 const _numColumns = 2
 
 function HomeScreen() {
+    let [fontsLoaded] = useFonts({
+        BaiJamjuree_200ExtraLight,
+        BaiJamjuree_200ExtraLight_Italic,
+        BaiJamjuree_300Light,
+        BaiJamjuree_300Light_Italic,
+        BaiJamjuree_400Regular,
+        BaiJamjuree_400Regular_Italic,
+        BaiJamjuree_500Medium,
+        BaiJamjuree_500Medium_Italic,
+        BaiJamjuree_600SemiBold,
+        BaiJamjuree_600SemiBold_Italic,
+        BaiJamjuree_700Bold,
+        BaiJamjuree_700Bold_Italic,
+      });
     const navigation = useNavigation()
     const [lang, setLang] = useState('');
     const [course, setCourse] = useState([]);
@@ -156,7 +186,9 @@ function HomeScreen() {
             </View>
         )
     }
-    
+    if (!fontsLoaded) {
+        return <AppLoading />;
+      } else {
     return (
         <ScrollView>
             <View style={styles.background}>
@@ -267,7 +299,7 @@ function HomeScreen() {
                             onPress={() =>
                                 navigation.navigate("VideoListScreen")
                             }>
-                            <Text style={{ color: "white" }}>{lang == 'EN' ? 'View' : 'ดูทั้งหมด'}</Text>
+                            <Text style={{ color: "white" ,fontFamily:'BaiJamjuree_400Regular'}}>{lang == 'EN' ? 'View' : 'ดูทั้งหมด'}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -294,7 +326,7 @@ function HomeScreen() {
                             onPress={() =>
                                 navigation.navigate("NewsListScreen")
                             }>
-                            <Text style={{ color: "white" }}>{lang == 'EN' ? 'View' : 'ดูทั้งหมด'}</Text>
+                            <Text style={{ color: "white" ,fontFamily:'BaiJamjuree_400Regular'}}>{lang == 'EN' ? 'View' : 'ดูทั้งหมด'}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -314,7 +346,7 @@ function HomeScreen() {
                 </View>
             </View>
         </ScrollView>
-    )
+    )}
 }
 
 const styles = StyleSheet.create({
@@ -350,6 +382,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         paddingHorizontal: 5,
+        fontFamily:'BaiJamjuree_500Medium'
     },
     section: {
         paddingBottom: 30,

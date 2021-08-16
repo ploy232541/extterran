@@ -26,24 +26,36 @@ import {
 } from 'expo-tracking-transparency';
 import {
   useFonts,
-  Pridi_200ExtraLight,
-  Pridi_300Light,
-  Pridi_400Regular,
-  Pridi_500Medium,
-  Pridi_600SemiBold,
-  Pridi_700Bold,
-} from '@expo-google-fonts/pridi';
+  BaiJamjuree_200ExtraLight,
+  BaiJamjuree_200ExtraLight_Italic,
+  BaiJamjuree_300Light,
+  BaiJamjuree_300Light_Italic,
+  BaiJamjuree_400Regular,
+  BaiJamjuree_400Regular_Italic,
+  BaiJamjuree_500Medium,
+  BaiJamjuree_500Medium_Italic,
+  BaiJamjuree_600SemiBold,
+  BaiJamjuree_600SemiBold_Italic,
+  BaiJamjuree_700Bold,
+  BaiJamjuree_700Bold_Italic,
+} from '@expo-google-fonts/bai-jamjuree';
 import { AppLoading } from 'expo';
 
 
   function LoginScreen() {
     let [fontsLoaded] = useFonts({
-      Pridi_200ExtraLight,
-      Pridi_300Light,
-      Pridi_400Regular,
-      Pridi_500Medium,
-      Pridi_600SemiBold,
-      Pridi_700Bold,
+      BaiJamjuree_200ExtraLight,
+      BaiJamjuree_200ExtraLight_Italic,
+      BaiJamjuree_300Light,
+      BaiJamjuree_300Light_Italic,
+      BaiJamjuree_400Regular,
+      BaiJamjuree_400Regular_Italic,
+      BaiJamjuree_500Medium,
+      BaiJamjuree_500Medium_Italic,
+      BaiJamjuree_600SemiBold,
+      BaiJamjuree_600SemiBold_Italic,
+      BaiJamjuree_700Bold,
+      BaiJamjuree_700Bold_Italic,
     });
     const navigation = useNavigation()
     const [lang, setLang] = useState('TH');
@@ -133,12 +145,12 @@ import { AppLoading } from 'expo';
                 <TouchableOpacity onPress={onPressTH}>
                   <Text
                     style={
-                      lang === 'TH' ? styles.active : styles.noActive,{fontFamily: 'Pridi_400Regular',}
+                      lang === 'TH' ? styles.active : styles.noActive,{fontFamily: 'BaiJamjuree_500Medium_Italic',}
                     }>
                     TH
                   </Text>
                 </TouchableOpacity>
-                <Text style={{fontSize: 18,  fontFamily: 'Pridi_400Regular'}}> / </Text>
+                <Text style={{fontSize: 18,  fontFamily: 'BaiJamjuree_500Medium_Italic'}}> / </Text>
                 <TouchableOpacity onPress={onPressEN}>
                   <Text
                     style={
@@ -172,23 +184,24 @@ import { AppLoading } from 'expo';
 
               <View style={{paddingLeft: 15, paddingRight: 15}}>
                 <Item floatingLabel style={{marginBottom: 10}}>
-                  <Label style={{fontSize: 14}}>
+                  <Label style={{fontSize: 14,fontFamily:'BaiJamjuree_400Regular'}}>
                     {lang === 'EN'
                       ? 'Employee code'
                       : 'รหัสพนักงาน'}
                   </Label>
                   <Input
+                  style={{fontSize: 14,fontFamily:'BaiJamjuree_400Regular'}}
                     onChangeText={(text) => setUsername(text)}
                     autoCapitalize={'none'}
                     autoCorrect={false}
                   />
                 </Item>
-
                 <Item floatingLabel>
-                  <Label style={{fontSize: 14}}>
+                  <Label style={{fontSize: 14,fontFamily:'BaiJamjuree_400Regular'}}>
                     {lang === 'EN' ? 'Password' : 'รหัสผ่าน'}
                   </Label>
                   <Input
+                  style={{fontSize: 14,fontFamily:'BaiJamjuree_400Regular'}}
                     secureTextEntry={showPassword}
                     onChangeText={text => setPassword(text)}
                   />
@@ -295,10 +308,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   text1: {
-    fontFamily: 'Pridi_400Regular',
+    fontFamily: 'BaiJamjuree_700Bold',
     marginTop: 20,
     alignSelf: 'center',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     fontSize: 25,
     color: '#002266',
     marginBottom: 30,
@@ -341,6 +354,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#FFF',
     alignSelf: 'center',
+    fontFamily:'BaiJamjuree_600SemiBold'
   },
   labelRegister: {
     fontSize: 16,
@@ -357,7 +371,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#002266',
     alignSelf: 'center',
-    fontFamily: 'Pridi_400Regular',
+    fontFamily: 'BaiJamjuree_400Regular',
   },
   heading: {
     fontSize: 30,

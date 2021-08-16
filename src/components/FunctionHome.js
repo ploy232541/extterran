@@ -3,8 +3,38 @@ import { View, Text, StyleSheet, Alert, TouchableOpacity, AsyncStorage } from "r
 import { Avatar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import {httpClient} from '../core/HttpClient';
+import {
+  useFonts,
+  BaiJamjuree_200ExtraLight,
+  BaiJamjuree_200ExtraLight_Italic,
+  BaiJamjuree_300Light,
+  BaiJamjuree_300Light_Italic,
+  BaiJamjuree_400Regular,
+  BaiJamjuree_400Regular_Italic,
+  BaiJamjuree_500Medium,
+  BaiJamjuree_500Medium_Italic,
+  BaiJamjuree_600SemiBold,
+  BaiJamjuree_600SemiBold_Italic,
+  BaiJamjuree_700Bold,
+  BaiJamjuree_700Bold_Italic,
+} from '@expo-google-fonts/bai-jamjuree';
+import { AppLoading } from 'expo';
 
 const FunctionHome = ({ functionType }) => {
+  let [fontsLoaded] = useFonts({
+    BaiJamjuree_200ExtraLight,
+    BaiJamjuree_200ExtraLight_Italic,
+    BaiJamjuree_300Light,
+    BaiJamjuree_300Light_Italic,
+    BaiJamjuree_400Regular,
+    BaiJamjuree_400Regular_Italic,
+    BaiJamjuree_500Medium,
+    BaiJamjuree_500Medium_Italic,
+    BaiJamjuree_600SemiBold,
+    BaiJamjuree_600SemiBold_Italic,
+    BaiJamjuree_700Bold,
+    BaiJamjuree_700Bold_Italic,
+  });
   const navigation = useNavigation();
   const [lang, setLang] = useState('');
   const [visitors, setVisitors] = useState(0);
@@ -37,7 +67,9 @@ const FunctionHome = ({ functionType }) => {
       run();
       
     }, []);
-
+    if (!fontsLoaded) {
+      return <AppLoading />;
+    } else {
   switch (functionType) {
     case "guide":
       return (
@@ -94,7 +126,7 @@ const FunctionHome = ({ functionType }) => {
             <Avatar.Icon icon="library" 
             style={{ backgroundColor: "#ff471a" }}/>
           </View>
-          <Text style={styles.textStyle}>
+          <Text style={styles.textStyle,{fontFamily:'BaiJamjuree_400Regular'}}>
           {lang === 'EN' ? 'library' : 'ห้องสมุด'}
           </Text>
         </TouchableOpacity>
@@ -112,11 +144,12 @@ const FunctionHome = ({ functionType }) => {
     //   );
     default:
       return Alert.alert("Something went wrong!");
-  }
+  }}
 };
 
 const styles = StyleSheet.create({
   textStyle: {
+    fontFamily:'BaiJamjuree_400Regular',
     fontSize: 14,
     color: "#0097fc",
     paddingTop: 12,

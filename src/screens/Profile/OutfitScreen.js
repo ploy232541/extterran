@@ -39,7 +39,7 @@ export default class OutfitScreen extends Component {
       alertiffillsome: false,
       canfill: false,
       //all
-      gender: [{name:'f'},{name:'m'}],
+      gender: [{name:'f',namethai:'ผู้หญิง',nameeng:'female'},{name:'m',namethai:'ผู้ชาย',nameeng:'male'}],
       select_uniform: false,
       uniform_type: 0,
       //all
@@ -60,16 +60,13 @@ export default class OutfitScreen extends Component {
       edit_shirt_pant_size: "",
       shirt_gender: "",
       shirt_count: 0,
-      //shirt
-      //coverall
+
       coverall: false,
       coverall_size: "",
       edit_coverall_size: "",
-      //coverall_pant_size: "",
-      //edit_coverall_pant_size: "",
-      //coverall_gender: "",
+  
       coverall_count: 0,
-      //coverall
+
       loading:true,
     };
   }
@@ -110,48 +107,14 @@ export default class OutfitScreen extends Component {
           console.log(error);
         });
 
-      /*httpClient
-        .get(`/Training/getUniforms/${this.state.user_id}`)
-        .then((response) => {
-          const result = response.data;
-          if (result != null) {
-            let size = this.state.select_1.find((member) => {
-              return member.name == result[0].boots_size;
-            });
-            this.setState({
-              boots_id: result[0].boots_id,
-              per_id: result[0].per_id,
-              boots_type: result[0].boots_type,
-              uniform_total: result[0].uniform_total,
-              uniform_part: result[0].uniform_part,
-              uniform_type: result[0].uniform_type,
-              select_type: result[0].select_type,
-              boots_name: result[0].boots_name,
-              uniform_name: result[0].uniform_name,
-              boots_size: size.id,
-              select_uniform: true,
-            });
-            if (result[0].boots_type == 1) {
-              this.setState({ boots: true });
-            } else if (result[0].boots_type == 2) {
-              this.setState({ shoes: true });
-            }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });*/
 
       httpClient
         .get(`/Training/getuniforms/${this.state.user_id}`)
         .then((response) => {
           const result = response.data;
-          //let i = 0;
-          //console.log("result = " + (Number(result.length)+3)%2);
-          //console.log("result = " + result[i + 1].uniform_id);
+   
            if (result != null && result != "") {
              for (let i = 0; i < result.length; i++) {
-            //console.log("result = " + result[i].uniform_size);
             if (result[i].uniform_type == "1" && result[i].uniform_part == "1") {
               let bob_size = this.state.select_1.find((item) => {
                 return item.name == result[i].uniform_size;
@@ -159,8 +122,7 @@ export default class OutfitScreen extends Component {
               let bob_pant_size = this.state.select_1.find((item) => {
                 return item.name == result[i+1].uniform_size;
               });
-              // console.log("bob_size.id = " + bob_size.id);
-              // console.log("bob_pant_size.id = " + bob_pant_size.id);
+ 
               if (bob_size != null) {
                 this.setState({
                   bob_count: String(result[i].uniform_total),
@@ -181,17 +143,21 @@ export default class OutfitScreen extends Component {
               let shirt_size = this.state.select_1.find((member) => {
                 return member.name == result[i].uniform_size;
               });
-              let shirt_pant_size = this.state.select_1.find((member) => {
+              let shirt_pant_size =null
+              if (result[i+1]) {
+                   shirt_pant_size = this.state.select_1.find((member) => {
                 return member.name == result[i+1].uniform_size;
               });
+              }
+            
               if (shirt_size != null) {
                 this.setState({
                 shirt_count: String(result[i].uniform_total),
                 shirt_gender: result[i].uniform_sex,
                 shirt_size: shirt_size.id,
-                shirt_pant_size: shirt_pant_size.id,
+                shirt_pant_size: shirt_pant_size?shirt_pant_size.id:null,
                 edit_shirt_size: result[i].sleevelength,
-                edit_shirt_pant_size: result[i+1].trouserbeak,
+                edit_shirt_pant_size: result[i+1]?result[i+1].trouserbeak:null,
                 select_uniform: true,
               })
               this.setState({shirt: true});
@@ -274,14 +240,7 @@ export default class OutfitScreen extends Component {
   onPressSend = () => {
     const {alertiffillsome, uniform_id, user_id, selectcount, bob_size, edit_bob_size, bob_pant_size, edit_bob_pant_size, bob_gender, bob_count, shirt_size, edit_shirt_size, shirt_pant_size, edit_shirt_pant_size, shirt_gender, shirt_count, coverall_size, edit_coverall_size, coverall_count} =
       this.state;
-      // console.log("bob gender  = " + bob_gender);
-      // console.log("shirt gender  = " + shirt_gender);
-      // console.log("bob size = " + bob_size);
-      // console.log("edit bob size = " + edit_bob_size);
-      // console.log("bob pant size = " + bob_pant_size);
-      // console.log("edit bob pant size = " + edit_bob_pant_size);
-      // console.log("bob count = " + bob_count);
-      // console.log(Number(bob_count) + Number(shirt_count));
+    
     if ( Number(bob_count) + Number(shirt_count) + Number(coverall_count) > Number(this.state.selectcount)) {
       this.state.lang === "EN"
         ? Alert.alert("You can\'t select all a uniform more than " + this.state.selectcount)
@@ -632,7 +591,7 @@ export default class OutfitScreen extends Component {
 
                     {/* เพิ่ม */}
                     <View style={{ marginTop: 12 }}>
-                      <Text>{this.state.lang === "EN" ? "Sex" : "เพศ"}</Text>
+                      <Text>{this.state.lang === "EN" ? "Sex" : "เพศ"}<Text style={{color:'red'}}>*</Text></Text>
                       <Picker
                         enabled={!this.state.select_uniform}
                         mode="dropdown"
@@ -662,7 +621,7 @@ export default class OutfitScreen extends Component {
                         />
                         {this.state.gender.map((item) => {
                           return (
-                            <Picker.Item label={item.name} value={item.name} />
+                            <Picker.Item label={this.state.lang === "EN" ? item.nameeng:item.namethai} value={item.name} />
                           );
                         })}
                       </Picker>
@@ -671,7 +630,7 @@ export default class OutfitScreen extends Component {
                     {/* เพิ่ม */}
                     <View>
                       <Text>
-                        {this.state.lang === "EN" ? "Shirt size" : "ขนาดเสื้อ"}
+                        {this.state.lang === "EN" ? "Shirt size" : "ขนาดเสื้อ"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <Picker
                         enabled={!this.state.select_uniform}
@@ -721,7 +680,7 @@ export default class OutfitScreen extends Component {
                       <Text>
                         {this.state.lang === "EN"
                           ? "Edit (inch)"
-                          : "แก้ไขความยาวแขนเสื้อ (นิ้ว)"}
+                          : "แก้ไขความยาวแขนเสื้อ (นิ้ว)"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <TextInput
                         editable={!this.state.select_uniform}
@@ -741,7 +700,7 @@ export default class OutfitScreen extends Component {
                     {/* เพิ่ม */}
                     <View>
                       <Text>
-                        {this.state.lang === "EN" ? "Pant size" : "ขนาดกางเกง"}
+                        {this.state.lang === "EN" ? "Pant size" : "ขนาดกางเกง"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <Picker
                         enabled={!this.state.select_uniform}
@@ -791,7 +750,7 @@ export default class OutfitScreen extends Component {
                       <Text>
                         {this.state.lang === "EN"
                           ? "Edit (inch)"
-                          : "แก้ไขความยาวขากางเกง (นิ้ว)"}
+                          : "แก้ไขความยาวขากางเกง (นิ้ว)"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <TextInput
                         editable={!this.state.select_uniform}
@@ -813,7 +772,7 @@ export default class OutfitScreen extends Component {
                       <Text>
                         {this.state.lang === "EN"
                           ? "Amount"
-                          : "จำนวน"}
+                          : "จำนวน"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <TextInput
                         style={styles.selectableInputStyle2}
@@ -881,7 +840,7 @@ export default class OutfitScreen extends Component {
                   <Text style={{ fontSize: 10, alignSelf: "center", color: "white" }}>
                     {this.state.lang === "EN"
                       ? "Shirt เสื้อปกเชิ้ตเอวเชิ้ต ชาย/หญิง"
-                      : "Shirt เสื้อปกเชิ้ตเอวเชิ้ต ชาย/หญิง"}
+                      : "Shirt เสื้อปกเชิ้ตเอวเชิ้ต ชาย/หญิง"}<Text style={{color:'red'}}>*</Text>
                   </Text>
                 </Button>
               </View>
@@ -927,7 +886,7 @@ export default class OutfitScreen extends Component {
 
                     {/* เพิ่ม */}
                     <View style={{ marginTop: 12 }}>
-                      <Text>{this.state.lang === "EN" ? "Sex" : "เพศ"}</Text>
+                      <Text>{this.state.lang === "EN" ? "Sex" : "เพศ"}<Text style={{color:'red'}}>*</Text></Text>
                       <Picker
                         enabled={!this.state.select_uniform}
                         mode="dropdown"
@@ -957,7 +916,7 @@ export default class OutfitScreen extends Component {
                         />
                         {this.state.gender.map((item) => {
                           return (
-                            <Picker.Item label={item.name} value={item.name} />
+                            <Picker.Item label={this.state.lang === "EN" ? item.nameeng:item.namethai} value={item.name} />
                           );
                         })}
                       </Picker>
@@ -966,7 +925,7 @@ export default class OutfitScreen extends Component {
                     {/* เพิ่ม */}
                     <View>
                       <Text>
-                        {this.state.lang === "EN" ? "Shirt size" : "ขนาดเสื้อ"}
+                        {this.state.lang === "EN" ? "Shirt size" : "ขนาดเสื้อ"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <Picker
                         enabled={!this.state.select_uniform}
@@ -1016,7 +975,7 @@ export default class OutfitScreen extends Component {
                       <Text>
                         {this.state.lang === "EN"
                           ? "Edit (inch)"
-                          : "แก้ไขความยาวแขนเสื้อ (นิ้ว)"}
+                          : "แก้ไขความยาวแขนเสื้อ (นิ้ว)"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <TextInput
                         editable={!this.state.select_uniform}
@@ -1036,7 +995,7 @@ export default class OutfitScreen extends Component {
                     {/* เพิ่ม */}
                     <View>
                       <Text>
-                        {this.state.lang === "EN" ? "Pant size" : "ขนาดกางเกง"}
+                        {this.state.lang === "EN" ? "Pant size" : "ขนาดกางเกง"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <Picker
                         enabled={!this.state.select_uniform}
@@ -1086,7 +1045,7 @@ export default class OutfitScreen extends Component {
                       <Text>
                         {this.state.lang === "EN"
                           ? "Edit (inch)"
-                          : "แก้ไขความยาวขากางเกง (นิ้ว)"}
+                          : "แก้ไขความยาวขากางเกง (นิ้ว)"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <TextInput
                         editable={!this.state.select_uniform}
@@ -1106,7 +1065,7 @@ export default class OutfitScreen extends Component {
                     {/* เพิ่ม */}
                     <View>
                       <Text>
-                        {this.state.lang === "EN" ? "Amount" : "จำนวน"}
+                        {this.state.lang === "EN" ? "Amount" : "จำนวน"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <TextInput
                         keyboardType = "numeric"
@@ -1172,7 +1131,7 @@ export default class OutfitScreen extends Component {
                   <Text style={{ fontSize: 10, alignSelf: "center", color: "white" }}>
                     {this.state.lang === "EN"
                       ? "Coverall ชุดหมี"
-                      : "Coverall ชุดหมี"}
+                      : "Coverall ชุดหมี"}<Text style={{color:'red'}}>*</Text>
                   </Text>
                 </Button>
               </View>
@@ -1221,7 +1180,7 @@ export default class OutfitScreen extends Component {
                       <Text>
                         {this.state.lang === "EN"
                           ? "Coverall size"
-                          : "ขนาดชุดหมี"}
+                          : "ขนาดชุดหมี"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <Picker
                         enabled={!this.state.select_uniform}
@@ -1271,7 +1230,7 @@ export default class OutfitScreen extends Component {
                       <Text>
                         {this.state.lang === "EN"
                           ? "Edit (inch)"
-                          : "แก้ไขขนาดชุด (นิ้ว)"}
+                          : "แก้ไขขนาดชุด (นิ้ว)"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <TextInput
                         editable={!this.state.select_uniform}
@@ -1291,7 +1250,7 @@ export default class OutfitScreen extends Component {
                     {/* เพิ่ม */}
                     <View>
                       <Text>
-                        {this.state.lang === "EN" ? "Amount" : "จำนวน"}
+                        {this.state.lang === "EN" ? "Amount" : "จำนวน"}<Text style={{color:'red'}}>*</Text>
                       </Text>
                       <TextInput
                         keyboardType = "numeric"

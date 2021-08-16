@@ -1041,6 +1041,11 @@
   resolved "https://registry.npmjs.org/@emotion/unitless/-/unitless-0.7.5.tgz"
   integrity sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==
 
+"@expo-google-fonts/bai-jamjuree@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/bai-jamjuree/-/bai-jamjuree-0.2.0.tgz#e3d18c3f31edac6a4f580844ea9a0e3044c6515b"
+  integrity sha512-IwO4YdGSDfE+v+wBGYzGmQPxkQ5tPKW0NCtbGz31D23xdn7/8K184oB4pHeQb6M+1ZkOsJ4ENQF8yNbWbGhZeg==
+
 "@expo-google-fonts/inter@^0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@expo-google-fonts/inter/-/inter-0.2.0.tgz#2934c1e510d58b652e3a5150ca7f76f55b89e84a"
