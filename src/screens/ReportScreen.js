@@ -48,8 +48,11 @@ class ReportScreen extends Component {
         .then(response => {
           const result = response.data;
           if (result != null) {
+         
+            for(var item of result)
             this.setState({
               select_1: result,
+
             });
           }
         })
@@ -329,7 +332,7 @@ class ReportScreen extends Component {
                     />
                       {this.state.select_1.map((data) => {
                         return (
-                          <Picker.Item label={data.usa_title} value={data.usa_id} />
+                          <Picker.Item label={data.Problem_title} value={data.id} />
                         )
                       })}
                   </Picker>

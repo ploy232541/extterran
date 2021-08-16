@@ -49,13 +49,13 @@ function StaffScreen() {
       icon: "address-book",
       to:'ConfirmBookingScreen'
     },
-    {
-      id:5,
-      title: lang == "EN" ? "Timesheet" : "Timesheet",
-      //imgSrc: 'https://source.unsplash.com/1024x768/?nature',
-      icon: "newspaper",
-      to:'ConfirmBookingScreen'
-    }
+    // {
+    //   id:5,
+    //   title: lang == "EN" ? "Timesheet" : "Timesheet",
+    //   //imgSrc: 'https://source.unsplash.com/1024x768/?nature',
+    //   icon: "newspaper",
+    //   to:'ConfirmBookingScreen'
+    // }
   ]
 
   const formatDataList = (dataList, numberColumns) => {
