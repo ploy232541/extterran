@@ -322,7 +322,7 @@ export default class ReportScreen extends Component {
     return (
       <ScrollView>
         <View style={styles.textHead1}>
-          <Text style={{ fontSize: "25", color: "#1E90FF", marginBottom: 20 , marginTop:20 , alignSelf: "center",}}>
+          <Text style={{ fontSize: 25, color: "#1E90FF", marginBottom: 20 , marginTop:20 , alignSelf: "center",}}>
             รายการ Report
           </Text>
 

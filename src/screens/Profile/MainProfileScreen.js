@@ -2634,7 +2634,7 @@ export default class MainProfileScreen extends Component {
         </View>
 
         <View style={styles.containerSec1}>
-          <Text style={{ fontSize: "15%", color: "#1E90FF" }}>
+          <Text style={{ fontSize: 15, color: "#1E90FF" }}>
             Observer/ข้อมูลผู้รายงาน
           </Text>
 

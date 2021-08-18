@@ -18,13 +18,13 @@ function ProfileInfor() {
     {
       id: 1,
       title: "Information",
-      imgSource: "https://picsum.photos/700",
+      imgSource: "info",
       to: "MainProfileScreen",
     },
     {
       id: 2,
       title: "Report",
-      imgSource: "https://picsum.photos/700",
+      imgSource: "list",
       to: "ReportScreen",
     },
   ];
@@ -39,7 +39,7 @@ function ProfileInfor() {
     }
     return (
       <View style={{ flex: 1, margin: 15 }}>
-        <ButtonCard title={item.title} to={item.to} src={item.imgSource} />
+        <ButtonCard title={item.title} to={item.to} icon={item.imgSource} />
       </View>
     );
   };
