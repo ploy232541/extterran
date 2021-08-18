@@ -74,6 +74,7 @@ import FeedBackCourseInScreen from '../screens/FeedBack/FeedBackCourseInScreen'
 import FeedBackCourseGeneralScreen from '../screens/FeedBack/FeedBackCourseGeneralScreen'
 import CourseScreenDetailOut from '../screens/Course/CourseScreenDetailOut'
 import ProfileInfor from '../screens/Profile/ProfileInfor';
+import PDFScreen from "../screens/Home/PDFScreen";
 
 const routes = {
   HomeScreen: { title: " ", component: HomeScreen },
@@ -305,7 +306,10 @@ const routes = {
   ProfileInfor: {
     title: " ",
     component: ProfileInfor,
-  },
+  },PDFScreen:{
+    title:"",
+    component:PDFScreen
+  }
 };
 
 export default routes;

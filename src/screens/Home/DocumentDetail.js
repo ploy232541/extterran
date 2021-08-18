@@ -15,11 +15,15 @@ import {
   List,
   ListItem,
 } from 'native-base';
-import { useNavigation } from "@react-navigation/native"
+import { StackActions, useNavigation } from "@react-navigation/native"
 import { downloadFIle } from "../../utils/file";
+import PDFScreen from './PDFScreen';
+import { Alert } from 'react-native';
 
 const numColumns = 2;
 const WIDTH = Dimensions.get('window').width;
+
+
 
 class DocumentDetail extends Component {
     constructor(props) {
@@ -31,7 +35,7 @@ class DocumentDetail extends Component {
         };
         this.arrayholder = [];
       }
-
+      
       async componentDidMount() {
 
         try {
@@ -105,6 +109,7 @@ class DocumentDetail extends Component {
       LinkingEbook(library_address){
           Linking.openURL(library_address)
       }
+ 
 
       _reanderItem = ({item, index}) => {
         let {itemStyle, itemText, itemInvisible} = styles;
@@ -117,15 +122,20 @@ class DocumentDetail extends Component {
             var arr = str.split(".");
             var type_document = arr[1]; 
         }
-
+        
+        const { navigate } = this.props.navigation;
         return (
                 <TouchableOpacity
-                  onPress={
-                    item.status_ebook == '1' ?
-                      this.LinkingEbook.bind(this, item.library_address)
-                    :
-                      () => downloadFIle(item.library_address, item.library_filename)
-                    }
+                onPress={() => navigate('PDFScreen', { address: item.library_address,filename:item.library_filename})}
+                // onPress={console.log(item.library_address)}
+                // onPress=navigate("PDFScreen")
+                  // onPress={
+                  //   item.status_ebook == '1' ?
+                  //     this.LinkingEbook.bind(this, item.library_address)
+                  //   :
+          
+                  //     // () => PDFScreen(item.library_address, item.library_filename)
+                  //   }
                 style={{flex: 1.1}}>
                <View style={itemStyle}>
                  <Image
@@ -172,6 +182,7 @@ class DocumentDetail extends Component {
       };
 
     render() {
+      const { navigate } = this.props.navigation;
         const {library_type_id, title} = this.props.route.params;
         if (this.state.loading) {
           return (
@@ -234,7 +245,6 @@ const styles = StyleSheet.create({
   });
 
   export default function(props) {
-    const navigation = useNavigation();
   
     return <DocumentDetail {...props} />;
   }
