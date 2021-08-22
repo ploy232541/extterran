@@ -7,6 +7,7 @@ import { httpClient } from "../../core/HttpClient";
 import { DataTable, Button } from "react-native-paper";
 import { Linking } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { AsyncStorage } from "react-native";
 
 const HEIGHT = Dimensions.get("window").height;
 
@@ -26,9 +27,11 @@ export default class ReportScreen extends Component {
   }
 
   async componentDidMount() {
+    let id = await AsyncStorage.getItem("userId");
+    this.setState({user_id: id });
     try {
       httpClient
-        .get(`/Profile/querycheckinformation`)
+        .get(`/Profile/querycheckinformation/${id}`)
         .then((response) => {
           const result = response.data;
           // console.log(result);
@@ -322,7 +325,7 @@ export default class ReportScreen extends Component {
     return (
       <ScrollView>
         <View style={styles.textHead1}>
-          <Text style={{ fontSize: 25, color: "#1E90FF", marginBottom: 20 , marginTop:20 , alignSelf: "center",}}>
+          <Text style={{ fontSize: "25", color: "#1E90FF", marginBottom: 20 , marginTop:20 , alignSelf: "center",}}>
             รายการ Report
           </Text>
 

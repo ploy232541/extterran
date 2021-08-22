@@ -697,9 +697,25 @@ export default class MainProfileScreen extends Component {
         },
         {
           formtype: 3,
+          question_id: 53,
+          question_type: 3,
+          question_name: "category",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
           question_id: 54,
           question_type: 1,
           question_name: "form3_category_other",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 55,
+          question_type: 3,
+          question_name: "related",
           answer_id: null,
           answer_detail: null,
         },
@@ -843,6 +859,22 @@ export default class MainProfileScreen extends Component {
           formtype: 3,
           question_id: 60,
           question_type: 3,
+          question_name: "situation_NO",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 60,
+          question_type: 3,
+          question_name: "situation_YES",
+          answer_id: null,
+          answer_detail: null,
+        },
+        {
+          formtype: 3,
+          question_id: 60,
+          question_type: 3,
           question_name: "situation",
           answer_id: null,
           answer_detail: null,
@@ -868,6 +900,12 @@ export default class MainProfileScreen extends Component {
       store: [],
 
       data1: [{ rd_row1: "" }],
+
+      data2: [{ rd_row1: "" }],
+
+      data3: [{ rd_row1: "" }],
+
+      data4: [{ rd_row1: "" }],
 
       data: [
         { rd_row: "" },
@@ -941,6 +979,7 @@ export default class MainProfileScreen extends Component {
       checkboxYesorNo: false,
       checkboxYesorNo1: false,
       checkboxYesorNo2: false,
+      checkboxYesorNo_Other: false,
 
       radioformBBS: false,
       radioformSWA: false,
@@ -987,8 +1026,8 @@ export default class MainProfileScreen extends Component {
       Otherhazob2: "",
       Otherhazob3: "",
       Description: "",
-      Severity: -1,
-      Probability: -1,
+      // Severity: -1,
+      // Probability: -1,
       Recommendation: "",
     };
   }
@@ -1072,7 +1111,7 @@ export default class MainProfileScreen extends Component {
     // let rd_row = this.state.rd_row
     data[index].rd_row = value;
     this.setState({ data: data });
-    // console.log(data);
+    // console.log(data[index].rd_row);
   };
   onChange1 = (index, value) => {
     let data1 = this.state.data1;
@@ -1157,6 +1196,7 @@ export default class MainProfileScreen extends Component {
         CheckboxCategory8,
         CheckboxCategory9,
         CheckboxCategory10,
+  
         CheckboxRelated,
         CheckboxRelated1,
         CheckboxRelated2,
@@ -1171,6 +1211,7 @@ export default class MainProfileScreen extends Component {
         CheckboxRelated11,
         CheckboxRelated12,
         CheckboxRelated13,
+  
         Description,
         Severity,
         Probability,
@@ -1178,6 +1219,7 @@ export default class MainProfileScreen extends Component {
         checkboxYesorNo,
         checkboxYesorNo1,
         checkboxYesorNo2,
+        checkboxYesorNo_Other
       } = this.state;
       if (startDate == "DD/MM/YYYY") {
         Alert.alert("กรุณากรอกวันที่");
@@ -1254,7 +1296,7 @@ export default class MainProfileScreen extends Component {
                 dataform1,
               };
               const data = params;
-              console.log(data);
+              // console.log(datachk1);
 
               Alert.alert(
                 this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
@@ -1262,13 +1304,14 @@ export default class MainProfileScreen extends Component {
                 [
                   {
                     text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-                    onPress: () => console.log("Cancel Pressed"),
+                    onPress: () => {},
                     style: "cancel",
                   },
                   ,
                   {
                     text: this.state.lang === "EN" ? "OK" : "ตกลง",
                     onPress: () => {
+                      // console.log(data)
                       httpClient
                         .post(`/Profile/InsertProfile`, data)
                         .then((response) => {
@@ -1445,37 +1488,49 @@ export default class MainProfileScreen extends Component {
               Alert.alert("กรุณากรอกข้อที่ 14 ");
             } else {
               const dataform3 = this.state.dataform3;
-              dataform3[0].answer_id = CheckboxCategory;
-              dataform3[1].answer_id = CheckboxCategory1;
-              dataform3[2].answer_id = CheckboxCategory2;
-              dataform3[3].answer_id = CheckboxCategory3;
-              dataform3[4].answer_id = CheckboxCategory4;
-              dataform3[5].answer_id = CheckboxCategory5;
-              dataform3[6].answer_id = CheckboxCategory6;
-              dataform3[7].answer_id = CheckboxCategory7;
-              dataform3[8].answer_id = CheckboxCategory8;
-              dataform3[9].answer_id = CheckboxCategory9;
-              dataform3[10].answer_id = CheckboxCategory10;
+              const datachk3 = this.state.data3;
+              const datachk4 = this.state.data4;
+              //checkbox ส่วนที่ 1
+              dataform3[0].answer_id = CheckboxCategory?1:0;
+              dataform3[1].answer_id = CheckboxCategory1?1:0;
+              dataform3[2].answer_id = CheckboxCategory2?1:0;
+              dataform3[3].answer_id = CheckboxCategory3?1:0;
+              dataform3[4].answer_id = CheckboxCategory4?1:0;
+              dataform3[5].answer_id = CheckboxCategory5?1:0;
+              dataform3[6].answer_id = CheckboxCategory6?1:0;
+              dataform3[7].answer_id = CheckboxCategory7?1:0;
+              dataform3[8].answer_id = CheckboxCategory8?1:0;
+              dataform3[9].answer_id = CheckboxCategory9?1:0;
+              dataform3[10].answer_id = CheckboxCategory10?1:0;
               dataform3[11].answer_detail = Otherhazob1;
-              dataform3[12].answer_id = CheckboxRelated;
-              dataform3[13].answer_id = CheckboxRelated1;
-              dataform3[14].answer_id = CheckboxRelated2;
-              dataform3[15].answer_id = CheckboxRelated3;
-              dataform3[16].answer_id = CheckboxRelated4;
-              dataform3[17].answer_id = CheckboxRelated5;
-              dataform3[18].answer_id = CheckboxRelated6;
-              dataform3[19].answer_id = CheckboxRelated7;
-              dataform3[20].answer_id = CheckboxRelated8;
-              dataform3[21].answer_id = CheckboxRelated9;
-              dataform3[22].answer_id = CheckboxRelated10;
-              dataform3[23].answer_id = CheckboxRelated11;
-              dataform3[24].answer_id = CheckboxRelated12;
-              dataform3[25].answer_id = CheckboxRelated13;
+              //checkbox ส่วนที่ 2
+              dataform3[12].answer_id = CheckboxRelated?1:0;
+              dataform3[13].answer_id = CheckboxRelated1?1:0;
+              dataform3[14].answer_id = CheckboxRelated2?1:0;
+              dataform3[15].answer_id = CheckboxRelated3?1:0;
+              dataform3[16].answer_id = CheckboxRelated4?1:0;
+              dataform3[17].answer_id = CheckboxRelated5?1:0;
+              dataform3[18].answer_id = CheckboxRelated6?1:0;
+              dataform3[19].answer_id = CheckboxRelated7?1:0;
+              dataform3[20].answer_id = CheckboxRelated8?1:0;
+              dataform3[21].answer_id = CheckboxRelated9?1:0;
+              dataform3[22].answer_id = CheckboxRelated10?1:0;
+              dataform3[23].answer_id = CheckboxRelated11?1:0;
+              dataform3[24].answer_id = CheckboxRelated12?1:0;
+              dataform3[25].answer_id = CheckboxRelated13?1:0;
               dataform3[26].answer_detail = Otherhazob3;
-              dataform3[27].answer_id = checkboxYesorNo;
-              dataform3[28].answer_id = checkboxYesorNo1;
-              dataform3[29].answer_id = checkboxYesorNo2;
-              dataform3[30].answer_detail = Recommendation;
+              //input
+              dataform3[27].answer_detail = Description;
+              //radio
+              dataform3[28].answer_id = datachk3[0].rd_row;
+              dataform3[29].answer_id = datachk4[0].rd_row;
+              //checkbox ส่วนที่ 3
+              dataform3[30].answer_id = checkboxYesorNo?1:0;
+              dataform3[31].answer_id = checkboxYesorNo1?1:0;
+              dataform3[32].answer_id = checkboxYesorNo2?1:0;
+              dataform3[33].answer_detail = checkboxYesorNo_Other;
+              //input
+              dataform3[34].answer_detail = Recommendation;
 
               const params = {
                 user_id,
@@ -1486,7 +1541,7 @@ export default class MainProfileScreen extends Component {
                 dataform3,
               };
               const data = params;
-              console.log(data);
+              // console.log(dataform3);
 
               Alert.alert(
                 this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
@@ -1587,37 +1642,50 @@ export default class MainProfileScreen extends Component {
               Alert.alert("กรุณากรอกข้อที่ 14 ");
             } else {
               const dataform3 = this.state.dataform3;
-              dataform3[0].answer_id = CheckboxCategory;
-              dataform3[1].answer_id = CheckboxCategory1;
-              dataform3[2].answer_id = CheckboxCategory2;
-              dataform3[3].answer_id = CheckboxCategory3;
-              dataform3[4].answer_id = CheckboxCategory4;
-              dataform3[5].answer_id = CheckboxCategory5;
-              dataform3[6].answer_id = CheckboxCategory6;
-              dataform3[7].answer_id = CheckboxCategory7;
-              dataform3[8].answer_id = CheckboxCategory8;
-              dataform3[9].answer_id = CheckboxCategory9;
-              dataform3[10].answer_id = CheckboxCategory10;
+              const datachk3 = this.state.data2;
+              const datachk4 = this.state.data3;
+              //checkbox ส่วนที่ 1
+              dataform3[0].answer_id = CheckboxCategory?1:0;
+              dataform3[1].answer_id = CheckboxCategory1?1:0;
+              dataform3[2].answer_id = CheckboxCategory2?1:0;
+              dataform3[3].answer_id = CheckboxCategory3?1:0;
+              dataform3[4].answer_id = CheckboxCategory4?1:0;
+              dataform3[5].answer_id = CheckboxCategory5?1:0;
+              dataform3[6].answer_id = CheckboxCategory6?1:0;
+              dataform3[7].answer_id = CheckboxCategory7?1:0;
+              dataform3[8].answer_id = CheckboxCategory8?1:0;
+              dataform3[9].answer_id = CheckboxCategory9?1:0;
+              dataform3[10].answer_id = CheckboxCategory10?1:0;
               dataform3[11].answer_detail = Otherhazob1;
-              dataform3[12].answer_id = CheckboxRelated;
-              dataform3[13].answer_id = CheckboxRelated1;
-              dataform3[14].answer_id = CheckboxRelated2;
-              dataform3[15].answer_id = CheckboxRelated3;
-              dataform3[16].answer_id = CheckboxRelated4;
-              dataform3[17].answer_id = CheckboxRelated5;
-              dataform3[18].answer_id = CheckboxRelated6;
-              dataform3[19].answer_id = CheckboxRelated7;
-              dataform3[20].answer_id = CheckboxRelated8;
-              dataform3[21].answer_id = CheckboxRelated9;
-              dataform3[22].answer_id = CheckboxRelated10;
-              dataform3[23].answer_id = CheckboxRelated11;
-              dataform3[24].answer_id = CheckboxRelated12;
-              dataform3[25].answer_id = CheckboxRelated13;
+              //checkbox ส่วนที่ 2
+              dataform3[12].answer_id = CheckboxRelated?1:0;
+              dataform3[13].answer_id = CheckboxRelated1?1:0;
+              dataform3[14].answer_id = CheckboxRelated2?1:0;
+              dataform3[15].answer_id = CheckboxRelated3?1:0;
+              dataform3[16].answer_id = CheckboxRelated4?1:0;
+              dataform3[17].answer_id = CheckboxRelated5?1:0;
+              dataform3[18].answer_id = CheckboxRelated6?1:0;
+              dataform3[19].answer_id = CheckboxRelated7?1:0;
+              dataform3[20].answer_id = CheckboxRelated8?1:0;
+              dataform3[21].answer_id = CheckboxRelated9?1:0;
+              dataform3[22].answer_id = CheckboxRelated10?1:0;
+              dataform3[23].answer_id = CheckboxRelated11?1:0;
+              dataform3[24].answer_id = CheckboxRelated12?1:0;
+              dataform3[25].answer_id = CheckboxRelated13?1:0;
               dataform3[26].answer_detail = Otherhazob3;
-              dataform3[27].answer_id = checkboxYesorNo;
-              dataform3[28].answer_id = checkboxYesorNo1;
-              dataform3[29].answer_id = checkboxYesorNo2;
-              dataform3[30].answer_detail = Recommendation;
+              //input
+              dataform3[27].answer_detail = Description;
+              //radio
+              dataform3[28].answer_id = datachk3[0].rd_row;
+              dataform3[29].answer_id = datachk4[0].rd_row;
+              //checkbox ส่วนที่ 3
+              dataform3[30].answer_id = checkboxYesorNo?1:0;
+              dataform3[31].answer_id = checkboxYesorNo1?1:0;
+              dataform3[32].answer_id = checkboxYesorNo2?1:0;
+              dataform3[33].answer_detail = checkboxYesorNo_Other;
+              //input
+              dataform3[34].answer_detail = Recommendation;
+
 
               const params = {
                 user_id,
@@ -1808,22 +1876,7 @@ export default class MainProfileScreen extends Component {
       console.log(error);
     }
   }
-  // reset = () => {
-  //   this.setState({
-  //     startDate: "DD/MM/YYYY",
-  //     location: "",
-  //     sublocation:"",
-  //     storeRadio:-1,
-  //     StopWork:"",
-  //     Possible:"",
-  //     Comments:"",
-  //     Waswork:"",
-  //     WasSWA:"",
-  //     Wasissue:"",
-  //     Isfollow:"",
-  //     Actions:"",
-  //   });
-  // };
+
   showDatePicker = (props) => {
     this.setState({ isDatePickerVisible: true });
     if (props == "start") {
@@ -1833,8 +1886,8 @@ export default class MainProfileScreen extends Component {
 
   formatDate = (date) => {
     var d = new Date(date),
-      month = "" + parseInt(d.getMonth() + 1),
-      day = "" + d.getDate(),
+      month = "" +parseInt( d.getMonth()+1),
+      day = "" +parseInt (d.getDate()+1),
       year = d.getFullYear();
     if (month.length < 2) month = "0" + month;
     if (day.length < 2) day = "0" + day;
@@ -1844,7 +1897,7 @@ export default class MainProfileScreen extends Component {
 
   formatDate1 = (date) => {
     let d = new Date(date),
-      month = "" + parseInt(d.getMonth() + 1),
+      month = "" + parseInt( d.getMonth()+1),
       day = "" + d.getDate(),
       year = d.getFullYear() + 1;
 
@@ -1893,7 +1946,7 @@ export default class MainProfileScreen extends Component {
       return (
         <View>
           <View style={styles.textHead3}>
-            <Text style={{ color: "#007aff", fontSize: 20 }}>
+            <Text style={{ color: "#007aff", fontSize: "20%" }}>
               BBS Observation การสังเกตพฤติกรรมความปลอดภัย
             </Text>
           </View>
@@ -1907,7 +1960,6 @@ export default class MainProfileScreen extends Component {
             style={styles.inputStyle}
             onChangeText={(text) => this.setState({ Detail: text })}
             placeholder="อธิบายรายละเอียด"
-            // value={this.state.Detail}
           ></TextInput>
 
           <Text style={styles.textHead3}>
@@ -1997,7 +2049,9 @@ export default class MainProfileScreen extends Component {
       return (
         <View>
           <View style={styles.textHead4}>
-            <Text style={{ fontSize: 20, color: "#1E90FF", marginBottom: 10 }}>
+            <Text
+              style={{ fontSize: "20%", color: "#1E90FF", marginBottom: 10 }}
+            >
               Stop Work Authority/Responsibility (SWA/SWR)
               การใช้อำนาจในการหยุดงาน
             </Text>
@@ -2166,7 +2220,9 @@ export default class MainProfileScreen extends Component {
       return (
         <View>
           <View style={styles.textHead4}>
-            <Text style={{ fontSize: 20, color: "#1E90FF", marginBottom: 10 }}>
+            <Text
+              style={{ fontSize: "20%", color: "#1E90FF", marginBottom: 10 }}
+            >
               HazOb & Near Miss Report
             </Text>
           </View>
@@ -2596,7 +2652,7 @@ export default class MainProfileScreen extends Component {
                 <TextInput
                   style={styles.inputStyle}
                   placeholder="อธิบายรายละเอียด"
-                  onPress={(text) => this.setState({ Otherhazob3: text })}
+                  onPress={(text) => this.setState({ Otherhazob2: text })}
                 ></TextInput>
               </View>
             )}
@@ -2624,7 +2680,9 @@ export default class MainProfileScreen extends Component {
     return (
       <ScrollView styles={styles.background}>
         <View style={styles.textHead1}>
-          <Text style={{ fontSize: 20, color: "#1E90FF" }}>แบบฟอร์มรายงาน</Text>
+          <Text style={{ fontSize: "20%", color: "#1E90FF" }}>
+            แบบฟอร์มรายงาน
+          </Text>
         </View>
 
         <View>
@@ -2634,7 +2692,7 @@ export default class MainProfileScreen extends Component {
         </View>
 
         <View style={styles.containerSec1}>
-          <Text style={{ fontSize: 15, color: "#1E90FF" }}>
+          <Text style={{ fontSize: "15%", color: "#1E90FF" }}>
             Observer/ข้อมูลผู้รายงาน
           </Text>
 
@@ -2772,7 +2830,7 @@ export default class MainProfileScreen extends Component {
           </View>
 
           <View style={styles.textHead4}>
-            <Text style={{ fontSize: 20, color: "#007aff" }}>
+            <Text style={{ fontSize: "20%", color: "#007aff" }}>
               Report Type ประเภทของรายงาน
             </Text>
           </View>
