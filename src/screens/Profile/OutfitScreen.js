@@ -77,7 +77,8 @@ export default class OutfitScreen extends Component {
 
     let n = new Date().getMonth();
     this.setState({ user_id: id, month: n });
-    if (this.state.month <10) {
+    //lเปิดเทส จริงๆ เป็นเดือน 10-12
+    if (this.state.month <7) {
       this.setState({ select_uniform: true });
     }
     const res = await AsyncStorage.getItem("language");
@@ -364,7 +365,8 @@ export default class OutfitScreen extends Component {
   };
 
   reset = async () => {
-    if (this.state.month <10 ) {
+    //สำหรับเทส
+    if (this.state.month <7 ) {
       this.setState({ select_uniform: true });
     }
     try {

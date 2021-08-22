@@ -41,7 +41,7 @@ const HowtoUseCard = ({ title, imgSrc, details }) => {
                         <View style={{flex:1}}>
                             <HTML 
                                 html={decode(decode(details))}
-                                onLinkPress={(event, href)=>{Linking.openURL(href)}}
+                                // onLinkPress={(event, href)=>{Linking.openURL(href)}}
                                 ignoredStyles= {['width','height']} 
                                 tagsStyles={{ img:{flex:1, alignSelf:'center', }
                                 }}

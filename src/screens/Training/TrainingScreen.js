@@ -52,6 +52,7 @@ function TrainingScreen() {
     icon: "user",
     to: "TrainingStatusScreen",
   });
+  // เปิดไว้สำหรับเทส
   if (team == true) {
     TrainingHeader.push({
       id: 3,
@@ -63,7 +64,8 @@ function TrainingScreen() {
   }
 
   var d = new Date();
-  if (d.getMonth() == 9) {
+   // เปิดไว้สำหรับเทส
+  if (d.getMonth() == 7) {
     TrainingHeader.push({
       id: 4,
       title: "Training Need",
