@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@bugsnag/expo": "7.5.5",
     "@expo-google-fonts/bai-jamjuree": "^0.2.0",
     "@expo-google-fonts/inter": "^0.2.0",
     "@expo-google-fonts/pridi": "^0.2.0",
@@ -24,7 +25,7 @@
     "expo": "~39.0.2",
     "expo-asset": "~8.2.0",
     "expo-av": "~8.6.0",
-    "expo-constants": "~9.2.0",
+    "expo-constants": "^9.2.0",
     "expo-document-picker": "^9.0.1",
     "expo-file-system": "~9.2.0",
     "expo-font": "~8.3.0",
@@ -83,8 +84,9 @@
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "~0.13.12",
     "react-native-webview": "10.7.0",
+    "react-native-webview-autoheight": "^1.0.6",
     "react-native-youtube": "^2.0.1",
-    "react-native-youtube-iframe": "^1.4.2",
+    "react-native-youtube-iframe": "*",
     "react-navigation": "^4.4.3",
     "react-navigation-drawer": "^2.6.0",
     "react-navigation-stack": "^2.10.1",
