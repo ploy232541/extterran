@@ -81,11 +81,11 @@ class TabMultimedia extends Component {
 
     searchFilterFunction = text => { 
     const newData = this.arrayholder.filter(item => {      
-    const itemData = `${this.state.lang === "EN" ? item.library_type_name_en.toUpperCase() : item.library_type_name.toUpperCase()}`;
-    
-    const textData = text.toUpperCase();
+    const itemData = `${this.state.lang === "EN" ? item.library_type_name_en : item.library_type_name}`;
+    const a=itemData.toString().toUpperCase()
+    const textData = text.toString().toUpperCase();
         
-    return itemData.indexOf(textData) > -1;    
+    return a.indexOf(textData) > -1;    
     });
 
     this.setState({ dataList: newData });  
