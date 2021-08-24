@@ -87,10 +87,12 @@ class DocumentDetail extends Component {
       };
       
       searchFilterFunction = text => {    
+        
         const newData = this.arrayholder.filter(item => {      
            const itemData = `${this.state.lang === "EN" ? item.library_name_en : item.library_name}`;
-           const textData = text.toUpperCase();
-           return itemData.indexOf(textData) > -1;    
+         const a=itemData.toString().toUpperCase()
+   
+           return a.indexOf(text.toString().toUpperCase()) > -1;    
         });
         this.setState({ docList: newData });  
       };
