@@ -86,11 +86,7 @@ const NewsDetailScreen = (props) => {
                   {lang === "EN" ? "More links" : "ลิ้งค์เพิ่มเติม"}
                 </Paragraph>
               </TouchableOpacity>
-            ) : (<TouchableOpacity onPress={(e) => openLink(link)}>
-            <Paragraph>
-              {lang === "EN" ? "More links" : "ลิ้งค์เพิ่มเติม"}
-            </Paragraph>
-          </TouchableOpacity>)}
+            ) : null}
           </Card.Content>
         </Card>
         

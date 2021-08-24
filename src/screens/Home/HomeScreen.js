@@ -9,6 +9,8 @@ import {
     Image,
     AsyncStorage,
     Linking,
+    SafeAreaView,
+    ActivityIndicator,
 } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { SliderBox } from "react-native-image-slider-box"
@@ -64,13 +66,27 @@ const functionHomeList = [
     { id: 4, functionType: "library" },
     // { id: 5, functionType: "visited" },
 ]
-
+ 
 const functionHome_renderItem = ({ item }) => {
     return (
         <View style={styles.programCardStyle}>
             <FunctionHome functionType={item.functionType} />
         </View>
     )
+}
+showyoutube=()=>{
+    return( <YoutubePlayer
+        height={HEIGHT_VIDEO}
+        width={WIDTH}
+        videoId={video.link_path.replace("https://www.youtube.com/watch?v=","")} 
+        play={false}
+        volume={50}
+        playbackRate={1}
+        playerParams={{
+            cc_lang_pref: "us",
+            showClosedCaptions: true
+        }}
+    /> )
 }
 
 const renderPage = (image, index) => {
@@ -110,8 +126,10 @@ function HomeScreen() {
     const [imageSlide, setImageSlide] = useState([]);
     const [video, setVideo] = useState(null);
     const [news, setNews] = useState(null);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         const run = async () => {
+            setLoading(true)
             try {
               let getLang = await AsyncStorage.getItem('language');
               let user_id = await AsyncStorage.getItem('userId');
@@ -126,7 +144,9 @@ function HomeScreen() {
                 .get(`/CourseOnline/getCourseOrgchart/${user_id}/${lang_id}`)
                 .then(response => {
                     let res = response.data;
+                    setLoading(false)
                     if (res != null) {
+                        
                         setCourse(res)
                     }
                 })
@@ -137,6 +157,7 @@ function HomeScreen() {
               httpClient
                 .get(`/ImageSlide/getImageSlide/${lang_id}`)
                 .then(response => {
+                
                     let res = response.data;
                     // console.log(res);
                     if (res != null) {
@@ -147,17 +168,18 @@ function HomeScreen() {
                     console.log(error);
                 });
 
-               httpClient
-                .get(`/Video/Limit/${lang_id}`)
-                .then( async response => {
-                  let res = await response.data;
-                  if (res != null) {
-                    setVideo(res)
-                  }
-                })
-                .catch(error => {
-                  console.log(error);
-                });
+            //    httpClient
+            //     .get(`/Video/Limit/${lang_id}`)
+            //     .then( async response => {
+            //         setLoading(false)
+            //       let res = await response.data;
+            //       if (res != null) {
+            //         setVideo(res)
+            //       }
+            //     })
+            //     .catch(error => {
+            //       console.log(error);
+            //     });
 
                 httpClient
                 .get(`/News/Limit/${lang_id}`)
@@ -189,6 +211,15 @@ function HomeScreen() {
     if (!fontsLoaded) {
         return <AppLoading />;
       } else {
+        if (loading) {
+            return (
+              <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                  <ActivityIndicator />
+                </View>
+              </SafeAreaView>
+            );
+          }
     return (
         <ScrollView>
             <View style={styles.background}>
@@ -257,25 +288,14 @@ function HomeScreen() {
                         <View style={styles.line} />
                         <Text style={styles.title}>{lang == 'EN' ? 'Videos' : 'วิดีโอแนะนำ'}</Text>
                         <View style={styles.line} />
-                    </View>
+                    </View> 
+
                     <View style={{paddingTop:20}}>
-                        {
+                   
+                        {/* {
                           video != null ?
                             video.vdo_type === 'link' ?
-                                <View >
-                                  <YoutubePlayer
-                                        height={HEIGHT_VIDEO}
-                                        width={WIDTH}
-                                        videoId={video.link_path.substring(32, 43)} 
-                                        play={false}
-                                        volume={50}
-                                        playbackRate={1}
-                                        playerParams={{
-                                            cc_lang_pref: "us",
-                                            showClosedCaptions: true
-                                        }}
-                                    /> 
-                                </View>
+                           เอาวีดีโอใส่ตรงนี้
                             :
                             <Video
                                 source={{
@@ -291,7 +311,7 @@ function HomeScreen() {
                             />
                          :
                          null
-                        }
+                        } */}
                     </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
