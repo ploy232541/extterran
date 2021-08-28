@@ -33,15 +33,7 @@ import RadioForm from "react-native-simple-radio-button";
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
 
-function fixedCoursePicker(selectedCourse) {
-  return (
-    <View style={styles.coursePickerStyles}>
-      <Picker enabled={false}>
-        <Picker.Item label={selectedCourse} value={selectedCourse} />
-      </Picker>
-    </View>
-  );
-}
+
 var radio_props = [
   { label: "BBS พฤติกรรม", value: 0 },
   { label: "SWA การหยุดงาน", value: 1 },
