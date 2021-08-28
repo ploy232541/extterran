@@ -20,7 +20,7 @@ import { Button, Label, Picker, Row } from "native-base";
 import { httpClient } from "../../core/HttpClient";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { now } from "moment";
+import moment, { now } from "moment";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
@@ -32,7 +32,6 @@ import RadioForm from "react-native-simple-radio-button";
 
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
-
 
 var radio_props = [
   { label: "BBS พฤติกรรม", value: 0 },
@@ -200,7 +199,9 @@ export default class ReportView extends Component {
   }
 
   async componentDidMount() {
-
+    this.setState({
+      reportype: this.props.route.params.item.what_kind_of_report - 1
+    });
     for (var index in cataegery) {
       cataegery[index].status = false;
     }
@@ -224,7 +225,7 @@ export default class ReportView extends Component {
 
     try {
       httpClient
-        .get(`/Profile/getProfileView/${id}/${this.props.route.params.id}`)
+        .get(`/Profile/getProfileView/${id}/${this.props.route.params.item.id}`)
         .then((response) => {
           const result = response.data;
           this.setState({ loading: false });
@@ -244,9 +245,6 @@ export default class ReportView extends Component {
     }
   }
 
-  
-
- 
   render() {
     if (this.state.loading) {
       return (
@@ -260,6 +258,7 @@ export default class ReportView extends Component {
       );
     }
     let question = [...this.state.question];
+    console.log(question[0]);
 
     return (
       <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
@@ -366,111 +365,36 @@ export default class ReportView extends Component {
                 Observation date :<Text style={{ color: "red" }}>*</Text>
               </Text>
               <Text style={styles.textInputThai}>วันที่พบเห็น</Text>
-              <TouchableOpacity onPress={() => this.showDatePicker("start")}>
-                <View style={styles.inputDate}>
-                  <Text style={{ paddingLeft: 10 }}>
-                    {this.state.startDate}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-
-              <DateTimePickerModal
-                locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
-                isVisible={this.state.isDatePickerVisible}
-                mode="date"
-                onConfirm={this.handleConfirm}
-                onCancel={this.hideDatePicker}
+              <TextInput
+                style={styles.inputStyle}
+                value={moment(
+                  this.props.route.params.item.observation_date
+                ).format("DD/MM/YYYY")}
               />
+              {/* <View style={styles.inputDate}>
+                  <Text style={{ paddingLeft: 10 }}>
+                    {moment(this.props.route.params.item.observation_date).format("DD/MM/YYYY")}
+                  </Text>
+                </View> */}
+
               <Text style={styles.textInputEng}>
                 {" "}
                 Location :<Text style={{ color: "red" }}>*</Text>
               </Text>
               <Text style={styles.textInputThai}>สถานที่พบเหตุการณ์</Text>
-
-              <Picker
-                mode="dropdown"
-                iosIcon={
-                  <Icon
-                    name="angle-down"
-                    style={{ width: "8%", paddingHorizontal: 2 }}
-                  />
-                }
-                style={styles.inputLightStyle}
-                placeholderStyle={{ color: "#bfc6ea" }}
-                placeholderIconColor="#007aff"
-                selectedValue={this.state.location_seleced}
-                onValueChange={(t) => {
-                  this.setState({
-                    location_seleced: t,
-                    sublocation_seleced: ""
-                  });
-                  try {
-                    httpClient
-                      .get(`/Profile/getSubLocation/${t}`)
-                      .then((response) => {
-                        const result = response.data;
-
-                        if (result != null) {
-                          this.setState({
-                            sublocation: result
-                          });
-                        }
-                      })
-                      .catch((error) => {
-                        console.log(error);
-                      });
-                  } catch (error) {}
-                }}
-                textStyle={{ fontSize: 14 }}
-                placeholder={
-                  this.state.lang === "EN"
-                    ? "Please select location"
-                    : "กรุณาเลือกสถานที่พบเหตุการณ์"
-                }
-              >
-                {this.state.location.map((data) => {
-                  return (
-                    <Picker.Item
-                      label={data.work_location_ot}
-                      value={data.id}
-                    />
-                  );
-                })}
-              </Picker>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.props.route.params.item.work_location_ot}
+              />
               <Text style={styles.textInputEng}>
                 Sub Location :<Text style={{ color: "red" }}>*</Text>
               </Text>
               <Text style={styles.textInputThai}>บริเวณที่พบเหตุการณ์</Text>
 
-              <Picker
-                mode="dropdown"
-                iosIcon={
-                  <Icon
-                    name="angle-down"
-                    style={{ width: "8%", paddingHorizontal: 2 }}
-                  />
-                }
-                style={styles.inputLightStyle}
-                placeholderStyle={{ color: "#bfc6ea" }}
-                placeholderIconColor="#007aff"
-                selectedValue={this.state.sublocation_seleced}
-                onValueChange={(t) => this.setState({ sublocation_seleced: t })}
-                textStyle={{ fontSize: 14 }}
-                placeholder={
-                  this.state.lang === "EN"
-                    ? "Please select sub location"
-                    : "กรุณาเลือกบริเวณที่พบเหตุการณ์"
-                }
-              >
-                {this.state.sublocation.map((data) => {
-                  return (
-                    <Picker.Item
-                      label={data.loca_ot_sub_title}
-                      value={data.id}
-                    />
-                  );
-                })}
-              </Picker>
+              <TextInput
+                style={styles.inputStyle}
+                value={this.props.route.params.item.loca_ot_sub_title}
+              />
             </View>
           </View>
           {/* จบส่วนที่2 */}
@@ -518,10 +442,8 @@ export default class ReportView extends Component {
               >
                 <RadioForm
                   radio_props={radio_props}
-                  initial={-1}
-                  onPress={(item) => {
-                    this.setState({ reportype: item });
-                  }}
+                  initial={this.state.reportype}
+                  disabled
                 />
                 <View
                   style={{
@@ -534,11 +456,8 @@ export default class ReportView extends Component {
               </View>
               {this.state.reportype == 4 && (
                 <TextInput
-                  keyboardType="text"
-                  value={this.state.reportype_detail}
-                  style={styles.inputStyle1}
-                  onChangeText={(t) => this.setState({ reportype_detail: t })}
-                  placeholder="อธิบายรายละเอียด"
+                  style={styles.inputStyle}
+                  value={this.props.route.params.item.loca_ot_sub_title}
                 />
               )}
             </View>
@@ -581,18 +500,16 @@ export default class ReportView extends Component {
                     <Text style={{ color: "red" }}> *</Text>
                   </Text>
                   <Text style={styles.textInputThai}> เรื่องที่เจอ</Text>
-                  <TextInput
-                    keyboardType="text"
-                    style={styles.inputStyle1}
-                    onChangeText={(t) => {
-                      let item = { ...question[0] };
-                      item.answer_id = "";
-                      item.answer_detail = t;
-                      question[0] = item;
 
-                      this.setState({ question });
-                    }}
-                    placeholder="อธิบายรายละเอียด"
+                  <TextInput
+                    style={styles.inputStyle}
+                    value={
+                      question[0]
+                        ? question[0].answer_detail
+                          ? question[0].answer_detail
+                          : ""
+                        : ""
+                    }
                   />
                   <Text style={styles.textInputEng}>
                     8. Activated Stop Work :
@@ -602,26 +519,56 @@ export default class ReportView extends Component {
                     {" "}
                     ได้มีการหยุดงานหรือไม่
                   </Text>
-
-                  <View style={styles.containerSec}>
-                    <View>
-                      <View style={{ marginVertical: 2, marginHorizontal: 24 }}>
-                        <RadioForm
-                          radio_props={radio_check}
-                          formHorizontal={true}
-                          initial={-1}
-                          onPress={(t) => {
-                            let item = { ...question[1] };
-                            item.answer_id = t + 1;
-                            item.answer_detail = "";
-                            question[1] = item;
-                            console.log(question[1]);
-                            this.setState({ question });
-                          }}
-                        />
+                  {console.log(question[1] ? question[1].answer_id[0] - 1 : -1)}
+                  {question[1] ? (
+                    question[1].answer_id[0] ? (
+                      <View style={styles.containerSec}>
+                        <View>
+                          <View
+                            style={{ marginVertical: 2, marginHorizontal: 24 }}
+                          >
+                            {/* จำเป็นต้องมี ไม่งั้นมันไม่ติ๊ก */}
+                            {console.log(question[1].answer_id[0])}
+                            <RadioForm
+                              radio_props={radio_check}
+                              formHorizontal={true}
+                              initial={Number(question[1].answer_id[0] - 1)}
+                              disabled
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    ) : (
+                      <View style={styles.containerSec}>
+                        <View>
+                          <View
+                            style={{ marginVertical: 2, marginHorizontal: 24 }}
+                          >
+                            <RadioForm
+                              radio_props={radio_check}
+                              formHorizontal={true}
+                              initial={-1}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    )
+                  ) : (
+                    <View style={styles.containerSec}>
+                      <View>
+                        <View
+                          style={{ marginVertical: 2, marginHorizontal: 24 }}
+                        >
+                          <RadioForm
+                            radio_props={radio_check}
+                            formHorizontal={true}
+                            initial={-1}
+                          />
+                        </View>
                       </View>
                     </View>
-                  </View>
+                  )}
+
                   <Text style={styles.textInputEng}>
                     9. Recommendation for improvement :
                     <Text style={{ color: "red" }}> *</Text>
@@ -631,49 +578,78 @@ export default class ReportView extends Component {
                     หรือการสนับสนุนการปฏิบัติอย่างปลอดภัย
                   </Text>
                   <TextInput
-                    keyboardType="text"
-                    style={styles.inputStyle1}
-                    onChangeText={(t) => {
-                      let item = { ...question[2] };
-                      item.answer_id = "";
-                      item.answer_detail = t;
-                      question[2] = item;
-                      console.log(question[2]);
-                      this.setState({ question });
-                    }}
-                    placeholder="อธิบายรายละเอียด"
+                    style={styles.inputStyle}
+                    value={
+                      question[2]
+                        ? question[2].answer_detail
+                          ? question[2].answer_detail
+                          : ""
+                        : ""
+                    }
                   />
+
                   <Text style={styles.textInputEng}>
                     10. Critical Behavior Inventory (CBI) 1-9 :
                   </Text>
                   <View style={styles.containerSec}>
                     {accounts.map((account, index) => {
-                      return (
-                        <View key={account.accNumber}>
-                          <Text style={{ marginVertical: 10, paddingLeft: 8 }}>
-                            {account.accNumber}
-                          </Text>
-                          <View
-                            style={{ marginVertical: 2, marginHorizontal: 24 }}
-                          >
-                            <RadioForm
-                              radio_props={radio_BBS}
-                              formHorizontal={true}
-                              initial={-1}
-                              // onPress={(item) => this.onChange(index, item)}
-                              onPress={(t) => {
-                                let k = index + 3;
-                                let item = { ...question[k] };
-                                item.answer_id = t + 1;
-                                item.answer_detail = "";
-                                question[k] = item;
-                                console.log(question[k]);
-                                this.setState({ question });
+                      if (question[index + 3]) {
+                        if (question[index + 3].answer_id) {
+                          if (question[index + 3].answer_id[0]) {
+                            return (
+                              <View key={account.accNumber}>
+                                <Text
+                                  style={{ marginVertical: 10, paddingLeft: 8 }}
+                                >
+                                  {account.accNumber}
+                                </Text>
+                                <View
+                                  style={{
+                                    marginVertical: 2,
+                                    marginHorizontal: 24
+                                  }}
+                                >
+                                  {console.log(
+                                    question[index + 3].answer_id[0]
+                                  )}
+                                  <RadioForm
+                                    radio_props={radio_BBS}
+                                    formHorizontal={true}
+                                    initial={Number(
+                                      question[index + 3].answer_id[0] - 1
+                                    )}
+                                    disabled
+                                  />
+                                </View>
+                              </View>
+                            );
+                          }
+                        }
+                      } else {
+                        return (
+                          <View key={account.accNumber}>
+                            <Text
+                              style={{ marginVertical: 10, paddingLeft: 8 }}
+                            >
+                              {account.accNumber}
+                            </Text>
+                            <View
+                              style={{
+                                marginVertical: 2,
+                                marginHorizontal: 24
                               }}
-                            />
+                            >
+                              {}
+                              <RadioForm
+                                radio_props={radio_BBS}
+                                formHorizontal={true}
+                                initial={-1}
+                                disabled
+                              />
+                            </View>
                           </View>
-                        </View>
-                      );
+                        );
+                      }
                     })}
                   </View>
                   <Text style={styles.textHead3}>11. Other/อื่นๆ</Text>
@@ -683,35 +659,46 @@ export default class ReportView extends Component {
                         {"อื่นๆ ระบุในข้อถัดไป"}
                       </Text>
                       <View style={{ marginVertical: 2, marginHorizontal: 24 }}>
-                        <RadioForm
-                          radio_props={radio_BBS}
-                          formHorizontal={true}
-                          initial={-1}
-                          onPress={(t) => {
-                            let item = { ...question[42] };
-                            item.answer_id = t + 1;
-                            item.answer_detail = "";
-                            question[42] = item;
-                            console.log(question[42]);
-                            this.setState({ question });
-                          }}
-                        />
+                        {question[42] ? (
+                          question[42].answer_id ? (
+                            <View>
+                              {console.log(question[42].answer_id)}
+                              <RadioForm
+                                radio_props={radio_BBS}
+                                formHorizontal={true}
+                                initial={question[42].answer_id[0] - 1}
+                                disabled
+                              />
+                            </View>
+                          ) : (
+                            <RadioForm
+                              radio_props={radio_BBS}
+                              formHorizontal={true}
+                              initial={-1}
+                              disabled
+                            />
+                          )
+                        ) : (
+                          <RadioForm
+                            radio_props={radio_BBS}
+                            formHorizontal={true}
+                            initial={-1}
+                            disabled
+                          />
+                        )}
                       </View>
                     </View>
                     <Text style={styles.textInputEng}>12. Other :</Text>
                     <Text style={styles.textInputThai}>อื่นๆ</Text>
                     <TextInput
-                      keyboardType="text"
-                      style={styles.inputStyle1}
-                      onChangeText={(t) => {
-                        let item = { ...question[43] };
-                        item.answer_id = "";
-                        item.answer_detail = t;
-                        question[43] = item;
-                        console.log(question[43]);
-                        this.setState({ question });
-                      }}
-                      placeholder="อธิบายรายละเอียด"
+                      style={styles.inputStyle}
+                      value={
+                        question[43]
+                          ? question[43].answer_detail
+                            ? question[43].answer_detail
+                            : ""
+                          : ""
+                      }
                     />
                   </View>
                 </View>
@@ -747,17 +734,14 @@ export default class ReportView extends Component {
                     การกระทำหรือสภาพการณ์ที่ไม่ปลอดภัยและการใช้อำนาจในการหยุดงาน
                   </Text>
                   <TextInput
-                    keyboardType="text"
-                    style={styles.inputStyle1}
-                    onChangeText={(t) => {
-                      let item = { ...question[44] };
-                      item.answer_id = "";
-                      item.answer_detail = t;
-                      question[44] = item;
-                      console.log(question[44]);
-                      this.setState({ question });
-                    }}
-                    placeholder="อธิบายรายละเอียด"
+                    style={styles.inputStyle}
+                    value={
+                      question[44]
+                        ? question[44].answer_detail
+                          ? question[44].answer_detail
+                          : ""
+                        : ""
+                    }
                   />
                   <Text style={styles.textInputEng}>
                     8. Possible Consequences, if DO NOT STOP :
@@ -768,17 +752,14 @@ export default class ReportView extends Component {
                     ผลกระทบต่อเนื่องที่อาจเกิดขึ้นตามมาถ้าไม่ใช้อำนาจในการหยุดงาน
                   </Text>
                   <TextInput
-                    keyboardType="text"
-                    style={styles.inputStyle1}
-                    onChangeText={(t) => {
-                      let item = { ...question[45] };
-                      item.answer_id = "";
-                      item.answer_detail = t;
-                      question[45] = item;
-                      console.log(question[45]);
-                      this.setState({ question });
-                    }}
-                    placeholder="อธิบายรายละเอียด"
+                    style={styles.inputStyle}
+                    value={
+                      question[45]
+                        ? question[45].answer_detail
+                          ? question[45].answer_detail
+                          : ""
+                        : ""
+                    }
                   />
                   <Text style={styles.textInputEng}>
                     9. Comments/Responses :
@@ -786,17 +767,14 @@ export default class ReportView extends Component {
                   </Text>
                   <Text style={styles.textInputThai}>คำชี้แจงหรือการแก้ไข</Text>
                   <TextInput
-                    keyboardType="text"
-                    style={styles.inputStyle1}
-                    onChangeText={(t) => {
-                      let item = { ...question[46] };
-                      item.answer_id = "";
-                      item.answer_detail = t;
-                      question[46] = item;
-                      console.log(question[46]);
-                      this.setState({ question });
-                    }}
-                    placeholder="อธิบายรายละเอียด"
+                    style={styles.inputStyle}
+                    value={
+                      question[46]
+                        ? question[46].answer_detail
+                          ? question[46].answer_detail
+                          : ""
+                        : ""
+                    }
                   />
                   <Text style={styles.textInputEng}>
                     10. Was work activity resumed? :
@@ -805,38 +783,33 @@ export default class ReportView extends Component {
                   <Text style={styles.textInputThai}>
                     มีการทำงานต่อ หลังจากหาแนวทางแก้ไขแล้วหรือไม่
                   </Text>
-                  <Picker
-                    mode="dropdown"
-                    iosIcon={
-                      <Icon
-                        name="angle-down"
-                        style={{ width: "8%", paddingHorizontal: 2 }}
-                      />
-                    }
-                    style={styles.inputLightStyle}
-                    placeholderStyle={{ color: "#bfc6ea" }}
-                    placeholderIconColor="#007aff"
-                    selectedValue={this.state.resumed}
-                    onValueChange={(t) => {
-                      this.setState({ resumed: t });
-                      let item = { ...question[47] };
-                      item.answer_id = t;
-                      item.answer_detail = "";
-                      question[47] = item;
-                      console.log(question[47]);
-                      this.setState({ question });
-                    }}
-                    textStyle={{ fontSize: 14 }}
-                    placeholder={
-                      this.state.lang === "EN"
-                        ? "Please select sub location"
-                        : "โปรดเลือกคำตอบ"
-                    }
-                  >
-                    {dropdown_check.map((data) => {
-                      return <Picker.Item label={data.title} value={data.id} />;
-                    })}
-                  </Picker>
+                  {question[47] ? (
+                    question[47].answer_id ? (
+                      <View>
+                        {console.log(question[47].answer_id[0])}
+                        <TextInput
+                          style={styles.inputStyle}
+                          value={
+                            question[47]
+                              ? question[47].answer_id[0]
+                                ? question[47].answer_id[0] == 1
+                                  ? "Yes"
+                                  : question[47].answer_id[0] == 2
+                                  ? "No"
+                                  : question[47].answer_id[0] == 3
+                                  ? "N/A"
+                                  : ""
+                                : ""
+                              : ""
+                          }
+                        />
+                      </View>
+                    ) : (
+                      <TextInput style={styles.inputStyle} />
+                    )
+                  ) : (
+                    <TextInput style={styles.inputStyle} />
+                  )}
 
                   <Text style={styles.textInputEng}>
                     11. Was SWA valid (real problem)? :
@@ -846,38 +819,33 @@ export default class ReportView extends Component {
                     การหยุดงานครั้งนี้ถูกต้องแล้ว (มีปัญหาจริงหรือไม่)
                   </Text>
 
-                  <Picker
-                    mode="dropdown"
-                    iosIcon={
-                      <Icon
-                        name="angle-down"
-                        style={{ width: "8%", paddingHorizontal: 2 }}
-                      />
-                    }
-                    style={styles.inputLightStyle}
-                    placeholderStyle={{ color: "#bfc6ea" }}
-                    placeholderIconColor="#007aff"
-                    selectedValue={this.state.realproblem}
-                    onValueChange={(t) => {
-                      this.setState({ realproblem: t });
-                      let item = { ...question[48] };
-                      item.answer_id = t;
-                      item.answer_detail = "";
-                      question[48] = item;
-                      console.log(question[48]);
-                      this.setState({ question });
-                    }}
-                    textStyle={{ fontSize: 14 }}
-                    placeholder={
-                      this.state.lang === "EN"
-                        ? "Please select sub location"
-                        : "โปรดเลือกคำตอบ"
-                    }
-                  >
-                    {dropdown_check.map((data) => {
-                      return <Picker.Item label={data.title} value={data.id} />;
-                    })}
-                  </Picker>
+                  {question[48] ? (
+                    question[48].answer_id ? (
+                      <View>
+                        {console.log(question[48].answer_id[0])}
+                        <TextInput
+                          style={styles.inputStyle}
+                          value={
+                            question[48]
+                              ? question[48].answer_id[0]
+                                ? question[48].answer_id[0] == 1
+                                  ? "Yes"
+                                  : question[48].answer_id[0] == 2
+                                  ? "No"
+                                  : question[48].answer_id[0] == 3
+                                  ? "N/A"
+                                  : ""
+                                : ""
+                              : ""
+                          }
+                        />
+                      </View>
+                    ) : (
+                      <TextInput style={styles.inputStyle} />
+                    )
+                  ) : (
+                    <TextInput style={styles.inputStyle} />
+                  )}
                   <Text style={styles.textInputEng}>
                     12. Was issue resolved? :
                     <Text style={{ color: "red" }}> *</Text>
@@ -886,38 +854,33 @@ export default class ReportView extends Component {
                     มีการแก้ปัญหาเรียบร้อยแล้ว (หรือต้องทำในระยะยาว)
                   </Text>
 
-                  <Picker
-                    mode="dropdown"
-                    iosIcon={
-                      <Icon
-                        name="angle-down"
-                        style={{ width: "8%", paddingHorizontal: 2 }}
-                      />
-                    }
-                    style={styles.inputLightStyle}
-                    placeholderStyle={{ color: "#bfc6ea" }}
-                    placeholderIconColor="#007aff"
-                    selectedValue={this.state.resolved}
-                    onValueChange={(t) => {
-                      this.setState({ resolved: t });
-                      let item = { ...question[49] };
-                      item.answer_id = t;
-                      item.answer_detail = "";
-                      question[49] = item;
-                      console.log(question[49]);
-                      this.setState({ question });
-                    }}
-                    textStyle={{ fontSize: 14 }}
-                    placeholder={
-                      this.state.lang === "EN"
-                        ? "Please select sub location"
-                        : "โปรดเลือกคำตอบ"
-                    }
-                  >
-                    {dropdown_check.map((data) => {
-                      return <Picker.Item label={data.title} value={data.id} />;
-                    })}
-                  </Picker>
+                  {question[49] ? (
+                    question[49].answer_id ? (
+                      <View>
+                        {console.log(question[49].answer_id[0])}
+                        <TextInput
+                          style={styles.inputStyle}
+                          value={
+                            question[49]
+                              ? question[49].answer_id[0]
+                                ? question[49].answer_id[0] == 1
+                                  ? "Yes"
+                                  : question[49].answer_id[0] == 2
+                                  ? "No"
+                                  : question[49].answer_id[0] == 3
+                                  ? "N/A"
+                                  : ""
+                                : ""
+                              : ""
+                          }
+                        />
+                      </View>
+                    ) : (
+                      <TextInput style={styles.inputStyle} />
+                    )
+                  ) : (
+                    <TextInput style={styles.inputStyle} />
+                  )}
                   <Text style={styles.textInputEng}>
                     13. Is follow up action required? if yes explain :
                     <Text style={{ color: "red" }}> *</Text>
@@ -925,56 +888,46 @@ export default class ReportView extends Component {
                   <Text style={styles.textInputThai}>
                     มีการติดตามผลหรือไม่ โปรดอธิบาย ในข้อถัดไป
                   </Text>
-
-                  <Picker
-                    mode="dropdown"
-                    iosIcon={
-                      <Icon
-                        name="angle-down"
-                        style={{ width: "8%", paddingHorizontal: 2 }}
-                      />
-                    }
-                    style={styles.inputLightStyle}
-                    placeholderStyle={{ color: "#bfc6ea" }}
-                    placeholderIconColor="#007aff"
-                    selectedValue={this.state.explain}
-                    onValueChange={(t) => {
-                      this.setState({ explain: t });
-                      let item = { ...question[50] };
-                      item.answer_id = t;
-                      item.answer_detail = "";
-                      question[50] = item;
-                      console.log(question[50]);
-                      this.setState({ question });
-                    }}
-                    textStyle={{ fontSize: 14 }}
-                    placeholder={
-                      this.state.lang === "EN"
-                        ? "Please select sub location"
-                        : "โปรดเลือกคำตอบ"
-                    }
-                  >
-                    {dropdown_check.map((data) => {
-                      return <Picker.Item label={data.title} value={data.id} />;
-                    })}
-                  </Picker>
+                  {question[50] ? (
+                    question[50].answer_id ? (
+                      <View>
+                        {console.log(question[50].answer_id[0])}
+                        <TextInput
+                          style={styles.inputStyle}
+                          value={
+                            question[50]
+                              ? question[50].answer_id[0]
+                                ? question[50].answer_id[0] == 1
+                                  ? "Yes"
+                                  : question[50].answer_id[0] == 2
+                                  ? "No"
+                                  : question[50].answer_id[0] == 3
+                                  ? "N/A"
+                                  : ""
+                                : ""
+                              : ""
+                          }
+                        />
+                      </View>
+                    ) : (
+                      <TextInput style={styles.inputStyle} />
+                    )
+                  ) : (
+                    <TextInput style={styles.inputStyle} />
+                  )}
                   <Text style={styles.textInputEng}>
                     14. Actions detail Explanation :
                     <Text style={{ color: "red" }}> *</Text>
                   </Text>
-                  {/* <Text style={styles.textInputThai}>คำชี้แจงหรือการแก้ไข</Text> */}
                   <TextInput
-                    keyboardType="text"
-                    style={styles.inputStyle1}
-                    onChangeText={(t) => {
-                      let item = { ...question[51] };
-                      item.answer_id = "";
-                      item.answer_detail = t;
-                      question[51] = item;
-                      console.log(question[51]);
-                      this.setState({ question });
-                    }}
-                    placeholder="อธิบายรายละเอียด"
+                    style={styles.inputStyle}
+                    value={
+                      question[51]
+                        ? question[51].answer_detail
+                          ? question[51].answer_detail
+                          : ""
+                        : ""
+                    }
                   />
                 </View>
               </View>
@@ -1004,38 +957,42 @@ export default class ReportView extends Component {
                   </Text>
                   <Text style={styles.textInputThai}> ประเภท</Text>
                   {cataegery.map((items, index) => {
+                    let k = question[52];
+                    let anscheck = false;
+                    let v = 1 + index;
+                    let showss = false;
+                    if (k) {
+                      if (k.answer_id) {
+                        let b = k.answer_id.indexOf(v);
+                        if (b != -1) {
+                          anscheck = true;
+                          if (index >= situation.length - 1) {
+                            showss = true;
+                          }
+                        }
+                      }
+                    }
+
                     return (
                       <View>
                         <View style={styles.checkboxContainer}>
                           <CheckBox
-                            checked={items.status}
-                            onPress={(t) => {
-                              cataegery[index].status =
-                                !cataegery[index].status;
-                              let item = { ...question[52] };
-                              item.answer_id = cataegery;
-                              item.answer_detail = "";
-                              question[52] = item;
-                              console.log(question[52]);
-                              this.setState({ question });
-                            }}
+                            checked={anscheck}
+                            disabled
                             style={styles.checkbox}
                             title={items.title}
                           />
                         </View>
-                        {items.status && index >= cataegery.length - 1 && (
+                        {showss && (
                           <TextInput
-                            keyboardType="text"
-                            style={styles.inputStyle1}
-                            onChangeText={(t) => {
-                              let item = { ...question[53] };
-                              item.answer_id = "";
-                              item.answer_detail = t;
-                              question[53] = item;
-                              console.log(question[53]);
-                              this.setState({ question });
-                            }}
-                            placeholder="อธิบายรายละเอียด"
+                            style={styles.inputStyle}
+                            value={
+                              question[53]
+                                ? question[53].answer_detail
+                                  ? question[53].answer_detail
+                                  : ""
+                                : ""
+                            }
                           />
                         )}
                       </View>
@@ -1047,38 +1004,41 @@ export default class ReportView extends Component {
                   </Text>
                   <Text style={styles.textInputThai}> เกี่ยวเนื่องกับ</Text>
                   {relatedwith.map((items, index) => {
+                    let k = question[54];
+                    let anscheck = false;
+                    let v = 1 + index;
+                    let showss = false;
+                    if (k) {
+                      if (k.answer_id) {
+                        let b = k.answer_id.indexOf(v);
+                        if (b != -1) {
+                          anscheck = true;
+                          if (index >= situation.length - 1) {
+                            showss = true;
+                          }
+                        }
+                      }
+                    }
                     return (
                       <View>
                         <View style={styles.checkboxContainer}>
                           <CheckBox
-                            checked={items.status}
-                            onPress={(t) => {
-                              relatedwith[index].status =
-                                !relatedwith[index].status;
-                              let item = { ...question[54] };
-                              item.answer_id = relatedwith;
-                              item.answer_detail = "";
-                              question[54] = item;
-                              console.log(question[54]);
-                              this.setState({ question });
-                            }}
+                            checked={anscheck}
+                            disabled
                             style={styles.checkbox}
                             title={items.title}
                           />
                         </View>
-                        {items.status && index >= relatedwith.length - 1 && (
+                        {showss && (
                           <TextInput
-                            keyboardType="text"
-                            style={styles.inputStyle1}
-                            onChangeText={(t) => {
-                              let item = { ...question[55] };
-                              item.answer_id = "";
-                              item.answer_detail = t;
-                              question[55] = item;
-                              console.log(question[55]);
-                              this.setState({ question });
-                            }}
-                            placeholder="อธิบายรายละเอียด"
+                            style={styles.inputStyle}
+                            value={
+                              question[55]
+                                ? question[55].answer_detail
+                                  ? question[55].answer_detail
+                                  : ""
+                                : ""
+                            }
                           />
                         )}
                       </View>
@@ -1092,17 +1052,14 @@ export default class ReportView extends Component {
                     รายละเอียด- โปรดอธิบาย
                   </Text>
                   <TextInput
-                    keyboardType="text"
-                    style={styles.inputStyle1}
-                    onChangeText={(t) => {
-                      let item = { ...question[56] };
-                      item.answer_id = "";
-                      item.answer_detail = t;
-                      question[56] = item;
-                      console.log(question[56]);
-                      this.setState({ question });
-                    }}
-                    placeholder="อธิบายรายละเอียด"
+                    style={styles.inputStyle}
+                    value={
+                      question[56]
+                        ? question[56].answer_detail
+                          ? question[56].answer_detail
+                          : ""
+                        : ""
+                    }
                   />
                   <Text style={styles.textInputEng}>
                     11. Severity - Impact :
@@ -1117,18 +1074,31 @@ export default class ReportView extends Component {
                       marginBottom: 2
                     }}
                   >
-                    <RadioForm
-                      radio_props={radio_severity}
-                      initial={-1}
-                      onPress={(t) => {
-                        let item = { ...question[57] };
-                        item.answer_id = t + 1;
-                        item.answer_detail = "";
-                        question[57] = item;
-                        console.log(question[57]);
-                        this.setState({ question });
-                      }}
-                    />
+                    {question[57] ? (
+                      question[57].answer_id ? (
+                        <View>
+                          {console.log(question[57].answer_id)}
+                          <RadioForm
+                            radio_props={radio_severity}
+                            initial={question[57].answer_id[0] - 1}
+                            disabled
+                          />
+                        </View>
+                      ) : (
+                        <RadioForm
+                          radio_props={radio_severity}
+                          initial={-1}
+                          disabled
+                        />
+                      )
+                    ) : (
+                      <RadioForm
+                        radio_props={radio_severity}
+                        initial={-1}
+                        disabled
+                      />
+                    )}
+
                     <View
                       style={{
                         flexDirection: "column",
@@ -1151,18 +1121,30 @@ export default class ReportView extends Component {
                       marginBottom: 2
                     }}
                   >
-                    <RadioForm
-                      radio_props={radio_probability}
-                      initial={-1}
-                      onPress={(t) => {
-                        let item = { ...question[58] };
-                        item.answer_id = t + 1;
-                        item.answer_detail = "";
-                        question[58] = item;
-                        console.log(question[58]);
-                        this.setState({ question });
-                      }}
-                    />
+                    {question[58] ? (
+                      question[58].answer_id ? (
+                        <View>
+                          {console.log(question[58].answer_id)}
+                          <RadioForm
+                            radio_props={radio_severity}
+                            initial={question[58].answer_id[0] - 1}
+                            disabled
+                          />
+                        </View>
+                      ) : (
+                        <RadioForm
+                          radio_props={radio_severity}
+                          initial={-1}
+                          disabled
+                        />
+                      )
+                    ) : (
+                      <RadioForm
+                        radio_props={radio_severity}
+                        initial={-1}
+                        disabled
+                      />
+                    )}
                     <View
                       style={{
                         flexDirection: "column",
@@ -1179,48 +1161,48 @@ export default class ReportView extends Component {
                   <Text style={styles.textInputThai}>
                     มีโอกาสพบความเสี่ยงดังกล่าวในสถานที่อื่นหรือไม่?
                   </Text>
+
                   {situation.map((items, index) => {
+                    let k = question[59];
+                    let anscheck = false;
+                    let showss = false;
+                    let v = 1 + index;
+                    if (k) {
+                      if (k.answer_id) {
+                        let b = k.answer_id.indexOf(v);
+                        if (b != -1) {
+                          anscheck = true;
+                          if (index >= situation.length - 1) {
+                            showss = true;
+                          }
+                        }
+                      }
+                    }
                     return (
                       <View>
                         <View style={styles.checkboxContainer}>
                           <CheckBox
-                            checked={items.status}
-                            onPress={(t) => {
-                              situation[index].status =
-                                !situation[index].status;
-                              let item = { ...question[59] };
-                              item.answer_id = index;
-                              item.answer_detail = "";
-                              question[59] = item;
-                              console.log(question[59]);
-                              this.setState({ question });
-                            }}
+                            checked={anscheck}
+                            disabled
                             style={styles.checkbox}
                             title={items.title}
                           />
                         </View>
+                        {showss && (
+                          <TextInput
+                            style={styles.inputStyle}
+                            value={
+                              question[60]
+                                ? question[60].answer_detail
+                                  ? question[60].answer_detail
+                                  : ""
+                                : ""
+                            }
+                          />
+                        )}
                       </View>
                     );
                   })}
-                  <KeyboardAwareScrollView>
-                    <View>
-                      <TextInput
-                        keyboardType="text"
-                        style={styles.inputStyle1}
-                        editable={situation[situation.length - 1].status}
-                        // enabled={situation[situation.length-1].status}
-                        onChangeText={(t) => {
-                          let item = { ...question[60] };
-                          item.answer_id = "";
-                          item.answer_detail = t;
-                          question[60] = item;
-                          console.log(question[60]);
-                          this.setState({ question });
-                        }}
-                        placeholder="อธิบายรายละเอียด"
-                      />
-                    </View>
-                  </KeyboardAwareScrollView>
 
                   <Text style={styles.textInputEng}>
                     14. Recommendation Actio :
@@ -1229,23 +1211,19 @@ export default class ReportView extends Component {
                   <Text style={styles.textInputThai}>
                     ข้อแนะนำเพื่อการแก้ไข
                   </Text>
-                  <KeyboardAwareScrollView>
-                    <View>
-                      <TextInput
-                        keyboardType="text"
-                        style={styles.inputStyle1}
-                        onChangeText={(t) => {
-                          let item = { ...question[61] };
-                          item.answer_id = "";
-                          item.answer_detail = t;
-                          question[61] = item;
-                          console.log(question[61]);
-                          this.setState({ question });
-                        }}
-                        placeholder="อธิบายรายละเอียด"
-                      />
-                    </View>
-                  </KeyboardAwareScrollView>
+
+                  <View>
+                    <TextInput
+                      style={styles.inputStyle}
+                      value={
+                        question[61]
+                          ? question[61].answer_detail
+                            ? question[61].answer_detail
+                            : ""
+                          : ""
+                      }
+                    />
+                  </View>
                 </View>
               </View>
             </View>
@@ -1259,26 +1237,7 @@ export default class ReportView extends Component {
                 marginBottom: 10,
                 marginTop: 10
               }}
-            >
-              <Pressable
-                style={[stylesdialog.button, stylesdialog.buttonOpen]}
-                onPress={() => this.onPressSend()}
-              >
-                <Text style={styles.textStyle}>
-                  {this.state.lang === "EN" ? "Accept" : "ยืนยัน"}
-                </Text>
-              </Pressable>
-              <Pressable
-                style={[styles.button, styles.buttonCancel]}
-                onPress={() => {
-                  this.props.navigation.goBack();
-                }}
-              >
-                <Text style={styles.textStyle}>
-                  {this.state.lang === "EN" ? "Cancel" : "ยกเลิก"}
-                </Text>
-              </Pressable>
-            </View>
+            ></View>
           )}
           {/* ตัวเลือกที่ 3 */}
           <View></View>

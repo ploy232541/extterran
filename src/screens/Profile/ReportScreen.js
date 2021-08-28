@@ -124,7 +124,7 @@ export default class ReportScreen extends Component {
         : item.what_kind_of_report_detail;
     return (
       <View>
-        <ListItem onPress={() => this.handleOpen(item.id)}>
+        <ListItem onPress={() => this.handleOpen(item)}>
           <View style={{ flexDirection: "row" }}>
             <Icon1 name="info" style={{ marginRight: 10 }} size={20} />
             <Text style={{ flex: 1 }}>
@@ -138,14 +138,14 @@ export default class ReportScreen extends Component {
       </View>
     );
   };
-  handleOpen(id) {
+  handleOpen(item) {
     const { navigation } = this.props;
-    navigation.navigate("ReportView", { id });
+    navigation.navigate("ReportView", { item });
   }
   renderHeader = () => {
     return (
-      <ScrollView>
-        <View>
+      <ScrollView style={{borderRadius: 10}}>
+        <View >
           <DateTimePickerModal
             locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
             isVisible={this.state.isDatePickerVisible}
@@ -153,7 +153,7 @@ export default class ReportScreen extends Component {
             onConfirm={this.handleConfirm}
             onCancel={this.hideDatePicker}
           />
-          <Header searchBar rounded style={{ backgroundColor: "#d9d9d9" }}>
+          <Header searchBar rounded style={{ backgroundColor: "#d9e6d9" }}>
             <Item
               style={{ backgroundColor: "#fff", margin: 5 }}
               onPress={() => this.showDatePicker("start")}
@@ -217,15 +217,15 @@ export default class ReportScreen extends Component {
                         var dateObjectStart = dateMomentObjectStart.toDate();
                         if (dateObject >= dateObjectStart) {
                           return item;
-                        } else if (this.state.endDate != "End Date") {
-                          var dateMomentObjectEnd = moment(
-                            this.state.endDate,
-                            "DD/MM/YYYY"
-                          );
-                          var dateObjectEnd = dateMomentObjectEnd.toDate();
-                          if (dateObject <= dateObjectEnd) {
-                            return item;
-                          }
+                        }
+                      } else if (this.state.endDate != "End Date") {
+                        var dateMomentObjectEnd = moment(
+                          this.state.endDate,
+                          "DD/MM/YYYY"
+                        );
+                        var dateObjectEnd = dateMomentObjectEnd.toDate();
+                        if (dateObject <= dateObjectEnd) {
+                          return item;
                         }
                       }
                     });
@@ -289,7 +289,7 @@ export default class ReportScreen extends Component {
           <Text style={styles.headline}>รายการ Report</Text>
 
           <View style={styles.container}>
-            <List style={{ borderWidth: 1, borderColor: "#e6e6e6" }}>
+            <List style={{ borderWidth: 1, borderColor: "#e6e6e6" },{borderRadius: 10}}>
               <FlatList
                 data={this.state.datalist}
                 renderItem={this._reanderItem}

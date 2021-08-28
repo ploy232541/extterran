@@ -33,7 +33,6 @@ import RadioForm from "react-native-simple-radio-button";
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
 
-
 var radio_props = [
   { label: "BBS พฤติกรรม", value: 0 },
   { label: "SWA การหยุดงาน", value: 1 },
@@ -319,7 +318,7 @@ export default class MainProfileScreen extends Component {
         user_id,
         location_seleced,
         sublocation_seleced,
-        reportype:reportype+1,
+        reportype: reportype + 1,
         reportype_detail
       };
       let data = [];
@@ -413,7 +412,7 @@ export default class MainProfileScreen extends Component {
         let errors = false;
         let index = 0;
         let ends = data.length - 1;
-        console.log(data[index]);
+
         do {
           let item = data[index];
           if (item != data[1] && item != data[3] && item != data[ends - 1]) {
@@ -483,7 +482,7 @@ export default class MainProfileScreen extends Component {
             }
           }
           index++;
-        } while (!errors && index < ends);
+        } while (!errors && index <= ends);
         if (!errors && index >= ends) {
           let senddata = [];
           senddata.push(datahead);
@@ -515,9 +514,7 @@ export default class MainProfileScreen extends Component {
                 if (result === true) {
                   Alert.alert(
                     this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                    this.state.lang === "EN"
-                      ? "Success"
-                      : "สำเร็จ",
+                    this.state.lang === "EN" ? "Success" : "สำเร็จ",
                     [
                       {
                         text: this.state.lang === "EN" ? "OK" : "ตกลง",
@@ -571,7 +568,6 @@ export default class MainProfileScreen extends Component {
           }}
         >
           <View style={styles.containerSec1}>
-            {/* <View style={styles.textHeader}> */}
             <Text
               style={{
                 fontSize: 18,
@@ -584,8 +580,6 @@ export default class MainProfileScreen extends Component {
             >
               แบบฟอร์มรายงาน
             </Text>
-
-            {/* </View> */}
 
             <View>
               <Divider style={{ backgroundColor: "black", borderWidth: 2 }} />
@@ -699,22 +693,24 @@ export default class MainProfileScreen extends Component {
                     location_seleced: t,
                     sublocation_seleced: ""
                   });
-                  try {
-                    httpClient
-                      .get(`/Profile/getSubLocation/${t}`)
-                      .then((response) => {
-                        const result = response.data;
+                  if (t != "") {
+                    try {
+                      httpClient
+                        .get(`/Profile/getSubLocation/${t}`)
+                        .then((response) => {
+                          const result = response.data;
 
-                        if (result != null) {
-                          this.setState({
-                            sublocation: result
-                          });
-                        }
-                      })
-                      .catch((error) => {
-                        console.log(error);
-                      });
-                  } catch (error) {}
+                          if (result != null) {
+                            this.setState({
+                              sublocation: result
+                            });
+                          }
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    } catch (error) {}
+                  }
                 }}
                 textStyle={{ fontSize: 14 }}
                 placeholder={
@@ -723,6 +719,10 @@ export default class MainProfileScreen extends Component {
                     : "กรุณาเลือกสถานที่พบเหตุการณ์"
                 }
               >
+                <Picker.Item
+                  label={"กรุณาเลือกสถานที่พบเหตุการณ์"}
+                  value={""}
+                />
                 {this.state.location.map((data) => {
                   return (
                     <Picker.Item
@@ -751,12 +751,11 @@ export default class MainProfileScreen extends Component {
                 selectedValue={this.state.sublocation_seleced}
                 onValueChange={(t) => this.setState({ sublocation_seleced: t })}
                 textStyle={{ fontSize: 14 }}
-                placeholder={
-                  this.state.lang === "EN"
-                    ? "Please select sub location"
-                    : "กรุณาเลือกบริเวณที่พบเหตุการณ์"
-                }
               >
+                <Picker.Item
+                  label={"กรุณาเลือกสถานที่พบเหตุการณ์"}
+                  value={""}
+                />
                 {this.state.sublocation.map((data) => {
                   return (
                     <Picker.Item
@@ -910,7 +909,7 @@ export default class MainProfileScreen extends Component {
                             item.answer_id = t + 1;
                             item.answer_detail = "";
                             question[1] = item;
-                            console.log(question[1]);
+
                             this.setState({ question });
                           }}
                         />
@@ -933,7 +932,7 @@ export default class MainProfileScreen extends Component {
                       item.answer_id = "";
                       item.answer_detail = t;
                       question[2] = item;
-                      console.log(question[2]);
+
                       this.setState({ question });
                     }}
                     placeholder="อธิบายรายละเอียด"
@@ -962,7 +961,7 @@ export default class MainProfileScreen extends Component {
                                 item.answer_id = t + 1;
                                 item.answer_detail = "";
                                 question[k] = item;
-                                console.log(question[k]);
+
                                 this.setState({ question });
                               }}
                             />
@@ -987,7 +986,7 @@ export default class MainProfileScreen extends Component {
                             item.answer_id = t + 1;
                             item.answer_detail = "";
                             question[42] = item;
-                            console.log(question[42]);
+
                             this.setState({ question });
                           }}
                         />
@@ -1003,7 +1002,7 @@ export default class MainProfileScreen extends Component {
                         item.answer_id = "";
                         item.answer_detail = t;
                         question[43] = item;
-                        console.log(question[43]);
+
                         this.setState({ question });
                       }}
                       placeholder="อธิบายรายละเอียด"
@@ -1049,7 +1048,7 @@ export default class MainProfileScreen extends Component {
                       item.answer_id = "";
                       item.answer_detail = t;
                       question[44] = item;
-                      console.log(question[44]);
+
                       this.setState({ question });
                     }}
                     placeholder="อธิบายรายละเอียด"
@@ -1070,7 +1069,7 @@ export default class MainProfileScreen extends Component {
                       item.answer_id = "";
                       item.answer_detail = t;
                       question[45] = item;
-                      console.log(question[45]);
+
                       this.setState({ question });
                     }}
                     placeholder="อธิบายรายละเอียด"
@@ -1088,7 +1087,7 @@ export default class MainProfileScreen extends Component {
                       item.answer_id = "";
                       item.answer_detail = t;
                       question[46] = item;
-                      console.log(question[46]);
+
                       this.setState({ question });
                     }}
                     placeholder="อธิบายรายละเอียด"
@@ -1118,7 +1117,7 @@ export default class MainProfileScreen extends Component {
                       item.answer_id = t;
                       item.answer_detail = "";
                       question[47] = item;
-                      console.log(question[47]);
+
                       this.setState({ question });
                     }}
                     textStyle={{ fontSize: 14 }}
@@ -1159,7 +1158,7 @@ export default class MainProfileScreen extends Component {
                       item.answer_id = t;
                       item.answer_detail = "";
                       question[48] = item;
-                      console.log(question[48]);
+
                       this.setState({ question });
                     }}
                     textStyle={{ fontSize: 14 }}
@@ -1199,7 +1198,7 @@ export default class MainProfileScreen extends Component {
                       item.answer_id = t;
                       item.answer_detail = "";
                       question[49] = item;
-                      console.log(question[49]);
+
                       this.setState({ question });
                     }}
                     textStyle={{ fontSize: 14 }}
@@ -1239,7 +1238,7 @@ export default class MainProfileScreen extends Component {
                       item.answer_id = t;
                       item.answer_detail = "";
                       question[50] = item;
-                      console.log(question[50]);
+
                       this.setState({ question });
                     }}
                     textStyle={{ fontSize: 14 }}
@@ -1266,7 +1265,7 @@ export default class MainProfileScreen extends Component {
                       item.answer_id = "";
                       item.answer_detail = t;
                       question[51] = item;
-                      console.log(question[51]);
+
                       this.setState({ question });
                     }}
                     placeholder="อธิบายรายละเอียด"
@@ -1311,7 +1310,7 @@ export default class MainProfileScreen extends Component {
                               item.answer_id = cataegery;
                               item.answer_detail = "";
                               question[52] = item;
-                              console.log(question[52]);
+
                               this.setState({ question });
                             }}
                             style={styles.checkbox}
@@ -1327,7 +1326,7 @@ export default class MainProfileScreen extends Component {
                               item.answer_id = "";
                               item.answer_detail = t;
                               question[53] = item;
-                              console.log(question[53]);
+
                               this.setState({ question });
                             }}
                             placeholder="อธิบายรายละเอียด"
@@ -1354,7 +1353,7 @@ export default class MainProfileScreen extends Component {
                               item.answer_id = relatedwith;
                               item.answer_detail = "";
                               question[54] = item;
-                              console.log(question[54]);
+
                               this.setState({ question });
                             }}
                             style={styles.checkbox}
@@ -1370,7 +1369,7 @@ export default class MainProfileScreen extends Component {
                               item.answer_id = "";
                               item.answer_detail = t;
                               question[55] = item;
-                              console.log(question[55]);
+
                               this.setState({ question });
                             }}
                             placeholder="อธิบายรายละเอียด"
@@ -1394,7 +1393,7 @@ export default class MainProfileScreen extends Component {
                       item.answer_id = "";
                       item.answer_detail = t;
                       question[56] = item;
-                      console.log(question[56]);
+
                       this.setState({ question });
                     }}
                     placeholder="อธิบายรายละเอียด"
@@ -1420,7 +1419,7 @@ export default class MainProfileScreen extends Component {
                         item.answer_id = t + 1;
                         item.answer_detail = "";
                         question[57] = item;
-                        console.log(question[57]);
+
                         this.setState({ question });
                       }}
                     />
@@ -1454,7 +1453,7 @@ export default class MainProfileScreen extends Component {
                         item.answer_id = t + 1;
                         item.answer_detail = "";
                         question[58] = item;
-                        console.log(question[58]);
+
                         this.setState({ question });
                       }}
                     />
@@ -1484,10 +1483,10 @@ export default class MainProfileScreen extends Component {
                               situation[index].status =
                                 !situation[index].status;
                               let item = { ...question[59] };
-                              item.answer_id = index;
+                              item.answer_id = situation;
                               item.answer_detail = "";
                               question[59] = item;
-                              console.log(question[59]);
+
                               this.setState({ question });
                             }}
                             style={styles.checkbox}
@@ -1497,25 +1496,23 @@ export default class MainProfileScreen extends Component {
                       </View>
                     );
                   })}
-                  <KeyboardAwareScrollView>
-                    <View>
-                      <TextInput
-                        keyboardType="text"
-                        style={styles.inputStyle1}
-                        editable={situation[situation.length - 1].status}
-                        // enabled={situation[situation.length-1].status}
-                        onChangeText={(t) => {
-                          let item = { ...question[60] };
-                          item.answer_id = "";
-                          item.answer_detail = t;
-                          question[60] = item;
-                          console.log(question[60]);
-                          this.setState({ question });
-                        }}
-                        placeholder="อธิบายรายละเอียด"
-                      />
-                    </View>
-                  </KeyboardAwareScrollView>
+
+                  <View>
+                    <TextInput
+                      keyboardType="text"
+                      style={styles.inputStyle1}
+                      editable={situation[situation.length - 1].status}
+                      onChangeText={(t) => {
+                        let item = { ...question[60] };
+                        item.answer_id = "";
+                        item.answer_detail = t;
+                        question[60] = item;
+
+                        this.setState({ question });
+                      }}
+                      placeholder="อธิบายรายละเอียด"
+                    />
+                  </View>
 
                   <Text style={styles.textInputEng}>
                     14. Recommendation Actio :
@@ -1524,23 +1521,22 @@ export default class MainProfileScreen extends Component {
                   <Text style={styles.textInputThai}>
                     ข้อแนะนำเพื่อการแก้ไข
                   </Text>
-                  <KeyboardAwareScrollView>
-                    <View>
-                      <TextInput
-                        keyboardType="text"
-                        style={styles.inputStyle1}
-                        onChangeText={(t) => {
-                          let item = { ...question[61] };
-                          item.answer_id = "";
-                          item.answer_detail = t;
-                          question[61] = item;
-                          console.log(question[61]);
-                          this.setState({ question });
-                        }}
-                        placeholder="อธิบายรายละเอียด"
-                      />
-                    </View>
-                  </KeyboardAwareScrollView>
+
+                  <View>
+                    <TextInput
+                      keyboardType="text"
+                      style={styles.inputStyle1}
+                      onChangeText={(t) => {
+                        let item = { ...question[61] };
+                        item.answer_id = "";
+                        item.answer_detail = t;
+                        question[61] = item;
+
+                        this.setState({ question });
+                      }}
+                      placeholder="อธิบายรายละเอียด"
+                    />
+                  </View>
                 </View>
               </View>
             </View>
