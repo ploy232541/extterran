@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { activateKeepAwake, deactivateKeepAwake } from "expo-keep-awake";
 import {
   Text,
   View,
@@ -13,7 +14,7 @@ import {
   Alert,
   TouchableHighlight,
   FlatList,
-  Platform,
+  Platform
 } from "react-native";
 import Modal from "react-native-modal";
 import { Accordion, Textarea } from "native-base";
@@ -37,6 +38,7 @@ import MediaControls, { PLAYER_STATES } from "react-native-media-controls";
 
 import SliderEntry from "./SliderEntry";
 import { sliderWidth, itemWidth } from "../../styles/SliderEntry.style";
+import AnimatedLoader from "react-native-animated-loader";
 
 const { width, height } = Dimensions.get("window");
 const BannerWidth = Dimensions.get("window").width;
@@ -95,12 +97,13 @@ class Vdo extends Component {
       duration: 0,
       isFullScreen: false,
       isLoading: true,
+      loading: true,
       paused: false,
       playerState: PLAYER_STATES.PLAYING,
       screenType: "content",
       //////new video expo////
 
-      statuss: {},
+      statuss: {}
     };
   }
 
@@ -129,6 +132,7 @@ class Vdo extends Component {
         .get(`/Learn/getLearn/${lesson_id}/${file_id}/${user_id}`)
         .then(async (response) => {
           const result = response.data;
+          this.setState({ loading: false });
           if (result != null) {
             maxPlayPosition =
               result.last > 0 && result.last != "s" ? result.last * 1000 : 0;
@@ -138,7 +142,7 @@ class Vdo extends Component {
             this.setState({
               dataArray: result,
               status: result.last,
-              currentSlide: result.image,
+              currentSlide: result.image
             });
           }
         })
@@ -174,7 +178,7 @@ class Vdo extends Component {
 
   showAlert = () => {
     this.setState({
-      showAlertLearn: true,
+      showAlertLearn: true
     });
   };
 
@@ -186,7 +190,7 @@ class Vdo extends Component {
     //Handler for Video Pause
     this.setState({
       paused: !this.state.paused,
-      playerState,
+      playerState
     });
   };
 
@@ -241,7 +245,7 @@ class Vdo extends Component {
           alignItems: "center",
           backgroundColor: "#e6e6e6",
           borderWidth: 1,
-          borderColor: "#d9d9d9",
+          borderColor: "#d9d9d9"
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -290,10 +294,9 @@ class Vdo extends Component {
     ) {
       if (e.positionMillis - maxPlayPosition < 2000) {
         maxPlayPosition = e.positionMillis;
-        
       }
     }
-    
+
     //เช็คว่ามีการเล่นไหม
     if (e.isPlaying == false && lastPlayPosition != "s") {
       //ถ้าเวลาปัจจุบันมากกว่าค่าสูงสุดที่บันทึกไว้
@@ -307,10 +310,9 @@ class Vdo extends Component {
         }, 1000);
       }
     }
-    if (!maxPlayPosition > 0&&
-      lastPlayPosition != "s" ) {
-        console.log("ครั้งแรก");
-        let { note_file_id, note_lesson_id, user_id, course_id, note_gen_id } =
+    if (!maxPlayPosition > 0 && lastPlayPosition != "s") {
+      console.log("ครั้งแรก");
+      let { note_file_id, note_lesson_id, user_id, course_id, note_gen_id } =
         this.state;
       let params = {
         lesson_id: note_lesson_id,
@@ -319,25 +321,24 @@ class Vdo extends Component {
         gen_id: note_gen_id,
         course_id: course_id,
         current_time: current_time,
-        type: item.type,
+        type: item.type
       };
-   
+
       httpClient
         .post("/Learn/LearnSaveVdo/UpdateTime", params)
-      
+
         .catch((error) => {
           console.log(error);
         });
-    
     }
     //บันทึกวีดีโอทุก 6 วิ
-    if (
-      maxPlayPosition > 0&&
-      lastPlayPosition != "s" 
-    ) {
-      // if (Math.floor(e.positionMillis) % 6000 == 0) 
-      if (e.positionMillis  - lastPlayPosition * 1000 > 6000 && e.positionMillis - maxPlayPosition < 2000) {
-        lastPlayPosition=Math.floor(e.positionMillis) * 0.001;
+    if (maxPlayPosition > 0 && lastPlayPosition != "s") {
+      // if (Math.floor(e.positionMillis) % 6000 == 0)
+      if (
+        e.positionMillis - lastPlayPosition * 1000 > 6000 &&
+        e.positionMillis - maxPlayPosition < 2000
+      ) {
+        lastPlayPosition = Math.floor(e.positionMillis) * 0.001;
         current_time = Math.floor(e.positionMillis) * 0.001;
         console.log("บันทึกวีดีโอ ลงในฐานข้อมูลได้");
         let { note_file_id, note_lesson_id, user_id, course_id, note_gen_id } =
@@ -349,7 +350,7 @@ class Vdo extends Component {
           gen_id: note_gen_id,
           course_id: course_id,
           current_time: current_time,
-          type: item.type,
+          type: item.type
         };
 
         httpClient
@@ -379,7 +380,7 @@ class Vdo extends Component {
         gen_id: note_gen_id,
         course_id: course_id,
         current_time: current_time,
-        type: item.type,
+        type: item.type
       };
       httpClient
         .post("/Learn/LearnSaveVdo/Complete", params)
@@ -435,7 +436,7 @@ class Vdo extends Component {
                         flex: 1,
                         alignItems: "center",
                         borderWidth: 3,
-                        borderColor: "#e6e6e6",
+                        borderColor: "#e6e6e6"
                       }}
                     >
                       <TouchableOpacity
@@ -483,7 +484,7 @@ class Vdo extends Component {
                             height: 70,
                             borderWidth: 1,
                             borderColor: "#66b3ff",
-                            margin: 8,
+                            margin: 8
                           }}
                         />
                       </TouchableOpacity>
@@ -500,7 +501,7 @@ class Vdo extends Component {
                     flex: 1,
                     alignItems: "center",
                     borderWidth: 3,
-                    borderColor: "#e6e6e6",
+                    borderColor: "#e6e6e6"
                   }}
                 >
                   <TouchableOpacity
@@ -552,24 +553,24 @@ class Vdo extends Component {
         file_id: file_id,
         user_id: user_id,
         gen_id: gen_id,
-        slide: index + 1,
+        slide: index + 1
       };
       httpClient
         .post("/Learn/LearnSavePdf", params)
         .then(async (response) => {
           const result = await response.data;
- 
+
           if (result.timeNext != null || result.timeNext != undefined) {
             this.setState({
               slider1ActiveSlide: index + 1,
-              scrollEnabled: false,
+              scrollEnabled: false
             });
             this.setState({ timeStr: "00:00:00" });
             this.time_down(parseInt(result.timeNext));
           } else {
             this.setState({
               slider1ActiveSlide: index + 1,
-              scrollEnabled: true,
+              scrollEnabled: true
             });
             this.time_down(null);
           }
@@ -636,7 +637,7 @@ class Vdo extends Component {
           alignItems: "center",
           backgroundColor: "#e6e6e6",
           borderWidth: 1,
-          borderColor: "#d9d9d9",
+          borderColor: "#d9d9d9"
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -688,7 +689,7 @@ class Vdo extends Component {
         file_id: val.file_id,
         lesson_id: val.lesson_id,
         gen_id: val.gen_id,
-        status: val.status,
+        status: val.status
       };
       arrlist.push(value);
     }
@@ -807,7 +808,7 @@ class Vdo extends Component {
           alignItems: "center",
           backgroundColor: "#e6e6e6",
           borderWidth: 1,
-          borderColor: "#d9d9d9",
+          borderColor: "#d9d9d9"
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -868,7 +869,7 @@ class Vdo extends Component {
           user_id: user_id,
           gen_id: gen_id,
           status: "success",
-          type: type,
+          type: type
         };
         // console.log(params);
         httpClient
@@ -891,7 +892,7 @@ class Vdo extends Component {
           file_id: file_id,
           user_id: user_id,
           gen_id: gen_id,
-          type: type,
+          type: type
         };
         // console.log(params);
         httpClient
@@ -916,7 +917,7 @@ class Vdo extends Component {
           alignItems: "center",
           backgroundColor: "#e6e6e6",
           borderWidth: 1,
-          borderColor: "#d9d9d9",
+          borderColor: "#d9d9d9"
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -961,7 +962,7 @@ class Vdo extends Component {
               playbackRate={1}
               playerParams={{
                 cc_lang_pref: "us",
-                showClosedCaptions: true,
+                showClosedCaptions: true
               }}
             />
           </View>
@@ -981,7 +982,7 @@ class Vdo extends Component {
           alignItems: "center",
           backgroundColor: "#e6e6e6",
           borderWidth: 1,
-          borderColor: "#d9d9d9",
+          borderColor: "#d9d9d9"
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -1015,14 +1016,14 @@ class Vdo extends Component {
           borderWidth: 1,
           borderRadius: 40,
           backgroundColor: "black",
-          alignItems: "center",
+          alignItems: "center"
         }}
       >
         <View
           style={{
             height: 300,
             width: "100%",
-            backgroundColor: "white",
+            backgroundColor: "white"
           }}
         >
           <WebView allowsFullscreenVideo={true} source={{ uri: item.scorm }} />
@@ -1042,7 +1043,7 @@ class Vdo extends Component {
           alignItems: "center",
           backgroundColor: "#e6e6e6",
           borderWidth: 1,
-          borderColor: "#d9d9d9",
+          borderColor: "#d9d9d9"
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -1076,14 +1077,14 @@ class Vdo extends Component {
           borderWidth: 1,
           borderRadius: 40,
           backgroundColor: "black",
-          alignItems: "center",
+          alignItems: "center"
         }}
       >
         <View
           style={{
             height: 550,
             width: "100%",
-            backgroundColor: "white",
+            backgroundColor: "white"
           }}
         >
           <WebView allowsFullscreenVideo={true} source={{ uri: item.ebook }} />
@@ -1104,7 +1105,7 @@ class Vdo extends Component {
       note_time,
       note_gen_id,
       user_id,
-      course_id,
+      course_id
     } = this.state;
 
     if (note_text != "") {
@@ -1116,7 +1117,7 @@ class Vdo extends Component {
         note_gen_id: note_gen_id,
         user_id: user_id,
         course_id: course_id,
-        note_id: "",
+        note_id: ""
       };
       httpClient
         .post("/Learn/LearnNoteSave", params)
@@ -1144,7 +1145,7 @@ class Vdo extends Component {
     httpClient
       .post("/Learn/LearnNoteSave", {
         note_id: this.state.note_id,
-        note_text: this.state.note_text,
+        note_text: this.state.note_text
       })
       .then((response) => {
         const result = response.data;
@@ -1168,7 +1169,7 @@ class Vdo extends Component {
         {
           text: this.state.lang == "EN" ? "Cancel" : "ยกเลิก",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
+          style: "cancel"
         },
         {
           text: this.state.lang == "EN" ? "Ok" : "ตกลง",
@@ -1176,9 +1177,9 @@ class Vdo extends Component {
             this.setState({
               modalVisible: true,
               note_text: data.note_text,
-              note_id: data.note_id,
-            }),
-        },
+              note_id: data.note_id
+            })
+        }
       ],
       { cancelable: false }
     );
@@ -1194,7 +1195,7 @@ class Vdo extends Component {
         {
           text: this.state.lang == "EN" ? "Cancel" : "ยกเลิก",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
+          style: "cancel"
         },
         {
           text: this.state.lang == "EN" ? "Ok" : "ตกลง",
@@ -1209,8 +1210,8 @@ class Vdo extends Component {
               })
               .catch((error) => {
                 console.log(error);
-              }),
-        },
+              })
+        }
       ],
       { cancelable: false }
     );
@@ -1239,7 +1240,7 @@ class Vdo extends Component {
           flexDirection: "row",
           padding: 10,
           alignItems: "center",
-          backgroundColor: "#cccccc",
+          backgroundColor: "#cccccc"
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -1273,7 +1274,7 @@ class Vdo extends Component {
             marginTop: 20,
             marginLeft: 100,
             marginRight: 100,
-            borderRadius: 10,
+            borderRadius: 10
           }}
         >
           <Text
@@ -1281,7 +1282,7 @@ class Vdo extends Component {
               padding: 10,
               fontSize: 14,
               fontWeight: "bold",
-              color: "#fff",
+              color: "#fff"
             }}
           >
             {this.state.lang == "EN" ? "Save" : "จดบันทึก"}
@@ -1293,7 +1294,7 @@ class Vdo extends Component {
               style={{
                 flexDirection: "row",
                 marginTop: 10,
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
               <View style={{ flex: 0.5 }}>
@@ -1317,7 +1318,7 @@ class Vdo extends Component {
                     style={{
                       flexDirection: "row",
                       marginTop: 10,
-                      alignItems: "center",
+                      alignItems: "center"
                     }}
                   >
                     <View style={{ flex: 0.3 }}>
@@ -1360,7 +1361,7 @@ class Vdo extends Component {
                       backgroundColor: "#e6e6e6",
                       height: 1,
                       width: "100%",
-                      marginTop: 10,
+                      marginTop: 10
                     }}
                   />
                 </View>
@@ -1376,10 +1377,19 @@ class Vdo extends Component {
   /////////////////////////////////End all function note////////////////////////////////////
 
   render() {
+    activateKeepAwake();
+
     const { dataArray } = this.state;
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
         <ScrollView>
+          <AnimatedLoader
+            visible={this.state.loading}
+            overlayColor="rgba(255,255,255,0.75)"
+            source={require("../../asset/loading/loading2.json")}
+            animationStyle={styles.lottie}
+            speed={1}
+          ></AnimatedLoader>
           <View>
             {dataArray != null ? (
               dataArray.type == "vdo" ? (
@@ -1465,7 +1475,7 @@ class Vdo extends Component {
                     backgroundColor: "#2196F3",
                     marginTop: 20,
                     marginLeft: 100,
-                    marginRight: 100,
+                    marginRight: 100
                   }}
                   onPress={this.submitEditNote.bind(this)}
                 >
@@ -1500,7 +1510,7 @@ class Vdo extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   subContainer: {
     flex: 1,
@@ -1508,33 +1518,33 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 40,
     backgroundColor: "black",
-    alignItems: "center",
+    alignItems: "center"
   },
   text: {
     fontSize: 18,
     color: "white",
-    margin: 40,
+    margin: 40
   },
   playerContainer: {
     height: 300,
     width: "100%",
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   warningText: {
     color: "red",
     fontWeight: "700",
     position: "absolute",
     alignSelf: "center",
-    top: 20,
+    top: 20
   },
   player: {
-    flex: 1,
+    flex: 1
   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginTop: 22
   },
   modalView: {
     // marginLeft: Platform.OS == 'ios' ? Platform.isPad ? 100 : null : DeviceInfo.isTablet() ? 100 : null,
@@ -1546,44 +1556,44 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 5
   },
   openButton: {
     backgroundColor: "#F194FF",
     borderRadius: 20,
     padding: 10,
-    elevation: 2,
+    elevation: 2
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "center"
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
+    textAlign: "center"
   },
   child: {
     height: 300,
     width: "100%",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   mediaPlayer: {
     position: "absolute",
     top: 0,
     left: 0,
     bottom: 0,
-    right: 0,
+    right: 0
   },
   videoBenner: {
     width: "100%",
     // height: 173,
-    height: HEIGHT / 3,
-  },
+    height: HEIGHT / 3
+  }
 });
 
 export default function (props) {

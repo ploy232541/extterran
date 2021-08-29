@@ -28,6 +28,7 @@ import Icon1 from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
+import AnimatedLoader from "react-native-animated-loader";
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
 const type = [
@@ -144,8 +145,8 @@ export default class ReportScreen extends Component {
   }
   renderHeader = () => {
     return (
-      <ScrollView style={{borderRadius: 10}}>
-        <View >
+      <ScrollView style={{ borderRadius: 10 }}>
+        <View>
           <DateTimePickerModal
             locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
             isVisible={this.state.isDatePickerVisible}
@@ -155,7 +156,7 @@ export default class ReportScreen extends Component {
           />
           <Header searchBar rounded style={{ backgroundColor: "#d9e6d9" }}>
             <Item
-              style={{ backgroundColor: "#fff", margin: 5 }}
+              style={{  margin: 5 }}
               onPress={() => this.showDatePicker("start")}
             >
               <Icon name="calendar" />
@@ -164,7 +165,7 @@ export default class ReportScreen extends Component {
               </View>
             </Item>
             <Item
-              style={{ backgroundColor: "#fff", margin: 5 }}
+              style={{margin: 5 }}
               onPress={() => this.showDatePicker()}
             >
               <Icon name="calendar" />
@@ -174,8 +175,8 @@ export default class ReportScreen extends Component {
               </View>
             </Item>
           </Header>
-          <Header>
-            <Item style={{ backgroundColor: "#fff", margin: 7 }}>
+          <Header   rounded style={{ backgroundColor: "#d9e6d9" }}>
+            <Item style={{ margin: 7 }}>
               <Pressable
                 style={[stylesdialog.button, stylesdialog.buttonOpen]}
                 onPress={() => {
@@ -272,24 +273,28 @@ export default class ReportScreen extends Component {
     this.setState({ statusList: newData });
   };
   render() {
-    if (this.state.loading) {
-      return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-          <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-          >
-            <ActivityIndicator />
-          </View>
-        </SafeAreaView>
-      );
-    }
+   
     return (
       <ScrollView style={styles.root}>
+         <AnimatedLoader
+          style={{ width: 270 }}
+          visible={this.state.loading}
+          overlayColor="rgba(255,255,255,0.75)"
+          source={require("../../asset/loading/loading2.json")}
+          animationStyle={styles.lottie}
+          speed={1}
+        >
+        </AnimatedLoader>
         <View style={{ marginBottom: 30 }}>
           <Text style={styles.headline}>รายการ Report</Text>
 
           <View style={styles.container}>
-            <List style={{ borderWidth: 1, borderColor: "#e6e6e6" },{borderRadius: 10}}>
+            <List
+              style={
+                ({ borderWidth: 1, borderColor: "#e6e6e6" },
+                { borderRadius: 10 })
+              }
+            >
               <FlatList
                 data={this.state.datalist}
                 renderItem={this._reanderItem}

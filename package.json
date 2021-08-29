@@ -48,6 +48,7 @@
     "react-dom": "16.13.1",
     "react-htmltext": "^0.40.2",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
+    "react-native-animated-loader": "^0.0.9",
     "react-native-animated-pagination-dot": "^0.1.8",
     "react-native-awesome-alerts": "^1.4.2",
     "react-native-banner-carousel": "^1.0.3",
