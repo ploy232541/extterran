@@ -39,6 +39,7 @@ import MediaControls, { PLAYER_STATES } from "react-native-media-controls";
 import SliderEntry from "./SliderEntry";
 import { sliderWidth, itemWidth } from "../../styles/SliderEntry.style";
 import AnimatedLoader from "react-native-animated-loader";
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const { width, height } = Dimensions.get("window");
 const BannerWidth = Dimensions.get("window").width;
@@ -52,6 +53,16 @@ var current_time = 0;
 
 var SLIDER_1_FIRST_ITEM = 0;
 
+const onFullscreenUpdate = async ({fullscreenUpdate}) => {
+  switch (fullscreenUpdate) {
+      case Video.FULLSCREEN_UPDATE_PLAYER_DID_PRESENT:
+          await ScreenOrientation.unlockAsync() // only on Android required
+          break;
+      case Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS:
+          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT) // only on Android required
+          break;
+  }
+}
 class Vdo extends Component {
   player;
   videoPlayer;
@@ -410,6 +421,7 @@ class Vdo extends Component {
               source={{ uri: item.vdo }}
               style={styles.mediaPlayer}
               volume={1}
+              onFullscreenUpdate={onFullscreenUpdate}
               onPlaybackStatusUpdate={(e) =>
                 this.handlePlaybackStatusUpdate(e, status, item)
               }
