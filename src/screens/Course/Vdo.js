@@ -39,7 +39,7 @@ import MediaControls, { PLAYER_STATES } from "react-native-media-controls";
 import SliderEntry from "./SliderEntry";
 import { sliderWidth, itemWidth } from "../../styles/SliderEntry.style";
 import AnimatedLoader from "react-native-animated-loader";
-import * as ScreenOrientation from 'expo-screen-orientation';
+import * as ScreenOrientation from "expo-screen-orientation";
 
 const { width, height } = Dimensions.get("window");
 const BannerWidth = Dimensions.get("window").width;
@@ -51,18 +51,21 @@ var lastPlayPosition = 0;
 var fristTime = false;
 var current_time = 0;
 
+
 var SLIDER_1_FIRST_ITEM = 0;
 
-const onFullscreenUpdate = async ({fullscreenUpdate}) => {
+const onFullscreenUpdate = async ({ fullscreenUpdate }) => {
   switch (fullscreenUpdate) {
-      case Video.FULLSCREEN_UPDATE_PLAYER_DID_PRESENT:
-          await ScreenOrientation.unlockAsync() // only on Android required
-          break;
-      case Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS:
-          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT) // only on Android required
-          break;
+    case Video.FULLSCREEN_UPDATE_PLAYER_DID_PRESENT:
+      await ScreenOrientation.unlockAsync(); // only on Android required
+      break;
+    case Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS:
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT
+      ); // only on Android required
+      break;
   }
-}
+};
 class Vdo extends Component {
   player;
   videoPlayer;
@@ -74,7 +77,7 @@ class Vdo extends Component {
       lang: "",
       dataArray: null,
       status: null,
-
+      timeshow:0,
       //state note
       dataArrayNote: [],
       note_lesson_id: "",
@@ -82,7 +85,7 @@ class Vdo extends Component {
       note_text: "",
       note_time: "",
       note_gen_id: "",
-
+      stops: false,
       modalVisible: false,
 
       //video Pdf Silde
@@ -119,12 +122,39 @@ class Vdo extends Component {
   }
 
   async componentDidMount() {
+    if (this.state.loading) {
+      setTimeout(() => {
+        if (this.state.loading) {
+          Alert.alert(
+            this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+            this.state.lang === "EN"
+              ? "Confirm"
+              : "กรุณาเข้าสู่บทเรียนอีกครั้ง",
+            [
+              {
+                text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+                onPress: () => this.props.navigation.goBack(),
+                style: "cancel"
+              },
+              ,
+              {
+                text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                onPress: () => this.props.navigation.goBack(),
+                style: "cancel"
+              }
+            ]
+          );
+        }
+      }, 10000);
+    }
     if (fristTime != false) {
       fristTime = false;
     }
+    if (this.state.stops) {
+      this.player.pauseAsync();
+    }
     try {
       const lesson_id = this.props.route.params.lesson_id;
-      // console.log(this.props.route.params)
 
       const file_id = this.props.route.params.file_id;
       this.setState({ note_lesson_id: lesson_id, note_file_id: file_id });
@@ -148,13 +178,15 @@ class Vdo extends Component {
             maxPlayPosition =
               result.last > 0 && result.last != "s" ? result.last * 1000 : 0;
             lastPlayPosition = result.last != "s" ? result.last : "s";
-
+         let   timeshow =
+              result.last != "s" || result.last != "l" ? result.last - 0.1 : 0;
             console.log("ค่ามากสุด", maxPlayPosition);
             this.setState({
               dataArray: result,
               status: result.last,
               currentSlide: result.image
             });
+            this.setState({timeshow})
           }
         })
         .catch((error) => {
@@ -174,7 +206,6 @@ class Vdo extends Component {
       )
       .then((response) => {
         const result = response.data;
-        //console.log(result)
         if (result.length > 0) {
           this.setState({ dataArrayNote: result });
         } else {
@@ -196,56 +227,6 @@ class Vdo extends Component {
   onSeek = (seek) => {
     this.player.playFromPositionAsync(Number(seek));
   };
-
-  onPaused = (playerState) => {
-    //Handler for Video Pause
-    this.setState({
-      paused: !this.state.paused,
-      playerState
-    });
-  };
-
-  onReplay = () => {
-    //Handler for Replay
-    this.setState({ playerState: PLAYER_STATES.PLAYING });
-    this.videoPlayer.seek(0);
-  };
-
-  onProgress = (data) => {
-    const { isLoading, playerState } = this.state;
-    // Video Player will continue progress even if the video already ended
-    if (!isLoading && playerState !== PLAYER_STATES.ENDED) {
-      this.setState({ currentTime: data.currentTime });
-    }
-  };
-
-  onLoad = (data) =>
-    this.setState({ duration: data.duration, isLoading: false });
-
-  onLoadStart = (data) => this.setState({ isLoading: true });
-
-  onEnd = () => this.setState({ playerState: PLAYER_STATES.ENDED });
-
-  onError = () => alert("Oh! ", error);
-
-  exitFullScreen = () => {
-    alert("Exit full screen");
-  };
-
-  enterFullScreen = () => {};
-
-  onFullScreen = () => {
-    if (this.state.screenType == "content")
-      this.setState({ screenType: "cover" });
-    else this.setState({ screenType: "content" });
-  };
-  renderToolbar = () => (
-    <View>
-      <Text> toolbar </Text>
-    </View>
-  );
-  onSeeking = (currentTime) => this.setState({ currentTime });
-
   /////////////////////////////////Start all function learm Video////////////////////////////////////
   _renderHeaderVideo(item, expanded) {
     return (
@@ -288,22 +269,24 @@ class Vdo extends Component {
   }
 
   handlePlaybackStatusUpdate = (e, status, item) => {
-    if (fristTime == false && e.isPlaying == false && lastPlayPosition != "s") {
-      console.log("ครั้งแรก");
-      this.player.playAsync();
-      fristTime = true;
+    if (this.state.stops) {
+      this.player.pauseAsync();
+    }
 
+    if (!fristTime) {
+      fristTime = true;
       this.player.playFromPositionAsync(maxPlayPosition);
+      this.player.playAsync();
     }
     this.setState({ statuss: e });
     this.setState({ note_gen_id: item.startcourse_id });
 
     if (
       e.isPlaying == true &&
-      e.positionMillis > maxPlayPosition &&
+      e.positionMillis > parseInt(maxPlayPosition) &&
       lastPlayPosition != "s"
     ) {
-      if (e.positionMillis - maxPlayPosition < 2000) {
+      if (e.positionMillis - parseInt(maxPlayPosition) < 2000) {
         maxPlayPosition = e.positionMillis;
       }
     }
@@ -311,20 +294,64 @@ class Vdo extends Component {
     //เช็คว่ามีการเล่นไหม
     if (e.isPlaying == false && lastPlayPosition != "s") {
       //ถ้าเวลาปัจจุบันมากกว่าค่าสูงสุดที่บันทึกไว้
-      if (e.positionMillis > maxPlayPosition && e.isBuffering) {
-        console.log("ค่าปัจจุบันมากกว่าค่า", maxPlayPosition);
-        setTimeout(() => {
-          this.player.playFromPositionAsync(maxPlayPosition);
-          if (e.isPlaying == false) {
-            this.player.playAsync();
-          }
-        }, 1000);
+      if (e.positionMillis > parseInt(maxPlayPosition) && e.isBuffering) {
+        console.log("ค่าปัจจุบันมากกว่าค่า", parseInt(maxPlayPosition));
+
+        this.player.playFromPositionAsync(parseInt(maxPlayPosition));
+        if (e.isPlaying == false) {
+          this.player.playAsync();
+        }
       }
     }
-    if (!maxPlayPosition > 0 && lastPlayPosition != "s") {
-      console.log("ครั้งแรก");
-      let { note_file_id, note_lesson_id, user_id, course_id, note_gen_id } =
-        this.state;
+
+    //บันทึกวีดีโอทุก 6 วิ
+    if (parseInt(maxPlayPosition) > 0 && lastPlayPosition != "s") {
+      if (parseInt(maxPlayPosition) > parseInt(lastPlayPosition)) {
+        if (Math.floor(e.positionMillis) % 6000 == 0) {
+          console.log(e.positionMillis / 1000, "อิอิ");
+          try {
+            if (this.state.note_file_id) {
+              let {
+                note_file_id,
+                note_lesson_id,
+                user_id,
+                course_id,
+                note_gen_id
+              } = this.state;
+              let params = {
+                lesson_id: note_lesson_id,
+                file_id: note_file_id,
+                user_id: user_id,
+                gen_id: note_gen_id,
+                course_id: course_id,
+                current_time: e.positionMillis / 1000,
+                type: item.type
+              };
+              httpClient
+                .post("/Learn/LearnSaveVdo/UpdateTime", params)
+                .then((res) => {
+                  console.log("บันทึกวีดีโอ ลงในฐานข้อมูลได้");
+                  this.setState({timeshow : e.positionMillis / 1000})
+              
+                })
+
+                .catch((error) => {
+                  console.log(error);
+                });
+              }
+          } catch (error) {}
+        }
+      }
+    }
+    if(!this.state.note_file_id){
+      console.log("ครั้งแรกนะ");
+      let {
+        note_file_id,
+        note_lesson_id,
+        user_id,
+        course_id,
+        note_gen_id
+      } = this.state;
       let params = {
         lesson_id: note_lesson_id,
         file_id: note_file_id,
@@ -336,43 +363,11 @@ class Vdo extends Component {
       };
 
       httpClient
-        .post("/Learn/LearnSaveVdo/UpdateTime", params)
-
+        .post("/Learn/LearnSaveVdo/UpdateTimeFirst", params)
         .catch((error) => {
           console.log(error);
         });
-    }
-    //บันทึกวีดีโอทุก 6 วิ
-    if (maxPlayPosition > 0 && lastPlayPosition != "s") {
-      // if (Math.floor(e.positionMillis) % 6000 == 0)
-      if (
-        e.positionMillis - lastPlayPosition * 1000 > 6000 &&
-        e.positionMillis - maxPlayPosition < 2000
-      ) {
-        lastPlayPosition = Math.floor(e.positionMillis) * 0.001;
-        current_time = Math.floor(e.positionMillis) * 0.001;
-        console.log("บันทึกวีดีโอ ลงในฐานข้อมูลได้");
-        let { note_file_id, note_lesson_id, user_id, course_id, note_gen_id } =
-          this.state;
-        let params = {
-          lesson_id: note_lesson_id,
-          file_id: note_file_id,
-          user_id: user_id,
-          gen_id: note_gen_id,
-          course_id: course_id,
-          current_time: current_time,
-          type: item.type
-        };
-
-        httpClient
-          .post("/Learn/LearnSaveVdo/UpdateTime", params)
-          .then((res) => this.componentDidMount())
-
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-      // }
+        this.componentDidMount()
     }
     //บันทึกวีดีโอจบ
     if (
@@ -712,19 +707,6 @@ class Vdo extends Component {
     }
     return (
       <View>
-        {/* <FlatListSlider
-              data={arrlist}
-              // timer={20000}
-              width={Platform.OS == 'ios' ? 380 : 330}
-              height={350}
-              loop={true}
-              autoscroll={false}
-              onPress={item => console.log(item)}
-              currentIndexCallback={index => this.saveLearnPdf(index, value)}
-              contentContainerStyle={{paddingHorizontal: 16}}
-              indicatorContainerStyle={{position:'absolute', bottom: 20}}
-              animation
-            /> */}
         {value.status != "s" ? (
           <View>
             <Carousel
@@ -1109,6 +1091,7 @@ class Vdo extends Component {
   /////////////////////////////////Start all function note////////////////////////////////////
   saveNote() {
     console.log("คลิกปุ่มจดบันทึก");
+    this.setState({ stops: false });
     this.onPlay();
     let {
       note_lesson_id,
@@ -1231,11 +1214,14 @@ class Vdo extends Component {
 
   onFocus() {
     console.log("ช่องกรอกข้อความ");
+    this.setState({ stops: true });
     this.onPause();
   }
   onPause() {
-    this.player.pauseAsync();
     this.setState({ note_time: this.state.statuss.positionMillis });
+    if (this.state.stops) {
+      this.player.pauseAsync();
+    }
   }
   onPlay() {
     this.player.playAsync();
@@ -1247,19 +1233,46 @@ class Vdo extends Component {
 
   _renderHeaderNote = (item, expanded) => {
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          padding: 10,
-          alignItems: "center",
-          backgroundColor: "#cccccc"
-        }}
-      >
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Icon4 name="note" size={20} style={{ color: "#000" }} />
-          <Text style={{ flex: 1, marginLeft: 5, color: "#000", fontSize: 16 }}>
-            {this.state.lang == "EN" ? "Note" : "จดบันทึก"}
-          </Text>
+      <View>
+        <View
+          style={{
+            flexDirection: "row",
+            padding: 10,
+            alignItems: "center",
+            backgroundColor: "#cccccc"
+          }}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Icon4 name="note" size={20} style={{ color: "#000" }} />
+            <Text
+              style={{ flex: 1, marginRight: 5, color: "#000", fontSize: 16 }}
+            >
+              {this.state.lang == "EN" ? "Note" : "จดบันทึก"}
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            padding: 10,
+            alignItems: "end",
+            backgroundColor: "#fff"
+          }}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text
+              style={{ flex: 1, marginLeft: 5, color: "green", fontSize: 14 }}
+            >
+              {this.state.lang == "EN" ? "lasttime:" : "เวลาล่าสุดที่บันทึก "}
+              {this.state.timeshow
+                ? Math.floor((parseInt(this.state.timeshow) * 0.001) / 3600) +
+                  ":" +
+                  Math.floor((parseInt(this.state.timeshow) % 3600) / 60) +
+                  ":" +
+                  Math.floor((parseInt(this.state.timeshow) % 3600) % 60)
+                : ": N/A"}
+            </Text>
+          </View>
         </View>
       </View>
     );
@@ -1390,7 +1403,6 @@ class Vdo extends Component {
 
   render() {
     activateKeepAwake();
-
     const { dataArray } = this.state;
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -1559,8 +1571,6 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalView: {
-    // marginLeft: Platform.OS == 'ios' ? Platform.isPad ? 100 : null : DeviceInfo.isTablet() ? 100 : null,
-    // marginRight: Platform.OS == 'ios' ? Platform.isPad ? 100 : null : DeviceInfo.isTablet() ? 100 : null,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
@@ -1605,6 +1615,10 @@ const styles = StyleSheet.create({
     width: "100%",
     // height: 173,
     height: HEIGHT / 3
+  },
+  lottie: {
+    width: 100,
+    height: 100
   }
 });
 
