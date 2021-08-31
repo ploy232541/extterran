@@ -29,8 +29,7 @@ import { Rows, Table } from "react-native-table-component";
 import "intl";
 import "intl/locale-data/jsonp/en";
 import RadioForm from "react-native-simple-radio-button";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import AnimatedLoader from "react-native-animated-loader";
+
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
 
@@ -247,21 +246,22 @@ export default class ReportView extends Component {
   }
 
   render() {
-  
+    if (this.state.loading) {
+      return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <ActivityIndicator />
+          </View>
+        </SafeAreaView>
+      );
+    }
     let question = [...this.state.question];
     console.log(question[0]);
 
     return (
       <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
-        <AnimatedLoader
-          style={{ width: 270 }}
-          visible={this.state.loading}
-          overlayColor="rgba(255,255,255,0.75)"
-          source={require("../../asset/loading/loading2.json")}
-          animationStyle={styles.lottie}
-          speed={1}
-        >
-        </AnimatedLoader>
         <View
           style={{
             flex: 1,
@@ -1668,9 +1668,5 @@ const stylesdialog = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ff0",
     borderRadius: 20
-  },
-  lottie: {
-    width: 100,
-    height: 100
   }
 });
