@@ -8,7 +8,7 @@ import {
   TextInput,
   Dimensions,
   TouchableOpacity,
-  AsyncStorage,
+  AsyncStorage
 } from "react-native";
 import { Divider, Avatar } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -59,9 +59,9 @@ export default class GroundTransportationBookingScreen extends Component {
           dates: "DD/MM/YYYY",
           startTime: "00:00",
           froms: "",
-          tos: "",
-        },
-      },
+          tos: ""
+        }
+      }
     };
   }
 
@@ -98,19 +98,22 @@ export default class GroundTransportationBookingScreen extends Component {
                 zipcode: row.zipcode ? row.zipcode : "-",
                 address: row.address ? row.address : "-",
                 address_moo: row.address_moo ? row.address_moo : "-",
-                address_village: row.address_village ? row.address_village : "-",
+                address_village: row.address_village
+                  ? row.address_village
+                  : "-",
                 address_alley: row.address_alley ? row.address_alley : "-",
                 address_road: row.address_road ? row.address_road : "-",
-                resident:
-                row.address ? row.address : "-" +
-                  " หมู่" +
-                  row.address_moo ? row.address_moo : "-" +
-                  " หมู่บ้าน" +
-                  row.address_village ? row.address_village : "-" +
-                  " ซอย" +
-                  row.address_alley ? row.address_alley : "-" +
-                  " ถนน" +
-                  row.address_road ? row.address_road : "-",
+                resident: row.address
+                  ? row.address
+                  : "-" + " หมู่" + row.address_moo
+                  ? row.address_moo
+                  : "-" + " หมู่บ้าน" + row.address_village
+                  ? row.address_village
+                  : "-" + " ซอย" + row.address_alley
+                  ? row.address_alley
+                  : "-" + " ถนน" + row.address_road
+                  ? row.address_road
+                  : "-"
               });
             }
           }
@@ -243,13 +246,13 @@ export default class GroundTransportationBookingScreen extends Component {
     let date1 = new Date(startcul);
     let date2 = new Date(endcul);
     this.setState({
-      total: "0",
+      total: "0"
     });
     if (date2 >= date1) {
       let diffInMs = Math.abs(date2 - date1);
       let totals = diffInMs / (1000 * 60 * 60 * 24) + 1;
       this.setState({
-        total: totals.toString(),
+        total: totals.toString()
       });
     }
   };
@@ -257,7 +260,7 @@ export default class GroundTransportationBookingScreen extends Component {
     let itemCopy = [...courseItem];
     itemCopy.splice(index, 1);
     this.setState({
-      ground: itemCopy,
+      ground: itemCopy
     });
   }
   //บันทึกข้อมูล
@@ -274,7 +277,7 @@ export default class GroundTransportationBookingScreen extends Component {
         zipcode,
         resident,
         province,
-        ground,
+        ground
       } = this.state;
       if (startDate == "DD/MM/YYYY") {
         this.state.lang === "EN"
@@ -373,7 +376,7 @@ export default class GroundTransportationBookingScreen extends Component {
             tos,
             startDate,
             startTime,
-            ground,
+            ground
           };
           Alert.alert(
             this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
@@ -382,7 +385,7 @@ export default class GroundTransportationBookingScreen extends Component {
               {
                 text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
                 onPress: () => console.log("Cancel Pressed"),
-                style: "cancel",
+                style: "cancel"
               },
               ,
               {
@@ -402,8 +405,8 @@ export default class GroundTransportationBookingScreen extends Component {
                           [
                             {
                               text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                              onPress: () => this.reset(),
-                            },
+                              onPress: () => this.reset()
+                            }
                           ],
                           { cancelable: false }
                         );
@@ -418,8 +421,8 @@ export default class GroundTransportationBookingScreen extends Component {
                     .catch((error) => {
                       console.log(error);
                     });
-                },
-              },
+                }
+              }
             ]
           );
         }
@@ -434,7 +437,7 @@ export default class GroundTransportationBookingScreen extends Component {
       tos: "",
       startDate: "DD/MM/YYYY",
       startTime: "00:00",
-      ground: [],
+      ground: []
     });
   };
 
@@ -450,7 +453,7 @@ export default class GroundTransportationBookingScreen extends Component {
             borderColor: "white",
             backgroundColor: "white",
             marginHorizontal: 15,
-            marginBottom: 20,
+            marginBottom: 20
           }}
         >
           {/* Start ground booking form section 1 */}
@@ -462,19 +465,19 @@ export default class GroundTransportationBookingScreen extends Component {
                 fontWeight: "bold",
                 color: "#4393de",
                 marginTop: 18,
-                alignSelf: "center",
+                alignSelf: "center"
               }}
             >
               {this.state.lang === "EN"
                 ? "EXTERRAN (THAILAND) LTD."
-                : "บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด"}
+                : "บริษัทเอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
             </Text>
             <Text
               style={{
                 alignSelf: "center",
                 fontSize: 16,
                 marginTop: 12,
-                marginBottom: 15,
+                marginBottom: 15
               }}
             >
               {this.state.lang === "EN" ? "Ground Transportation" : "รถยนต์"}
@@ -583,7 +586,7 @@ export default class GroundTransportationBookingScreen extends Component {
                 marginBottom: 10,
                 flexDirection: "row",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
               <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -736,14 +739,14 @@ export default class GroundTransportationBookingScreen extends Component {
                         style={{
                           marginLeft: 10,
                           marginRight: 5,
-                          color: "white",
+                          color: "white"
                         }}
                       />
                       <Text
                         style={{
                           color: "white",
                           marginRight: 10,
-                          fontSize: 14,
+                          fontSize: 14
                         }}
                       >
                         {this.state.lang === "EN" ? "Delete" : "ลบ"}
@@ -758,7 +761,7 @@ export default class GroundTransportationBookingScreen extends Component {
 
           {/* โชว์ DateTimePickerModal*/}
           <DateTimePickerModal
-          locale="th"
+            locale="th"
             isVisible={this.state.isDatePickerVisible}
             mode="date"
             onConfirm={this.handleConfirm}
@@ -766,7 +769,7 @@ export default class GroundTransportationBookingScreen extends Component {
           />
 
           <DateTimePickerModal
-          locale="th"
+            locale="th"
             isVisible={this.state.isTimePickerVisible}
             mode="time"
             onConfirm={this.handleTimePicker}
@@ -779,7 +782,7 @@ export default class GroundTransportationBookingScreen extends Component {
               style={styles.btnAddGroundStyle}
               onPress={() =>
                 this.setState({
-                  ground: [...this.state.ground, this.state.groundItem],
+                  ground: [...this.state.ground, this.state.groundItem]
                 })
               }
             >
@@ -799,7 +802,7 @@ export default class GroundTransportationBookingScreen extends Component {
               flexDirection: "row",
               justifyContent: "space-around",
               paddingVertical: 20,
-              marginBottom: 12,
+              marginBottom: 12
             }}
           >
             <View style={styles.buttonContainer}>
@@ -829,15 +832,15 @@ export default class GroundTransportationBookingScreen extends Component {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   containerSec1: {
     marginHorizontal: 8,
-    marginVertical: 18,
+    marginVertical: 18
   },
   textHeader: {
     alignItems: "center",
-    padding: 12,
+    padding: 12
   },
   inputStyle: {
     backgroundColor: "#DCDCDC",
@@ -845,7 +848,7 @@ const styles = StyleSheet.create({
     height: HEIGHT / 20,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   inputStyle1: {
     borderRadius: 15,
@@ -854,10 +857,10 @@ const styles = StyleSheet.create({
     height: HEIGHT / 20,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   textInput: {
-    color: "grey",
+    color: "grey"
   },
   inputLightStyle: {
     borderWidth: 1,
@@ -868,56 +871,56 @@ const styles = StyleSheet.create({
     marginTop: 10,
     // paddingLeft: 10,
     marginBottom: 10,
-    borderColor: "#007aff",
+    borderColor: "#007aff"
   },
   arrowDownStyle: {
-    backgroundColor: "#F4F4F4",
+    backgroundColor: "#F4F4F4"
   },
   containerSec2: {
     marginHorizontal: 10,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: "#398DDD",
+    borderColor: "#398DDD"
   },
   contentInSec2: {
-    padding: 12,
+    padding: 12
   },
   buttonContainer: {
     alignSelf: "center",
     justifyContent: "center",
     paddingTop: 20,
     width: "30%",
-    borderRadius: 4,
+    borderRadius: 4
   },
   buttonContainer1: {
-    marginRight: 20,
+    marginRight: 20
   },
   btnAddGroundStyle: {
     justifyContent: "center",
     alignSelf: "center",
     backgroundColor: "#005ce6",
-    borderRadius: 10,
+    borderRadius: 10
   },
   btnDelGroundStyle: {
     backgroundColor: "#b30000",
     alignSelf: "flex-end",
     marginTop: 10,
     marginBottom: 20,
-    borderRadius: 10,
+    borderRadius: 10
   },
   btnConfirmStyle: {
     backgroundColor: "#449D44",
     justifyContent: "center",
     alignSelf: "center",
     borderRadius: 10,
-    paddingHorizontal: 32,
+    paddingHorizontal: 32
   },
   btnCancelStyle: {
     backgroundColor: "#5A6268",
     justifyContent: "center",
     alignSelf: "center",
     borderRadius: 10,
-    paddingHorizontal: 32,
+    paddingHorizontal: 32
   },
   inputDate: {
     borderWidth: 1,
@@ -928,6 +931,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flex: 1,
     justifyContent: "center",
-    borderColor: "#007aff",
-  },
+    borderColor: "#007aff"
+  }
 });

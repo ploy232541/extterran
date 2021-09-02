@@ -10,7 +10,7 @@ import {
   Modal,
   SafeAreaView,
   Image,
-  Alert,
+  Alert
 } from "react-native";
 import React, { Component, createRef } from "react";
 import { Avatar } from "react-native-paper";
@@ -27,8 +27,8 @@ import { Rows, Table } from "react-native-table-component";
 import FormData from "form-data";
 import { number } from "prop-types";
 import NumberFormat from "react-number-format";
-import 'intl';
-import 'intl/locale-data/jsonp/en';
+import "intl";
+import "intl/locale-data/jsonp/en";
 
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
@@ -89,16 +89,16 @@ export default class TrainingFormScreen extends Component {
       profile: [],
       culMonths: "",
       courseComfrom: [],
-      select_all:[],
+      select_all: [],
       tableData: [
         [
           "Training / Seminar / Education Costs (THB) \nค่าใช้จ่ายการฝึกอบรม/การศึกษา (บาท)",
-          "Period of Bond Contract (Months) \nระยะเวลาผูกพันตามสัญญา (เดือน)",
+          "Period of Bond Contract (Months) \nระยะเวลาผูกพันตามสัญญา (เดือน)"
         ],
         ["35,000 - 50,000", "4"],
         ["50,001 - 100,000", "8"],
         ["100,001 - 150,000", "12"],
-        ["150,001 Up ขึ้นไป", "16"],
+        ["150,001 Up ขึ้นไป", "16"]
       ],
       isSelected: true,
       modalVisible: false,
@@ -113,7 +113,7 @@ export default class TrainingFormScreen extends Component {
       dateTimeNow: "",
       signPurpose: [],
       preRequist: [],
-      expected: [],
+      expected: []
     };
   }
 
@@ -125,7 +125,7 @@ export default class TrainingFormScreen extends Component {
       dateNow: this.formatDate(now()),
       dateTimeNow: this.formatDateTime(now()),
       dateThai: this.formatThai(now()),
-      dateEng: this.formatEng(now()),
+      dateEng: this.formatEng(now())
     });
     const res = await AsyncStorage.getItem("language");
     if (res === "EN") {
@@ -141,7 +141,7 @@ export default class TrainingFormScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              select_2: result,
+              select_2: result
             });
           }
         })
@@ -164,7 +164,7 @@ export default class TrainingFormScreen extends Component {
                 lastname:
                   this.state.lang === "EN" ? row.lastname_en : row.lastname,
                 position: row.position_title,
-                dept: row.dep_title,
+                dept: row.dep_title
               });
             }
           }
@@ -178,7 +178,7 @@ export default class TrainingFormScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              conditionExpenseCourse: result,
+              conditionExpenseCourse: result
             });
           }
         })
@@ -192,11 +192,11 @@ export default class TrainingFormScreen extends Component {
           if (result != null) {
             if (this.state.lang_id == 2) {
               this.setState({
-                condition: result[0].from_condition_th,
+                condition: result[0].from_condition_th
               });
             } else {
               this.setState({
-                condition: result[0].from_condition_en,
+                condition: result[0].from_condition_en
               });
             }
           }
@@ -211,11 +211,11 @@ export default class TrainingFormScreen extends Component {
           if (result != null) {
             if (this.state.lang_id == 2) {
               this.setState({
-                signPurpose: result,
+                signPurpose: result
               });
             } else {
               this.setState({
-                signPurpose: result,
+                signPurpose: result
               });
             }
           }
@@ -301,12 +301,12 @@ export default class TrainingFormScreen extends Component {
         tableData: [
           [
             "Training / Seminar / Education Costs (THB) \nค่าใช้จ่ายการฝึกอบรม/การศึกษา (บาท)",
-            "Period of Bond Contract (Months) \nระยะเวลาผูกพันตามสัญญา (เดือน)",
+            "Period of Bond Contract (Months) \nระยะเวลาผูกพันตามสัญญา (เดือน)"
           ],
           ["35,000 - 50,000", "4"],
           ["50,001 - 100,000", "8"],
           ["100,001 - 150,000", "12"],
-          ["150,001 Up ขึ้นไป", "16"],
+          ["150,001 Up ขึ้นไป", "16"]
         ],
         isSelected: true,
         modalVisible: false,
@@ -320,7 +320,7 @@ export default class TrainingFormScreen extends Component {
         pre_requerse: "",
         pre_requerse2: "",
         preRequist: "",
-        expected: "",
+        expected: ""
       });
     }
     this.componentDidMount;
@@ -332,14 +332,14 @@ export default class TrainingFormScreen extends Component {
     let itemCopy = [...courseItem];
     itemCopy.splice(index, 1);
     this.setState({
-      courseItem: itemCopy,
+      courseItem: itemCopy
     });
   }
   deleteCourse2(index, courseItem) {
     let itemCopy = [...courseItem];
     itemCopy.splice(index, 1);
     this.setState({
-      courseItem2: itemCopy,
+      courseItem2: itemCopy
     });
   }
   reset() {
@@ -358,7 +358,7 @@ export default class TrainingFormScreen extends Component {
       pre_requerse: "",
       pre_requerse2: "",
       courseItem: [],
-      courseItem2: [],
+      courseItem2: []
     });
   }
 
@@ -369,7 +369,7 @@ export default class TrainingFormScreen extends Component {
       JPG: "image/JPG",
       pdf: "application/pdf",
       jpeg: "image/jpeg",
-      jpg: "image/jpg",
+      jpg: "image/jpg"
     };
     let extention = name.split(".")[1];
     if (allow[extention] !== undefined) {
@@ -396,7 +396,7 @@ export default class TrainingFormScreen extends Component {
         pre_requerse,
         pre_requerse2,
         courseItem,
-        courseItem2,
+        courseItem2
       } = this.state;
 
       if (course == "") {
@@ -509,7 +509,7 @@ export default class TrainingFormScreen extends Component {
             pre_requerse,
             pre_requerse2,
             courseItem,
-            courseItem2,
+            courseItem2
           };
           Alert.alert(
             this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
@@ -518,7 +518,7 @@ export default class TrainingFormScreen extends Component {
               {
                 text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
                 onPress: () => console.log("Cancel Pressed"),
-                style: "cancel",
+                style: "cancel"
               },
               ,
               {
@@ -533,8 +533,8 @@ export default class TrainingFormScreen extends Component {
                           const data = new FormData();
                           data.append("file", {
                             name: result + "",
-                            type:upload_file.type,
-                            uri: upload_file.uri,
+                            type: upload_file.type,
+                            uri: upload_file.uri
                           });
 
                           httpClient
@@ -559,8 +559,9 @@ export default class TrainingFormScreen extends Component {
                                         this.state.lang === "EN"
                                           ? "OK"
                                           : "ตกลง",
-                                      onPress: () => this.props.navigation.goBack(),
-                                    },
+                                      onPress: () =>
+                                        this.props.navigation.goBack()
+                                    }
                                   ],
                                   { cancelable: false }
                                 );
@@ -584,8 +585,8 @@ export default class TrainingFormScreen extends Component {
                             [
                               {
                                 text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                                onPress: () => this.reset(),
-                              },
+                                onPress: () => this.reset()
+                              }
                             ],
                             { cancelable: false }
                           );
@@ -601,8 +602,8 @@ export default class TrainingFormScreen extends Component {
                     .catch((error) => {
                       console.log(error);
                     });
-                },
-              },
+                }
+              }
             ]
           );
         }
@@ -618,67 +619,67 @@ export default class TrainingFormScreen extends Component {
       expense: null,
       course: value,
       courseselect: "",
-      course_id: value,
+      course_id: value
     });
     if (value == "") {
       this.setState({
         showCourse: false,
-        inputCourse: false,
+        inputCourse: false
       });
     } else if (value == "0") {
       this.setState({
         showCourse: false,
-        inputCourse: true,
+        inputCourse: true
       });
     } else {
       this.sub_course(value);
       this.setState({
         inputCourse: false,
-        showCourse: true,
+        showCourse: true
       });
     }
     if (value == 3 || value == 4) {
       this.setState({
         showinputExpense: false,
-        showuninputExpense: true,
+        showuninputExpense: true
       });
     } else {
       this.setState({
         showinputExpense: true,
-        showuninputExpense: false,
+        showuninputExpense: false
       });
     }
   };
   onPickerValueChanges = (v) => {
     this.setState({ courseselect: v, nameplace_etc: "" });
     if (v != "") {
-    let ck=this.state.lang_id==1?v:(Number(v)-1)
-    console.log(ck);
+      let ck = this.state.lang_id == 1 ? v : Number(v) - 1;
+      console.log(ck);
       let result = this.state.select_all.find((member) => {
-        return member.course_id ==ck;
+        return member.course_id == ck;
       });
       console.log(result);
       this.setState({
-        courseComfrom: result,
+        courseComfrom: result
       });
 
       if (this.state.course != "0" && this.state.course != null) {
         this.setState({
           courseComfrom: result,
-          nameCourse: "",
+          nameCourse: ""
         });
       } else {
         this.setState({
-          courseComfrom: [],
+          courseComfrom: []
         });
       }
       if (this.state.course == 3 || this.state.course == 4) {
         this.setState({
-          expense: Number(result.course_fee).toString(),
+          expense: Number(result.course_fee).toString()
         });
       } else {
         this.setState({
-          expense: 0,
+          expense: 0
         });
       }
       this.checkcourse(Number(result.course_fee));
@@ -694,7 +695,7 @@ export default class TrainingFormScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              select_3: result,
+              select_3: result
             });
           }
         })
@@ -716,14 +717,14 @@ export default class TrainingFormScreen extends Component {
 
           if (result != null) {
             this.setState({
-              select_1: result,
+              select_1: result
             });
           }
         })
         .catch((error) => {
           console.log(error);
         });
-        httpClient
+      httpClient
         .get(
           `/Training/TrainingFormNameCourseAllLang/${user_id}/${this.state.lang_id}/${value}`
         )
@@ -732,7 +733,7 @@ export default class TrainingFormScreen extends Component {
 
           if (result != null) {
             this.setState({
-              select_all: result,
+              select_all: result
             });
           }
         })
@@ -793,7 +794,7 @@ export default class TrainingFormScreen extends Component {
       "กันยายน",
       "ตุลาคม",
       "พฤษจิกายน",
-      "ธันวาคม",
+      "ธันวาคม"
     ];
     let d = new Date(date),
       month = monthNamesThai[d.getMonth()],
@@ -814,7 +815,7 @@ export default class TrainingFormScreen extends Component {
       "September",
       "October",
       "November",
-      "December",
+      "December"
     ];
     let d = new Date(date),
       month = monthNamesEng[d.getMonth()],
@@ -835,7 +836,7 @@ export default class TrainingFormScreen extends Component {
       "กันยายน",
       "ตุลาคม",
       "พฤษจิกายน",
-      "ธันวาคม",
+      "ธันวาคม"
     ];
     let d = new Date(date);
     d.setDate(d.getDate() + 1);
@@ -858,7 +859,7 @@ export default class TrainingFormScreen extends Component {
       "September",
       "October",
       "November",
-      "December",
+      "December"
     ];
     let d = new Date(date);
     d.setDate(d.getDate() + 1);
@@ -889,7 +890,7 @@ export default class TrainingFormScreen extends Component {
         startcul: dates,
         isStart: false,
         startdatethai: datethai,
-        startdateeng: dateeng,
+        startdateeng: dateeng
       });
       if (this.state.endcul != 0) {
         this.culDate(dates, this.state.endcul);
@@ -899,7 +900,7 @@ export default class TrainingFormScreen extends Component {
         endDate: date,
         endcul: dates,
         enddatethai: datethai,
-        enddateeng: dateeng,
+        enddateeng: dateeng
       });
 
       if (this.state.startcul != 0) {
@@ -913,13 +914,13 @@ export default class TrainingFormScreen extends Component {
     let date1 = new Date(startcul);
     let date2 = new Date(endcul);
     this.setState({
-      total: "0",
+      total: "0"
     });
     if (date2 >= date1) {
       let diffInMs = Math.abs(date2 - date1);
       let totals = diffInMs / (1000 * 60 * 60 * 24) + 1;
       this.setState({
-        total: totals.toString(),
+        total: totals.toString()
       });
     }
   };
@@ -927,11 +928,10 @@ export default class TrainingFormScreen extends Component {
     this.setState({
       nameplace_etc: text,
       place: "",
-      nameplace: "",
+      nameplace: ""
     });
     this.dateCount();
   };
-
 
   async uploadFile() {
     let result = await DocumentPicker.getDocumentAsync({});
@@ -958,7 +958,7 @@ export default class TrainingFormScreen extends Component {
                 this.setModalVisible(true);
                 condition = Number(data.from_expense);
                 this.setState({
-                  form_month: data.form_month,
+                  form_month: data.form_month
                 });
                 this.setModalVisible(true);
                 break;
@@ -973,7 +973,7 @@ export default class TrainingFormScreen extends Component {
                 this.setModalVisible(true);
                 condition = Number(data.from_expense);
                 this.setState({
-                  form_month: data.form_month,
+                  form_month: data.form_month
                 });
 
                 this.setModalVisible(true);
@@ -985,7 +985,7 @@ export default class TrainingFormScreen extends Component {
       }
     } else {
       this.setState({
-        form_month: null,
+        form_month: null
       });
     }
     this.dateCount();
@@ -1000,7 +1000,7 @@ export default class TrainingFormScreen extends Component {
         ? this.state.lang === "EN"
           ? result.place_en
           : result.place_th
-        : "",
+        : ""
     });
     this.dateCount();
   };
@@ -1015,7 +1015,7 @@ export default class TrainingFormScreen extends Component {
     );
     this.setState({
       countMonthEng: countMonthEng,
-      countMonthThai: countMonthThai,
+      countMonthThai: countMonthThai
     });
   };
 
@@ -1032,7 +1032,7 @@ export default class TrainingFormScreen extends Component {
             borderColor: "white",
             backgroundColor: "white",
             marginHorizontal: 15,
-            marginBottom: 20,
+            marginBottom: 20
           }}
         >
           <View style={styles.containerSec1}>
@@ -1043,19 +1043,19 @@ export default class TrainingFormScreen extends Component {
                 fontWeight: "bold",
                 color: "#4393de",
                 marginTop: 18,
-                alignSelf: "center",
+                alignSelf: "center"
               }}
             >
               {this.state.lang === "EN"
                 ? "EXTERRAN (THAILAND) LTD."
-                : "บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด"}
+                : "บริษัทเอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
             </Text>
             <Text
               style={{
                 alignSelf: "center",
                 fontSize: 16,
                 marginTop: 12,
-                marginBottom: 15,
+                marginBottom: 15
               }}
             >
               Training Request
@@ -1099,7 +1099,7 @@ export default class TrainingFormScreen extends Component {
                 marginBottom: 10,
                 flexDirection: "row",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
               <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -1116,7 +1116,9 @@ export default class TrainingFormScreen extends Component {
           {/* ส่วนที่2 */}
           <View style={styles.containerSec2}>
             <View style={styles.contentInSec2}>
-              <Text style={styles.textInputEng}>Name of Course :<Text style={{ color: "red" }}>*</Text></Text>
+              <Text style={styles.textInputEng}>
+                Name of Course :<Text style={{ color: "red" }}>*</Text>
+              </Text>
               <Text style={styles.textInputThai}>ชื่อหลักสูตร</Text>
 
               <Picker
@@ -1215,16 +1217,21 @@ export default class TrainingFormScreen extends Component {
               {this.state.showinputExpense && (
                 <View>
                   <Text style={styles.textInputEng}>
-                    Expense (excluded vat) :<Text style={{ color: "red" }}>*</Text>
+                    Expense (excluded vat) :
+                    <Text style={{ color: "red" }}>*</Text>
                   </Text>
                   <Text style={styles.textInputThai}>
                     ค่าใช้จ่ายต่อบุคคล (ไม่รวมภาษี)
                   </Text>
-               
+
                   <TextInput
                     style={styles.inputStyle1}
                     keyboardType={"phone-pad"}
-                    onChangeText={(text) => {this.setState({ expense: Number(text.replace(/,/g, "")) })}}
+                    onChangeText={(text) => {
+                      this.setState({
+                        expense: Number(text.replace(/,/g, ""))
+                      });
+                    }}
                     placeholder="กรุณากรอกจำนวนเงิน"
                     value={new Intl.NumberFormat().format(this.state.expense)}
                     onBlur={(e) => this.checkcourse(this.state.expense)}
@@ -1246,7 +1253,7 @@ export default class TrainingFormScreen extends Component {
                   flex: 1,
                   marginTop: 15,
                   marginBottom: 15,
-                  alignItems: "center",
+                  alignItems: "center"
                 }}
               >
                 <Text style={{ color: "red" }}>
@@ -1300,7 +1307,9 @@ export default class TrainingFormScreen extends Component {
                 value={this.state.total}
               />
 
-              <Text style={styles.textInputEng}>Place :<Text style={{ color: "red" }}>*</Text></Text>
+              <Text style={styles.textInputEng}>
+                Place :<Text style={{ color: "red" }}>*</Text>
+              </Text>
               <Text style={styles.textInputThai}>สถานที่ฝึกอบรม</Text>
               {this.state.showuninputExpense && (
                 <Picker
@@ -1352,7 +1361,9 @@ export default class TrainingFormScreen extends Component {
               )}
 
               <View>
-                <Text style={styles.textInputEng}>File :<Text style={{ color: "red" }}>*</Text></Text>
+                <Text style={styles.textInputEng}>
+                  File :<Text style={{ color: "red" }}>*</Text>
+                </Text>
                 <Text style={styles.textInputThai}>แนปไฟล์</Text>
                 <View style={{ marginTop: 5, marginBottom: 20 }}>
                   <Button
@@ -1364,7 +1375,7 @@ export default class TrainingFormScreen extends Component {
                       // width: "20%",
                       marginTop: 10,
                       marginBottom: 10,
-                      borderColor: "#4392de",
+                      borderColor: "#4392de"
                     }}
                     onPress={this.uploadFile.bind(this)}
                   >
@@ -1395,7 +1406,7 @@ export default class TrainingFormScreen extends Component {
               marginVertical: 30,
               flexDirection: "row",
               justifyContent: "center",
-              alignItems: "center",
+              alignItems: "center"
             }}
           >
             <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -1423,7 +1434,7 @@ export default class TrainingFormScreen extends Component {
                   flexDirection: "row",
                   justifyContent: "space-between",
                   paddingVertical: 2,
-                  marginBottom: 2,
+                  marginBottom: 2
                 }}
               >
                 <TextInput
@@ -1438,7 +1449,7 @@ export default class TrainingFormScreen extends Component {
                     flexDirection: "column",
                     justifyContent: "space-between",
                     paddingVertical: 2,
-                    margin: 4,
+                    margin: 4
                   }}
                 >
                   <TouchableOpacity
@@ -1447,8 +1458,8 @@ export default class TrainingFormScreen extends Component {
                       this.setState({
                         courseItem: [
                           ...this.state.courseItem,
-                          this.state.preRequist,
-                        ],
+                          this.state.preRequist
+                        ]
                       })
                     }
                   >
@@ -1465,7 +1476,7 @@ export default class TrainingFormScreen extends Component {
                         flexDirection: "row",
                         justifyContent: "space-between",
                         paddingVertical: 2,
-                        marginBottom: 2,
+                        marginBottom: 2
                       }}
                       key={index}
                     >
@@ -1487,7 +1498,7 @@ export default class TrainingFormScreen extends Component {
                         style={{
                           flexDirection: "row",
                           marginTop: 1,
-                          marginBottom: 4,
+                          marginBottom: 4
                         }}
                       >
                         <TouchableOpacity
@@ -1516,7 +1527,7 @@ export default class TrainingFormScreen extends Component {
                   flexDirection: "row",
                   justifyContent: "space-between",
                   paddingVertical: 2,
-                  marginBottom: 2,
+                  marginBottom: 2
                 }}
               >
                 <TextInput
@@ -1533,7 +1544,7 @@ export default class TrainingFormScreen extends Component {
                     flexDirection: "column",
                     justifyContent: "space-between",
                     paddingVertical: 2,
-                    margin: 4,
+                    margin: 4
                   }}
                 >
                   <TouchableOpacity
@@ -1542,8 +1553,8 @@ export default class TrainingFormScreen extends Component {
                       this.setState({
                         courseItem2: [
                           ...this.state.courseItem2,
-                          this.state.expected,
-                        ],
+                          this.state.expected
+                        ]
                       })
                     }
                   >
@@ -1560,7 +1571,7 @@ export default class TrainingFormScreen extends Component {
                         flexDirection: "row",
                         justifyContent: "space-between",
                         paddingVertical: 2,
-                        marginBottom: 2,
+                        marginBottom: 2
                       }}
                       key={index}
                     >
@@ -1581,7 +1592,7 @@ export default class TrainingFormScreen extends Component {
                         style={{
                           flexDirection: "row",
                           marginTop: 1,
-                          marginBottom: 4,
+                          marginBottom: 4
                         }}
                       >
                         <TouchableOpacity
@@ -1625,7 +1636,7 @@ export default class TrainingFormScreen extends Component {
               marginVertical: 30,
               flexDirection: "row",
               justifyContent: "center",
-              alignItems: "center",
+              alignItems: "center"
             }}
           >
             <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -2013,7 +2024,7 @@ export default class TrainingFormScreen extends Component {
                     padding: 12,
                     // paddingTop: 10,
                     backgroundColor: "#fff",
-                    marginBottom: 5,
+                    marginBottom: 5
                   }}
                 >
                   {/* <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}> */}
@@ -2111,7 +2122,11 @@ export default class TrainingFormScreen extends Component {
                   <CheckBox
                     checked
                     style={stylescheckbox.checkbox}
-                    title={this.state.lang_id==1?"I accept the terms ":"ยอมรับเงื่อนไข"}
+                    title={
+                      this.state.lang_id == 1
+                        ? "I accept the terms "
+                        : "ยอมรับเงื่อนไข"
+                    }
                   />
 
                   {/* เอก */}
@@ -2138,7 +2153,7 @@ export default class TrainingFormScreen extends Component {
                       flex: 4,
                       borderWidth: 0,
                       alignItems: "flex-start",
-                      justifyContent: "center",
+                      justifyContent: "center"
                     }}
                   >
                     <Text
@@ -2146,7 +2161,7 @@ export default class TrainingFormScreen extends Component {
                         // textAlign: "justify",
                         marginLeft: 6,
                         textDecorationLine: "underline",
-                        borderWidth: 0,
+                        borderWidth: 0
                       }}
                     >
                       {this.state.profile.firstname +
@@ -2160,7 +2175,7 @@ export default class TrainingFormScreen extends Component {
                     <View
                       style={{
                         alignItems: "flex-start",
-                        justifyContent: "center",
+                        justifyContent: "center"
                       }}
                     >
                       {/* <View style={{ paddingLeft: "25%" }}> */}
@@ -2168,7 +2183,7 @@ export default class TrainingFormScreen extends Component {
                         style={{
                           // textAlign: "justify",
                           // marginHorizontal: 8,
-                          borderWidth: 0,
+                          borderWidth: 0
                         }}
                       >
                         Date:
@@ -2179,19 +2194,19 @@ export default class TrainingFormScreen extends Component {
                       style={{
                         borderWidth: 0,
                         alignItems: "flex-start",
-                        justifyContent: "center",
+                        justifyContent: "center"
                       }}
                     >
                       <Text
                         style={{
                           textDecorationLine: "underline",
-                          borderWidth: 0,
+                          borderWidth: 0
                         }}
                       >
                         {this.state.dateTimeNow}
                       </Text>
                     </View>
-                    <View style={{ flex: 1, borderWidth: 0}}></View>
+                    <View style={{ flex: 1, borderWidth: 0 }}></View>
                   </View>
                   <View style={{ flex: 0.1, borderWidth: 0 }}></View>
                 </View>
@@ -2217,7 +2232,7 @@ export default class TrainingFormScreen extends Component {
                       style={{
                         textAlign: "justify",
                         // marginHorizontal: 8,
-                        marginBottom: 24,
+                        marginBottom: 24
                       }}
                     >
                       {this.state.position}
@@ -2249,7 +2264,7 @@ export default class TrainingFormScreen extends Component {
                     <Image
                       style={styles.logo}
                       source={{
-                        uri: `http://smartxlearning.com/uploads/signature/${this.state.signPurpose[0].purpose_id}/${this.state.signPurpose[0].sign_image}`,
+                        uri: `http://smartxlearning.com/uploads/signature/${this.state.signPurpose[0].purpose_id}/${this.state.signPurpose[0].sign_image}`
                       }}
                     />
                   </View>
@@ -2266,7 +2281,7 @@ export default class TrainingFormScreen extends Component {
                       style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
-                        borderWidth: 0,
+                        borderWidth: 0
                       }}
                     >
                       {/* <View style={{ paddingLeft: "25%" }}> */}
@@ -2274,7 +2289,7 @@ export default class TrainingFormScreen extends Component {
                         style={{
                           // textAlign: "justify",
                           // marginHorizontal: 8,
-                          borderWidth: 0,
+                          borderWidth: 0
                         }}
                       >
                         Date:
@@ -2285,13 +2300,13 @@ export default class TrainingFormScreen extends Component {
                       style={{
                         borderWidth: 0,
                         alignItems: "flex-start",
-                        justifyContent: "center",
+                        justifyContent: "center"
                       }}
                     >
                       <Text
                         style={{
                           textDecorationLine: "underline",
-                          borderWidth: 0,
+                          borderWidth: 0
                         }}
                       >
                         {this.state.dateTimeNow}
@@ -2371,12 +2386,12 @@ export default class TrainingFormScreen extends Component {
                 <View style={styles.pickerContainer2}>
                   {/* <Text style={{ textAlign: "justify", marginHorizontal: 8 }}>
                     <Text style={{ textDecorationLine: "underline" }}> */}
-                  <View style={{ flex: 0.1, borderWidth: 0}}></View>
+                  <View style={{ flex: 0.1, borderWidth: 0 }}></View>
                   <View style={{ flex: 4, borderWidth: 0 }}>
                     <Image
                       style={styles.logo}
                       source={{
-                        uri: `http://smartxlearning.com/uploads/signature/${this.state.signPurpose[1].purpose_id}/${this.state.signPurpose[1].sign_image}`,
+                        uri: `http://smartxlearning.com/uploads/signature/${this.state.signPurpose[1].purpose_id}/${this.state.signPurpose[1].sign_image}`
                       }}
                     />
                   </View>
@@ -2389,7 +2404,7 @@ export default class TrainingFormScreen extends Component {
                       style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
-                        borderWidth: 0,
+                        borderWidth: 0
                       }}
                     >
                       {/* <View style={{ paddingLeft: "25%" }}> */}
@@ -2397,7 +2412,7 @@ export default class TrainingFormScreen extends Component {
                         style={{
                           // textAlign: "justify",
                           // marginHorizontal: 8,
-                          borderWidth: 0,
+                          borderWidth: 0
                         }}
                       >
                         Date:
@@ -2408,13 +2423,13 @@ export default class TrainingFormScreen extends Component {
                       style={{
                         borderWidth: 0,
                         alignItems: "flex-start",
-                        justifyContent: "center",
+                        justifyContent: "center"
                       }}
                     >
                       <Text
                         style={{
                           textDecorationLine: "underline",
-                          borderWidth: 0,
+                          borderWidth: 0
                         }}
                       >
                         {this.state.dateTimeNow}
@@ -2489,7 +2504,7 @@ export default class TrainingFormScreen extends Component {
                     <Image
                       style={styles.logo}
                       source={{
-                        uri: `http://smartxlearning.com/uploads/signature/${this.state.signPurpose[2].purpose_id}/${this.state.signPurpose[2].sign_image}`,
+                        uri: `http://smartxlearning.com/uploads/signature/${this.state.signPurpose[2].purpose_id}/${this.state.signPurpose[2].sign_image}`
                       }}
                     />
                   </View>
@@ -2501,7 +2516,7 @@ export default class TrainingFormScreen extends Component {
                       style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
-                        borderWidth: 0,
+                        borderWidth: 0
                       }}
                     >
                       {/* <View style={{ paddingLeft: "25%" }}> */}
@@ -2509,7 +2524,7 @@ export default class TrainingFormScreen extends Component {
                         style={{
                           // textAlign: "justify",
                           // marginHorizontal: 8,
-                          borderWidth: 0,
+                          borderWidth: 0
                         }}
                       >
                         Date:
@@ -2520,13 +2535,13 @@ export default class TrainingFormScreen extends Component {
                       style={{
                         borderWidth: 0,
                         alignItems: "flex-start",
-                        justifyContent: "center",
+                        justifyContent: "center"
                       }}
                     >
                       <Text
                         style={{
                           textDecorationLine: "underline",
-                          borderWidth: 0,
+                          borderWidth: 0
                         }}
                       >
                         {this.state.dateTimeNow}
@@ -2589,7 +2604,7 @@ export default class TrainingFormScreen extends Component {
               flexDirection: "row",
               justifyContent: "space-between",
               paddingHorizontal: 45,
-              marginBottom: 10,
+              marginBottom: 10
             }}
           >
             <Pressable
@@ -2600,10 +2615,11 @@ export default class TrainingFormScreen extends Component {
                 {this.state.lang === "EN" ? "Accept" : "ยืนยัน"}
               </Text>
             </Pressable>
-            <Pressable style={[styles.button, styles.buttonCancel]} 
-            onPress={() => {
-              this.props.navigation.goBack()
-            }}
+            <Pressable
+              style={[styles.button, styles.buttonCancel]}
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}
             >
               <Text style={styles.textStyle}>
                 {this.state.lang === "EN" ? "Cancel" : "ยกเลิก"}
@@ -2623,12 +2639,12 @@ export default class TrainingFormScreen extends Component {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   container: {
     flex: 1,
     marginHorizontal: WIDTH / 20,
-    marginVertical: HEIGHT / 36,
+    marginVertical: HEIGHT / 36
     // marginBottom: 32,
   },
   containerSec1: {
@@ -2638,52 +2654,52 @@ const styles = StyleSheet.create({
     // marginHorizontal: 20,
     // marginTop: 18,
     marginHorizontal: 8,
-    marginVertical: 18,
+    marginVertical: 18
   },
   //กรอบข้อมูลรอบนอก
   containerSec2: {
     marginHorizontal: 12,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: "#398DDD",
+    borderColor: "#398DDD"
   },
   containerSec4: {
     marginHorizontal: 12,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: "red",
+    borderColor: "red"
   },
   containerSec5: {
     marginHorizontal: 12,
     marginBottom: 30,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: "gray",
+    borderColor: "gray"
   },
   containerSec3: {
     marginTop: 18,
     borderRadius: 8,
     borderWidth: 2,
     borderColor: "#999999",
-    backgroundColor: "#fff",
+    backgroundColor: "#fff"
   },
   contentInSec2: {
-    padding: 12,
+    padding: 12
   },
   textHeader: {
     alignItems: "center",
-    padding: 14,
+    padding: 14
   },
   textHeader1: {
     fontWeight: "bold",
     fontSize: 20,
-    marginTop: 15,
+    marginTop: 15
   },
   textHeader2: {
     fontWeight: "bold",
     fontSize: 14,
     marginTop: 8,
-    alignSelf: "center",
+    alignSelf: "center"
   },
   inputStyle: {
     backgroundColor: "#DCDCDC",
@@ -2691,7 +2707,7 @@ const styles = StyleSheet.create({
     height: HEIGHT / 20,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   inputStyle1: {
     borderRadius: 15,
@@ -2700,7 +2716,7 @@ const styles = StyleSheet.create({
     height: HEIGHT / 20,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   inputStyle2: {
     borderRadius: 15,
@@ -2710,7 +2726,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingLeft: 10,
     marginBottom: 10,
-    width: "85%",
+    width: "85%"
   },
   inputStyle3: {
     backgroundColor: "#FFF",
@@ -2719,7 +2735,7 @@ const styles = StyleSheet.create({
     paddingLeft: 18,
     marginTop: 8,
     marginHorizontal: 8,
-    width: 270,
+    width: 270
   },
   inputStyle4: {
     backgroundColor: "#FFF",
@@ -2729,7 +2745,7 @@ const styles = StyleSheet.create({
     marginLeft: -298,
     //marginHorizontal: 20,
     marginTop: 15,
-    width: "123%",
+    width: "123%"
   },
   inputStyle5: {
     backgroundColor: "#FFF",
@@ -2738,7 +2754,7 @@ const styles = StyleSheet.create({
     paddingLeft: 18,
     marginTop: 8,
     marginHorizontal: 12,
-    width: "78%",
+    width: "78%"
   },
   inputStyle6: {
     backgroundColor: "#fff",
@@ -2747,7 +2763,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingLeft: 18,
     marginHorizontal: 12,
-    marginBottom: 12,
+    marginBottom: 12
   },
   ///กรอบเพิ่มข้อมูล
   pickerContainer: {
@@ -2755,76 +2771,76 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     marginVertical: 1,
     marginTop: 1,
-    marginBottom: 4,
+    marginBottom: 4
   },
   pickerContainer1: {
     flexDirection: "column",
     alignItems: "center",
     marginVertical: 1,
     marginTop: 1,
-    marginBottom: 4,
+    marginBottom: 4
   },
   pickerContainer2: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-evenly"
     // paddingVertical: 12,
     // marginBottom: 2,
   },
   textInputEng: {
-    marginTop: 10,
+    marginTop: 10
   },
   textInputEng1: {
     marginTop: 5,
     marginHorizontal: 8,
-    textAlign: "left",
+    textAlign: "left"
   },
   textInputEng2: {
     marginTop: 10,
     marginLeft: 10,
-    marginBottom: 5,
+    marginBottom: 5
   },
   textInputEng3: {
     marginTop: 5,
-    fontSize: 12,
+    fontSize: 12
   },
   textInputEng4: {
     fontWeight: "bold",
     marginTop: 5,
-    fontSize: 12,
+    fontSize: 12
   },
   textInputEng5: {
     marginTop: 12,
-    textAlign: "justify",
+    textAlign: "justify"
     // marginHorizontal: 8,
   },
   textInputThai: {
-    color: "grey",
+    color: "grey"
   },
   textInputThai1: {
     marginTop: 5,
     fontSize: 14,
-    textAlign: "center",
+    textAlign: "center"
   },
   textInputThai2: {
     marginTop: 15,
-    textAlign: "justify",
+    textAlign: "justify"
     // marginHorizontal: 8,
   },
   textInputEng6: {
-    textAlign: "justify",
+    textAlign: "justify"
     // marginHorizontal: 8,
   },
   textInputThai3: {
-    textAlign: "justify",
+    textAlign: "justify"
     // marginHorizontal: 8,
   },
   textInputThai4: {
     textAlign: "justify",
     // marginHorizontal: 8,
-    marginBottom: 4,
+    marginBottom: 4
   },
   textInputThai5: {
-    textAlign: "justify",
+    textAlign: "justify"
     // marginHorizontal: 8,
     // marginBottom: 18,
   },
@@ -2837,14 +2853,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     // paddingLeft: 10,
     marginBottom: 10,
-    borderColor: "#007aff",
+    borderColor: "#007aff"
   },
   viewBorderDropdown: {
     borderWidth: 1,
     borderRadius: 15,
     marginBottom: 10,
     paddingLeft: 10,
-    marginTop: 10,
+    marginTop: 10
   },
   inputDate: {
     borderWidth: 1,
@@ -2855,33 +2871,33 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flex: 1,
     justifyContent: "center",
-    borderColor: "#007aff",
+    borderColor: "#007aff"
   },
   confirmStyle: {
     marginTop: 10,
     marginBottom: 10,
     marginHorizontal: 30,
     paddingTop: 60,
-    paddingBottom: 30,
+    paddingBottom: 30
   },
   confirmStyle1: {
     marginTop: 2,
     marginBottom: 10,
-    marginHorizontal: 14,
+    marginHorizontal: 14
     // paddingTop: 2,
     // paddingBottom: 10,
   },
   textConfirm: {
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 10,
+    paddingTop: 10
   },
   addButtonText: {
     color: "white",
     fontSize: 20,
     fontWeight: "700",
     textAlign: "center",
-    margin: 7,
+    margin: 7
   },
   addButton: {
     borderRadius: 50,
@@ -2890,7 +2906,7 @@ const styles = StyleSheet.create({
     height: HEIGHT / 21,
     marginHorizontal: 2,
     marginTop: 5,
-    fontSize: 24,
+    fontSize: 24
   },
   deleteButton: {
     borderRadius: 50,
@@ -2899,43 +2915,43 @@ const styles = StyleSheet.create({
     height: HEIGHT / 21,
     marginHorizontal: 5,
     marginTop: 8,
-    fontSize: 24,
+    fontSize: 24
   },
   logo1: {
     marginTop: 4,
     // marginBottom: 12,
     alignItems: "center",
     width: 250,
-    height: 120,
+    height: 120
     // width: WIDTH / 2,
     // height: HEIGHT / 2,
   },
   head: {
     height: 40,
-    backgroundColor: "#f1f8ff",
+    backgroundColor: "#f1f8ff"
   },
   text: {
     margin: 6,
-    textAlign: "center",
+    textAlign: "center"
   },
   checkboxContainer: {
     flexDirection: "row",
     marginBottom: 20,
-    marginTop: 20,
+    marginTop: 20
   },
   checkbox: {
     alignSelf: "center",
-    borderRadius: 1,
+    borderRadius: 1
   },
   label: {
-    margin: 18,
+    margin: 18
     // marginHorizontal: 18,
   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginTop: 22
   },
   modalView: {
     margin: 20,
@@ -2946,62 +2962,62 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 5
   },
   button: {
     borderRadius: 15,
     paddingVertical: 15,
     paddingHorizontal: 22,
-    elevation: 2,
+    elevation: 2
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: "#F194FF"
   },
   buttonCancel: {
-    backgroundColor: "gray",
+    backgroundColor: "gray"
   },
   buttonAccept: {
-    backgroundColor: "blue",
+    backgroundColor: "blue"
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "center"
   },
   textStyle1: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "center"
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
+    textAlign: "center"
   },
   logo: {
     width: WIDTH / 5,
     height: HEIGHT / 12,
     marginLeft: 8,
     alignItems: "center",
-    marginTop: 2,
+    marginTop: 2
   },
   logo2: {
     width: WIDTH / 3,
     height: HEIGHT / 9,
     // padding: 1,
     alignItems: "center",
-    marginTop: 5,
-  },
+    marginTop: 5
+  }
 });
 const stylesdialog = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginTop: 22
   },
   modalView: {
     margin: 20,
@@ -3012,50 +3028,50 @@ const stylesdialog = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 5
   },
   button: {
     borderRadius: 15,
     paddingVertical: 15,
     paddingHorizontal: 24,
-    elevation: 2,
+    elevation: 2
     // margin:5
   },
   buttonOpen: {
-    backgroundColor: "green",
+    backgroundColor: "green"
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#2196F3"
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "center"
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
-  },
+    textAlign: "center"
+  }
 });
 
 const stylescheckbox = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   checkboxContainer: {
     flexDirection: "row",
-    marginBottom: 20,
+    marginBottom: 20
   },
   checkbox: {
-    alignSelf: "center",
+    alignSelf: "center"
   },
   label: {
-    margin: 8,
-  },
+    margin: 8
+  }
 });

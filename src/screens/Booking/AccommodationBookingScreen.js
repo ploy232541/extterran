@@ -8,7 +8,7 @@ import {
   TextInput,
   Dimensions,
   TouchableOpacity,
-  AsyncStorage,
+  AsyncStorage
 } from "react-native";
 import { Divider, Avatar } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -58,9 +58,9 @@ export default class AccommodationBookingScreen extends Component {
           startDate: "DD/MM/YYYY",
           endDate: "DD/MM/YYYY",
           province_id: "",
-          accommodation: "",
-        },
-      },
+          accommodation: ""
+        }
+      }
     };
   }
 
@@ -95,7 +95,7 @@ export default class AccommodationBookingScreen extends Component {
                   this.state.lang === "EN" ? row.dt_name_en : row.dt_name_th,
                 subdistrict:
                   this.state.lang === "EN" ? row.sdt_name_en : row.sdt_name_th,
-                zipcode: row.zipcode ? row.zipcode : "-",
+                zipcode: row.zipcode ? row.zipcode : "-"
               });
             }
           }
@@ -110,7 +110,7 @@ export default class AccommodationBookingScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              select_1: result,
+              select_1: result
             });
           }
         })
@@ -124,7 +124,7 @@ export default class AccommodationBookingScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              select_3: result,
+              select_3: result
             });
           }
         })
@@ -138,7 +138,7 @@ export default class AccommodationBookingScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              select_4: result,
+              select_4: result
             });
           }
         })
@@ -206,7 +206,7 @@ export default class AccommodationBookingScreen extends Component {
     let itemCopy = [...this.state.accommodation];
     itemCopy.splice(index, 1);
     this.setState({
-      accommodation: itemCopy,
+      accommodation: itemCopy
     });
   }
 
@@ -225,7 +225,7 @@ export default class AccommodationBookingScreen extends Component {
         accom,
         startDate,
         endDate,
-        accommodation,
+        accommodation
       } = this.state;
       if (
         (purpose_id == "" && purpose_id != 6) ||
@@ -334,7 +334,7 @@ export default class AccommodationBookingScreen extends Component {
             accom,
             startDate,
             endDate,
-            accommodation,
+            accommodation
           };
 
           Alert.alert(
@@ -344,7 +344,7 @@ export default class AccommodationBookingScreen extends Component {
               {
                 text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
                 onPress: () => console.log("Cancel Pressed"),
-                style: "cancel",
+                style: "cancel"
               },
               ,
               {
@@ -364,8 +364,8 @@ export default class AccommodationBookingScreen extends Component {
                           [
                             {
                               text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                              onPress: () => this.reset(),
-                            },
+                              onPress: () => this.reset()
+                            }
                           ],
                           { cancelable: false }
                         );
@@ -380,8 +380,8 @@ export default class AccommodationBookingScreen extends Component {
                     .catch((error) => {
                       console.log(error);
                     });
-                },
-              },
+                }
+              }
             ]
           );
         }
@@ -398,7 +398,7 @@ export default class AccommodationBookingScreen extends Component {
       purpose_id: "",
       purposeEtc: "",
       accom: "",
-      accommodation: [],
+      accommodation: []
     });
   };
 
@@ -414,7 +414,7 @@ export default class AccommodationBookingScreen extends Component {
             borderColor: "white",
             backgroundColor: "white",
             marginHorizontal: 15,
-            marginBottom: 20,
+            marginBottom: 20
           }}
         >
           {/* Start accommodation booking form section 1 */}
@@ -426,19 +426,19 @@ export default class AccommodationBookingScreen extends Component {
                 fontWeight: "bold",
                 color: "#4393de",
                 marginTop: 18,
-                alignSelf: "center",
+                alignSelf: "center"
               }}
             >
               {this.state.lang === "EN"
                 ? "EXTERRAN (THAILAND) LTD."
-                : "บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด"}
+                : "บริษัทเอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
             </Text>
             <Text
               style={{
                 alignSelf: "center",
                 fontSize: 16,
                 marginTop: 12,
-                marginBottom: 15,
+                marginBottom: 15
               }}
             >
               {this.state.lang === "EN" ? "Accommodation" : "ที่พัก"}
@@ -469,7 +469,9 @@ export default class AccommodationBookingScreen extends Component {
               <Text style={styles.textInput}>เลขบัตรประชาชน</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.identification ? this.state.identification : "-"}
+                value={
+                  this.state.identification ? this.state.identification : "-"
+                }
               />
 
               <Text>Phone No:</Text>
@@ -504,7 +506,7 @@ export default class AccommodationBookingScreen extends Component {
               <Text style={styles.textInput}>รหัสไปรษณีย์</Text>
               <TextInput
                 style={styles.inputStyle}
-                value={this.state.zipcode? this.state.zipcode.toString() : "-"}
+                value={this.state.zipcode ? this.state.zipcode.toString() : "-"}
               />
 
               <Text>Purpose:</Text>
@@ -577,7 +579,7 @@ export default class AccommodationBookingScreen extends Component {
                 marginBottom: 10,
                 flexDirection: "row",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
               <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -622,7 +624,7 @@ export default class AccommodationBookingScreen extends Component {
                         const result = response.data;
                         if (result != null) {
                           this.setState({
-                            hotel: result,
+                            hotel: result
                           });
                         }
                       })
@@ -859,14 +861,14 @@ export default class AccommodationBookingScreen extends Component {
                           style={{
                             marginLeft: 10,
                             marginRight: 5,
-                            color: "white",
+                            color: "white"
                           }}
                         />
                         <Text
                           style={{
                             color: "white",
                             marginRight: 10,
-                            fontSize: 14,
+                            fontSize: 14
                           }}
                         >
                           {this.state.lang === "EN" ? "Delete" : "ลบ"}
@@ -882,7 +884,7 @@ export default class AccommodationBookingScreen extends Component {
 
           {/* โชว์ DateTimePickerModal*/}
           <DateTimePickerModal
-          locale="th"
+            locale="th"
             isVisible={this.state.isDatePickerVisible}
             mode="date"
             onConfirm={this.handleConfirm}
@@ -897,8 +899,8 @@ export default class AccommodationBookingScreen extends Component {
                 this.setState({
                   accommodation: [
                     ...this.state.accommodation,
-                    this.state.accommodationItem,
-                  ],
+                    this.state.accommodationItem
+                  ]
                 })
               }
             >
@@ -917,7 +919,7 @@ export default class AccommodationBookingScreen extends Component {
               flexDirection: "row",
               justifyContent: "space-around",
               paddingVertical: 20,
-              marginBottom: 40,
+              marginBottom: 40
             }}
           >
             <View style={styles.buttonContainer}>
@@ -948,15 +950,15 @@ export default class AccommodationBookingScreen extends Component {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   containerSec1: {
     marginHorizontal: 8,
-    marginVertical: 18,
+    marginVertical: 18
   },
   textHeader: {
     alignItems: "center",
-    padding: 12,
+    padding: 12
   },
   inputStyle: {
     backgroundColor: "#DCDCDC",
@@ -964,7 +966,7 @@ const styles = StyleSheet.create({
     height: HEIGHT / 20,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   inputStyle1: {
     borderRadius: 15,
@@ -973,10 +975,10 @@ const styles = StyleSheet.create({
     height: HEIGHT / 20,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   textInput: {
-    color: "grey",
+    color: "grey"
   },
   inputLightStyle: {
     borderWidth: 1,
@@ -987,56 +989,56 @@ const styles = StyleSheet.create({
     marginTop: 10,
     // paddingLeft: 10,
     marginBottom: 10,
-    borderColor: "#007aff",
+    borderColor: "#007aff"
   },
   arrowDownStyle: {
-    backgroundColor: "#F4F4F4",
+    backgroundColor: "#F4F4F4"
   },
   containerSec2: {
     marginHorizontal: 20,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: "#398DDD",
+    borderColor: "#398DDD"
   },
   contentInSec2: {
-    padding: 12,
+    padding: 12
   },
   buttonContainer: {
     alignSelf: "center",
     justifyContent: "center",
     paddingTop: 20,
     width: "30%",
-    borderRadius: 4,
+    borderRadius: 4
   },
   buttonContainer1: {
-    marginRight: 20,
+    marginRight: 20
   },
   btnAddAccommodationStyle: {
     justifyContent: "center",
     alignSelf: "center",
     backgroundColor: "#005ce6",
-    borderRadius: 10,
+    borderRadius: 10
   },
   btnDelaccommodationStyle: {
     backgroundColor: "#b30000",
     alignSelf: "flex-end",
     marginTop: 10,
     marginBottom: 20,
-    borderRadius: 10,
+    borderRadius: 10
   },
   btnConfirmStyle: {
     backgroundColor: "#449D44",
     justifyContent: "center",
     alignSelf: "center",
     borderRadius: 10,
-    paddingHorizontal: 32,
+    paddingHorizontal: 32
   },
   btnCancelStyle: {
     backgroundColor: "#5A6268",
     justifyContent: "center",
     alignSelf: "center",
     borderRadius: 10,
-    paddingHorizontal: 32,
+    paddingHorizontal: 32
   },
   inputDate: {
     borderWidth: 1,
@@ -1047,6 +1049,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flex: 1,
     justifyContent: "center",
-    borderColor: "#007aff",
-  },
+    borderColor: "#007aff"
+  }
 });
