@@ -433,180 +433,123 @@ export default class TrainingFormScreen extends Component {
             : "กรุณากรอกวันที่สิ้นสุดการฝึกอบรม"
         );
       } else if (
-        place == "" &&
-        (nameplace_etc == "" || nameplace_etc == null)
-      ) {
-        Alert.alert(
-          this.state.lang === "EN"
-            ? "Please specify the training location"
-            : "โปรดระบุสถานที่อบรม"
-        );
-      } else if (pre_requerse == "" || pre_requerse == null) {
-        Alert.alert(
-          this.state.lang === "EN"
-            ? "Please specify training qualifications"
-            : "กรุณาระบุคุณสมบัติในการฝึกอบรม"
-        );
-      } else if (pre_requerse2 == "" || pre_requerse2 == null) {
-        Alert.alert(
-          this.state.lang === "EN"
-            ? "Please specify expected training results"
-            : "กรุณาระบุผลที่คาดว่าจะได้รับในการฝึกอบรม"
-        );
-      } else if (
         (upload_file == "" || upload_file == null) &&
-        (this.state.course == 3 || this.state.course == 4)
+        (this.state.course == 3 ||
+          this.state.course == 4 ||
+          this.state.course == 0)
       ) {
         Alert.alert(
-          this.state.lang === "EN" ? "Please attach the file" : "กรุณาแนปไฟล์"
+          this.state.lang === "EN" ? "Please attach the file" : "กรุณาแนบไฟล์"
         );
-      } else {
-        let error;
-        if (courseItem.length > 0) {
-          let index = 0;
-          do {
-            error = courseItem[index].length > 0 ? false : true;
-            if (error == true) {
-              Alert.alert(
-                this.state.lang === "EN"
-                  ? "Please specify training qualifications"
-                  : "กรุณาระบุคุณสมบัติในการฝึกอบรม"
-              );
-            }
-            index++;
-          } while (index <= courseItem.length - 1 && error == false);
-        }
-        if (courseItem2.length > 0 && error == false) {
-          let index = 0;
-          do {
-            error = courseItem2[index].length > 0 ? false : true;
-            if (error == true) {
-              Alert.alert(
-                this.state.lang === "EN"
-                  ? "Please specify expected training results"
-                  : "กรุณาระบุผลที่คาดว่าจะได้รับในการฝึกอบรม"
-              );
-            }
-            index++;
-          } while (index <= courseItem2.length - 1 && error == false);
-        }
-        if (
-          error == false ||
-          courseItem.length <= 0 ||
-          courseItem.length2.length <= 0
-        ) {
-          const params = {
-            user_id,
-            course,
-            courseselect,
-            nameCourse,
-            expense,
-            startDate,
-            endDate,
-            total,
-            place,
-            nameplace_etc,
-            pre_requerse,
-            pre_requerse2,
-            courseItem,
-            courseItem2
-          };
-          Alert.alert(
-            this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-            this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
-            [
-              {
-                text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-              },
-              ,
-              {
-                text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                onPress: () => {
-                  httpClient
-                    .post("/Training/InsertTrainingRequest", params)
-                    .then((response) => {
-                      const result = response.data;
-                      if (result != false) {
-                        if (upload_file != null && upload_file != "") {
-                          const data = new FormData();
-                          data.append("file", {
-                            name: result + "",
-                            type: upload_file.type,
-                            uri: upload_file.uri
-                          });
+      }else if(total<=0){  Alert.alert(
+        this.state.lang === "EN" ? "Include at least 1 training day." : "รวมวันฝึกอบรมต้องมีอย่างน้อย 1 วัน"
+      );} 
+      else {
+        const params = {
+          user_id,
+          course,
+          courseselect,
+          nameCourse,
+          expense,
+          startDate,
+          endDate,
+          total,
+          place,
+          nameplace_etc,
+          pre_requerse,
+          pre_requerse2,
+          courseItem,
+          courseItem2
+        };
+        Alert.alert(
+          this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+          this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+          [
+            {
+              text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            ,
+            {
+              text: this.state.lang === "EN" ? "OK" : "ตกลง",
+              onPress: () => {
+                httpClient
+                  .post("/Training/InsertTrainingRequest", params)
+                  .then((response) => {
+                    const result = response.data;
+                    if (result != false) {
+                      if (upload_file != null && upload_file != "") {
+                        const data = new FormData();
+                        data.append("file", {
+                          name: result + "",
+                          type: upload_file.type,
+                          uri: upload_file.uri
+                        });
 
-                          httpClient
-                            .post(
-                              "/Training/InsertTrainingRequestFile",
-                              data,
-                              {}
-                            )
-                            .then((response) => {
-                              const result = response.data;
-                              if (result == true) {
-                                Alert.alert(
-                                  this.state.lang === "EN"
-                                    ? "Alert"
-                                    : "แจ้งเตือน",
-                                  this.state.lang === "EN"
-                                    ? "Training request sent"
-                                    : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
-                                  [
-                                    {
-                                      text:
-                                        this.state.lang === "EN"
-                                          ? "OK"
-                                          : "ตกลง",
-                                      onPress: () =>
-                                        this.props.navigation.goBack()
-                                    }
-                                  ],
-                                  { cancelable: false }
-                                );
-                              } else {
-                                Alert.alert(
-                                  this.state.lang === "EN"
-                                    ? `Training request failed`
-                                    : "ไม่สามารถส่งคำร้องขอฝึกอบรมได้"
-                                );
-                              }
-                            })
-                            .catch((error) => {
-                              console.log(error);
-                            });
-                        } else {
-                          Alert.alert(
-                            this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                            this.state.lang === "EN"
-                              ? "Training request sent"
-                              : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
-                            [
-                              {
-                                text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                                onPress: () => this.reset()
-                              }
-                            ],
-                            { cancelable: false }
-                          );
-                        }
+                        httpClient
+                          .post("/Training/InsertTrainingRequestFile", data, {})
+                          .then((response) => {
+                            const result = response.data;
+                            if (result == true) {
+                              Alert.alert(
+                                this.state.lang === "EN"
+                                  ? "Alert"
+                                  : "แจ้งเตือน",
+                                this.state.lang === "EN"
+                                  ? "Training request sent"
+                                  : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
+                                [
+                                  {
+                                    text:
+                                      this.state.lang === "EN" ? "OK" : "ตกลง",
+                                    onPress: () =>
+                                      this.props.navigation.goBack()
+                                  }
+                                ],
+                                { cancelable: false }
+                              );
+                            } else {
+                              Alert.alert(
+                                this.state.lang === "EN"
+                                  ? `Training request failed`
+                                  : "ไม่สามารถส่งคำร้องขอฝึกอบรมได้"
+                              );
+                            }
+                          })
+                          .catch((error) => {
+                            console.log(error);
+                          });
                       } else {
                         Alert.alert(
+                          this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
                           this.state.lang === "EN"
-                            ? `Training request failed`
-                            : "ไม่สามารถส่งคำร้องขอฝึกอบรมได้"
+                            ? "Training request sent"
+                            : "ส่งคำขอฝึกอบรมเรียบร้อยแล้ว",
+                          [
+                            {
+                              text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                              onPress: () => this.reset()
+                            }
+                          ],
+                          { cancelable: false }
                         );
                       }
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                    });
-                }
+                    } else {
+                      Alert.alert(
+                        this.state.lang === "EN"
+                          ? `Training request failed`
+                          : "ไม่สามารถส่งคำร้องขอฝึกอบรมได้"
+                      );
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
               }
-            ]
-          );
-        }
+            }
+          ]
+        );
       }
     } catch (err) {
       console.log(err);
@@ -682,7 +625,7 @@ export default class TrainingFormScreen extends Component {
           expense: 0
         });
       }
-      this.checkcourse(Number(result.course_fee));
+      this.checkcourse(Number(result.course_fee?result.course_fee:null));
       this.getplace(v);
     }
   };
@@ -948,47 +891,54 @@ export default class TrainingFormScreen extends Component {
   }
 
   checkcourse = (expensecourse) => {
-    let condition = 0;
-    if (expensecourse >= 35000) {
-      for (let data of this.state.conditionExpenseCourse) {
-        if (condition == 0) {
-          if (data.from_expense_2 == "") {
-            if (expensecourse >= Number(data.from_expense)) {
-              if (condition == 0) {
-                this.setModalVisible(true);
-                condition = Number(data.from_expense);
-                this.setState({
-                  form_month: data.form_month
-                });
-                this.setModalVisible(true);
-                break;
+    if (!isNaN(expensecourse)) {
+      let condition = 0;
+      if (expensecourse >= 35000) {
+        for (let data of this.state.conditionExpenseCourse) {
+          if (condition == 0) {
+            if (data.from_expense_2 == "") {
+              if (expensecourse >= Number(data.from_expense)) {
+                if (condition == 0) {
+                  this.setModalVisible(true);
+                  condition = Number(data.from_expense);
+                  this.setState({
+                    form_month: data.form_month
+                  });
+                  this.setModalVisible(true);
+                  break;
+                }
               }
-            }
-          } else {
-            if (
-              expensecourse >= Number(data.from_expense) &&
-              expensecourse <= Number(data.from_expense_2)
-            ) {
-              if (condition == 0) {
-                this.setModalVisible(true);
-                condition = Number(data.from_expense);
-                this.setState({
-                  form_month: data.form_month
-                });
+            } else {
+              if (
+                expensecourse >= Number(data.from_expense) &&
+                expensecourse <= Number(data.from_expense_2)
+              ) {
+                if (condition == 0) {
+                  this.setModalVisible(true);
+                  condition = Number(data.from_expense);
+                  this.setState({
+                    form_month: data.form_month
+                  });
 
-                this.setModalVisible(true);
-                break;
+                  this.setModalVisible(true);
+                  break;
+                }
               }
             }
           }
         }
+      } else {
+        this.setState({
+          form_month: null
+        });
       }
+      this.dateCount();
     } else {
+      Alert.alert("ไม่สามารถคำนวนค่าใช้จ่ายได้ กรุณาตรวจสอบค่าใช้จ่ายอีกครั้ง");
       this.setState({
         form_month: null
       });
     }
-    this.dateCount();
   };
   placeFunc = (k) => {
     this.setState({ place: k, nameplace_etc: "" });
@@ -1226,14 +1176,14 @@ export default class TrainingFormScreen extends Component {
 
                   <TextInput
                     style={styles.inputStyle1}
-                    keyboardType={"phone-pad"}
+                    keyboardType={"number-pad"}
                     onChangeText={(text) => {
                       this.setState({
                         expense: Number(text.replace(/,/g, ""))
                       });
                     }}
                     placeholder="กรุณากรอกจำนวนเงิน"
-                    value={new Intl.NumberFormat().format(this.state.expense)}
+                    value={this.state.expense}
                     onBlur={(e) => this.checkcourse(this.state.expense)}
                   />
                 </View>
@@ -1307,9 +1257,7 @@ export default class TrainingFormScreen extends Component {
                 value={this.state.total}
               />
 
-              <Text style={styles.textInputEng}>
-                Place :<Text style={{ color: "red" }}>*</Text>
-              </Text>
+              <Text style={styles.textInputEng}>Place :</Text>
               <Text style={styles.textInputThai}>สถานที่ฝึกอบรม</Text>
               {this.state.showuninputExpense && (
                 <Picker
@@ -1362,9 +1310,14 @@ export default class TrainingFormScreen extends Component {
 
               <View>
                 <Text style={styles.textInputEng}>
-                  File :<Text style={{ color: "red" }}>*</Text>
+                  File :
+                  {(this.state.course == 0 ||
+                    this.state.course == 3 ||
+                    this.state.course == 4) && (
+                    <Text style={{ color: "red" }}>*</Text>
+                  )}
                 </Text>
-                <Text style={styles.textInputThai}>แนปไฟล์</Text>
+                <Text style={styles.textInputThai}>แนบไฟล์</Text>
                 <View style={{ marginTop: 5, marginBottom: 20 }}>
                   <Button
                     style={{
