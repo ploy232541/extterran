@@ -9,7 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
   AsyncStorage,
-  Alert,
+  Alert
 } from "react-native";
 import { Divider, Avatar } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -71,10 +71,10 @@ export default class FlightBookingScreen extends Component {
           checkEtc: false,
           flight: "",
           checkBaggage: false,
-          baggage: "",
-        },
+          baggage: ""
+        }
       },
-      tem: -1,
+      tem: -1
     };
   }
 
@@ -107,7 +107,7 @@ export default class FlightBookingScreen extends Component {
                 phone: row.phone,
                 birthday: row.birthday,
                 province:
-                  this.state.lang === "EN" ? row.pv_name_en : row.pv_name_th,
+                  this.state.lang === "EN" ? row.pv_name_en : row.pv_name_th
               });
             }
           }
@@ -122,7 +122,7 @@ export default class FlightBookingScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              select_1: result,
+              select_1: result
             });
           }
         })
@@ -136,7 +136,7 @@ export default class FlightBookingScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              select_2: result,
+              select_2: result
             });
           }
         })
@@ -259,7 +259,7 @@ export default class FlightBookingScreen extends Component {
     let itemCopy = [...courseItem];
     itemCopy.splice(index, 1);
     this.setState({
-      flight: itemCopy,
+      flight: itemCopy
     });
   }
 
@@ -282,7 +282,7 @@ export default class FlightBookingScreen extends Component {
         airportCheck,
         baggage,
         checkBaggage,
-        flight,
+        flight
       } = this.state;
       if (
         (purpose == "" && purpose != 3) ||
@@ -447,7 +447,7 @@ export default class FlightBookingScreen extends Component {
             airportCheck,
             purpose,
             purpose_etc: purposeEtc,
-            flight,
+            flight
           };
 
           const datas = params;
@@ -459,7 +459,7 @@ export default class FlightBookingScreen extends Component {
               {
                 text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
                 onPress: () => console.log("Cancel Pressed"),
-                style: "cancel",
+                style: "cancel"
               },
               ,
               {
@@ -479,8 +479,8 @@ export default class FlightBookingScreen extends Component {
                           [
                             {
                               text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                              onPress: () => this.reset(),
-                            },
+                              onPress: () => this.reset()
+                            }
                           ],
                           { cancelable: false }
                         );
@@ -495,8 +495,8 @@ export default class FlightBookingScreen extends Component {
                     .catch((error) => {
                       console.log(error);
                     });
-                },
-              },
+                }
+              }
             ]
           );
         }
@@ -524,11 +524,28 @@ export default class FlightBookingScreen extends Component {
       baggage: "",
       airportCheck: false,
       checkBaggage: false,
-      flight: [],
+      flight: []
     });
   };
 
   render() {
+    let f = [];
+    let t = [];
+    let keyselect = [];
+    let selexts = this.state.select_1;
+    for (var item of selexts) {
+      keyselect.push(item.id);
+    }
+    for (var item of selexts) {
+      if (item.id != this.state.tos_id) {
+        f.push(item);
+      }
+
+      if (item.id != this.state.froms_id) {
+        t.push(item);
+      }
+    }
+
     return (
       <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
         <View
@@ -540,7 +557,7 @@ export default class FlightBookingScreen extends Component {
             borderColor: "white",
             backgroundColor: "white",
             marginHorizontal: 15,
-            marginBottom: 20,
+            marginBottom: 20
           }}
         >
           {/* Start flight booking form section 1 */}
@@ -552,12 +569,12 @@ export default class FlightBookingScreen extends Component {
                 fontWeight: "bold",
                 color: "#4393de",
                 marginTop: 18,
-                alignSelf: "center",
+                alignSelf: "center"
               }}
             >
               {this.state.lang === "EN"
                 ? "EXTERRAN (THAILAND) LTD."
-                : "บริษัทเอ็กซ์เธอร์แลน ประเทศไทย จำกัด"}
+                : "บริษัทเอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
             </Text>
 
             <Text
@@ -565,7 +582,7 @@ export default class FlightBookingScreen extends Component {
                 alignSelf: "center",
                 fontSize: 16,
                 marginTop: 12,
-                marginBottom: 15,
+                marginBottom: 15
               }}
             >
               {this.state.lang === "EN" ? "Flight" : "เครื่องบิน"}
@@ -577,7 +594,7 @@ export default class FlightBookingScreen extends Component {
             </View>
 
             {/* ส่วนที่1 */}
-            <View style={{ margin: 20, marginHorizontal: 8}}>
+            <View style={{ margin: 20, marginHorizontal: 8 }}>
               <Text style={{ marginTop: 10 }}>Name:</Text>
               <Text style={styles.textInput}>ชื่อ</Text>
               <TextInput
@@ -693,7 +710,7 @@ export default class FlightBookingScreen extends Component {
                 marginBottom: 10,
                 flexDirection: "row",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
               <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -714,7 +731,7 @@ export default class FlightBookingScreen extends Component {
               <Text style={styles.textInput}>วันออกเดินทาง</Text>
               <TouchableOpacity onPress={() => this.showDatePicker("start")}>
                 <View style={styles.inputDate}>
-                  <Text style={{ color: "#bfc6ea" }}>
+                  <Text style={{ color: "#000" }}>
                     {this.state.startDate}
                   </Text>
                 </View>
@@ -724,7 +741,7 @@ export default class FlightBookingScreen extends Component {
               <Text style={styles.textInput}>เวลาเดินทาง</Text>
               <TouchableOpacity onPress={() => this.showTimePicker("start")}>
                 <View style={styles.inputDate}>
-                  <Text style={{ color: "#bfc6ea" }}>
+                  <Text style={{ color: "#000" }}>
                     {this.state.startTime}
                   </Text>
                 </View>
@@ -734,7 +751,7 @@ export default class FlightBookingScreen extends Component {
               <Text style={styles.textInput}>สิ้นสุดเดินทาง</Text>
               <TouchableOpacity onPress={() => this.showTimePicker()}>
                 <View style={styles.inputDate}>
-                  <Text style={{ color: "#bfc6ea" }}>{this.state.endTime}</Text>
+                  <Text style={{ color: "#000" }}>{this.state.endTime}</Text>
                 </View>
               </TouchableOpacity>
 
@@ -751,25 +768,29 @@ export default class FlightBookingScreen extends Component {
                       />
                     }
                     style={styles.inputLightStyle}
-                    placeholder={this.state.lang === "EN" ? "Please select from the flight." : "กรุณาเลือกเที่ยวบินต้นทาง"}
+                    placeholder={
+                      this.state.lang === "EN"
+                        ? "Please select from the flight."
+                        : "กรุณาเลือกเที่ยวบินต้นทาง"
+                    }
                     placeholderStyle={{ color: "#bfc6ea" }}
                     placeholderIconColor="#007aff"
                     selectedValue={this.state.froms_id}
-                    onValueChange={(text) =>
-                      this.setState({ froms_id: text, froms: "" })
-                    }
+                    onValueChange={(text) => {
+                      this.setState({ froms_id: text, froms: "" });
+                    }}
                     textStyle={{ fontSize: 14 }}
                   >
-                    {/* <Picker.Item
+                    <Picker.Item
                       label={
                         this.state.lang === "EN"
                           ? "Please select from the flight"
                           : "กรุณาเลือกเที่ยวบินต้นทาง"
                       }
                       value=""
-                    /> */}
+                    />
 
-                    {this.state.select_1.map((data) => {
+                    {f.map((data) => {
                       return (
                         <Picker.Item
                           label={
@@ -822,22 +843,28 @@ export default class FlightBookingScreen extends Component {
                       />
                     }
                     style={styles.inputLightStyle}
-                    placeholder={this.state.lang === "EN" ? "Please select end the flight." : "กรุณาเลือกเที่ยวบินปลายทาง"}
+                    placeholder={
+                      this.state.lang === "EN"
+                        ? "Please select end the flight."
+                        : "กรุณาเลือกเที่ยวบินปลายทาง"
+                    }
                     placeholderStyle={{ color: "#bfc6ea" }}
                     placeholderIconColor="#007aff"
                     selectedValue={this.state.tos_id}
-                    onValueChange={(text) => this.setState({ tos_id: text })}
+                    onValueChange={(text) => {
+                      this.setState({ tos_id: text });
+                    }}
                     textStyle={{ fontSize: 14 }}
                   >
-                    {/* <Picker.Item
+                    <Picker.Item
                       label={
                         this.state.lang === "EN"
                           ? "Please select end the flight"
                           : "กรุณาเลือกเที่ยวบินปลายทาง"
                       }
                       value=""
-                    /> */}
-                    {this.state.select_1.map((data) => {
+                    />
+                    {t.map((data) => {
                       return (
                         <Picker.Item
                           label={
@@ -886,7 +913,7 @@ export default class FlightBookingScreen extends Component {
                       tos_id: "",
                       tos: "",
                       froms_id: "",
-                      froms_id: "",
+                      froms_id: ""
                     });
                   }}
                   style={styles.checkbox}
@@ -899,7 +926,11 @@ export default class FlightBookingScreen extends Component {
               <Text style={styles.textInput}>เที่ยวบิน</Text>
               <TextInput
                 style={styles.inputStyle1}
-                placeholder={this.state.lang === "EN" ? "Please enter your flight." : "กรุณากรอกเที่ยวบิน"}
+                placeholder={
+                  this.state.lang === "EN"
+                    ? "Please enter your flight."
+                    : "กรุณากรอกเที่ยวบิน"
+                }
                 value={this.state.firstflight}
                 onChangeText={(text) => this.setState({ firstflight: text })}
               ></TextInput>
@@ -913,7 +944,7 @@ export default class FlightBookingScreen extends Component {
                   onPress={() => {
                     this.setState({
                       checkBaggage: !this.state.checkBaggage,
-                      baggage: "",
+                      baggage: ""
                     });
                   }}
                   style={styles.checkbox}
@@ -927,7 +958,11 @@ export default class FlightBookingScreen extends Component {
                 <View>
                   <TextInput
                     style={styles.inputStyle1}
-                    placeholder={this.state.lang === "EN" ? "Please enter your baggage weight." : "กรุณากรอกน้ำหนักสัมภาระ"}
+                    placeholder={
+                      this.state.lang === "EN"
+                        ? "Please enter your baggage weight."
+                        : "กรุณากรอกน้ำหนักสัมภาระ"
+                    }
                     value={this.state.baggage}
                     onChangeText={(text) => this.setState({ baggage: text })}
                   ></TextInput>
@@ -936,11 +971,12 @@ export default class FlightBookingScreen extends Component {
               {/* กรณีติ๊ก checkbox */}
 
               <DateTimePickerModal
-              locale="th"
-                // isVisible={isTimePickerVisible}
-                mode="time"
-                // onConfirm={handleTimePicker}
-                // onCancel={hideTimePicker}
+               locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
+               isVisible={this.state.isDatePickerVisible}
+               mode="date"
+               minimumDate={new Date()}
+               onConfirm={this.handleConfirm}
+               onCancel={this.hideDatePicker}
               />
             </View>
           </View>
@@ -1001,7 +1037,11 @@ export default class FlightBookingScreen extends Component {
                             />
                           }
                           style={styles.inputLightStyle}
-                          placeholder={this.state.lang === "EN" ? "Please select from the flight." : "กรุณาเลือกเที่ยวบินต้นทาง"}
+                          placeholder={
+                            this.state.lang === "EN"
+                              ? "Please select from the flight."
+                              : "กรุณาเลือกเที่ยวบินต้นทาง"
+                          }
                           placeholderStyle={{ color: "#bfc6ea" }}
                           placeholderIconColor="#007aff"
                           selectedValue={item.data.froms_id}
@@ -1087,7 +1127,11 @@ export default class FlightBookingScreen extends Component {
                             />
                           }
                           style={styles.inputLightStyle}
-                          placeholder={this.state.lang === "EN" ? "Please select end the flight." : "กรุณาเลือกเที่ยวบินปลายทาง"}
+                          placeholder={
+                            this.state.lang === "EN"
+                              ? "Please select end the flight."
+                              : "กรุณาเลือกเที่ยวบินปลายทาง"
+                          }
                           placeholderStyle={{ color: "#bfc6ea" }}
                           placeholderIconColor="#007aff"
                           selectedValue={item.data.tos_id}
@@ -1227,7 +1271,11 @@ export default class FlightBookingScreen extends Component {
                       <View>
                         <TextInput
                           style={styles.inputStyle1}
-                          placeholder={this.state.lang === "EN" ? "Please enter your baggage weight." : "กรุณากรอกน้ำหนักสัมภาระ"}
+                          placeholder={
+                            this.state.lang === "EN"
+                              ? "Please enter your baggage weight."
+                              : "กรุณากรอกน้ำหนักสัมภาระ"
+                          }
                           value={item.data.baggage}
                           onChangeText={(text) => {
                             let flight = [...this.state.flight];
@@ -1259,14 +1307,14 @@ export default class FlightBookingScreen extends Component {
                           style={{
                             marginLeft: 10,
                             marginRight: 5,
-                            color: "white",
+                            color: "white"
                           }}
                         />
                         <Text
                           style={{
                             color: "white",
                             marginRight: 10,
-                            fontSize: 14,
+                            fontSize: 14
                           }}
                         >
                           {this.state.lang === "EN" ? "Delete" : "ลบ"}
@@ -1274,13 +1322,7 @@ export default class FlightBookingScreen extends Component {
                       </Button>
                     </View>
 
-                    <DateTimePickerModal
-                    locale="th"
-                      // isVisible={isTimePickerVisible}
-                      mode="time"
-                      // onConfirm={handleTimePicker}
-                      // onCancel={hideTimePicker}
-                    />
+                
                   </View>
                 </View>
               </View>
@@ -1288,17 +1330,8 @@ export default class FlightBookingScreen extends Component {
           })}
 
           {/* เพิ่มเที่ยวบิน */}
-
-          {/* โชว์ DateTimePickerModal*/}
           <DateTimePickerModal
-            isVisible={this.state.isDatePickerVisible}
-            mode="date"
-            onConfirm={this.handleConfirm}
-            onCancel={this.hideDatePicker}
-          />
-
-          <DateTimePickerModal
-          locale="th"
+            locale="th"
             isVisible={this.state.isTimePickerVisible}
             mode="time"
             onConfirm={this.handleTimePicker}
@@ -1311,7 +1344,7 @@ export default class FlightBookingScreen extends Component {
               style={styles.btnAddFlightStyle}
               onPress={() =>
                 this.setState({
-                  flight: [...this.state.flight, this.state.flightItem],
+                  flight: [...this.state.flight, this.state.flightItem]
                 })
               }
             >
@@ -1331,7 +1364,7 @@ export default class FlightBookingScreen extends Component {
               flexDirection: "row",
               justifyContent: "space-around",
               paddingVertical: 20,
-              marginBottom: 12,
+              marginBottom: 12
             }}
           >
             <View style={styles.buttonContainer}>
@@ -1364,15 +1397,15 @@ export default class FlightBookingScreen extends Component {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   containerSec1: {
     marginHorizontal: 8,
-    marginVertical: 18,
+    marginVertical: 18
   },
   textHeader: {
     alignItems: "center",
-    padding: 12,
+    padding: 12
   },
   inputStyle: {
     backgroundColor: "#DCDCDC",
@@ -1380,7 +1413,7 @@ const styles = StyleSheet.create({
     height: HEIGHT / 20,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   inputStyle1: {
     borderRadius: 15,
@@ -1389,10 +1422,10 @@ const styles = StyleSheet.create({
     height: HEIGHT / 20,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   textInput: {
-    color: "grey",
+    color: "grey"
   },
   inputLightStyle: {
     borderWidth: 1,
@@ -1403,7 +1436,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     // paddingLeft: 10,
     marginBottom: 10,
-    borderColor: "#007aff",
+    borderColor: "#007aff"
   },
   inputLightStyle1: {
     borderWidth: 1,
@@ -1414,26 +1447,26 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingLeft: 10,
     marginBottom: 10,
-    borderColor: "#007aff",
+    borderColor: "#007aff"
   },
   arrowDownStyle: {
-    backgroundColor: "#F4F4F4",
+    backgroundColor: "#F4F4F4"
   },
   containerSec2: {
     marginHorizontal: 10,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: "#398DDD",
+    borderColor: "#398DDD"
   },
   contentInSec2: {
-    padding: 12,
+    padding: 12
   },
   buttonContainer: {
     alignSelf: "center",
     justifyContent: "center",
     paddingTop: 20,
     width: "30%",
-    borderRadius: 4,
+    borderRadius: 4
   },
   buttonContainer1: {
     alignSelf: "center",
@@ -1442,34 +1475,34 @@ const styles = StyleSheet.create({
     width: "30%",
     borderRadius: 4,
     marginTop: 2,
-    marginBottom: 18,
+    marginBottom: 18
   },
   btnAddFlightStyle: {
     justifyContent: "center",
     alignSelf: "center",
     backgroundColor: "#005ce6",
-    borderRadius: 10,
+    borderRadius: 10
   },
   btnDelFlightStyle: {
     backgroundColor: "#b30000",
     alignSelf: "flex-end",
     marginTop: 10,
     marginBottom: 20,
-    borderRadius: 10,
+    borderRadius: 10
   },
   btnConfirmStyle: {
     backgroundColor: "#449D44",
     justifyContent: "center",
     alignSelf: "center",
     borderRadius: 10,
-    paddingHorizontal: 32,
+    paddingHorizontal: 32
   },
   btnCancelStyle: {
     backgroundColor: "#5A6268",
     justifyContent: "center",
     alignSelf: "center",
     borderRadius: 10,
-    paddingHorizontal: 32,
+    paddingHorizontal: 32
   },
   inputDate: {
     borderWidth: 1,
@@ -1480,12 +1513,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flex: 1,
     justifyContent: "center",
-    borderColor: "#007aff",
+    borderColor: "#007aff"
   },
   checkboxContainer: {
     flexDirection: "row",
     margin: 5,
-    justifyContent: "flex-start",
+    justifyContent: "flex-start"
   },
   checkbox: {
     alignSelf: "center",
@@ -1493,9 +1526,9 @@ const styles = StyleSheet.create({
     height: HEIGHT / 40,
     width: "6%",
     // padding: 20,
-    margin: 8,
+    margin: 8
   },
   label: {
-    margin: 12,
-  },
+    margin: 12
+  }
 });
