@@ -64,7 +64,7 @@ export default class TrainingFormScreen extends Component {
       nameCourse: "",
       courseselect: "",
       lang_id: 1,
-      expense: null,
+      expense: 0,
       showinputExpense: true,
       showuninputExpense: false,
       startDate: "DD/MM/YYYY",
@@ -273,7 +273,7 @@ export default class TrainingFormScreen extends Component {
         inputCourse: false,
         nameCourse: "",
         courseselect: "",
-        expense: null,
+        expense: 0,
         showinputExpense: true,
         showuninputExpense: false,
         startDate: "DD/MM/YYYY",
@@ -414,12 +414,6 @@ export default class TrainingFormScreen extends Component {
             ? "Please select a course"
             : "กรุณาเลือกหลักสูตร"
         );
-      } else if (expense == "") {
-        Alert.alert(
-          this.state.lang === "EN"
-            ? "Please specify cost"
-            : "โปรดระบุค่าใช้จ่าย"
-        );
       } else if (startDate == "DD/MM/YYYY") {
         Alert.alert(
           this.state.lang === "EN"
@@ -450,7 +444,7 @@ export default class TrainingFormScreen extends Component {
           course,
           courseselect,
           nameCourse,
-          expense,
+          expense:expense?expense:0,
           startDate,
           endDate,
           total,
@@ -529,7 +523,7 @@ export default class TrainingFormScreen extends Component {
                           [
                             {
                               text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                              onPress: () => this.reset()
+                              onPress: () => this.props.navigation.goBack()
                             }
                           ],
                           { cancelable: false }
@@ -559,7 +553,7 @@ export default class TrainingFormScreen extends Component {
 
   onPickerValueChange = (value) => {
     this.setState({
-      expense: null,
+      expense: 0,
       course: value,
       courseselect: "",
       course_id: value
@@ -625,7 +619,8 @@ export default class TrainingFormScreen extends Component {
           expense: 0
         });
       }
-      this.checkcourse(Number(result.course_fee?result.course_fee:null));
+      if (this.state.course == 3 || this.state.course == 4||this.state.course == 0) {this.checkcourse(Number(result.course_fee?result.course_fee:0));}
+      
       this.getplace(v);
     }
   };
@@ -1176,8 +1171,14 @@ export default class TrainingFormScreen extends Component {
 
                   <TextInput
                     style={styles.inputStyle1}
-                    keyboardType={"number-pad"}
+                    // keyboardType={"numeric"}
                     onChangeText={(text) => {
+                      if (text=='0') {
+                  
+                        this.setState({
+                          expense: "0"
+                        });
+                      }
                       this.setState({
                         expense: Number(text.replace(/,/g, ""))
                       });
@@ -1819,7 +1820,7 @@ export default class TrainingFormScreen extends Component {
                           ? this.state.courseComfrom.course_title
                           : this.state.nameCourse
                           ? this.state.nameCourse
-                          : "--ไม่ได้กรอกครอส--"}
+                          : "--ไม่ได้กรอกคอสเรียน--"}
                         "
                       </Text>{" "}
                       at

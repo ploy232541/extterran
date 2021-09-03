@@ -14,6 +14,7 @@ import {
   TouchableHighlight,
   FlatList,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import Modal from "react-native-modal";
 import { Accordion, Textarea } from "native-base";
@@ -100,7 +101,7 @@ class Vdo extends Component {
       paused: false,
       playerState: PLAYER_STATES.PLAYING,
       screenType: "content",
-
+      loading:true,
       //////new video expo////
 
       statuss: {},
@@ -108,6 +109,8 @@ class Vdo extends Component {
   }
 
   async componentDidMount() {
+ 
+
     if (fristTime != false) {
       fristTime = false;
     }
@@ -131,6 +134,7 @@ class Vdo extends Component {
       await httpClient
         .get(`/Learn/getLearn/${lesson_id}/${file_id}/${user_id}`)
         .then(async (response) => {
+          this.setState({loading:false})
           const result = response.data;
           if (result != null) {
             maxPlayPosition =
@@ -1388,8 +1392,15 @@ class Vdo extends Component {
   /////////////////////////////////End all function note////////////////////////////////////
 
   render() {
-    const { dataArray } = this.state;
+  const { dataArray } = this.state;
     activateKeepAwake()
+   if (this.state.loading) {
+    return (
+      <View style={[styles.container, styles.horizontal]}>
+        <ActivityIndicator size="large" color="#1877f2" />
+      </View>
+    );
+   }else{
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
         <ScrollView>
@@ -1507,7 +1518,7 @@ class Vdo extends Component {
           />
         </ScrollView>
       </SafeAreaView>
-    );
+    );}
   }
 }
 
@@ -1596,7 +1607,11 @@ const styles = StyleSheet.create({
     width: "100%",
     // height: 173,
     height: HEIGHT / 3,
-  },
+  },  lottie: {
+    width: 100,
+    height: 100
+  }
+
 });
 
 export default function (props) {

@@ -38,6 +38,7 @@
     "expo-updates": "~0.3.3",
     "form-data": "^3.0.0",
     "intl": "^1.2.5",
+    "lottie-react-native": "~2.6.1",
     "moment": "^2.29.1",
     "moment-range": "^4.0.2",
     "native-base": "^2.15.0",
