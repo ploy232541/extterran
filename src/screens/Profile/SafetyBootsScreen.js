@@ -55,9 +55,11 @@ export default class SafetyBootsScreen extends Component {
     let id = await AsyncStorage.getItem("userId");
 
     let n = new Date().getMonth();
+
     this.setState({ user_id: id, month: n });
     //สำหรับเทส
-    if (this.state.month < 7) {
+    if (n <8) {
+      console.log(n);
       this.setState({ select_boots: true });
     }
     const res = await AsyncStorage.getItem("language");
@@ -245,7 +247,7 @@ export default class SafetyBootsScreen extends Component {
   };
   reset = async () => {
      //สำหรับเทส
-    if (this.state.month < 7) {
+    if (this.state.month < 8) {
       this.setState({ select_boots: true });
     }
     try {

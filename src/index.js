@@ -194,7 +194,7 @@ function DrawerStack() {
 
   return (
     <Drawer.Navigator
-                screenOptions={{ headerShown: true }}
+                screenOptions={{ headerShown: true,headerStatusBarHeight:0 }}
                 drawerContent={(props) => <CustomDrawerContent {...props} />}
               >
                 <Drawer.Screen
@@ -397,7 +397,10 @@ function MainApp() {
       },
     };
   }, [theme.colors, theme.dark]);
-
+  const lang = AsyncStorage.getItem("language");
+  let company =lang === "EN"
+  ? "EXTERRAN (THAILAND) LTD."
+  : "บริษัทเอ็กซ์เธอร์แอน ประเทศไทย จำกัด"
   return (
     <PaperProvider theme={paperTheme}>
       <NavigationContainer>
@@ -429,8 +432,10 @@ function MainApp() {
             name="Main"
             component={DrawerStack}
             options={{
-              title: " ",
-              headerShown: false,
+              color:"blue",
+              headerTintColor:"#1877f2",
+              title:company,
+              headerShown: true,
             }}
           />
 
