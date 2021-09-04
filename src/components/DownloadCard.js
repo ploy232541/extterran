@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Card } from "react-native-paper"
-import { View, StyleSheet, Text, FlatList, AsyncStorage, TouchableOpacity } from "react-native"
+import { View, StyleSheet, Text, FlatList, AsyncStorage, TouchableOpacity, Alert } from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
 import {httpClient} from '../core/HttpClient';
 import moment from 'moment';
@@ -48,7 +48,7 @@ const DownloadCard = ({ item }) => {
             </View>
             <View style={{flex: 1, flexDirection:'row', alignItems:'center'}}>
                 <TouchableOpacity 
-                onPress={()=> downloadFIle(item.dow_address, item.dow_name)}
+                onPress={()=> {item.dow_address?(downloadFIle(item.dow_address, item.dow_name)):Alert.alert("ไม่พบไฟล์ในฐานข้อมูล")}}
                 >
                   <View style={{flex: 1, flexDirection:'row', alignItems:'center'}}>
                     <Icon name="ios-download" size={30}/><Text style={{fontSize:12, marginLeft:5}}> {lang == "EN" ? 'Download' : 'ดาวน์โหลด'}</Text>

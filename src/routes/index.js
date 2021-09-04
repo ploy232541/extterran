@@ -75,6 +75,7 @@ import FeedBackCourseGeneralScreen from '../screens/FeedBack/FeedBackCourseGener
 import CourseScreenDetailOut from '../screens/Course/CourseScreenDetailOut'
 import ProfileInfor from '../screens/Profile/ProfileInfor';
 import PDFScreen from "../screens/Home/PDFScreen";
+import StudyPlanDetailScreen from "../screens/StudyPlan/StudyPlanDetailScreen";
 
 const routes = {
   HomeScreen: { title: " ", component: HomeScreen },
@@ -90,7 +91,7 @@ const routes = {
   QandAListScreen: { title: " ", component: QandAListScreen },
   QandADetailScreen: { title: " ", component: QandADetailScreen },
   DownloadScreen: { title: " ", component: DownloadScreen },
-
+  StudyPlanDetailScreen:{title:"",component:StudyPlanDetailScreen},
   ProfileScreen: { title: " ", component: ProfileScreen },
   OutfitScreen: { title: " ", component: OutfitScreen },
   SafetyBootsScreen: { title: " ", component: SafetyBootsScreen },

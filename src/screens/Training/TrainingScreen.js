@@ -65,7 +65,7 @@ function TrainingScreen() {
 
   var d = new Date();
    // เปิดไว้สำหรับเทส
-  if (d.getMonth() == 7) {
+  if (d.getMonth() == 8) {
     TrainingHeader.push({
       id: 4,
       title: "Training Need",

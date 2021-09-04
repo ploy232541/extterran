@@ -1,10 +1,9 @@
 /* Done for now */
 import React, { useEffect, useState } from "react";
-import { Dimensions, Text, View } from "react-native";
+import { AsyncStorage, Dimensions, Text, View } from "react-native";
 import { DataTable } from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
 
-import AsyncStorage1 from "@react-native-async-storage/async-storage";
 
 const HEIGHT = Dimensions.get("window").height;
 
@@ -60,7 +59,7 @@ function StudyPlanDetailScreen(props) {
 
   useEffect(() => {
     const run = async () => {
-      setLang(await AsyncStorage1.getItem("language"));
+      setLang(await AsyncStorage.getItem("language"));
     };
 
     run();

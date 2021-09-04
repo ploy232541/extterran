@@ -99,7 +99,7 @@ export default class OutfitScreen extends Component {
         .get(`/Training/SizeUniforms`)
         .then((response) => {
           const result = response.data;
-
+          this.setState({ loading: false });
           if (result != null) {
             let data = [];
 
@@ -201,7 +201,7 @@ export default class OutfitScreen extends Component {
             }
           }
 
-          this.setState({ loading: false });
+      
 
           /*if (result != null) {
             if ((Number(result.length))%2 != 1) {
