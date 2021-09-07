@@ -155,7 +155,7 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case "HomeTab":
-      return " ";
+      return "บริษัทเอ็กซ์เธอร์แอน ประเทศไทย จำกัด";
     case "MyProgramsTab":
       return " ";
     case "SearchTab":
@@ -194,7 +194,7 @@ function DrawerStack() {
 
   return (
     <Drawer.Navigator
-                screenOptions={{ headerShown: true,headerStatusBarHeight:0 }}
+                screenOptions={{ headerShown: true}}
                 drawerContent={(props) => <CustomDrawerContent {...props} />}
               >
                 <Drawer.Screen
@@ -203,6 +203,7 @@ function DrawerStack() {
                  
                     title: lang == 'EN' ? "Home" : "หน้าหลัก",
                     headerTitle: getHeaderTitle(route),
+                    headerTintColor:"#1877f2",
                     drawerIcon: ({ size, color }) => (
                       <Icons size={size} color={color} name="home" />
                     ),
@@ -435,7 +436,7 @@ function MainApp() {
               color:"blue",
               headerTintColor:"#1877f2",
               title:company,
-              headerShown: true,
+              headerShown: false,
             }}
           />
 
