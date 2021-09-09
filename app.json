@@ -18,12 +18,12 @@
     ],
     "ios": {
       "bundleIdentifier": "com.exterran.elearnings",
-      "buildNumber": "1.0.2",
+      "buildNumber": "1.0.3",
       "supportsTablet": true
     },
     "android": {
       "package": "com.exterran.elearning",
-      "versionCode": 37,
+      "versionCode": 38,
       "permissions": []
     },
     "web": {

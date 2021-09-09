@@ -123,6 +123,7 @@ class CousreScreenDetail extends Component {
       };
     
       _reanderItem = ({item, index}) => {
+    
         let {itemStyle, itemText, itemInvisible, status_notLearn, status_learning, status_pass} = styles;
         if (item.empty) {
           return <View style={itemInvisible} />;

@@ -399,9 +399,7 @@ function MainApp() {
     };
   }, [theme.colors, theme.dark]);
   const lang = AsyncStorage.getItem("language");
-  let company =lang === "EN"
-  ? "EXTERRAN (THAILAND) LTD."
-  : "บริษัทเอ็กซ์เธอร์แอน ประเทศไทย จำกัด"
+ 
   return (
     <PaperProvider theme={paperTheme}>
       <NavigationContainer>
@@ -435,7 +433,7 @@ function MainApp() {
             options={{
               color:"blue",
               headerTintColor:"#1877f2",
-              title:company,
+              title:" ",
               headerShown: false,
             }}
           />
