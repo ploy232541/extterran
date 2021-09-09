@@ -228,7 +228,7 @@ function HomeScreen() {
       setTimeout(() => {
         setCountloading(countloading + 1);
       }, 1000);
-      if (loading && countloading > 15) {
+      if (loading && countloading > 20) {
         return (
           <View style={{ backgroundColor: "#fff" }}>
             <Image
