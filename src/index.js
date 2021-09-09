@@ -155,7 +155,7 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case "HomeTab":
-      return "บริษัทเอ็กซ์เธอร์แอน ประเทศไทย จำกัด";
+      return "บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด";
     case "MyProgramsTab":
       return " ";
     case "SearchTab":
@@ -218,7 +218,6 @@ function DrawerStack() {
                   name="MyPrograms"
                   options={({ route }) => ({
                     title: lang == 'EN' ? "Course" : "หลักสูตรของฉัน",
-                    headerTitle: getHeaderTitle(route),
                     drawerIcon: ({ size, color }) => (
                       <Icons size={size} color={color} name="view-list" />
                     ),
