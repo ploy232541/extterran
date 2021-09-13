@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  SafeAreaView,
+  SafeAreaView
 } from "react-native";
 import { httpClient } from "../../core/HttpClient";
 import { Label, Button, Input, Textarea } from "native-base";
@@ -44,7 +44,7 @@ export default class CourseScreenDetailOut extends Component {
       backgroundColorIcon: "",
       content: "",
 
-      loading: null,
+      loading: null
     };
   }
 
@@ -119,7 +119,7 @@ export default class CourseScreenDetailOut extends Component {
               field_id: value.isInput.input.field_id,
               required: value.isInput.input.required,
               field: "input",
-              name_field: value.isInput.label.field_name,
+              name_field: value.isInput.label.field_name
             });
           }
         } else if (value.isRadio) {
@@ -139,7 +139,7 @@ export default class CourseScreenDetailOut extends Component {
                 field_id: value.isRadio.radio.field_id,
                 required: radioRequired,
                 field: "radio",
-                name_field: radioName,
+                name_field: radioName
               });
             }
           }
@@ -149,7 +149,7 @@ export default class CourseScreenDetailOut extends Component {
               field_id: value.isTextarea.textarea.field_id,
               required: value.isTextarea.textarea.required,
               field: "textarea",
-              name_field: value.isTextarea.label.field_name,
+              name_field: value.isTextarea.label.field_name
             });
           }
         } else if (value.isDate) {
@@ -158,7 +158,7 @@ export default class CourseScreenDetailOut extends Component {
               field_id: value.isDate.date.field_id,
               required: value.isDate.date.required,
               field: "date",
-              name_field: value.isDate.label.field_name,
+              name_field: value.isDate.label.field_name
             });
           }
         } else if (value.isFile) {
@@ -167,7 +167,7 @@ export default class CourseScreenDetailOut extends Component {
               field_id: value.isFile.file.field_id,
               required: value.isFile.file.required,
               field: "file",
-              name_field: value.isFile.label.field_name,
+              name_field: value.isFile.label.field_name
             });
           }
         } else if (value.isCheckbox) {
@@ -187,7 +187,7 @@ export default class CourseScreenDetailOut extends Component {
                 field_id: value.isCheckbox.checkbox.field_id,
                 required: checkBoxRequired,
                 field: "checkbox",
-                name_field: checkBoxName,
+                name_field: checkBoxName
               });
             }
           }
@@ -201,7 +201,7 @@ export default class CourseScreenDetailOut extends Component {
           {
             text: this.state.lang == "EN" ? "CANCEL" : "ยกเลิก",
             onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",
+            style: "cancel"
           },
           {
             text: this.state.lang == "EN" ? "OK" : "ตกลง",
@@ -258,11 +258,11 @@ export default class CourseScreenDetailOut extends Component {
                           let file = {
                             field_id: value.field_id,
                             name: this.state[`field_id_${value.field_id}`].name,
-                            uri: this.state[`field_id_${value.field_id}`].uri,
+                            uri: this.state[`field_id_${value.field_id}`].uri
                           };
 
                           this.setState({
-                            fileAll: [...this.state.fileAll, file],
+                            fileAll: [...this.state.fileAll, file]
                           });
                           dataAll[value.field_id] =
                             this.state[`field_id_${value.field_id}`].name;
@@ -284,11 +284,11 @@ export default class CourseScreenDetailOut extends Component {
                           let file = {
                             field_id: value.field_id,
                             name: this.state[`field_id_${value.field_id}`].name,
-                            uri: this.state[`field_id_${value.field_id}`].uri,
+                            uri: this.state[`field_id_${value.field_id}`].uri
                           };
 
                           this.setState({
-                            fileAll: [...this.state.fileAll, file],
+                            fileAll: [...this.state.fileAll, file]
                           });
                           dataAll[value.field_id] =
                             this.state[`field_id_${value.field_id}`].name;
@@ -328,7 +328,7 @@ export default class CourseScreenDetailOut extends Component {
                   course_id: course_id,
                   user_id: user_id,
                   lang_id: lang_id,
-                  fieldAll: dataAll,
+                  fieldAll: dataAll
                 };
 
                 httpClient
@@ -343,7 +343,7 @@ export default class CourseScreenDetailOut extends Component {
                         icon: "check",
                         backgroundColorIcon: "green",
                         content:
-                          this.state.lang == "EN" ? "Success." : "เรียบร้อย",
+                          this.state.lang == "EN" ? "Success." : "เรียบร้อย"
                       });
                     }
                   })
@@ -351,8 +351,8 @@ export default class CourseScreenDetailOut extends Component {
                     console.log(error);
                   });
               }
-            },
-          },
+            }
+          }
         ],
         { cancelable: false }
       );
@@ -371,14 +371,14 @@ export default class CourseScreenDetailOut extends Component {
 
             if (value.filed_id == val.field_id) {
               var params = {
-                form_ans_id: value.form_ans_id,
+                form_ans_id: value.form_ans_id
                 // form_id: value.form_id
               };
 
               const data = new FormData();
               data.append("file", {
                 name: val.name,
-                uri: val.uri,
+                uri: val.uri
               });
 
               Object.keys(params).forEach((key) =>
@@ -395,7 +395,7 @@ export default class CourseScreenDetailOut extends Component {
                       icon: "check",
                       backgroundColorIcon: "green",
                       content:
-                        this.state.lang == "EN" ? "Success." : "เรียบร้อย",
+                        this.state.lang == "EN" ? "Success." : "เรียบร้อย"
                     });
                   }
                 })
@@ -461,7 +461,7 @@ export default class CourseScreenDetailOut extends Component {
     if (this.state.selectCheckBox) {
       if (this.state.selectCheckBox[id] == true) {
         await this.setState({
-          checkBoxChoice: [...this.state.checkBoxChoice, id],
+          checkBoxChoice: [...this.state.checkBoxChoice, id]
         });
       } else {
         await this.removeValue(this.state.checkBoxChoice, id);
@@ -493,7 +493,17 @@ export default class CourseScreenDetailOut extends Component {
       );
     }
     return (
-      <ScrollView style={{ backgroundColor: "#fff" , borderWidth: 2, marginVertical: 18, marginHorizontal: 15,borderRadius:12}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={{
+          backgroundColor: "#fff",
+          borderWidth: 2,
+          marginVertical: 18,
+          marginHorizontal: 15,
+          borderRadius: 12
+        }}
+      >
         <View style={{ flex: 1, padding: 30 }}>
           <Text style={{ fontSize: 20, alignSelf: "center", marginBottom: 20 }}>
             {" "}
@@ -521,8 +531,8 @@ export default class CourseScreenDetailOut extends Component {
                               data.isInput.input.checkInput != "" ||
                               data.isInput.input.text_dis != ""
                                 ? "#d9d9d9"
-                                : "#fff",
-                          },
+                                : "#fff"
+                          }
                         ]}
                         editable={
                           data.isInput.input.checkInput != "" ||
@@ -563,7 +573,7 @@ export default class CourseScreenDetailOut extends Component {
                           backgroundColor:
                             data.isTextarea.textarea.disabled == "disabled"
                               ? "#d9d9d9"
-                              : "#fff",
+                              : "#fff"
                         }}
                         disabled={
                           data.isTextarea.textarea.disabled == "disabled"
@@ -615,7 +625,7 @@ export default class CourseScreenDetailOut extends Component {
                             style={{
                               flex: 1,
                               flexDirection: "row",
-                              alignItems: "center",
+                              alignItems: "center"
                             }}
                           >
                             <View
@@ -623,7 +633,7 @@ export default class CourseScreenDetailOut extends Component {
                                 backgroundColor: "#e6e6e6",
                                 borderRadius: 20,
                                 marginBottom: 5,
-                                marginRight: 10,
+                                marginRight: 10
                               }}
                             >
                               <RadioButton
@@ -706,7 +716,7 @@ export default class CourseScreenDetailOut extends Component {
                           style={{
                             flexDirection: "row",
                             justifyContent: "center",
-                            alignItems: "center",
+                            alignItems: "center"
                           }}
                         >
                           <View style={{ flex: 0.5 }}>
@@ -722,7 +732,7 @@ export default class CourseScreenDetailOut extends Component {
                               style={{
                                 backgroundColor: "#DCDCDC",
                                 height: 30,
-                                marginTop: 8,
+                                marginTop: 8
                               }}
                             >
                               <Text style={{ marginLeft: 5, marginRight: 5 }}>
@@ -746,7 +756,7 @@ export default class CourseScreenDetailOut extends Component {
                                   height: 30,
                                   borderColor: "#3399ff",
                                   borderWidth: 1,
-                                  marginTop: 8,
+                                  marginTop: 8
                                 }}
                               >
                                 <Text
@@ -754,7 +764,7 @@ export default class CourseScreenDetailOut extends Component {
                                     color: "#3399ff",
                                     fontWeight: "bold",
                                     marginLeft: 10,
-                                    marginRight: 10,
+                                    marginRight: 10
                                   }}
                                 >
                                   {this.state.lang == "EN"
@@ -792,7 +802,7 @@ export default class CourseScreenDetailOut extends Component {
                           style={{
                             flex: 1,
                             flexDirection: "row",
-                            alignItems: "center",
+                            alignItems: "center"
                           }}
                         >
                           <View
@@ -801,7 +811,7 @@ export default class CourseScreenDetailOut extends Component {
                               borderRadius: 5,
                               marginBottom: 5,
                               marginRight: 10,
-                            //   borderColor: "#e6e6e6",
+                              //   borderColor: "#e6e6e6",
                               borderColor: "black",
                               borderWidth: 2
                             }}
@@ -846,7 +856,7 @@ export default class CourseScreenDetailOut extends Component {
               </View>
             );
           })}
-          <View style={{ flex: 1, alignSelf: "center", }}>
+          <View style={{ flex: 1, alignSelf: "center" }}>
             <Button
               disabled={checkButton}
               onPress={this.submitForm}
@@ -854,7 +864,7 @@ export default class CourseScreenDetailOut extends Component {
                 backgroundColor: "green",
                 height: 40,
                 marginTop: 8,
-                marginBottom: 8,
+                marginBottom: 8
               }}
             >
               <Text
@@ -862,7 +872,7 @@ export default class CourseScreenDetailOut extends Component {
                   color: "#fff",
                   fontWeight: "bold",
                   marginLeft: 10,
-                  marginRight: 10,
+                  marginRight: 10
                 }}
               >
                 {this.state.lang == "EN" ? "Submit" : "บันทึก"}
@@ -882,7 +892,7 @@ export default class CourseScreenDetailOut extends Component {
                 alignItems: "center",
                 backgroundColor: this.state.backgroundColorIcon,
                 borderRadius: 50,
-                width: "100%",
+                width: "100%"
               }}
             >
               <AntDesign name={this.state.icon} size={36} color="#FFFFFF" />
@@ -910,7 +920,7 @@ export default class CourseScreenDetailOut extends Component {
 
 const styles = StyleSheet.create({
   boxView: {
-    marginBottom: 10,
+    marginBottom: 10
   },
   inputStyle: {
     borderRadius: 15,
@@ -919,7 +929,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     marginBottom: 10,
     borderColor: "#cccccc",
-    borderWidth: 1,
+    borderWidth: 1
   },
   textareaStyle: {
     borderRadius: 5,
@@ -928,7 +938,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     marginBottom: 10,
     borderColor: "#cccccc",
-    borderWidth: 1,
+    borderWidth: 1
   },
   inputDate: {
     borderWidth: 1,
@@ -938,20 +948,20 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     marginBottom: 10,
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   datePickerStyle: {
     width: "100%",
-    borderRadius: 5,
+    borderRadius: 5
   },
   labels: {
-    fontSize: 16,
+    fontSize: 16
   },
   sublabels: {
     color: "gray",
     fontSize: 14,
     marginTop: -5,
-    marginBottom: 5,
+    marginBottom: 5
   },
 
   content: {
@@ -960,11 +970,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: -16,
-    marginBottom: 16,
+    marginBottom: 16
   },
   contentText: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 16
   },
   btn: {
     borderRadius: 32,
@@ -978,10 +988,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#0099ff",
     marginTop: 16,
     minWidth: "50%",
-    paddingHorizontal: 16,
+    paddingHorizontal: 16
   },
   btnText: {
     color: "#FFFFFF",
-    fontWeight: "bold",
-  },
+    fontWeight: "bold"
+  }
 });

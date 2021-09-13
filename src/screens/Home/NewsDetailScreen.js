@@ -36,8 +36,8 @@ const NewsDetailScreen = (props) => {
   const onMessage = (event) => {
     setWebViewHeight(Number(event.nativeEvent.data));
   };
-  let htmlsdecode=decode(decode(details)) 
-let htmls=`<!doctype html>
+  let htmlsdecode = decode(decode(details));
+  let htmls = `<!doctype html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -69,7 +69,7 @@ let htmls=`<!doctype html>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     -->
   </body>
-</html>`
+</html>`;
   const onShouldStartLoadWithRequest = (request) => {
     if (request.navigationType === "click") {
       // Open all new click-throughs in external browser.
@@ -81,7 +81,13 @@ let htmls=`<!doctype html>
   if (details.includes("<iframe")) {
     return (
       <View style={styles.container}>
+        {/* <ScrollView
+                    
+                    style={{ flex: 1, backgroundColor: "white" }}
+                  > */}
         <ScrollView
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
             flexGrow: 1,
             height: styles.header.height + webViewHeight
@@ -129,7 +135,7 @@ let htmls=`<!doctype html>
             </Card>
           </View>
           <WebView
-            source={{ html: htmlsdecode}}
+            source={{ html: htmlsdecode }}
             bounces={true}
             scrollEnabled={true}
             onMessage={onMessage}
@@ -148,7 +154,7 @@ let htmls=`<!doctype html>
         </ScrollView>
       </View>
     );
-  }else if(details.includes("source")){
+  } else if (details.includes("source")) {
     return (
       <View style={styles.container}>
         <ScrollView
@@ -156,6 +162,8 @@ let htmls=`<!doctype html>
             flexGrow: 1,
             height: styles.header.height + webViewHeight
           }}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
         >
           <View style={styles.header}>
             <Card style={styles.cardStyle}>
@@ -199,7 +207,7 @@ let htmls=`<!doctype html>
             </Card>
           </View>
           <WebView
-            source={{ html: htmls}}
+            source={{ html: htmls }}
             bounces={true}
             scrollEnabled={true}
             onMessage={onMessage}
@@ -218,11 +226,13 @@ let htmls=`<!doctype html>
         </ScrollView>
       </View>
     );
-  } 
-  else {
+  } else {
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+        >
           <Card style={styles.cardStyle}>
             <Card.Cover
               source={{

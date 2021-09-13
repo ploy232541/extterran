@@ -554,7 +554,12 @@ export default class MainProfileScreen extends Component {
     let question = [...this.state.question];
 
     return (
-      <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
+      // <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={{ flex: 1, backgroundColor: "white" }}
+      >
         <View
           style={{
             flex: 1,

@@ -144,8 +144,12 @@ export default class ReportScreen extends Component {
   }
   renderHeader = () => {
     return (
-      <ScrollView style={{borderRadius: 10}}>
-        <View >
+      <ScrollView
+        style={{ borderRadius: 10 }}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
+        <View>
           <DateTimePickerModal
             locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
             isVisible={this.state.isDatePickerVisible}
@@ -284,12 +288,21 @@ export default class ReportScreen extends Component {
       );
     }
     return (
-      <ScrollView style={styles.root}>
+      <ScrollView
+        style={styles.root}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         <View style={{ marginBottom: 30 }}>
           <Text style={styles.headline}>รายการ Report</Text>
 
           <View style={styles.container}>
-            <List style={{ borderWidth: 1, borderColor: "#e6e6e6" },{borderRadius: 10}}>
+            <List
+              style={
+                ({ borderWidth: 1, borderColor: "#e6e6e6" },
+                { borderRadius: 10 })
+              }
+            >
               <FlatList
                 data={this.state.datalist}
                 renderItem={this._reanderItem}

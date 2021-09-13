@@ -115,7 +115,12 @@ class QandAListScreen extends Component {
 
     render(){
         return (
-            <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
+            // <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
+            <ScrollView
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            style={{ flex: 1, backgroundColor: "white" }}
+          >
                 <View style={{ margin: 15 }}>
                 <Accordion
                   dataArray={this.state.dataArray}

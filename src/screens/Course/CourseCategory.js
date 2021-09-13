@@ -143,7 +143,12 @@ function CourseCategory({route}) {
     const numberColumns = 2
 
     return (
-        <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
+        // <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    style={{ flex: 1, backgroundColor: "white" }}
+                  >
           {/* <TouchableOpacity disabled style={{borderRadius: 5,width:'40%', alignSelf:'center', alignItems:'center', height:HEIGHT*0.05, justifyContent:'center', backgroundColor:'#3b5998', marginVertical:20}}>
             <Text style={{color:'white', fontSize: 16}}>{lang == "EN" ? 'Course category' : 'หมวดหมู่หลักสูตร'}</Text>
          </TouchableOpacity> */}

@@ -84,7 +84,12 @@ const FeedBackCourseInScreen = (props) => {
       );
     }
     return (
-        <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
+        // <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
+              <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    style={{ flex: 1, backgroundColor: "white" }}
+                  >
            {
              courseId ? 
               <Modal_FeedBack courseId={courseId} chkVisible={modalVisible} closeModal={_closeModal} />

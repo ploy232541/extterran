@@ -1,15 +1,20 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { ScrollView} from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { Divider } from "react-native-elements";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import { Dimensions } from "react-native";
 
-const WIDTH = Dimensions.get('window').width
+const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
 const StaffForm = () => {
   return (
-    <ScrollView style={{ backgroundColor: "white" }}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+      style={{ flex: 1, backgroundColor: "white" }}
+    >
+      {/* <ScrollView style={{ backgroundColor: "white" }}> */}
       <View style={styles.container}>
         <View style={{ marginHorizontal: 48 }}>
           <Divider style={{ backgroundColor: "#6e767e" }} />
@@ -20,10 +25,10 @@ const StaffForm = () => {
             fontSize: 16,
             color: "#4393de",
             marginTop: 10,
-            alignSelf: "center",
+            alignSelf: "center"
           }}
         >
-          บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด
+          บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด
         </Text>
         <Text style={{ alignSelf: "center", fontSize: 16 }}>
           Booking Request
@@ -35,7 +40,7 @@ const StaffForm = () => {
             borderWidth: 1,
             borderRadius: 12,
             marginTop: 20,
-            borderColor: "#d9d9d9",
+            borderColor: "#d9d9d9"
           }}
         >
           <View style={{ margin: 20 }}>
@@ -43,7 +48,7 @@ const StaffForm = () => {
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                alignItems: "baseline",
+                alignItems: "baseline"
               }}
             >
               <Text>ชื่อ</Text>
@@ -59,7 +64,7 @@ const StaffForm = () => {
               style={{
                 flexDirection: "row",
                 alignItems: "baseline",
-                marginTop: 5,
+                marginTop: 5
               }}
             >
               <Text>แผนก</Text>
@@ -69,7 +74,7 @@ const StaffForm = () => {
               style={{
                 flexDirection: "row",
                 alignItems: "baseline",
-                marginTop: 5,
+                marginTop: 5
               }}
             >
               <Text>ค่าใช้จ่ายต่อบุคคล(ไม่รวมภาษี)</Text>
@@ -79,7 +84,7 @@ const StaffForm = () => {
               style={{
                 flexDirection: "row",
                 alignItems: "baseline",
-                marginTop: 5,
+                marginTop: 5
               }}
             >
               <Text>วันที่เริ่มฝึกอบรม</Text>
@@ -91,7 +96,7 @@ const StaffForm = () => {
               style={{
                 flexDirection: "row",
                 alignItems: "baseline",
-                marginTop: 5,
+                marginTop: 5
               }}
             >
               <Text>รวมวันฝึกอบรม</Text>
@@ -114,7 +119,7 @@ const StaffForm = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     borderWidth: 1,
-                    borderRadius: 5,
+                    borderRadius: 5
                   }}
                 >
                   <AntIcon name="filetext1" size={24} />
@@ -143,7 +148,7 @@ const StaffForm = () => {
               style={{
                 backgroundColor: "#4393de",
                 marginHorizontal: 36,
-                marginTop: 40,
+                marginTop: 40
               }}
             />
             <View
@@ -151,7 +156,7 @@ const StaffForm = () => {
                 marginHorizontal: 36,
                 alignItems: "center",
                 marginTop: 5,
-                marginBottom: 40,
+                marginBottom: 40
               }}
             >
               <Text>Country Manager</Text>
@@ -163,14 +168,14 @@ const StaffForm = () => {
               style={{
                 backgroundColor: "#4393de",
                 marginHorizontal: 36,
-                marginTop: 40,
+                marginTop: 40
               }}
             />
             <View
               style={{
                 marginHorizontal: 36,
                 alignItems: "center",
-                marginTop: 5,
+                marginTop: 5
               }}
             >
               <Text>HR Training Coordinator</Text>
@@ -181,14 +186,14 @@ const StaffForm = () => {
               style={{
                 backgroundColor: "#4393de",
                 marginHorizontal: 36,
-                marginTop: 40,
+                marginTop: 40
               }}
             />
             <View
               style={{
                 marginHorizontal: 36,
                 alignItems: "center",
-                marginTop: 5,
+                marginTop: 5
               }}
             >
               <Text>Human Resources Manager</Text>
@@ -196,16 +201,39 @@ const StaffForm = () => {
             </View>
           </View>
 
-          <View style={{flexDirection:'row', justifyContent:'space-around', margin:20}}>
-          <TouchableOpacity style={{backgroundColor:'green',width:WIDTH/5,height:HEIGHT*0.04, justifyContent:'center', alignItems:'center',borderRadius:4}}>
-                <Text style={{color:'white'}}>อนุมัติ</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              margin: 20
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                backgroundColor: "green",
+                width: WIDTH / 5,
+                height: HEIGHT * 0.04,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 4
+              }}
+            >
+              <Text style={{ color: "white" }}>อนุมัติ</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{backgroundColor:'red',width:WIDTH/5,height:HEIGHT*0.04, justifyContent:'center', alignItems:'center',borderRadius:4}}>
-                <Text style={{color:'white'}}>ไม่อนุมัติ</Text>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "red",
+                width: WIDTH / 5,
+                height: HEIGHT * 0.04,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 4
+              }}
+            >
+              <Text style={{ color: "white" }}>ไม่อนุมัติ</Text>
             </TouchableOpacity>
           </View>
-
         </View>
       </View>
     </ScrollView>
@@ -215,11 +243,11 @@ const StaffForm = () => {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 18,
-    marginVertical: 18,
+    marginVertical: 18
   },
   marginText: {
-    marginTop: 5,
-  },
+    marginTop: 5
+  }
 });
 
 export default StaffForm;

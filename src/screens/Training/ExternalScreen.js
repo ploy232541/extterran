@@ -449,7 +449,10 @@ export default class ExternalScreen extends Component {
   render() {
     return (
       <View style={styles.background}>
-        <ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+        >
           <View style={styles.textHeader}>
             <Text style={{ color: "#333333", fontSize: 24 }}>
               Training Needs - External
@@ -499,7 +502,10 @@ export default class ExternalScreen extends Component {
             // จบ การกอปปี้พนักงาน
             return (
               <View>
-                <ScrollView>
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
+                >
                   <View style={styles.containerSec2}>
                     <View style={styles.contentInSec}>
                       <View

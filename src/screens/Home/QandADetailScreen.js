@@ -10,7 +10,12 @@ const QandADetailScreen = (props) => {
     const date = props.route.params.date
     const details = props.route.params.details
     return (
-        <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
+        <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={{ flex: 1, backgroundColor: "white" }}
+      >
+        {/* <ScrollView style={{ backgroundColor: "white", flex: 1 }}> */}
             <View style={styles.container}>
                 <Card style={{ marginVertical: 40 }}>
                     <Card.Title

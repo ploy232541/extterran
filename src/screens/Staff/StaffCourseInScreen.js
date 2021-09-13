@@ -183,7 +183,12 @@ const StaffCourseInScreen = (props) => {
       );
     }
     return (
-        <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
+      <ScrollView
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+      style={{ flex: 1, backgroundColor: "white" }}
+    >
+        {/* <ScrollView style={{ flex: 1, backgroundColor: "white" }}> */}
            {
              userId ? 
               <ModalFeedBack userId={userId} chkVisible={modalVisible} closeModal={_closeModal} />

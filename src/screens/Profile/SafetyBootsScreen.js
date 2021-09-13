@@ -8,7 +8,7 @@ import {
   Image,
   Alert,
   ActivityIndicator,
-  SafeAreaView,
+  SafeAreaView
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
@@ -47,7 +47,7 @@ export default class SafetyBootsScreen extends Component {
       uniform_name: "", //
       uniform_part: "", //
       uniform_total: "", //
-      loading: true,
+      loading: true
     };
   }
 
@@ -58,7 +58,7 @@ export default class SafetyBootsScreen extends Component {
 
     this.setState({ user_id: id, month: n });
     //สำหรับเทส
-    if (n <8) {
+    if (n < 8) {
       console.log(n);
       this.setState({ select_boots: true });
     }
@@ -81,7 +81,7 @@ export default class SafetyBootsScreen extends Component {
               data[i] = { id: i, name: result[i] };
             }
             this.setState({
-              select_1: data,
+              select_1: data
             });
           }
         })
@@ -111,7 +111,7 @@ export default class SafetyBootsScreen extends Component {
                 boots_name: result[0].boots_name,
                 uniform_name: result[0].uniform_name,
                 boots_size: size.id,
-                select_boots: true,
+                select_boots: true
               });
               if (result[0].boots_type == 1) {
                 this.setState({ boots: true });
@@ -135,7 +135,7 @@ export default class SafetyBootsScreen extends Component {
               var row = result[i];
 
               this.setState({
-                orgid: row.orgchart_id,
+                orgid: row.orgchart_id
               });
             }
           }
@@ -151,7 +151,7 @@ export default class SafetyBootsScreen extends Component {
           if (result != null) {
             for (let i = 0; i < result.length; i++) {
               this.setState({
-                authorityid: result,
+                authorityid: result
               });
             }
           }
@@ -174,7 +174,7 @@ export default class SafetyBootsScreen extends Component {
       select_type,
       boots_name,
       uniform_name,
-      boots_size,
+      boots_size
     } = this.state;
     if (boots_size == null || boots_size == "") {
       this.state.lang === "EN"
@@ -195,7 +195,7 @@ export default class SafetyBootsScreen extends Component {
         select_type,
         boots_name,
         uniform_name,
-        boots_size: result.name,
+        boots_size: result.name
       };
 
       Alert.alert(
@@ -205,7 +205,7 @@ export default class SafetyBootsScreen extends Component {
           {
             text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
             onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",
+            style: "cancel"
           },
           ,
           {
@@ -223,8 +223,8 @@ export default class SafetyBootsScreen extends Component {
                       [
                         {
                           text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                          onPress: () => this.reset(),
-                        },
+                          onPress: () => this.reset()
+                        }
                       ],
                       { cancelable: false }
                     );
@@ -239,14 +239,14 @@ export default class SafetyBootsScreen extends Component {
                 .catch((error) => {
                   console.log(error);
                 });
-            },
-          },
+            }
+          }
         ]
       );
     }
   };
   reset = async () => {
-     //สำหรับเทส
+    //สำหรับเทส
     if (this.state.month < 8) {
       this.setState({ select_boots: true });
     }
@@ -273,7 +273,7 @@ export default class SafetyBootsScreen extends Component {
                 boots_name: result[0].boots_name,
                 uniform_name: result[0].uniform_name,
                 boots_size: size.id,
-                select_boots: true,
+                select_boots: true
               });
               if (result[0].boots_type == 1) {
                 this.setState({ boots: true });
@@ -310,7 +310,10 @@ export default class SafetyBootsScreen extends Component {
     ) {
       return (
         <View style={styles.background}>
-          <ScrollView>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+          >
             <View style={styles.textHeader}>
               <Text style={{ color: "#009bdc", fontSize: 24 }}>
                 {this.state.lang === "EN"
@@ -328,7 +331,10 @@ export default class SafetyBootsScreen extends Component {
                   />
 
                   {this.state.boots ? (
-                    <ScrollView>
+                    <ScrollView
+                      showsVerticalScrollIndicator={false}
+                      showsHorizontalScrollIndicator={false}
+                    >
                       <Button
                         style={{ backgroundColor: "red" }}
                         mode="contained"
@@ -341,7 +347,7 @@ export default class SafetyBootsScreen extends Component {
                             uniform_part: "",
                             uniform_type: "",
                             select_type: "",
-                            boots_size: "",
+                            boots_size: ""
                           })
                         }
                       >
@@ -352,7 +358,7 @@ export default class SafetyBootsScreen extends Component {
                           style={{
                             marginLeft: 10,
                             marginRight: 5,
-                            color: "white",
+                            color: "white"
                           }}
                         />
                         Safety Boots
@@ -378,7 +384,7 @@ export default class SafetyBootsScreen extends Component {
                               style={{
                                 width: "10%",
                                 paddingHorizontal: 1,
-                                paddingBottom: 24,
+                                paddingBottom: 24
                               }}
                             />
                           }
@@ -422,7 +428,7 @@ export default class SafetyBootsScreen extends Component {
                           select_type: 2,
                           boots_size: "",
                           boots_name: "Safety Boots",
-                          uniform_name: "Safety Boots",
+                          uniform_name: "Safety Boots"
                         })
                       }
                     >
@@ -440,7 +446,10 @@ export default class SafetyBootsScreen extends Component {
                     source={require("../../asset/boots_image/safetshoes.png")}
                   />
                   {this.state.shoes ? (
-                    <ScrollView>
+                    <ScrollView
+                      showsVerticalScrollIndicator={false}
+                      showsHorizontalScrollIndicator={false}
+                    >
                       <Button
                         style={{ backgroundColor: "red" }}
                         mode="contained"
@@ -453,7 +462,7 @@ export default class SafetyBootsScreen extends Component {
                             uniform_part: "",
                             uniform_type: "",
                             select_type: "",
-                            boots_size: "",
+                            boots_size: ""
                           })
                         }
                       >
@@ -463,7 +472,7 @@ export default class SafetyBootsScreen extends Component {
                           style={{
                             marginLeft: 10,
                             marginRight: 5,
-                            color: "white",
+                            color: "white"
                           }}
                         />
                         Safety Shoes
@@ -488,7 +497,7 @@ export default class SafetyBootsScreen extends Component {
                               style={{
                                 width: "10%",
                                 paddingHorizontal: 1,
-                                paddingBottom: 24,
+                                paddingBottom: 24
                               }}
                             />
                           }
@@ -532,7 +541,7 @@ export default class SafetyBootsScreen extends Component {
                           select_type: 2,
                           boots_size: "",
                           boots_name: "Safety Shoes",
-                          uniform_name: "Safety Shoes",
+                          uniform_name: "Safety Shoes"
                         })
                       }
                     >
@@ -557,7 +566,10 @@ export default class SafetyBootsScreen extends Component {
     } else {
       return (
         <View style={styles.background}>
-          <ScrollView>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+          >
             <View style={styles.textHeader}>
               <Text style={{ color: "#009bdc", fontSize: 24 }}>
                 {this.state.lang === "EN"
@@ -575,7 +587,10 @@ export default class SafetyBootsScreen extends Component {
                   />
 
                   {this.state.boots ? (
-                    <ScrollView>
+                    <ScrollView
+                      showsVerticalScrollIndicator={false}
+                      showsHorizontalScrollIndicator={false}
+                    >
                       <Button
                         style={{ backgroundColor: "red" }}
                         mode="contained"
@@ -588,7 +603,7 @@ export default class SafetyBootsScreen extends Component {
                             uniform_part: "",
                             uniform_type: "",
                             select_type: "",
-                            boots_size: "",
+                            boots_size: ""
                           })
                         }
                       >
@@ -599,7 +614,7 @@ export default class SafetyBootsScreen extends Component {
                           style={{
                             marginLeft: 10,
                             marginRight: 5,
-                            color: "white",
+                            color: "white"
                           }}
                         />
                         Safety Boots
@@ -625,7 +640,7 @@ export default class SafetyBootsScreen extends Component {
                               style={{
                                 width: "10%",
                                 paddingHorizontal: 1,
-                                paddingBottom: 24,
+                                paddingBottom: 24
                               }}
                             />
                           }
@@ -669,7 +684,7 @@ export default class SafetyBootsScreen extends Component {
                           select_type: 2,
                           boots_size: "",
                           boots_name: "Safety Boots",
-                          uniform_name: "Safety Boots",
+                          uniform_name: "Safety Boots"
                         })
                       }
                     >
@@ -698,16 +713,16 @@ export default class SafetyBootsScreen extends Component {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "white"
   },
   container: {
     flex: 1,
     marginHorizontal: 40,
-    marginVertical: 50,
+    marginVertical: 50
   },
   textHeader: {
     alignItems: "center",
-    padding: 15,
+    padding: 15
   },
   containerSec1: {
     borderWidth: 2,
@@ -716,7 +731,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 10,
     borderColor: "#398DDD",
-    marginBottom: 15,
+    marginBottom: 15
   },
   inputStyle: {
     borderColor: "#DCDCDC",
@@ -725,7 +740,7 @@ const styles = StyleSheet.create({
     height: HEIGHT / 25,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   selectableInputStyle: {
     borderColor: "#DCDCDC",
@@ -737,7 +752,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
     paddingLeft: 10,
-    width: "100%",
+    width: "100%"
   },
   submitButton: {
     alignSelf: "center",
@@ -746,31 +761,31 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: "#fff",
     borderRadius: 20,
-    width: "35%",
+    width: "35%"
   },
   card: {
     marginVertical: 16,
-    backgroundColor: "#FAF0E6",
+    backgroundColor: "#FAF0E6"
   },
   cardImage: {
     resizeMode: "cover",
     width: "100%",
-    height: imageHeight,
+    height: imageHeight
   },
 
   cardImageContainerExists: {
     borderColor: "#4392de",
     borderWidth: 1,
-    marginBottom: 16,
+    marginBottom: 16
   },
   cardImageTextContainerExists: {
     backgroundColor: "#4392de",
     padding: 16,
-    alignItems: "center",
+    alignItems: "center"
   },
   cardImageTextExists: {
     color: "#fff",
     fontWeight: "700",
-    fontSize: 16,
-  },
+    fontSize: 16
+  }
 });

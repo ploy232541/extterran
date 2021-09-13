@@ -47,7 +47,12 @@ function VideoListScreen() {
     }
 
     return (
-        <ScrollView style={{backgroundColor:'white'}}>
+        // <ScrollView style={{backgroundColor:'white'}}>
+              <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    style={{ flex: 1, backgroundColor: "white" }}
+                  >
             <View style={styles.container}>
                 <FlatList
                 data={video}

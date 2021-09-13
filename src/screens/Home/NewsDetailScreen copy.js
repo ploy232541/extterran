@@ -6,13 +6,13 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Linking,
+  Linking
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import moment from "moment";
 import HTML from "react-native-render-html";
-import Constants from 'expo-constants';
-import { WebView } from 'react-native-webview';
+import Constants from "expo-constants";
+import { WebView } from "react-native-webview";
 var decode = require("decode-html");
 
 const openLink = (link) => {
@@ -31,14 +31,17 @@ const NewsDetailScreen = (props) => {
   const link = props.route.params.link;
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         <Card style={styles.cardStyle}>
           <Card.Cover
             source={{
               uri:
                 imgSrc != null
                   ? imgSrc
-                  : "http://smartxlearning.com/themes/template/img/newspaper.jpg",
+                  : "http://smartxlearning.com/themes/template/img/newspaper.jpg"
             }}
           />
           <Card.Content style={{ alignItems: "center", marginHorizontal: 40 }}>
@@ -47,7 +50,7 @@ const NewsDetailScreen = (props) => {
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-                marginVertical: 20,
+                marginVertical: 20
               }}
             >
               <Icon name="md-calendar" size={20} />
@@ -60,8 +63,7 @@ const NewsDetailScreen = (props) => {
               </Text>
             </View>
             {/* <Paragraph> */}
-          
-            
+
             <HTML
               html={decode(decode(details))}
               onLinkPress={(event, href) => {
@@ -90,18 +92,18 @@ const NewsDetailScreen = (props) => {
 const styles = StyleSheet.create({
   cardStyle: {
     marginVertical: 18,
-    marginHorizontal: 18,
+    marginHorizontal: 18
   },
   container: {
     backgroundColor: "white",
-    flex: 1,
-  },
+    flex: 1
+  }
 });
 const styless = StyleSheet.create({
-    container: {
-      flex: 1,
-      marginTop: Constants.statusBarHeight,
-    },
-  });
+  container: {
+    flex: 1,
+    marginTop: Constants.statusBarHeight
+  }
+});
 
 export default NewsDetailScreen;

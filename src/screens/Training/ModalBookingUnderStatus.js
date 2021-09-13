@@ -7,10 +7,10 @@ import {
   TextInput,
   ActivityIndicator,
   SafeAreaView,
-  Alert,
+  Alert
 } from "react-native";
 // import AsyncStorage1 from "@react-native-async-storage/async-storage"; //--
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Divider } from "react-native-elements";
 import AntIcon from "react-native-vector-icons/AntDesign";
@@ -31,8 +31,10 @@ const ModalBookingUnderStatus = (props) => {
           borderRadius: 12,
           marginTop: 20,
           borderColor: "#d9d9d9",
-          backgroundColor: "white",
+          backgroundColor: "white"
         }}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       >
         {props.modelData
           ? props.modelData.map((item) => {
@@ -42,7 +44,7 @@ const ModalBookingUnderStatus = (props) => {
                     style={{
                       alignSelf: "center",
                       fontSize: 18,
-                      marginBottom: 10,
+                      marginBottom: 10
                     }}
                   >
                     ใบคำขอ Booking
@@ -56,17 +58,17 @@ const ModalBookingUnderStatus = (props) => {
                       fontSize: 16,
                       color: "#4393de",
                       marginTop: 10,
-                      alignSelf: "center",
+                      alignSelf: "center"
                     }}
                   >
-                    บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด
+                    บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด
                   </Text>
                   <Text
                     style={{
                       alignSelf: "center",
                       fontSize: 16,
                       marginBottom: 15,
-                      marginTop: 10,
+                      marginTop: 10
                     }}
                   >
                     Booking Request
@@ -218,7 +220,7 @@ const ModalBookingUnderStatus = (props) => {
                               marginBottom: 30,
                               borderWidth: 1,
                               borderColor: "#e6e6e6",
-                              borderRadius: 10,
+                              borderRadius: 10
                             }}
                           >
                             <Text>Date :</Text>
@@ -293,7 +295,7 @@ const ModalBookingUnderStatus = (props) => {
                               marginBottom: 30,
                               borderWidth: 1,
                               borderColor: "#e6e6e6",
-                              borderRadius: 10,
+                              borderRadius: 10
                             }}
                           >
                             <Text>Province :</Text>
@@ -342,7 +344,7 @@ const ModalBookingUnderStatus = (props) => {
                               marginBottom: 30,
                               borderWidth: 1,
                               borderColor: "#e6e6e6",
-                              borderRadius: 10,
+                              borderRadius: 10
                             }}
                           >
                             <Text>Date :</Text>
@@ -430,7 +432,7 @@ const ModalBookingUnderStatus = (props) => {
                     style={{
                       flexDirection: "row",
                       justifyContent: "space-around",
-                      margin: 20,
+                      margin: 20
                     }}
                   >
                     <TouchableOpacity
@@ -441,7 +443,7 @@ const ModalBookingUnderStatus = (props) => {
                         height: HEIGHT * 0.04,
                         justifyContent: "center",
                         alignItems: "center",
-                        borderRadius: 4,
+                        borderRadius: 4
                       }}
                     >
                       <Text style={{ color: "white" }}>ปิด</Text>
@@ -459,10 +461,10 @@ const ModalBookingUnderStatus = (props) => {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 18,
-    marginVertical: 18,
+    marginVertical: 18
   },
   marginText: {
-    marginTop: 5,
+    marginTop: 5
   },
   inputStyle: {
     backgroundColor: "#DCDCDC",
@@ -470,23 +472,23 @@ const styles = StyleSheet.create({
     height: HEIGHT / 25,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   textInput: {
-    color: "grey",
+    color: "grey"
   },
   confirmStyle: {
     marginTop: 10,
     marginBottom: 10,
     marginHorizontal: 20,
     paddingTop: 60,
-    paddingBottom: 30,
+    paddingBottom: 30
   },
   textConfirm: {
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 10,
-  },
+    paddingTop: 10
+  }
 });
 
 export default ModalBookingUnderStatus;

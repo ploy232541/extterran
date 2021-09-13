@@ -9,7 +9,7 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { ActivityIndicator, Button, Card, List } from "react-native-paper";
 import { useNavigation } from "@react-navigation/core";
@@ -216,7 +216,7 @@ export function accordionListScreen(type, subtype, title = null) {
             borderRadius: 10,
             backgroundColor: "orange",
             marginVertical: 12,
-            marginHorizontal: 10,
+            marginHorizontal: 10
           }}
           title={
             type == 0
@@ -257,7 +257,7 @@ export function accordionListScreen(type, subtype, title = null) {
                       backgroundColor: "white",
                       marginTop: 5,
                       borderColor: "#003263",
-                      borderWidth: 1,
+                      borderWidth: 1
                     }}
                   >
                     <Card.Content style={indexStyle.cardContentStyle}>
@@ -266,8 +266,8 @@ export function accordionListScreen(type, subtype, title = null) {
                           indexStyle.infoStyle,
                           {
                             width:
-                              word[0] == "0" && item.url_print ? "62%" : "81%",
-                          },
+                              word[0] == "0" && item.url_print ? "62%" : "81%"
+                          }
                         ]}
                       >
                         {item.booking_type == 1 ||
@@ -340,7 +340,7 @@ export function accordionListScreen(type, subtype, title = null) {
                             height: 36,
                             marginLeft: 8,
                             marginRight: 2,
-                            marginTop: 10,
+                            marginTop: 10
                           }}
                           onPress={() => Linking.openURL(item.url_print)}
                         >
@@ -365,7 +365,7 @@ export function accordionListScreen(type, subtype, title = null) {
                           height: 36,
                           marginLeft: 8,
                           marginRight: 2,
-                          marginTop: 10,
+                          marginTop: 10
                         }}
                         onPress={() =>
                           shown(
@@ -480,7 +480,10 @@ export function accordionListScreen(type, subtype, title = null) {
       {loading ? (
         activityIndicator()
       ) : (
-        <ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+        >
           {type == 0 ? (
             <>
               {accordion(
@@ -555,7 +558,7 @@ export function blank(margin) {
     <View
       style={[
         indexStyle.scrollView,
-        { backgroundColor: "transparent", margin: margin },
+        { backgroundColor: "transparent", margin: margin }
       ]}
     />
   );

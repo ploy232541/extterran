@@ -7,10 +7,10 @@ import {
   TextInput,
   ActivityIndicator,
   SafeAreaView,
-  Alert,
+  Alert
 } from "react-native";
 // import AsyncStorage1 from "@react-native-async-storage/async-storage"; //--
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Divider } from "react-native-elements";
 import AntIcon from "react-native-vector-icons/AntDesign";
@@ -18,13 +18,11 @@ import { Dimensions } from "react-native";
 import HTML from "react-native-render-html";
 import Modal from "react-native-modal";
 
-
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
 
- const ModalTrainingStatus = (props) => {
-
-   let lang =  AsyncStorage.getItem("language");
+const ModalTrainingStatus = (props) => {
+  let lang = AsyncStorage.getItem("language");
 
   return (
     <Modal visible={props.chkVisible} onBackdropPress={props.closeModal}>
@@ -35,8 +33,10 @@ const HEIGHT = Dimensions.get("window").height;
           borderRadius: 12,
           marginTop: 20,
           borderColor: "#d9d9d9",
-          backgroundColor: "white",
+          backgroundColor: "white"
         }}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       >
         {props.modelData
           ? props.modelData.map((item) => {
@@ -46,7 +46,7 @@ const HEIGHT = Dimensions.get("window").height;
                     style={{
                       alignSelf: "center",
                       fontSize: 18,
-                      marginBottom: 10,
+                      marginBottom: 10
                     }}
                   >
                     ติดตามสถานะ
@@ -60,17 +60,17 @@ const HEIGHT = Dimensions.get("window").height;
                       fontSize: 16,
                       color: "#4393de",
                       marginTop: 10,
-                      alignSelf: "center",
+                      alignSelf: "center"
                     }}
                   >
-                    บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด
+                    บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด
                   </Text>
                   <Text
                     style={{
                       alignSelf: "center",
                       fontSize: 16,
                       marginBottom: 15,
-                      marginTop: 10,
+                      marginTop: 10
                     }}
                   >
                     Training Request
@@ -271,7 +271,7 @@ const HEIGHT = Dimensions.get("window").height;
 
                     <View style={styles.confirmStyle}>
                       <Text style={{ textAlign: "center" }}>
-                      {item.country_manager != null
+                        {item.country_manager != null
                           ? item.country_manager
                           : ""}
                       </Text>
@@ -287,7 +287,7 @@ const HEIGHT = Dimensions.get("window").height;
                     <View style={{ paddingTop: 20 }}>
                       <Text>Acknowledged By HR:</Text>
                     </View>
- <View style={styles.confirmStyle}>
+                    <View style={styles.confirmStyle}>
                       <Text style={{ textAlign: "center" }}>
                         {item.human_resources_manager != null
                           ? item.human_resources_manager
@@ -315,14 +315,13 @@ const HEIGHT = Dimensions.get("window").height;
                         <Text>เจ้าหน้าที่</Text>
                       </View>
                     </View>
-                   
                   </View>
 
                   <View
                     style={{
                       flexDirection: "row",
                       justifyContent: "space-around",
-                      margin: 20,
+                      margin: 20
                     }}
                   >
                     <TouchableOpacity
@@ -333,7 +332,7 @@ const HEIGHT = Dimensions.get("window").height;
                         height: HEIGHT * 0.04,
                         justifyContent: "center",
                         alignItems: "center",
-                        borderRadius: 4,
+                        borderRadius: 4
                       }}
                     >
                       <Text style={{ color: "white" }}>ปิด</Text>
@@ -351,10 +350,10 @@ const HEIGHT = Dimensions.get("window").height;
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 18,
-    marginVertical: 18,
+    marginVertical: 18
   },
   marginText: {
-    marginTop: 5,
+    marginTop: 5
   },
   inputStyle: {
     backgroundColor: "#DCDCDC",
@@ -362,23 +361,23 @@ const styles = StyleSheet.create({
     height: HEIGHT / 25,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   textInput: {
-    color: "grey",
+    color: "grey"
   },
   confirmStyle: {
     marginTop: 10,
     marginBottom: 10,
     marginHorizontal: 20,
     paddingTop: 60,
-    paddingBottom: 30,
+    paddingBottom: 30
   },
   textConfirm: {
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 10,
-  },
+    paddingTop: 10
+  }
 });
 
 export default ModalTrainingStatus;

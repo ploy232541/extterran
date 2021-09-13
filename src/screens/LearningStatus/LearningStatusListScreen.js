@@ -126,7 +126,9 @@ class LearningStatusListScreen extends Component {
     );
   }
   return (
-    <ScrollView style={styles.root}>
+
+    <ScrollView style={styles.root}showsVerticalScrollIndicator={false}
+    showsHorizontalScrollIndicator={false}>
          <View style={{marginBottom: 30}}>
          {
            type == '1' ?

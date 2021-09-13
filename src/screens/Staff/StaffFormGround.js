@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ActivityIndicator,
-  Alert,
+  Alert
 } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { Divider } from "react-native-elements";
@@ -75,7 +75,7 @@ const StaffFormGround = ({ navigation, route }) => {
         {
           text: lang == "EN" ? "CANCEN" : "ยกเลิก",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
+          style: "cancel"
         },
         ,
         {
@@ -99,7 +99,7 @@ const StaffFormGround = ({ navigation, route }) => {
                 booking_id: route.params.booking_id,
                 user_id: user_id,
                 approval_status: approval_status,
-                approval_note: approval_note,
+                approval_note: approval_note
               };
 
               httpClient
@@ -120,8 +120,8 @@ const StaffFormGround = ({ navigation, route }) => {
                 lang == "EN" ? "Please enter a reason." : "โปรดกรอกเหตุผลด้วย"
               );
             }
-          },
-        },
+          }
+        }
       ]
     );
   };
@@ -149,8 +149,10 @@ const StaffFormGround = ({ navigation, route }) => {
           borderColor: "red",
           backgroundColor: "white",
           marginHorizontal: 18,
-          marginBottom: 20,
+          marginBottom: 20
         }}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       >
         {ground ? (
           <View style={styles.container}>
@@ -166,19 +168,19 @@ const StaffFormGround = ({ navigation, route }) => {
                 fontWeight: "bold",
                 color: "#4393de",
                 marginTop: 18,
-                alignSelf: "center",
+                alignSelf: "center"
               }}
             >
               {lang == "EN"
                 ? "EXTERRAN (THAILAND) LTD."
-                : "บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
+                : "บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด"}
             </Text>
             <Text
               style={{
                 alignSelf: "center",
                 fontSize: 16,
                 marginTop: 4,
-                marginBottom: 15,
+                marginBottom: 15
               }}
             >
               Booking Request
@@ -288,7 +290,10 @@ const StaffFormGround = ({ navigation, route }) => {
 
             {item.map((param) => {
               return (
-                <ScrollView>
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
+                >
                   <Divider style={{ backgroundColor: "black" }} />
 
                   <View style={{ margin: 20, marginHorizontal: 8 }}>
@@ -329,7 +334,7 @@ const StaffFormGround = ({ navigation, route }) => {
                         marginVertical: 8,
                         flexDirection: "row",
                         justifyContent: "center",
-                        alignItems: "center",
+                        alignItems: "center"
                       }}
                     >
                       <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -351,14 +356,14 @@ const StaffFormGround = ({ navigation, route }) => {
                           style={{
                             paddingBottom: 1,
                             backgroundColor: "blue",
-                            marginHorizontal: 8,
+                            marginHorizontal: 8
                             // marginTop: 50,
                           }}
                         />
                         <View
                           style={{
                             alignItems: "center",
-                            marginTop: 5,
+                            marginTop: 5
                           }}
                         >
                           <Text>Particlapant's Supervisor</Text>
@@ -376,14 +381,14 @@ const StaffFormGround = ({ navigation, route }) => {
                           style={{
                             paddingBottom: 1,
                             backgroundColor: "blue",
-                            marginHorizontal: 8,
+                            marginHorizontal: 8
                             // marginTop: 50,
                           }}
                         />
                         <View
                           style={{
                             alignItems: "center",
-                            marginTop: 5,
+                            marginTop: 5
                           }}
                         >
                           <Text>Human Resources Manager</Text>
@@ -414,7 +419,7 @@ const StaffFormGround = ({ navigation, route }) => {
                   style={{
                     flexDirection: "row",
                     justifyContent: "space-around",
-                    margin: 20,
+                    margin: 20
                   }}
                 >
                   <TouchableOpacity
@@ -425,7 +430,7 @@ const StaffFormGround = ({ navigation, route }) => {
                       height: HEIGHT * 0.05,
                       justifyContent: "center",
                       alignItems: "center",
-                      borderRadius: 4,
+                      borderRadius: 4
                     }}
                   >
                     <Text style={{ color: "white" }}>ยืนยัน</Text>
@@ -439,7 +444,7 @@ const StaffFormGround = ({ navigation, route }) => {
                       height: HEIGHT * 0.05,
                       justifyContent: "center",
                       alignItems: "center",
-                      borderRadius: 4,
+                      borderRadius: 4
                     }}
                   >
                     <Text style={{ color: "white" }}>ย้อนกลับ</Text>
@@ -454,7 +459,7 @@ const StaffFormGround = ({ navigation, route }) => {
                       height: HEIGHT * 0.05,
                       justifyContent: "center",
                       alignItems: "center",
-                      borderRadius: 4,
+                      borderRadius: 4
                     }}
                   >
                     <Text style={{ color: "white" }}>ปิด</Text>
@@ -466,7 +471,7 @@ const StaffFormGround = ({ navigation, route }) => {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-around",
-                  margin: 20,
+                  margin: 20
                 }}
               >
                 <TouchableOpacity
@@ -477,7 +482,7 @@ const StaffFormGround = ({ navigation, route }) => {
                     height: HEIGHT * 0.05,
                     justifyContent: "center",
                     alignItems: "center",
-                    borderRadius: 4,
+                    borderRadius: 4
                   }}
                 >
                   <Text style={{ color: "white" }}>อนุมัติ</Text>
@@ -491,7 +496,7 @@ const StaffFormGround = ({ navigation, route }) => {
                     height: HEIGHT * 0.05,
                     justifyContent: "center",
                     alignItems: "center",
-                    borderRadius: 4,
+                    borderRadius: 4
                   }}
                 >
                   <Text style={{ color: "white" }}>ไม่อนุมัติ</Text>
@@ -506,7 +511,7 @@ const StaffFormGround = ({ navigation, route }) => {
                     height: HEIGHT * 0.05,
                     justifyContent: "center",
                     alignItems: "center",
-                    borderRadius: 4,
+                    borderRadius: 4
                   }}
                 >
                   <Text style={{ color: "white" }}>ปิด</Text>
@@ -523,26 +528,26 @@ const StaffFormGround = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 18,
-    marginVertical: 18,
+    marginVertical: 18
   },
   marginText: {
-    marginTop: 5,
+    marginTop: 5
   },
   textSyH1: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   textSy1: {
     fontWeight: "normal",
     fontSize: 16,
     marginLeft: 2,
-    marginRight: 5,
+    marginRight: 5
   },
   textSy2: {
     fontWeight: "normal",
     fontSize: 16,
     marginLeft: 12,
-    marginRight: 5,
+    marginRight: 5
   },
   inputStyle: {
     backgroundColor: "#DCDCDC",
@@ -550,15 +555,15 @@ const styles = StyleSheet.create({
     height: HEIGHT / 25,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   confirmStyle: {
     marginTop: 10,
     marginBottom: 10,
     marginHorizontal: 20,
     paddingTop: 60,
-    paddingBottom: 30,
-  },
+    paddingBottom: 30
+  }
 });
 
 export default StaffFormGround;

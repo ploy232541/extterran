@@ -19,40 +19,44 @@ function ProfileScreen() {
     {
       id: 1,
       title: "ชุด",
-      src: require('../../asset/dashboardIcon/uniform.png'),
-      to: "OutfitScreen",
+      src: require("../../asset/dashboardIcon/uniform.png"),
+      to: "OutfitScreen"
     },
     {
       id: 2,
       title: "รองเท้าเซฟตี้",
       src: require("../../asset/dashboardIcon/safetyb.png"),
-      to: "SafetyBootsScreen",
+      to: "SafetyBootsScreen"
     },
     {
       id: 3,
       title: "Medical Checkups",
       src: require("../../asset/dashboardIcon/medical.png"),
-      to: "MedicalCheckupsScreen",
+      to: "MedicalCheckupsScreen"
     },
     {
       id: 4,
       title: "ข้อมูลส่วนตัว",
       src: require("../../asset/dashboardIcon/infomation.png"),
-      to: "ProfileInfor",
-    },
+      to: "ProfileInfor"
+    }
   ];
 
   const profile_renderItem = ({ item }) => {
     if (item.empty) {
       return (
         <View
-          style={{ flex: 1, marginVertical: 5,
-            marginHorizontal: 5, backgroundColor: "transparent" }}
+          style={{
+            flex: 1,
+            marginVertical: 5,
+            marginHorizontal: 5,
+            backgroundColor: "transparent"
+          }}
         ></View>
       );
     }
     return (
-      <View style={{ flex: 1, marginTop:24, marginHorizontal: 10 }}>
+      <View style={{ flex: 1, marginTop: 24, marginHorizontal: 10 }}>
         <ButtonCard_Profile title={item.title} to={item.to} src={item.src} />
       </View>
     );
@@ -61,15 +65,20 @@ function ProfileScreen() {
   const profileNumColumn = 2;
 
   return (
-    <ScrollView style={{backgroundColor: "white"}}>
-    <View>
-      <FlatList
-        data={formatDataList(ProfileHeader, profileNumColumn)}
-        renderItem={profile_renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={profileNumColumn}
-      />
-    </View>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+      style={{ flex: 1, backgroundColor: "white" }}
+    >
+      {/* <ScrollView style={{backgroundColor: "white"}}> */}
+      <View>
+        <FlatList
+          data={formatDataList(ProfileHeader, profileNumColumn)}
+          renderItem={profile_renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={profileNumColumn}
+        />
+      </View>
     </ScrollView>
   );
 }

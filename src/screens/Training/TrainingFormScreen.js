@@ -435,16 +435,19 @@ export default class TrainingFormScreen extends Component {
         Alert.alert(
           this.state.lang === "EN" ? "Please attach the file" : "กรุณาแนบไฟล์"
         );
-      }else if(total<=0){  Alert.alert(
-        this.state.lang === "EN" ? "Include at least 1 training day." : "รวมวันฝึกอบรมต้องมีอย่างน้อย 1 วัน"
-      );} 
-      else {
+      } else if (total <= 0) {
+        Alert.alert(
+          this.state.lang === "EN"
+            ? "Include at least 1 training day."
+            : "รวมวันฝึกอบรมต้องมีอย่างน้อย 1 วัน"
+        );
+      } else {
         const params = {
           user_id,
           course,
           courseselect,
           nameCourse,
-          expense:expense?expense:0,
+          expense: expense ? expense : 0,
           startDate,
           endDate,
           total,
@@ -619,8 +622,14 @@ export default class TrainingFormScreen extends Component {
           expense: 0
         });
       }
-      if (this.state.course == 3 || this.state.course == 4||this.state.course == 0) {this.checkcourse(Number(result.course_fee?result.course_fee:0));}
-      
+      if (
+        this.state.course == 3 ||
+        this.state.course == 4 ||
+        this.state.course == 0
+      ) {
+        this.checkcourse(Number(result.course_fee ? result.course_fee : 0));
+      }
+
       this.getplace(v);
     }
   };
@@ -967,7 +976,12 @@ export default class TrainingFormScreen extends Component {
   render() {
     const { listFeedBack, upload_file } = this.state;
     return (
-      <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={{ flex: 1, backgroundColor: "white" }}
+      >
+        {/* <ScrollView style={{ backgroundColor: "#d9d9d9" }}> */}
         <View
           style={{
             flex: 1,
@@ -993,7 +1007,7 @@ export default class TrainingFormScreen extends Component {
             >
               {this.state.lang === "EN"
                 ? "EXTERRAN (THAILAND) LTD."
-                : "บริษัทเอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
+                : "บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด"}
             </Text>
             <Text
               style={{
@@ -1173,8 +1187,7 @@ export default class TrainingFormScreen extends Component {
                     style={styles.inputStyle1}
                     // keyboardType={"numeric"}
                     onChangeText={(text) => {
-                      if (text=='0') {
-                  
+                      if (text == "0") {
                         this.setState({
                           expense: "0"
                         });

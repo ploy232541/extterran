@@ -110,7 +110,12 @@ class HowToUseListScreen extends Component {
 
     render(){
         return (
-            <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
+            <ScrollView
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            style={{ flex: 1, backgroundColor: "white" }}
+          >
+            {/* <ScrollView style={{ backgroundColor: "white", flex: 1 }}> */}
                 <View style={styles.container}>
                     <FlatList
                         data={this.formatDataList(this.state.howToUse, numberColumns)}

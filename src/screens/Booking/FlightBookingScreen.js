@@ -547,7 +547,12 @@ export default class FlightBookingScreen extends Component {
     }
 
     return (
-      <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
+      // <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={{ flex: 1, backgroundColor: "white" }}
+      >
         <View
           style={{
             flex: 1,
@@ -574,7 +579,7 @@ export default class FlightBookingScreen extends Component {
             >
               {this.state.lang === "EN"
                 ? "EXTERRAN (THAILAND) LTD."
-                : "บริษัทเอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
+                : "บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด"}
             </Text>
 
             <Text
@@ -731,9 +736,7 @@ export default class FlightBookingScreen extends Component {
               <Text style={styles.textInput}>วันออกเดินทาง</Text>
               <TouchableOpacity onPress={() => this.showDatePicker("start")}>
                 <View style={styles.inputDate}>
-                  <Text style={{ color: "#000" }}>
-                    {this.state.startDate}
-                  </Text>
+                  <Text style={{ color: "#000" }}>{this.state.startDate}</Text>
                 </View>
               </TouchableOpacity>
 
@@ -741,9 +744,7 @@ export default class FlightBookingScreen extends Component {
               <Text style={styles.textInput}>เวลาเดินทาง</Text>
               <TouchableOpacity onPress={() => this.showTimePicker("start")}>
                 <View style={styles.inputDate}>
-                  <Text style={{ color: "#000" }}>
-                    {this.state.startTime}
-                  </Text>
+                  <Text style={{ color: "#000" }}>{this.state.startTime}</Text>
                 </View>
               </TouchableOpacity>
 
@@ -971,12 +972,12 @@ export default class FlightBookingScreen extends Component {
               {/* กรณีติ๊ก checkbox */}
 
               <DateTimePickerModal
-               locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
-               isVisible={this.state.isDatePickerVisible}
-               mode="date"
-               minimumDate={new Date()}
-               onConfirm={this.handleConfirm}
-               onCancel={this.hideDatePicker}
+                locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
+                isVisible={this.state.isDatePickerVisible}
+                mode="date"
+                minimumDate={new Date()}
+                onConfirm={this.handleConfirm}
+                onCancel={this.hideDatePicker}
               />
             </View>
           </View>
@@ -1321,8 +1322,6 @@ export default class FlightBookingScreen extends Component {
                         </Text>
                       </Button>
                     </View>
-
-                
                   </View>
                 </View>
               </View>

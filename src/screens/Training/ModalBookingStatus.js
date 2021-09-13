@@ -7,7 +7,7 @@ import {
   TextInput,
   ActivityIndicator,
   SafeAreaView,
-  Alert,
+  Alert
 } from "react-native";
 // import AsyncStorage1 from "@react-native-async-storage/async-storage"; //--
 import { AsyncStorage } from "react-native";
@@ -24,7 +24,6 @@ const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
 const ModalBookingStatus = (props) => {
   const [lang, setLang] = useState("TH");
-
 
   useEffect(() => {
     const run = async () => {
@@ -52,8 +51,10 @@ const ModalBookingStatus = (props) => {
           borderRadius: 12,
           marginTop: 20,
           borderColor: "red",
-          backgroundColor: "white",
+          backgroundColor: "white"
         }}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       >
         {props.modelData
           ? props.modelData.map((item) => {
@@ -63,7 +64,7 @@ const ModalBookingStatus = (props) => {
                     style={{
                       alignSelf: "center",
                       fontSize: 20,
-                      fontWeight: "bold",
+                      fontWeight: "bold"
                     }}
                   >
                     {lang == "EN" ? "Booking Request" : "ใบคำขอ Booking"}
@@ -75,19 +76,19 @@ const ModalBookingStatus = (props) => {
                       fontWeight: "bold",
                       color: "#4393de",
                       marginTop: 18,
-                      alignSelf: "center",
+                      alignSelf: "center"
                     }}
                   >
                     {lang == "EN"
                       ? "EXTERRAN (THAILAND) LTD."
-                      : "บริษัท เอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
+                      : "บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด"}
                   </Text>
                   <Text
                     style={{
                       alignSelf: "center",
                       fontSize: 16,
                       marginTop: 4,
-                      marginBottom: 15,
+                      marginBottom: 15
                     }}
                   >
                     Booking Request
@@ -241,7 +242,7 @@ const ModalBookingStatus = (props) => {
                               // marginBottom: 20,
                               borderWidth: 1,
                               borderColor: "#398DDD",
-                              borderRadius: 10,
+                              borderRadius: 10
                             }}
                           >
                             <Text>Date :</Text>
@@ -273,7 +274,9 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.flight_from ? value.flight_from : "-"}
+                              value={
+                                value.flight_from ? value.flight_from : "-"
+                              }
                             />
 
                             <Text>To :</Text>
@@ -317,7 +320,7 @@ const ModalBookingStatus = (props) => {
                               // marginBottom: 20,
                               borderWidth: 1,
                               borderColor: "#398DDD",
-                              borderRadius: 10,
+                              borderRadius: 10
                             }}
                           >
                             <Text>Province :</Text>
@@ -367,7 +370,7 @@ const ModalBookingStatus = (props) => {
                               // marginBottom: 20,
                               borderWidth: 1,
                               borderColor: "#398DDD",
-                              borderRadius: 10,
+                              borderRadius: 10
                             }}
                           >
                             <Text>Date :</Text>
@@ -375,7 +378,9 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.ground_date ? value.ground_date : "-"}
+                              value={
+                                value.ground_date ? value.ground_date : "-"
+                              }
                             />
 
                             <Text>Time :</Text>
@@ -383,7 +388,9 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.ground_time ? value.ground_time : "-"}
+                              value={
+                                value.ground_time ? value.ground_time : "-"
+                              }
                             />
 
                             <Text>From :</Text>
@@ -391,7 +398,9 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={value.ground_from ? value.ground_from : "-"}
+                              value={
+                                value.ground_from ? value.ground_from : "-"
+                              }
                             />
 
                             <Text>To :</Text>
@@ -411,7 +420,7 @@ const ModalBookingStatus = (props) => {
                       marginVertical: "10%",
                       flexDirection: "row",
                       justifyContent: "center",
-                      alignItems: "center",
+                      alignItems: "center"
                     }}
                   >
                     <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -425,13 +434,11 @@ const ModalBookingStatus = (props) => {
 
                   {/* <View style={{ marginTop: 15 }}> */}
                   <View>
-                    <Text style={{ marginHorizontal: 10,}}>
-                      Approved :{" "}
-                    </Text>
+                    <Text style={{ marginHorizontal: 10 }}>Approved : </Text>
                     <Text
                       style={{
                         color: "grey",
-                        marginHorizontal: 10,
+                        marginHorizontal: 10
                       }}
                     >
                       อนุมัติโดย
@@ -453,7 +460,7 @@ const ModalBookingStatus = (props) => {
                       </View>
                     </View>
 
-                    <View style={{ marginHorizontal: 8}}>
+                    <View style={{ marginHorizontal: 8 }}>
                       <Text>Acknowledged By HR :</Text>
                     </View>
 
@@ -477,7 +484,7 @@ const ModalBookingStatus = (props) => {
                     style={{
                       flexDirection: "row",
                       justifyContent: "space-around",
-                      margin: 20,
+                      margin: 20
                     }}
                   >
                     <TouchableOpacity
@@ -488,7 +495,7 @@ const ModalBookingStatus = (props) => {
                         height: HEIGHT * 0.04,
                         justifyContent: "center",
                         alignItems: "center",
-                        borderRadius: 4,
+                        borderRadius: 4
                       }}
                     >
                       <Text style={{ color: "white" }}>ปิด</Text>
@@ -507,10 +514,10 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: 18,
     // marginVertical: 18,
-    marginTop: 18,
+    marginTop: 18
   },
   marginText: {
-    marginTop: 5,
+    marginTop: 5
   },
   inputStyle: {
     backgroundColor: "#DCDCDC",
@@ -518,23 +525,23 @@ const styles = StyleSheet.create({
     height: HEIGHT / 25,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   textInput: {
-    color: "grey",
+    color: "grey"
   },
   confirmStyle: {
     marginTop: 10,
     marginBottom: 10,
     marginHorizontal: 20,
     paddingTop: 60,
-    paddingBottom: 30,
+    paddingBottom: 30
   },
   textConfirm: {
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 10,
-  },
+    paddingTop: 10
+  }
 });
 
 export default ModalBookingStatus;

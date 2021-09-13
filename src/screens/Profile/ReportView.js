@@ -261,7 +261,12 @@ export default class ReportView extends Component {
     console.log(question[0]);
 
     return (
-      <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={{ flex: 1, backgroundColor: "white" }}
+      >
+        {/* <ScrollView style={{ backgroundColor: "#d9d9d9" }}> */}
         <View
           style={{
             flex: 1,

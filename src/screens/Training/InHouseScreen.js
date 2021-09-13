@@ -6,7 +6,7 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
-  Alert,
+  Alert
 } from "react-native";
 import { Picker } from "native-base";
 import { Avatar, trainingNeed } from "react-native-paper";
@@ -32,7 +32,7 @@ export default class InHouseScreen extends Component {
       selectCourse: [],
       lang: "",
       firstname: "",
-      empList: [],
+      empList: []
     };
   }
   async componentDidMount() {
@@ -51,7 +51,7 @@ export default class InHouseScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              empList: result,
+              empList: result
             });
           }
         })
@@ -64,7 +64,7 @@ export default class InHouseScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              selectCourse: result,
+              selectCourse: result
             });
           }
         })
@@ -99,7 +99,7 @@ export default class InHouseScreen extends Component {
 
     this.setState({ trainingNeed: trainingNeed });
   }
-  onPressSend = async() => {
+  onPressSend = async () => {
     let id = await AsyncStorage.getItem("userId");
     const { trainingNeed } = this.state;
     if (trainingNeed.length <= 0) {
@@ -132,7 +132,7 @@ export default class InHouseScreen extends Component {
                       "\n ลำดับที่ " +
                       (i + 1)
                   );
-                }else {
+                } else {
                   error = false;
                 }
                 i++;
@@ -144,7 +144,7 @@ export default class InHouseScreen extends Component {
       } while (index < trainingNeed.length && error == false);
       if (error == false) {
         let data = { trainingNeed: trainingNeed, user_id: id };
- 
+
         Alert.alert(
           this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
           this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
@@ -152,7 +152,7 @@ export default class InHouseScreen extends Component {
             {
               text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
               onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
+              style: "cancel"
             },
             ,
             {
@@ -171,8 +171,8 @@ export default class InHouseScreen extends Component {
                         [
                           {
                             text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                            onPress: () => this.reset(),
-                          },
+                            onPress: () => this.reset()
+                          }
                         ],
                         { cancelable: false }
                       );
@@ -187,8 +187,8 @@ export default class InHouseScreen extends Component {
                   .catch((error) => {
                     console.log(error);
                   });
-              },
-            },
+              }
+            }
           ]
         );
       }
@@ -200,7 +200,10 @@ export default class InHouseScreen extends Component {
   render() {
     return (
       <View style={styles.background}>
-        <ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+        >
           <View style={styles.textHeader}>
             <Text style={{ color: "#333333", fontSize: 24 }}>
               Training Needs - In house
@@ -213,7 +216,7 @@ export default class InHouseScreen extends Component {
               marginVertical: 20,
               flexDirection: "row",
               justifyContent: "center",
-              alignItems: "center",
+              alignItems: "center"
             }}
           >
             <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -246,7 +249,10 @@ export default class InHouseScreen extends Component {
             }
 
             return (
-              <ScrollView>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+              >
                 <View style={styles.containerSec2}>
                   <View style={styles.contentInSec}>
                     <Text style={styles.textStyle1}>
@@ -277,7 +283,7 @@ export default class InHouseScreen extends Component {
                             trainingNeed[index] = item;
 
                             this.setState({
-                              trainingNeed,
+                              trainingNeed
                             });
                           }}
                         >
@@ -332,7 +338,10 @@ export default class InHouseScreen extends Component {
                         }
                       }
                       return (
-                        <ScrollView>
+                        <ScrollView
+                          showsVerticalScrollIndicator={false}
+                          showsHorizontalScrollIndicator={false}
+                        >
                           <View style={{ marginTop: 15 }}>
                             <View style={styles.pickerContainer}>
                               <View style={styles.scFlex}>
@@ -350,12 +359,12 @@ export default class InHouseScreen extends Component {
                                   placeholderIconColor="#007aff"
                                   textStyle={{
                                     fontSize: 14,
-                                    marginRight: "45%",
+                                    marginRight: "45%"
                                   }}
                                   selectedValue={param.course_id}
                                   onValueChange={(text) => {
                                     let trainingNeed = [
-                                      ...this.state.trainingNeed,
+                                      ...this.state.trainingNeed
                                     ];
 
                                     let item = { ...trainingNeed[index] };
@@ -370,7 +379,7 @@ export default class InHouseScreen extends Component {
                                       o.data = o.data.filter((s) => s.id != id);
                                     });
                                     this.setState({
-                                      trainingNeed: trainingNeed,
+                                      trainingNeed: trainingNeed
                                     });
                                   }}
                                 >
@@ -416,14 +425,14 @@ export default class InHouseScreen extends Component {
                       style={{
                         marginLeft: 10,
                         marginRight: 5,
-                        color: "white",
+                        color: "white"
                       }}
                     />
                     <Text
                       style={{
                         color: "white",
                         marginRight: 10,
-                        fontSize: 14,
+                        fontSize: 14
                       }}
                     >
                       {this.state.lang === "EN" ? "Delete" : "ลบ"}
@@ -448,8 +457,8 @@ export default class InHouseScreen extends Component {
                   ...this.state.trainingNeed,
                   {
                     employee_id: "",
-                    data: [{ course_id: "" }],
-                  },
+                    data: [{ course_id: "" }]
+                  }
                 ];
                 this.setState({ trainingNeed: trainingNeed });
               }}
@@ -458,7 +467,7 @@ export default class InHouseScreen extends Component {
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 16,
+                  fontSize: 16
                 }}
               >
                 {this.state.lang === "EN" ? "Add Employee" : "เพิ่มพนักงาน"}
@@ -472,7 +481,7 @@ export default class InHouseScreen extends Component {
               // justifyContent: "space-around",
               paddingVertical: 12,
               paddingHorizontal: 24,
-              marginBottom: 40,
+              marginBottom: 40
             }}
           >
             <View style={{ flex: 4 }}>
@@ -490,8 +499,9 @@ export default class InHouseScreen extends Component {
 
             <View style={{ flex: 4 }}>
               <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.btnCancelStyle}
-                onPress={e=>this.props.navigation.goBack()}
+                <TouchableOpacity
+                  style={styles.btnCancelStyle}
+                  onPress={(e) => this.props.navigation.goBack()}
                 >
                   <Text style={{ color: "white" }}>ยกเลิก</Text>
                 </TouchableOpacity>
@@ -509,16 +519,16 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     // flex: 1,
     width: "100%",
-    height: "100%",
+    height: "100%"
   },
   container: {
     flex: 1,
     alignItems: "center",
-    width: 500,
+    width: 500
   },
   textHeader: {
     alignItems: "center",
-    padding: 20,
+    padding: 20
   },
   //btn Add trainingNeed
   btnStyle1: {
@@ -529,7 +539,7 @@ const styles = StyleSheet.create({
     // marginTop: 5,
     // width: "60%",
     alignSelf: "center",
-    borderRadius: 10,
+    borderRadius: 10
   },
   //กรอบข้อมูลรอบนอก
   containerSec2: {
@@ -538,16 +548,16 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#398DDD",
     marginHorizontal: 10,
-    marginBottom: 24,
+    marginBottom: 24
   },
   //ชื่อหัวข้อ
   textStyle1: {
     marginTop: 12,
     marginBottom: 12,
-    paddingHorizontal: 6,
+    paddingHorizontal: 6
   },
   trainingNeedStyle: {
-    marginVertical: "100%",
+    marginVertical: "100%"
     //marginTop: 12,
   },
   /// picker styles
@@ -559,27 +569,27 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     marginLeft: 14,
     // marginVertical: 24,
-    height: 60,
+    height: 60
   },
   coursePickerStyles: {
     //height: 10,
     width: pickerWidth - 56,
     borderWidth: 1,
     borderColor: "#B1B1B1",
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
   ///กรอบเพิ่มข้อมูล
   pickerContainer: {
     flexDirection: "row",
     marginTop: 5,
-    marginBottom: 12,
+    marginBottom: 12
   },
   /// add button
   addButton: {
     borderRadius: 10,
     backgroundColor: "#4392de",
     height: 44,
-    paddingHorizontal: 8,
+    paddingHorizontal: 8
   },
   /// del button
   deleteButton: {
@@ -590,7 +600,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     marginLeft: -152,
-    marginTop: 5,
+    marginTop: 5
   },
   addButtonText: {
     // color: "white",
@@ -601,14 +611,14 @@ const styles = StyleSheet.create({
     // marginLeft: 1,
   },
   contentInSec: {
-    padding: 2,
+    padding: 2
   },
   submitButton: {
     alignSelf: "center",
     marginVertical: 8,
     backgroundColor: "#3BB54A",
     marginTop: 30,
-    marginBottom: 20,
+    marginBottom: 20
   },
   buttonContainer: {
     alignSelf: "center",
@@ -616,21 +626,21 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     borderRadius: 4,
     marginTop: 2,
-    width: "50%",
+    width: "50%"
   },
   btnConfirmStyle: {
     backgroundColor: "#449D44",
     padding: 12,
     alignItems: "center",
     borderRadius: 10,
-    height: 45,
+    height: 45
   },
   btnCancelStyle: {
     backgroundColor: "#5A6268",
     padding: 12,
     alignItems: "center",
     borderRadius: 10,
-    height: 45,
+    height: 45
   },
   btnDeltrainingNeed: {
     backgroundColor: "#b30000",
@@ -638,15 +648,15 @@ const styles = StyleSheet.create({
     marginRight: 12,
     marginTop: 10,
     marginBottom: 20,
-    borderRadius: 10,
+    borderRadius: 10
   },
   scFlex: {
-    flex: 5,
+    flex: 5
   },
   scFlex1: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   bdPicker: {
     width: "100%",
@@ -654,13 +664,13 @@ const styles = StyleSheet.create({
     borderColor: "#d9d9d9",
     marginBottom: 5,
     // marginHorizontal: 5,
-    marginVertical: 5,
+    marginVertical: 5
   },
   bdPicker1: {
     width: "100%",
     borderWidth: 1,
     borderColor: "#d9d9d9",
-    marginHorizontal: 4,
+    marginHorizontal: 4
   },
   btnDelCard: {
     backgroundColor: "#b30000",
@@ -668,13 +678,13 @@ const styles = StyleSheet.create({
     marginRight: 12,
     marginTop: 10,
     marginBottom: 20,
-    borderRadius: 10,
+    borderRadius: 10
   },
   pickerContainer2: {
     flexDirection: "row",
     justifyContent: "center",
     marginVertical: 5,
-    marginBottom: 12,
+    marginBottom: 12
   },
   addButtonText: {
     color: "white",
@@ -682,7 +692,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 5,
     marginTop: -2,
-    marginLeft: 1,
+    marginLeft: 1
   },
   /// add button
   addButton: {
@@ -694,7 +704,7 @@ const styles = StyleSheet.create({
     height: 36,
     marginLeft: 10,
     marginRight: 8,
-    marginTop: 5,
+    marginTop: 5
   },
   /// del button
   deleteButton: {
@@ -706,7 +716,6 @@ const styles = StyleSheet.create({
     height: 36,
     marginLeft: 8,
     marginRight: 2,
-    marginTop: 5,
-  },
+    marginTop: 5
+  }
 });
-

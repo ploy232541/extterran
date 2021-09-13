@@ -17,15 +17,15 @@ function MyProgramsScreen() {
       title: "หลักสูตรบังคับภายใน",
       //imgSrc: 'http://smartxlearning.com/themes/template/img/book.png',
       icon: "chalkboard-teacher",
-      to: "1",
+      to: "1"
     },
     {
       id: 2,
       title: "หลักสูตรบังคับภายนอก",
       //imgSrc: 'http://smartxlearning.com/themes/template/img/book.png',
       icon: "warehouse",
-      to: "3",
-    },
+      to: "3"
+    }
     // {
     //   id: 3,
     //   title: "หลักสูตรทั่วไป",
@@ -54,7 +54,7 @@ function MyProgramsScreen() {
             flex: 1,
             marginVertical: 5,
             marginHorizontal: 5,
-            backgroundColor: "transparent",
+            backgroundColor: "transparent"
           }}
         ></View>
       );
@@ -76,7 +76,7 @@ function MyProgramsScreen() {
                 backgroundColor: "#003263",
                 borderColor: "white",
                 borderWidth: 6,
-                borderRadius: 20,
+                borderRadius: 20
               }}
             >
               <Icons
@@ -93,7 +93,7 @@ function MyProgramsScreen() {
                   flex: 1,
                   marginTop: 12,
                   marginBottom: 20,
-                  textAlign: "center",
+                  textAlign: "center"
                 }}
               >
                 {item.title}
@@ -110,7 +110,12 @@ function MyProgramsScreen() {
   const numberColumns = 2;
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+      style={{ flex: 1, backgroundColor: "white" }}
+    >
+      {/* <ScrollView style={{ flex: 1, backgroundColor: "white" }} > */}
       {/* <TouchableOpacity style={{width:'30%', alignSelf:'center', alignItems:'center', height:HEIGHT*0.03, justifyContent:'center', backgroundColor:'#3b5998', marginVertical:20}}>
             <Text style={{color:'white'}}>หมวดหมู่หลักสูตร</Text>
           </TouchableOpacity> */}
@@ -134,11 +139,11 @@ const styles = StyleSheet.create({
     marginEnd: 10,
     marginStart: 10,
     marginBottom: 12,
-    flex: 1,
+    flex: 1
   },
   imageStyle: {
-    height: HEIGHT / 6,
-  },
+    height: HEIGHT / 6
+  }
 });
 
 export default MyProgramsScreen;

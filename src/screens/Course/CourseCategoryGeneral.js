@@ -120,7 +120,12 @@ function CourseCategoryGeneral() {
   const numberColumns = 2;
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
+    // <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
+    <ScrollView
+    showsVerticalScrollIndicator={false}
+    showsHorizontalScrollIndicator={false}
+    style={{ flex: 1, backgroundColor: "white" }}
+  >
       <View style={{ marginTop: 15 }}>
         <FlatList
           data={formatDataList(myProgramData, numberColumns)}

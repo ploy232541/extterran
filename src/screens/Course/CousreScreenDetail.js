@@ -60,6 +60,7 @@ class CousreScreenDetail extends Component {
         .then(async response => {
           const result = response.data;
             if (result != null) {
+              
               this.setState({cousreList: result})
             }
           })
@@ -123,7 +124,7 @@ class CousreScreenDetail extends Component {
       };
     
       _reanderItem = ({item, index}) => {
-    
+    console.log(item);
         let {itemStyle, itemText, itemInvisible, status_notLearn, status_learning, status_pass} = styles;
         if (item.empty) {
           return <View style={itemInvisible} />;

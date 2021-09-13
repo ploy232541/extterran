@@ -404,7 +404,12 @@ export default class AccommodationBookingScreen extends Component {
 
   render() {
     return (
-      <ScrollView style={{ backgroundColor: "#d9d9d9" }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        style={{ flex: 1, backgroundColor: "white" }}
+      >
+        {/* <ScrollView style={{ backgroundColor: "#d9d9d9" }}> */}
         <View
           style={{
             flex: 1,
@@ -431,7 +436,7 @@ export default class AccommodationBookingScreen extends Component {
             >
               {this.state.lang === "EN"
                 ? "EXTERRAN (THAILAND) LTD."
-                : "บริษัทเอ็กซ์เธอร์แอน ประเทศไทย จำกัด"}
+                : "บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด"}
             </Text>
             <Text
               style={{

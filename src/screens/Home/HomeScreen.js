@@ -51,8 +51,8 @@ const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT_VIDEO = (Dimensions.get("window").width * 9) / 16;
 //แก้ไขเวอร์ชัน
-const mobileversion=23
-var mobileversionshow=true
+const mobileversion = 23;
+var mobileversionshow = true;
 
 const functionHomeList = [
   { id: 1, functionType: "guide" },
@@ -228,7 +228,7 @@ function HomeScreen() {
       setTimeout(() => {
         setCountloading(countloading + 1);
       }, 1000);
-      if (loading && countloading > 20) {
+      if (loading && countloading > 30) {
         return (
           <View style={{ backgroundColor: "#fff" }}>
             <Image
@@ -266,13 +266,17 @@ function HomeScreen() {
           />
         </View>
       );
-    }if (mobile.version>mobileversion &&mobileversionshow==true) {
-      mobileversionshow=false
-      Alert.alert("กรุณาทำการอัพเดตเป็น version ล่าสุด ")
+    }
+    if (mobile.version > mobileversion && mobileversionshow == true) {
+      mobileversionshow = false;
+      Alert.alert("กรุณาทำการอัพเดตเป็น version ล่าสุด ");
     }
     console.log(mobile.version);
     return (
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         <View style={styles.background}>
           {/* Head Image on Home Screen */}
           <View style={styles.videoBenner}>
@@ -283,7 +287,7 @@ function HomeScreen() {
                     source={vdo}
                     style={styles.mediaPlayer}
                     /> */}
-            <VideoPlayer
+            {/* <VideoPlayer
               videoProps={{
                 shouldPlay: true,
                 isLooping: true,
@@ -291,6 +295,12 @@ function HomeScreen() {
                 style: styles.mediaPlayer,
                 source: vdo
               }}
+            /> */}
+            <Image
+              resizeMode={"stretch"}
+              style={{ width: "100%", height: "100%" }}
+              // source={{ uri: `${pathname + pic}` }}
+              source={require("../../asset/banner/banner.jpeg")}
             />
           </View>
 
@@ -313,6 +323,7 @@ function HomeScreen() {
               >
                 <ScrollView
                   horizontal={true}
+                  showsVerticalScrollIndicator={false}
                   showsHorizontalScrollIndicator={false}
                 >
                   {course.map((item) => {

@@ -66,7 +66,12 @@ function StudyPlanDetailScreen(props) {
   }, []);
 
   return (
-    <ScrollView style={{ backgroundColor: "white" }}>
+    <ScrollView
+    showsVerticalScrollIndicator={false}
+    showsHorizontalScrollIndicator={false}
+    style={{ flex: 1, backgroundColor: "white" }}
+  >
+    {/* <ScrollView style={{ backgroundColor: "white" }}> */}
       <View style={{ margin: 18 }}>
         <DataTable style={{ borderBottomWidth: 1, borderColor: "#dddddd" }}>
           <DataTable.Row

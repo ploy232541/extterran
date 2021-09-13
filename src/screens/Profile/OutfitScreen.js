@@ -72,10 +72,9 @@ export default class OutfitScreen extends Component {
       coverall_count: 0,
 
       loading: true,
-      showsModel1:false,
-      showsModel2:false,
-      showsModel3:false,
-
+      showsModel1: false,
+      showsModel2: false,
+      showsModel3: false
     };
   }
 
@@ -200,8 +199,6 @@ export default class OutfitScreen extends Component {
               }
             }
           }
-
-      
 
           /*if (result != null) {
             if ((Number(result.length))%2 != 1) {
@@ -521,37 +518,62 @@ export default class OutfitScreen extends Component {
   };
 
   render() {
-    const closeModal1 = () => { if (this.state.showsModel1) { this.setState({showsModel1:false}) } }
-    const closeModal2 = () => { if (this.state.showsModel2) { this.setState({showsModel2:false}) } }
-    const closeModal3 = () => { if (this.state.showsModel3) { this.setState({showsModel3:false}) } }
-    const images1 = [{
-      url: '', props: {
-        // Or you can set source directory.
-        source: require('../../asset/outfit_image/1-sizeuniform.png')
-    },
-  },{
-    url: '', props: {
-      // Or you can set source directory.
-      source: require('../../asset/outfit_image/2-sizeuniform.png')
-  },
-},]
-const images2 = [{
-  url: '', props: {
-    // Or you can set source directory.
-    source: require('../../asset/outfit_image/3-sizeuniform.png')
-},
-},{
-url: '', props: {
-  // Or you can set source directory.
-  source: require('../../asset/outfit_image/4-sizeuniform.png')
-},
-},]
-const images3 = [{
-  url: '', props: {
-    // Or you can set source directory.
-    source: require('../../asset/outfit_image/5-sizeuniform.png')
-},
-}]
+    const closeModal1 = () => {
+      if (this.state.showsModel1) {
+        this.setState({ showsModel1: false });
+      }
+    };
+    const closeModal2 = () => {
+      if (this.state.showsModel2) {
+        this.setState({ showsModel2: false });
+      }
+    };
+    const closeModal3 = () => {
+      if (this.state.showsModel3) {
+        this.setState({ showsModel3: false });
+      }
+    };
+    const images1 = [
+      {
+        url: "",
+        props: {
+          // Or you can set source directory.
+          source: require("../../asset/outfit_image/1-sizeuniform.png")
+        }
+      },
+      {
+        url: "",
+        props: {
+          // Or you can set source directory.
+          source: require("../../asset/outfit_image/2-sizeuniform.png")
+        }
+      }
+    ];
+    const images2 = [
+      {
+        url: "",
+        props: {
+          // Or you can set source directory.
+          source: require("../../asset/outfit_image/3-sizeuniform.png")
+        }
+      },
+      {
+        url: "",
+        props: {
+          // Or you can set source directory.
+          source: require("../../asset/outfit_image/4-sizeuniform.png")
+        }
+      }
+    ];
+    const images3 = [
+      {
+        url: "",
+        props: {
+          // Or you can set source directory.
+          source: require("../../asset/outfit_image/5-sizeuniform.png")
+        }
+      }
+    ];
     if (this.state.loading) {
       return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -583,7 +605,10 @@ const images3 = [{
     }
     return (
       <View style={styles.background}>
-        <ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+        >
           <View style={styles.textHeader}>
             <Text style={{ color: "#009bdc", fontSize: 24 }}>
               {this.state.lang === "EN"
@@ -616,7 +641,9 @@ const images3 = [{
                     backgroundColor: "orange"
                   }}
                   // ปุ่มดูใส่เสื้อ
-                  onPress={() => {this.setState({showsModel1:true})}}
+                  onPress={() => {
+                    this.setState({ showsModel1: true });
+                  }}
                 >
                   <Text
                     style={{
@@ -639,7 +666,10 @@ const images3 = [{
                 />
 
                 {this.state.bob ? (
-                  <ScrollView>
+                  <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                  >
                     <Button
                       style={{ backgroundColor: "red" }}
                       mode="contained"
@@ -938,7 +968,9 @@ const images3 = [{
                     backgroundColor: "orange"
                   }}
                   // ปุ่มดูใส่เสื้อ
-                  onPress={() => {this.setState({showsModel2:true})}}
+                  onPress={() => {
+                    this.setState({ showsModel2: true });
+                  }}
                 >
                   <Text
                     style={{
@@ -962,7 +994,10 @@ const images3 = [{
                 />
 
                 {this.state.shirt ? (
-                  <ScrollView>
+                  <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                  >
                     <Button
                       style={{ backgroundColor: "red" }}
                       mode="contained"
@@ -1252,16 +1287,28 @@ const images3 = [{
                   }}
                 >
                   {this.state.lang === "EN" ? "Size Charts: " : "ตารางไซส์: "}
-                </Text>  
+                </Text>
                 <Modal visible={this.state.showsModel1} transparent>
-                        <ImageViewer imageUrls={images1}  onCancel={closeModal1} enableSwipeDown/>
-                      </Modal>
-                      <Modal visible={this.state.showsModel2} transparent>
-                        <ImageViewer imageUrls={images2}  onCancel={closeModal2} enableSwipeDown/>
-                      </Modal>
+                  <ImageViewer
+                    imageUrls={images1}
+                    onCancel={closeModal1}
+                    enableSwipeDown
+                  />
+                </Modal>
+                <Modal visible={this.state.showsModel2} transparent>
+                  <ImageViewer
+                    imageUrls={images2}
+                    onCancel={closeModal2}
+                    enableSwipeDown
+                  />
+                </Modal>
                 <Modal visible={this.state.showsModel3} transparent>
-                        <ImageViewer imageUrls={images3}  onCancel={closeModal3} enableSwipeDown/>
-                      </Modal>
+                  <ImageViewer
+                    imageUrls={images3}
+                    onCancel={closeModal3}
+                    enableSwipeDown
+                  />
+                </Modal>
                 <Button
                   style={{
                     borderColor: "orange",
@@ -1269,10 +1316,10 @@ const images3 = [{
                     backgroundColor: "orange"
                   }}
                   // ปุ่มดูใส่เสื้อ
-                  onPress={() => {this.setState({showsModel3:true})
+                  onPress={() => {
+                    this.setState({ showsModel3: true });
                   }}
-                > 
-              
+                >
                   <Text
                     style={{
                       fontSize: 10,
@@ -1295,7 +1342,10 @@ const images3 = [{
                 />
 
                 {this.state.coverall ? (
-                  <ScrollView>
+                  <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                  >
                     <Button
                       style={{ backgroundColor: "red" }}
                       mode="contained"
@@ -1553,5 +1603,8 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "700",
     fontSize: 16
+  },
+  contentContainer: {
+    paddingVertical: 20
   }
 });
