@@ -25,14 +25,14 @@ function MyProgramsScreen() {
       //imgSrc: 'http://smartxlearning.com/themes/template/img/book.png',
       icon: "warehouse",
       to: "3"
-    }
-    // {
-    //   id: 3,
-    //   title: "หลักสูตรทั่วไป",
-    //   //imgSrc: 'http://smartxlearning.com/themes/template/img/book.png',
-    //   icon: "book",
-    //   to: "5",
-    // },
+    },
+    {
+      id: 3,
+      title: "หลักสูตรทั่วไป",
+      //imgSrc: 'http://smartxlearning.com/themes/template/img/book.png',
+      icon: "book",
+      to: "5",
+    },
   ];
 
   const formatDataList = (dataList, numberColumns) => {

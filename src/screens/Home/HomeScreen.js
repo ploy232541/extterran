@@ -20,6 +20,7 @@ import Carousel from "react-native-banner-carousel";
 import MyProgramCard from "../../components/MyProgramCard";
 import PublicRelationsCard from "../../components/PublicRelationsCard";
 import FunctionHome from "../../components/FunctionHome";
+import AutoHeightImage from 'react-native-auto-height-image';
 import { Video } from "expo-av";
 import {
   FULLSCREEN_UPDATE_PLAYER_DID_DISMISS,
@@ -51,7 +52,7 @@ const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT_VIDEO = (Dimensions.get("window").width * 9) / 16;
 //แก้ไขเวอร์ชัน
-const mobileversion = 23;
+const mobileversion = 24;
 var mobileversionshow = true;
 
 const functionHomeList = [
@@ -231,10 +232,9 @@ function HomeScreen() {
       if (loading && countloading > 30) {
         return (
           <View style={{ backgroundColor: "#fff" }}>
-            <Image
-              resizeMode={"stretch"}
-              style={{ width: "100%", height: "80%" }}
-              source={require("../../asset/showdow.jpeg")}
+            <AutoHeightImage
+              style={{ width: "100%"}}
+              source={require("../../asset/showdown.png")}
             />
           </View>
         );
@@ -259,9 +259,8 @@ function HomeScreen() {
       console.log(mobile);
       return (
         <View style={{ backgroundColor: "#fff" }}>
-          <Image
-            resizeMode={"stretch"}
-            style={{ width: "100%", height: "80%" }}
+          <AutoHeightImage
+            style={{ width: "100%"}}
             source={{ uri: `${pathname + pic}` }}
           />
         </View>
@@ -311,7 +310,7 @@ function HomeScreen() {
             <View style={styles.container_title}>
               <View style={styles.line} />
               <Text style={styles.title}>
-                {lang == "EN" ? "Course" : "หลักสูตรของเรา"}
+                {lang == "EN" ? "Course" : "หลักสูตรของฉัน"}
               </Text>
               <View style={styles.line} />
             </View>
@@ -510,7 +509,11 @@ const styles = StyleSheet.create({
   programCardStyle: {
     width: "48%",
     marginHorizontal: 4
-  }
+  },image: {
+    width: "100%",
+    height: null,
+    resizeMode: 'cover'
+}
 });
 
 export default HomeScreen;

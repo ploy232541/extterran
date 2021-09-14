@@ -55,6 +55,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
     "react-native-animated-loader": "^0.0.9",
     "react-native-animated-pagination-dot": "^0.1.8",
+    "react-native-auto-height-image": "^3.2.4",
     "react-native-awesome-alerts": "^1.4.2",
     "react-native-banner-carousel": "^1.0.3",
     "react-native-checkbox-form": "^1.1.5",
