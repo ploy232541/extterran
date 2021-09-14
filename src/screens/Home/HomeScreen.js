@@ -52,7 +52,7 @@ const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT_VIDEO = (Dimensions.get("window").width * 9) / 16;
 //แก้ไขเวอร์ชัน
-const mobileversion = 24;
+const mobileversion = 25;
 var mobileversionshow = true;
 
 const functionHomeList = [
@@ -136,7 +136,6 @@ function HomeScreen() {
   const [mobile, setMobile] = useState([]);
   useEffect(() => {
     const run = async () => {
-      setLoading(true);
       try {
         let getLang = await AsyncStorage.getItem("language");
         let user_id = await AsyncStorage.getItem("userId");
@@ -296,7 +295,7 @@ function HomeScreen() {
               }}
             /> */}
             <Image
-              resizeMode={"stretch"}
+              resizeMode={"center"}
               style={{ width: "100%", height: "100%" }}
               // source={{ uri: `${pathname + pic}` }}
               source={require("../../asset/banner/banner.jpeg")}
