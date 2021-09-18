@@ -59,7 +59,7 @@ var situation = [
     title: "Yes/ใช่ (Please provide detail / กรุณาระบุรายละเอียดใน Other",
     status: false
   },
-  { title: "", status: false }
+  { title: "Other", status: false }
 ];
 const radio_severity = [
   { label: "Severe / ร้ายแรงที่สุด", value: 0 },
@@ -1293,7 +1293,7 @@ export default class MainProfileScreen extends Component {
                 }}
               >
                 {
-                  " Stop Work Authority/Responsibility (SWA/SWR) \n การใช้อำนาจในการหยุดงาน"
+                  " HazOb & Near Miss Report"
                 }
               </Text>
               <View style={styles.containerSec2}>

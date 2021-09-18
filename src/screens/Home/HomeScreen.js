@@ -20,7 +20,7 @@ import Carousel from "react-native-banner-carousel";
 import MyProgramCard from "../../components/MyProgramCard";
 import PublicRelationsCard from "../../components/PublicRelationsCard";
 import FunctionHome from "../../components/FunctionHome";
-import AutoHeightImage from 'react-native-auto-height-image';
+import AutoHeightImage from "react-native-auto-height-image";
 import { Video } from "expo-av";
 import {
   FULLSCREEN_UPDATE_PLAYER_DID_DISMISS,
@@ -47,12 +47,12 @@ import {
 } from "@expo-google-fonts/bai-jamjuree";
 import { AppLoading } from "expo";
 
-const vdo = require("../../video/benner_video.mp4");
+// const vdo = require("../../video/benner_video.mp4");
 const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT_VIDEO = (Dimensions.get("window").width * 9) / 16;
 //แก้ไขเวอร์ชัน
-const mobileversion = 25;
+const mobileversion = 27;
 var mobileversionshow = true;
 
 const functionHomeList = [
@@ -232,7 +232,7 @@ function HomeScreen() {
         return (
           <View style={{ backgroundColor: "#fff" }}>
             <AutoHeightImage
-              style={{ width: "100%"}}
+              style={{ width: "100%" }}
               source={require("../../asset/showdown.png")}
             />
           </View>
@@ -255,11 +255,11 @@ function HomeScreen() {
     }
     if (mobile.status_mobile == "y") {
       const { status_mobile, pathname, pic } = mobile;
-      console.log(mobile);
+   
       return (
         <View style={{ backgroundColor: "#fff" }}>
           <AutoHeightImage
-            style={{ width: "100%"}}
+            style={{ width: "100%" }}
             source={{ uri: `${pathname + pic}` }}
           />
         </View>
@@ -269,7 +269,7 @@ function HomeScreen() {
       mobileversionshow = false;
       Alert.alert("กรุณาทำการอัพเดตเป็น version ล่าสุด ");
     }
-    console.log(mobile.version);
+ 
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -294,12 +294,18 @@ function HomeScreen() {
                 source: vdo
               }}
             /> */}
-            <Image
+            <AutoHeightImage
+              resizeMode={"center"}
+              style={{ width: "99%", height: "100%", alignSelf: "center" }}
+              // source={require("../../asset/showdown.png")}
+              source={require("../../asset/banner/banner.jpeg")}
+            />
+            {/* <Image
               resizeMode={"center"}
               style={{ width: "100%", height: "100%" }}
               // source={{ uri: `${pathname + pic}` }}
               source={require("../../asset/banner/banner.jpeg")}
-            />
+            /> */}
           </View>
 
           <View style={styles.section}></View>
@@ -349,7 +355,10 @@ function HomeScreen() {
           </View>
 
           {/* Video Introduction */}
-          <View style={styles.section}>
+          <TouchableOpacity
+            style={styles.section}
+            onPress={() => navigation.navigate("VideoListScreen")}
+          >
             <View style={styles.container_title}>
               <View style={styles.line} />
               <Text style={styles.title}>
@@ -359,6 +368,17 @@ function HomeScreen() {
             </View>
 
             <View style={{ paddingTop: 20 }}>
+              <Image
+                // resizeMode={"center"}
+                // style={{ width: "90%", height: "60%",alignSelf:"center"}}
+                style={{
+                  width: "99%",
+                  height: HEIGHT / 4,
+                  alignSelf: "center"
+                }}
+                // source={{ uri: `${pathname + pic}` }}
+                source={require("../../asset/video-play.jpeg")}
+              />
               {/* {
                           video != null ?
                             video.vdo_type === 'link' ?
@@ -395,7 +415,7 @@ function HomeScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </TouchableOpacity>
 
           {/* Public Relations */}
           <View style={styles.section}>
@@ -508,11 +528,12 @@ const styles = StyleSheet.create({
   programCardStyle: {
     width: "48%",
     marginHorizontal: 4
-  },image: {
+  },
+  image: {
     width: "100%",
     height: null,
-    resizeMode: 'cover'
-}
+    resizeMode: "cover"
+  }
 });
 
 export default HomeScreen;

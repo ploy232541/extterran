@@ -952,7 +952,7 @@ export default class ReportView extends Component {
                 }}
               >
                 {
-                  " Stop Work Authority/Responsibility (SWA/SWR) \n การใช้อำนาจในการหยุดงาน"
+                      " HazOb & Near Miss Report"
                 }
               </Text>
               <View style={styles.containerSec2}>

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Smartxlearning",
     "slug": "Exterran-e-Learning",
-    "version": "25.0.0",
+    "version": "27.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -23,7 +23,7 @@
     },
     "android": {
       "package": "com.exterran.elearning",
-      "versionCode": 41,
+      "versionCode": 43,
       "permissions": []
     },
     "web": {

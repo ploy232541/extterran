@@ -426,16 +426,18 @@ export default class TrainingFormScreen extends Component {
             ? "Please enter the training end date"
             : "กรุณากรอกวันที่สิ้นสุดการฝึกอบรม"
         );
-      } else if (
-        (upload_file == "" || upload_file == null) &&
-        (this.state.course == 3 ||
-          this.state.course == 4 ||
-          this.state.course == 0)
-      ) {
-        Alert.alert(
-          this.state.lang === "EN" ? "Please attach the file" : "กรุณาแนบไฟล์"
-        );
-      } else if (total <= 0) {
+      } 
+      // else if (
+      //   (upload_file == "" || upload_file == null) &&
+      //   (this.state.course == 3 ||
+      //     this.state.course == 4 ||
+      //     this.state.course == 0)
+      // ) {
+      //   Alert.alert(
+      //     this.state.lang === "EN" ? "Please attach the file" : "กรุณาแนบไฟล์"
+      //   );
+      // } 
+      else if (total <= 0) {
         Alert.alert(
           this.state.lang === "EN"
             ? "Include at least 1 training day."
@@ -1323,14 +1325,7 @@ export default class TrainingFormScreen extends Component {
               )}
 
               <View>
-                <Text style={styles.textInputEng}>
-                  File :
-                  {(this.state.course == 0 ||
-                    this.state.course == 3 ||
-                    this.state.course == 4) && (
-                    <Text style={{ color: "red" }}>*</Text>
-                  )}
-                </Text>
+                <Text style={styles.textInputEng}>File :</Text>
                 <Text style={styles.textInputThai}>แนบไฟล์</Text>
                 <View style={{ marginTop: 5, marginBottom: 20 }}>
                   <Button

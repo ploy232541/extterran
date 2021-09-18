@@ -40,6 +40,21 @@ const ModalTrainingStatus = (props) => {
       >
         {props.modelData
           ? props.modelData.map((item) => {
+              const getdetenew = (dates) => {
+                if (dates) {
+                  var dateParts = dates ? dates.split("/") : null;
+                  let month = Number(dateParts[1]) + 1;
+                  if (month < 10) {
+                    month = "0" + month;
+                    var dateObject =
+                      dateParts[0] + "/" + month + "/" + dateParts[2];
+                    return dateObject;
+                  }
+                  return null;
+                }
+              };
+              item.start_date = getdetenew(item.start_date);
+              item.end_date = getdetenew(item.end_date);
               return (
                 <View style={styles.container}>
                   <Text

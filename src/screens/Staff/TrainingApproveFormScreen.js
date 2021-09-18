@@ -121,15 +121,21 @@ const TrainingApproveFormScreen = (props) => {
     );
   };
 
-  //    if (loading) {
-  //         return (
-  //           <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-  //             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-  //               <ActivityIndicator />
-  //             </View>
-  //           </SafeAreaView>
-  //         );
-  //     }
+  const getdetenew = (dates) => {
+    if (dates) {
+      var dateParts = dates ? dates.split("/") : null;
+      let month = Number(dateParts[1]) + 1;
+      if (month < 10) {
+        month = "0" + month;
+        var dateObject = dateParts[0] + "/" + month + "/" + dateParts[2];
+        return dateObject;
+      }
+      return null;
+    }
+  };
+  dataArray.start_date = getdetenew(dataArray.start_date);
+  dataArray.end_date = getdetenew(dataArray.end_date);
+
   return (
     <Modal visible={props.chkVisible} onBackdropPress={props.closeModal}>
       <ScrollView

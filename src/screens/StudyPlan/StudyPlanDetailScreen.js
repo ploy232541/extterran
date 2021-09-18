@@ -38,6 +38,7 @@ function StudyPlanDetailScreen(props) {
   ];
   const [lang, setLang] = useState("TH");
   let item = props.route.params.item;
+
   var data0 = item.month_start,
     data1 = item.month_end,
     monthStart = "",
@@ -104,7 +105,7 @@ function StudyPlanDetailScreen(props) {
             >
               <View style={{ marginHorizontal: 18, marginVertical: 10 }}>
                 <Text style={{ textAlign: "center" }}>
-                  {monthStart} - {monthEnd}
+                  {monthStart} {item.start} - {monthEnd} {item.end}
                 </Text>
 
                 <View

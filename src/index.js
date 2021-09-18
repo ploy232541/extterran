@@ -152,20 +152,17 @@ function CustomDrawerContent(props) {
   }
 }
 
-function getHeaderTitle(route) {
+function getHeaderTitle(route,lang) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
 
   switch (routeName) {
     case "HomeTab":
-      return "บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด";
+      return lang == "EN" ? "EXTERRAN (THAILAND) LTD." : "บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด";
     case "MyProgramsTab":
-      return " ";
-    case "SearchTab":
-      return " ";
+      return lang == "EN" ? "Courses" : "หลักสูตรของฉัน";
     case "ProfileTab":
-      return " ";
-    case "AccountTab":
-      return "  ";
+      return lang == "EN" ? "User" : "ผู้ใช้";
+
   }
 }
 
@@ -203,7 +200,8 @@ function DrawerStack() {
         name="Home"
         options={({ route }) => ({
           title: lang == "EN" ? "Home" : "หน้าหลัก",
-          headerTitle: getHeaderTitle(route),
+         headerTitleStyle:{fontSize: 16,},
+          headerTitle: getHeaderTitle(route,lang),
           headerTintColor: "#1877f2",
           drawerIcon: ({ size, color }) => (
             <Icons size={size} color={color} name="home" />
@@ -216,6 +214,9 @@ function DrawerStack() {
       <Drawer.Screen
         name="MyPrograms"
         options={({ route }) => ({
+          headerTintColor: "#1877f2",
+          headerTitleStyle:{fontSize: 16,},
+          headerTitle: getHeaderTitle(route,lang),
           title: lang == "EN" ? "Course" : "หลักสูตรของฉัน",
           drawerIcon: ({ size, color }) => (
             <Icons size={size} color={color} name="view-list" />
@@ -228,6 +229,7 @@ function DrawerStack() {
       <Drawer.Screen
         name="Status"
         options={{
+          headerTintColor: "#1877f2",
           title: lang == "EN" ? "Study status" : "สถานะการเรียน",
           drawerIcon: ({ size, color }) => (
             <Icons size={size} color={color} name="insert-chart" />
@@ -248,6 +250,7 @@ function DrawerStack() {
         <Drawer.Screen
           name="Staff"
           options={{
+            headerTintColor: "#1877f2",
             title: lang == "EN" ? "Team" : "ทีมงาน",
             drawerIcon: ({ size, color }) => (
               <Icons size={size} color={color} name="people" />
@@ -269,6 +272,7 @@ function DrawerStack() {
       <Drawer.Screen
         name="StudyPlan"
         options={{
+          headerTintColor: "#1877f2",
           title: lang == "EN" ? "Study plan" : "แผนการเรียน",
           drawerIcon: ({ size, color }) => (
             <Icons size={size} color={color} name="library-books" />
@@ -288,6 +292,7 @@ function DrawerStack() {
       <Drawer.Screen
         name="Programs"
         options={{
+          headerTintColor: "#1877f2",
           title: lang == "EN" ? "General course" : "หลักสูตรทั่วไป",
           drawerIcon: ({ size, color }) => (
             <Icons size={size} color={color} name="school" />
@@ -300,6 +305,7 @@ function DrawerStack() {
       <Drawer.Screen
         name="Training"
         options={{
+          headerTintColor: "#1877f2",
           title: lang == "EN" ? "Training" : "ฝึกอบรม",
           drawerIcon: ({ size, color }) => (
             <Icons size={size} color={color} name="today" />
@@ -319,6 +325,7 @@ function DrawerStack() {
       <Drawer.Screen
         name="Classroom"
         options={{
+          headerTintColor: "#1877f2",
           title: lang == "EN" ? "Classroom online" : "ห้องเรียนออนไลน์",
           drawerIcon: ({ size, color }) => (
             <Icons size={size} color={color} name="cast-connected" />
@@ -339,6 +346,7 @@ function DrawerStack() {
       <Drawer.Screen
         name="FeedBack"
         options={{
+          headerTintColor: "#1877f2",
           title:
             lang == "EN" ? "Feedback To Supervisor" : "Feedback To Supervisor",
           drawerIcon: ({ size, color }) => (
@@ -360,6 +368,7 @@ function DrawerStack() {
       <Drawer.Screen
         name="Settings"
         options={{
+          headerTintColor: "#1877f2",
           title: lang == "EN" ? "Settings language" : "ตั้งค่าภาษา",
           drawerIcon: ({ size, color }) => (
             <Icons size={size} color={color} name="settings" />
@@ -379,6 +388,7 @@ function DrawerStack() {
       <Drawer.Screen
         name="Report"
         options={{
+          headerTintColor: "#1877f2",
           title: lang == "EN" ? "Report a problem" : "แจ้งปัญหาการใช้งาน",
           drawerIcon: ({ size, color }) => (
             <Icons size={size} color={color} name="report-problem" />
