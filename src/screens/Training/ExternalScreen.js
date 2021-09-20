@@ -524,7 +524,7 @@ export default class ExternalScreen extends Component {
 
                         <View>
                           <Picker
-                            mode="dropdown"
+                            mode="filter"
                             iosIcon={
                               <Icon
                                 name="angle-down"

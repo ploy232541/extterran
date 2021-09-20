@@ -295,6 +295,7 @@ export default class SafetyBootsScreen extends Component {
         </SafeAreaView>
       );
     }
+    console.log("orgid = " + this.state.orgid);
     if (
       this.state.orgid == 2 ||
       (this.state.orgid == 3 && this.state.authorityid != null)

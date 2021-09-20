@@ -53,9 +53,10 @@ class HowToUseListScreen extends Component {
 
     searchFilterFunction = text => {    
         const newData = this.arrayholder.filter(item => {      
-           const itemData = `${this.state.lang === 'EN' ? item.usa_title.toUpperCase() : item.usa_title}`;
+           const itemData =item.usa_title+"";
+
            const textData = text.toUpperCase();
-           return itemData.indexOf(textData) > -1;    
+           return itemData.toString().toUpperCase().indexOf(textData) > -1;    
         });
         
         this.setState({ howToUse: newData });  

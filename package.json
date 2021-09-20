@@ -80,6 +80,7 @@
     "react-native-media-controls": "^2.2.0",
     "react-native-modal": "^11.6.1",
     "react-native-modal-datetime-picker": "^9.1.0",
+    "react-native-modal-filter-picker": "^2.0.0",
     "react-native-paper": "^4.9.2",
     "react-native-picker-select": "^8.0.3",
     "react-native-progress-circle": "^2.1.0",
