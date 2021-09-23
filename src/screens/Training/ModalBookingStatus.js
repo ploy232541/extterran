@@ -199,7 +199,7 @@ const ModalBookingStatus = (props) => {
 
                     {item.booking_type != 3 ? (
                       <>
-                        {item.purpose != null ? (
+                        {item.purpose != null &&item.purpose_etc !=''? (
                           <>
                             <Text>Purpose :</Text>
                             <Text style={styles.textInput}>
@@ -208,11 +208,11 @@ const ModalBookingStatus = (props) => {
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}
-                              value={item.purpose ? item.purpose : "-"}
+                              value={item.purpose ? item.purpose :item.purpose_etc}
                             />
                           </>
                         ) : null}
-                        {item.purpose_etc != null ? (
+                        {item.purpose_etc != null &&item.purpose_etc !=''? (
                           <>
                             <Text>Purpose :</Text>
                             <Text style={styles.textInput}>
