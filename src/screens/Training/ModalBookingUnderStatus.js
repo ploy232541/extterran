@@ -247,7 +247,7 @@ const ModalBookingUnderStatus = (props) => {
                               value={value.time_end}
                             />
 
-                            <Text>From :</Text>
+                            <Text>From 555:</Text>
                             <Text style={styles.textInput}>ต้นทาง</Text>
                             <TextInput
                               editable={false}
