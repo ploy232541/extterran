@@ -703,7 +703,7 @@ export default class AccommodationBookingScreen extends Component {
               <Text style={styles.textInput}>เช็คอิน</Text>
               <TouchableOpacity onPress={() => this.showDatePicker("start")}>
                 <View style={styles.inputDate}>
-                  <Text style={{ color: "#bfc6ea" }}>
+                  <Text style={{ color: "#000" }}>
                     {this.state.startDate}
                   </Text>
                 </View>
@@ -713,7 +713,7 @@ export default class AccommodationBookingScreen extends Component {
               <Text style={styles.textInput}>เช็คเอาต์</Text>
               <TouchableOpacity onPress={() => this.showDatePicker()}>
                 <View style={styles.inputDate}>
-                  <Text style={{ color: "#bfc6ea" }}>{this.state.endDate}</Text>
+                  <Text style={{ color: "#000" }}>{this.state.endDate}</Text>
                 </View>
               </TouchableOpacity>
             </View>

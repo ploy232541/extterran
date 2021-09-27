@@ -612,7 +612,7 @@ export default class GroundTransportationBookingScreen extends Component {
               <Text style={styles.textInput}>วันออกเดินทาง</Text>
               <TouchableOpacity onPress={() => this.showDatePicker("start")}>
                 <View style={styles.inputDate}>
-                  <Text style={{ color: "#bfc6ea" }}>
+                  <Text style={{ color: "#000" }}>
                     {this.state.startDate}
                   </Text>
                 </View>
@@ -622,7 +622,7 @@ export default class GroundTransportationBookingScreen extends Component {
               <Text style={styles.textInput}>เวลาเดินทาง</Text>
               <TouchableOpacity onPress={() => this.showTimePicker("start")}>
                 <View style={styles.inputDate}>
-                  <Text style={{ color: "#bfc6ea" }}>
+                  <Text style={{ color: "#000" }}>
                     {this.state.startTime}
                   </Text>
                 </View>
