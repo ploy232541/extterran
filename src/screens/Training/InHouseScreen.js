@@ -17,10 +17,11 @@ import { set } from "react-native-reanimated";
 import { httpClient } from "../../core/HttpClient";
 import { AsyncStorage } from "react-native";
 import Icons from "react-native-vector-icons/Ionicons";
-
+import RNPickerDialog from 'rn-modal-picker';
 let dimensions = Dimensions.get("window");
 let pickerWidth = dimensions.width - 56;
 const WIDTH = Dimensions.get("window").height;
+
 
 export default class InHouseScreen extends Component {
   constructor(props) {
@@ -32,7 +33,13 @@ export default class InHouseScreen extends Component {
       selectCourse: [],
       lang: "",
       firstname: "",
-      empList: []
+      empList: [],
+      emp:[],
+      placeHolderText: 'กรุณาเลือกพนักงาน',
+      selectedText: '',
+      defaultValue: true,
+      select: '',
+      value: '',
     };
   }
   async componentDidMount() {
@@ -50,8 +57,17 @@ export default class InHouseScreen extends Component {
         .then((response) => {
           const result = response.data;
           if (result != null) {
+           let emp=[]
+            for (let i in result) {
+              emp[i]={
+                id:result[i].user_id,
+                name:result[i].firstname
+              }
+             
+              console.log(emp);
+            }
             this.setState({
-              empList: result
+              empList: emp
             });
           }
         })
@@ -74,6 +90,9 @@ export default class InHouseScreen extends Component {
     } catch (error) {
       console.log(error);
     }
+  }
+  selectedValue(index, item) {
+    this.setState({selectedText: item.name});
   }
   deleteEmployee(index) {
     let itemCopy = [...this.state.trainingNeed];
@@ -223,11 +242,35 @@ export default class InHouseScreen extends Component {
             <Avatar.Icon
               icon="arrow-down"
               size={30}
-              style={styles.arrowDownStyle}
+              style={Styless.arrowDownStyle}
             />
             <Divider style={{ paddingBottom: 1, flex: 1 }} />
           </View>
+          <View style={Styless.container}>
+        <Text style={{marginBottom: 50, fontSize: 25, fontWeight: 'bold'}}>
+          {'React Native Picker With Search'}
+        </Text>
+        <RNPickerDialog
+          data={this.state.empList}
+          pickerTitle={'Sort by'}
+          // labelText={'testss'}
+          showSearchBar={true}
+          showPickerTitle={true}
+          listTextStyle={Styless.listTextStyle}
+          pickerStyle={Styless.pickerStyle}
+          selectedText={this.state.selectedText}
+          placeHolderText={this.state.placeHolderText}
+          searchBarPlaceHolder={'Search.....'}
+          searchBarPlaceHolderColor={'#398DDD'}
+          selectedTextStyle={Styless.selectedTextStyle}
+          placeHolderTextColor={'black'}
+          dropDownIconStyle={Styless.dropDownIconStyle}
+          searchBarStyle={Styless.searchBarStyle}
+          //dropDownIcon={require('../assets/pin.png')}
+          selectedValue={(index, item) => this.selectedValue(index, item)}
+        />
 
+      </View>
           {/* Start */}
           {this.state.trainingNeed.map((item, index) => {
             let excludeEmployees = [];
@@ -718,4 +761,96 @@ const styles = StyleSheet.create({
     marginRight: 2,
     marginTop: 5
   }
+});
+const Styless = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  selectedTextStyle: {
+    height: 50,
+    borderColor: 'gray',
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    width: '100%',
+    color: 'black',
+    fontSize: 20,
+    paddingLeft: 10,
+    marginTop: -2,
+  },
+  selectedTextStyle1: {
+    height: 50,
+    borderColor: 'gray',
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    width: '100%',
+    color: 'black',
+    fontSize: 20,
+    paddingLeft: 10,
+    marginTop: 15,
+  },
+  listTextStyle: {
+    color: '#000',
+    marginVertical: 10,
+    flex: 0.9,
+    marginLeft: 20,
+    marginHorizontal: 10,
+    textAlign: 'left',
+  },
+  searchBarStyle: {
+    marginBottom: 10,
+    flexDirection: 'row',
+    height: 40,
+    shadowRadius: 1,
+    shadowOpacity: 1.0,
+    borderWidth: 1,
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    },
+    borderColor: '#303030',
+    shadowColor: '#303030',
+    borderRadius: 5,
+    elevation: 1,
+    marginHorizontal: 10,
+  },
+  placeHolderTextStyle: {
+    color: 'red',
+    padding: 10,
+    textAlign: 'left',
+    width: '99%',
+    flexDirection: 'row',
+  },
+  dropDownIconStyle: {
+    width: 10,
+    height: 10,
+    left: -40,
+    // marginTop: 20,
+  },
+  dropDownIconStyle1: {
+    width: 10,
+    height: 10,
+    left: -40,
+    marginTop: 15,
+  },
+  pickerStyle: {
+    shadowRadius: 0.5,
+    shadowOpacity: 0.5,
+    borderWidth: 0.5,
+    shadowOffset: {
+      width: 0.5,
+      height: 0.5,
+    },
+    height: 60,
+    borderColor: '#303030',
+    shadowColor: '#303030',
+    borderRadius: 2,
+    elevation: 0.5,
+  },
+  pickerStyle1: {
+    height: 60,
+    borderBottomColor: 'dodgerblue',
+    borderBottomWidth: 2,
+  },
 });
