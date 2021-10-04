@@ -18,6 +18,7 @@ import { httpClient } from "../../core/HttpClient";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Alert } from "react-native";
 import ImageViewer from "react-native-image-zoom-viewer";
+import moment from "moment";
 
 const HEIGHT = Dimensions.get("window").height;
 
@@ -27,74 +28,67 @@ let imageHeight = Math.round((dimensions.width * 9) / 16);
 export default class OutfitScreen extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       lang: "",
-      uniform_id: "",
-      user_id: "",
-      selectcount: 2,
-      maxselect: 2,
-      select_1: [],
-      orgchartid: "",
-      roving: ["10", "11", "12", "13", "14", "15", "16", "17", "18"],
-      alertiffillsome: false,
-      canfill: false,
-      //all
+      showsModel1: false,
+      showsModel2: false,
+      showsModel3: false,
       gender: [
         { name: "f", namethai: "ผู้หญิง", nameeng: "female" },
         { name: "m", namethai: "ผู้ชาย", nameeng: "male" }
       ],
+      sizeUniforms: [],
+      select_bob: {
+        sex: "",
+        shirt_size: "",
+        edit_shirt: "",
+        pant_size: "",
+        edit_pant: "",
+        amount: "",
+        selects: false
+      },
+      select_shirt: {
+        sex: "",
+        shirt_size: "",
+        edit_shirt: "",
+        pant_size: "",
+        edit_pant: "",
+        amount: "",
+        selects: false
+      },
+      status1: false,
+      status2: false,
+
+      select_coverall: { size: "", edit: "", amount: "", selects: false },
       select_uniform: false,
-      uniform_type: 0,
-      //all
-      //bob
-      bob: false,
-      bob_size: "",
-      edit_bob_size: "",
+      show_bob: false,
+      show_shirt: false,
+      show_coverall: false,
+      status_bob: false,
+      status_shirt: false,
+      status_coverall: false,
+      bob_shirt_size: "",
       bob_pant_size: "",
-      edit_bob_pant_size: "",
-      bob_gender: "",
-      bob_count: 0,
-      //bob
-      //shirt
-      shirt: false,
-      shirt_size: "",
-      edit_shirt_size: "",
+      shirt_shirt_size: "",
       shirt_pant_size: "",
-      edit_shirt_pant_size: "",
-      shirt_gender: "",
-      shirt_count: 0,
-
-      coverall: false,
-      coverall_size: "",
-      edit_coverall_size: "",
-
-      coverall_count: 0,
-
-      loading: true,
-      showsModel1: false,
-      showsModel2: false,
-      showsModel3: false
+      coverall_size: ""
     };
   }
-
   async componentDidMount() {
-    let id = await AsyncStorage.getItem("userId");
-
-    let n = new Date().getMonth();
-    this.setState({ user_id: id, month: n });
-    //lเปิดเทส จริงๆ เป็นเดือน 10-12
-    if (this.state.month < 8) {
+    let month = new Date().getMonth();
+    if (month <= 8) {
       this.setState({ select_uniform: true });
+    } else {
     }
     const res = await AsyncStorage.getItem("language");
+    let id = await AsyncStorage.getItem("userId");
     if (res === "EN") {
       this.setState({ lang: "EN" });
     } else {
       this.setState({ lang: "TH" });
     }
     try {
-      httpClient
+      await httpClient
         .get(`/Training/SizeUniforms`)
         .then((response) => {
           const result = response.data;
@@ -106,418 +100,225 @@ export default class OutfitScreen extends Component {
               data[i] = { id: i, name: result[i] };
             }
             this.setState({
-              select_1: data
+              sizeUniforms: data
             });
           }
         })
         .catch((error) => {
           console.log(error);
         });
+      await httpClient.get(`/Profile/getUniform/${id}`).then((response) => {
+        let result = response.data;
 
-      httpClient
-        .get(`/Training/getuniforms/${this.state.user_id}`)
-        .then((response) => {
-          const result = response.data;
+        if (result != null) {
+          let getCovercall = result.getCovercall[0];
+          let getshirtBob = result.getshirtBob[0];
+          let getshirtShirt = result.getshirtShirt[0];
+          let gettrousersBob = result.gettrousersBob[0];
+          let gettrousersShirt = result.gettrousersShirt[0];
+          let yearss = "";
+          let status_bob = getshirtBob ? true : false;
+          let status_shirt = getshirtShirt ? true : false;
+          let status_Covercall = getCovercall ? true : false;
+          this.setState({
+            status_bob,
+            status_shirt,
+            status_Covercall,
+            status2: true
+          });
 
-          if (result != null && result != "") {
-            for (let i = 0; i < result.length; i++) {
-              if (
-                result[i].uniform_type == "1" &&
-                result[i].uniform_part == "1"
-              ) {
-                let bob_size = this.state.select_1.find((item) => {
-                  return item.name == result[i].uniform_size;
-                });
-                let bob_pant_size = this.state.select_1.find((item) => {
-                  return item.name == result[i + 1].uniform_size;
-                });
-
-                if (bob_size != null) {
-                  this.setState({
-                    bob_count: String(result[i].uniform_total),
-                    bob_gender: result[i].uniform_sex,
-                    bob_size: bob_size.id,
-                    bob_pant_size: bob_pant_size.id,
-                    edit_bob_size: result[i].sleevelength,
-                    edit_bob_pant_size: result[i + 1].trouserbeak,
-                    select_uniform: true
-                  });
-                  this.setState({ bob: true });
-                } else {
-                  this.reset();
-                }
-              } else if (
-                result[i].uniform_type == "2" &&
-                result[i].uniform_part == "1"
-              ) {
-                let shirt_size = this.state.select_1.find((member) => {
-                  return member.name == result[i].uniform_size;
-                });
-                let shirt_pant_size = null;
-                if (result[i + 1]) {
-                  shirt_pant_size = this.state.select_1.find((member) => {
-                    return member.name == result[i + 1].uniform_size;
-                  });
-                }
-
-                if (shirt_size != null) {
-                  this.setState({
-                    shirt_count: String(result[i].uniform_total),
-                    shirt_gender: result[i].uniform_sex,
-                    shirt_size: shirt_size.id,
-                    shirt_pant_size: shirt_pant_size
-                      ? shirt_pant_size.id
-                      : null,
-                    edit_shirt_size: result[i].sleevelength,
-                    edit_shirt_pant_size: result[i + 1]
-                      ? result[i + 1].trouserbeak
-                      : null,
-                    select_uniform: true
-                  });
-                  this.setState({ shirt: true });
-                } else {
-                  this.reset();
-                }
-              } else if (
-                result[i].uniform_type == "3" &&
-                result[i].uniform_part == "3"
-              ) {
-                let coverall_size = this.state.select_1.find((member) => {
-                  return member.name == result[i].uniform_size;
-                });
-                if (coverall_size != null) {
-                  this.setState({ coverall: true });
-                  this.setState({
-                    coverall_count: String(result[i].uniform_total),
-                    coverall_size: coverall_size.id,
-                    edit_coverall_size: result[i].sleevelength,
-                    select_uniform: true
-                  });
-                } else {
-                  this.reset();
-                }
-              }
-            }
+          if (result.getshirtBob[0]) {
+            yearss = moment(getshirtBob.created_date).format("YYYY");
+          } else if (result.getshirtShirt[0]) {
+            yearss = moment(getshirtShirt.created_date).format("YYYY");
+          } else if (result.getCovercall[0]) {
+            yearss = moment(getCovercall.created_date).format("YYYY");
           }
 
-          /*if (result != null) {
-            if ((Number(result.length))%2 != 1) {
-              
-            }
-          }*/
-          /*if (result != null) {
-            let bobsize = this.state.select_1.find((member) => {
-              return member.name == result[1].uniform_size;
-            });
-            let bobpantsize = this.state.select_1.find((member) => {
-              return member.name == result[0].uniform_size;
-            });
-            this.setState({
-              bob_count: String(result[0].uniform_total),
-              bob_gender: result[0].uniform_sex,
-              bob_size: bobsize.id,
-              bob_pant_size: bobpantsize.id,
-              edit_bob_size: result[1].sleevelength,
-              edit_bob_pant_size: result[0].trouserbeak,
-              select_uniform: true,
-            })
-            this.setState({bob: true});
-          }*/
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-      httpClient
-        .get(`/Training/getorgcharttest/${this.state.user_id}`)
-        .then((response) => {
-          const result = response.data;
-          if (result != null) {
-            for (let i = 0; i < result.length; i++) {
-              var row = result[i];
-
-              this.setState({
-                orgchartid: row.orgchart_id
-              });
-            }
+          if (yearss == new Date().getFullYear()) {
+            this.setState({ select_uniform: true });
           }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          let select_bob = {
+            sex: getshirtBob
+              ? getshirtBob.uniform_sex
+                ? getshirtBob.uniform_sex
+                : ""
+              : "",
+            shirt_size: getshirtBob
+              ? getshirtBob.uniform_size
+                ? getshirtBob.uniform_size
+                : ""
+              : "",
+            edit_shirt: getshirtBob
+              ? getshirtBob.sleevelength
+                ? getshirtBob.sleevelength
+                : ""
+              : "",
+            pant_size: gettrousersBob
+              ? gettrousersBob.uniform_size
+                ? gettrousersBob.uniform_size
+                : ""
+              : "",
+            edit_pant: gettrousersBob
+              ? gettrousersBob.trouserbeak
+                ? gettrousersBob.trouserbeak
+                : ""
+              : "",
+            amount: gettrousersBob
+              ? gettrousersBob.uniform_total
+                ? gettrousersBob.uniform_total
+                : ""
+              : ""
+          };
+          this.setState({ select_bob });
+
+          let select_shirt = {
+            sex: getshirtShirt
+              ? getshirtShirt.uniform_sex
+                ? getshirtShirt.uniform_sex
+                : ""
+              : "",
+            shirt_size: getshirtShirt
+              ? getshirtShirt.uniform_size
+                ? getshirtShirt.uniform_size
+                : ""
+              : "",
+            edit_shirt: getshirtShirt
+              ? getshirtShirt.sleevelength
+                ? getshirtShirt.sleevelength
+                : ""
+              : "",
+            pant_size: gettrousersShirt
+              ? gettrousersShirt.uniform_size
+                ? gettrousersShirt.uniform_size
+                : ""
+              : "",
+            edit_pant: gettrousersShirt
+              ? gettrousersShirt.trouserbeak
+                ? gettrousersShirt.trouserbeak
+                : ""
+              : "",
+            amount: gettrousersShirt
+              ? gettrousersShirt.uniform_total
+                ? gettrousersShirt.uniform_total
+                : ""
+              : ""
+          };
+
+          this.setState({ select_shirt });
+          let select_coverall = {
+            size: getCovercall.uniform_size ? getCovercall.uniform_size : "",
+            edit: getCovercall.sleevelength ? getCovercall.sleevelength : "",
+            amount: getCovercall.uniform_total ? getCovercall.uniform_total : ""
+          };
+
+          this.setState({ select_coverall });
+        }
+      });
     } catch (error) {}
   }
+  onPressSend =async () => {
+    let id = await AsyncStorage.getItem("userId");
+    let { select_shirt, select_bob, select_coverall } = this.state;
+    let getShirt = select_shirt.selects? select_shirt : null;
+    let getBob = select_bob.selects ? select_bob : null;
+    let getCoverall = select_coverall .selects ? select_coverall : null;
+    let getData = { getBob, getShirt, getCoverall ,id};
+    if (getShirt==null&&getBob==null&&getCoverall==null) {
+      Alert.alert( this.state.lang === "EN" ? "Please select a uniform" : "กรุณาเลือกชุดยูนิฟอร์ม")
+    }else{ Alert.alert(
+      this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+      this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+      [
+        {
+          text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        ,
+        {
+          text: this.state.lang === "EN" ? "OK" : "ตกลง",
+          onPress: () => {
 
-  onPressSend = () => {
-    const {
-      alertiffillsome,
-      uniform_id,
-      user_id,
-      selectcount,
-      bob_size,
-      edit_bob_size,
-      bob_pant_size,
-      edit_bob_pant_size,
-      bob_gender,
-      bob_count,
-      shirt_size,
-      edit_shirt_size,
-      shirt_pant_size,
-      edit_shirt_pant_size,
-      shirt_gender,
-      shirt_count,
-      coverall_size,
-      edit_coverall_size,
-      coverall_count
-    } = this.state;
-
-    if (
-      Number(bob_count) + Number(shirt_count) + Number(coverall_count) >
-      Number(this.state.selectcount)
-    ) {
-      this.state.lang === "EN"
-        ? Alert.alert(
-            "You can't select all a uniform more than " + this.state.selectcount
-          )
-        : Alert.alert(
-            "คุณไม่สามารถเลือกชุดยูนิฟอร์มทั้งหมดได้เกิน " +
-              this.state.selectcount +
-              " ตัว"
-          );
-    } else {
-      for (let i = 1; i != 4; i++) {
-        if (i == 1 || i == 2) {
-          if (i == 1 && bob_count != 0) {
-            if (bob_gender == "" || bob_size == "" || bob_pant_size == "") {
-              this.state.lang === "EN"
-                ? Alert.alert("Please fill in all details.")
-                : Alert.alert("กรุณากรอกรายละเอียดให้ครบถ้วน");
-            } else {
-              let bob_size = this.state.select_1.find((member) => {
-                return member.id === this.state.bob_size;
-              });
-              let bob_pant_size = this.state.select_1.find((member) => {
-                return member.id === this.state.bob_pant_size;
-              });
-              const params = {
-                uniform_id,
-                user_id,
-                bob_size: bob_size.name,
-                bob_pant_size: bob_pant_size.name,
-                edit_bob_pant_size,
-                edit_bob_size,
-                bob_gender,
-                bob_count
-              };
-              this.state.alertiffillsome = true;
-              console.log(params);
-              httpClient.post(`/Training/insertbob`, params).catch((error) => {
-                console.log(error);
-              });
-            }
-          }
-          if (i == 2 && shirt_count != 0) {
-            if (
-              shirt_gender == "" ||
-              shirt_size == "" ||
-              shirt_pant_size == ""
-            ) {
-              this.state.lang === "EN"
-                ? Alert.alert("Please fill in all details.")
-                : Alert.alert("กรุณากรอกรายละเอียดให้ครบถ้วน");
-            } else {
-              let shirt_size = this.state.select_1.find((member) => {
-                return member.id === this.state.shirt_size;
-              });
-              let shirt_pant_size = this.state.select_1.find((member) => {
-                return member.id === this.state.shirt_pant_size;
-              });
-              const params = {
-                uniform_id,
-                user_id,
-                shirt_size: shirt_size.name,
-                shirt_pant_size: shirt_pant_size.name,
-                edit_shirt_pant_size,
-                edit_shirt_size,
-                shirt_gender,
-                shirt_count
-              };
-              this.state.alertiffillsome = true;
-              httpClient
-                .post(`/Training/insertshirt`, params)
-                .catch((error) => {
-                  console.log(error);
-                });
-            }
-          }
-        }
-        if (i == 3 && coverall_count != 0) {
-          if (coverall_size == "") {
-            this.state.lang === "EN"
-              ? Alert.alert("Please fill in all details.")
-              : Alert.alert("กรุณากรอกรายละเอียดให้ครบถ้วน");
-          } else {
-            let coverall_size = this.state.select_1.find((member) => {
-              return member.id === this.state.coverall_size;
-            });
-            const params = {
-              uniform_id,
-              user_id,
-              coverall_size: coverall_size.name,
-              edit_coverall_size,
-              coverall_count
-            };
-            this.state.alertiffillsome = true;
             httpClient
-              .post(`/Training/insertcoverall`, params)
+              .post(`/Profile/InsertUniforms`, getData)
+              .then((response) => {
+                const result = response.data;
+
+                if (result === true) {
+                  Alert.alert(
+                    this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                    this.state.lang === "EN"
+                      ? "Success"
+                      : "บันทึกสำเร็จ",
+                    [
+                      {
+                        text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                        onPress: (e) => this.props.navigation.goBack()
+                      }
+                    ],
+                    { cancelable: false }
+                  );
+                } else {
+                  Alert.alert(
+                    this.state.lang === "EN"
+                      ? `Fail`
+                      : "เกิดข้อผิดพลาด"
+                  );
+                }
+              })
               .catch((error) => {
                 console.log(error);
               });
           }
         }
-      }
-
-      if (this.state.alertiffillsome == true) {
-        Alert.alert(
-          this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-          this.state.lang === "EN" ? "Success" : "บันทึกสำเร็จ",
-          [
-            {
-              text: this.state.lang === "EN" ? "OK" : "ตกลง",
-              onPress: () => this.reset()
-            }
-          ]
-        );
-      } else {
-        Alert.alert(
-          this.state.lang === "EN" ? `Can't save` : "ไม่สามารถบันทึกได้"
-        );
-      }
-    }
+      ]
+    );}
+   
   };
-
-  reset = async () => {
-    //สำหรับเทส
-    if (this.state.month < 8) {
-      this.setState({ select_uniform: true });
-    }
-    try {
-      httpClient
-        .get(`/Training/getuniforms/${this.state.user_id}`)
-        .then((response) => {
-          const result = response.data;
-          if (result != null && result != "") {
-            //let i = 0;
-            //console.log("result = " + (Number(result.length)+3)%2);
-            //console.log("result = " + result[i + 1].uniform_id);
-            for (let i = 0; i < result.length; i++) {
-              //console.log("result = " + result[i].uniform_type);
-              if (
-                result[i].uniform_type == "1" &&
-                result[i].uniform_part == "1"
-              ) {
-                let bobsize = this.state.select_1.find((member) => {
-                  return member.name == result[i].uniform_size;
-                });
-                let bobpantsize = this.state.select_1.find((member) => {
-                  return member.name == result[i + 1].uniform_size;
-                });
-                if (bobsize == null) {
-                  this.reset();
-                } else {
-                  this.setState({
-                    bob_count: String(result[i].uniform_total),
-                    bob_gender: result[i].uniform_sex,
-                    bob_size: bobsize.id,
-                    bob_pant_size: bobpantsize.id,
-                    edit_bob_size: result[i].sleevelength,
-                    edit_bob_pant_size: result[i + 1].trouserbeak,
-                    select_uniform: true
-                  });
-                  this.setState({ bob: true });
-                }
-              }
-              if (
-                result[i].uniform_type == "2" &&
-                result[i].uniform_part == "1"
-              ) {
-                let shirtsize = this.state.select_1.find((member) => {
-                  return member.name == result[i].uniform_size;
-                });
-                let shirtpantsize = this.state.select_1.find((member) => {
-                  return member.name == result[i + 1].uniform_size;
-                });
-                if (shirtsize == null) {
-                  this.reset();
-                } else {
-                  this.setState({
-                    shirt_count: String(result[i].uniform_total),
-                    shirt_gender: result[i].uniform_sex,
-                    shirt_size: shirtsize.id,
-                    shirt_pant_size: shirtpantsize.id,
-                    edit_shirt_size: result[i].sleevelength,
-                    edit_shirt_pant_size: result[i + 1].trouserbeak,
-                    select_uniform: true
-                  });
-                  this.setState({ shirt: true });
-                }
-              }
-              if (
-                result[i].uniform_type == "3" &&
-                result[i].uniform_part == "3"
-              ) {
-                let coverallsize = this.state.select_1.find((member) => {
-                  return member.name == result[i].uniform_size;
-                });
-                if (coverallsize == null) {
-                  this.reset();
-                } else {
-                  this.setState({
-                    shirt_count: String(result[i].uniform_total),
-                    coverall_size: shirtsize.id,
-                    edit_coverall_size: result[i].sleevelength,
-                    select_uniform: true
-                  });
-                  this.setState({ coverall: true });
-                }
-              }
-            }
-
-            /*if (result != null) {
-            if ((Number(result.length))%2 != 1) {
-              
-            }
-          }*/
-            /*if (result != null) {
-            let bobsize = this.state.select_1.find((member) => {
-              return member.name == result[1].uniform_size;
-            });
-            let bobpantsize = this.state.select_1.find((member) => {
-              return member.name == result[0].uniform_size;
-            });
-            this.setState({
-              bob_count: String(result[0].uniform_total),
-              bob_gender: result[0].uniform_sex,
-              bob_size: bobsize.id,
-              bob_pant_size: bobpantsize.id,
-              edit_bob_size: result[1].sleevelength,
-              edit_bob_pant_size: result[0].trouserbeak,
-              select_uniform: true,
-            })
-            this.setState({bob: true});
-          }*/
-          }
-        })
-
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   render() {
+    if (
+      this.state.sizeUniforms.length > 0 &&
+      !this.state.status1 &&
+      this.state.status2 &&
+      (this.state.select_bob.amount > 0 ||
+        this.state.select_shirt.amount > 0 ||
+        this.state.select_coverall.amount > 0)
+    ) {
+      let bob_shirt_size,
+        bob_pant_size,
+        shirt_shirt_size,
+        shirt_pant_size,
+        coverall_size;
+      for (let a of this.state.sizeUniforms) {
+        if (a.name == this.state.select_bob.shirt_size.toUpperCase()) {
+          bob_shirt_size = a.id;
+        }
+
+        if (a.name == this.state.select_bob.pant_size.toUpperCase()) {
+          bob_pant_size = a.id;
+        }
+        if (a.name == this.state.select_shirt.shirt_size.toUpperCase()) {
+          shirt_shirt_size = a.id;
+        }
+
+        if (a.name == this.state.select_shirt.pant_size.toUpperCase()) {
+          shirt_pant_size = a.id;
+        }
+        if (a.name == this.state.select_coverall.size.toUpperCase()) {
+          coverall_size = a.id;
+        }
+      }
+
+      this.setState({
+        bob_shirt_size,
+        bob_pant_size,
+        shirt_shirt_size,
+        shirt_pant_size,
+        coverall_size,
+        status1: true
+      });
+    }
     const closeModal1 = () => {
       if (this.state.showsModel1) {
         this.setState({ showsModel1: false });
@@ -574,35 +375,7 @@ export default class OutfitScreen extends Component {
         }
       }
     ];
-    if (this.state.loading) {
-      return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-          <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-          >
-            <ActivityIndicator />
-          </View>
-        </SafeAreaView>
-      );
-    }
-    console.log("orgchartid = " + this.state.orgchartid);
-    for (let i = 0; i < this.state.roving.length; i++) {
-      if (this.state.orgchartid == this.state.roving[i]) {
-        this.state.selectcount = 3;
-        this.state.maxselect = 3;
-      }
-    }
-    console.log("selectcount = " + this.state.selectcount);
-    if (
-      Number(this.state.bob_count) +
-        Number(this.state.shirt_count) +
-        Number(this.state.coverall_count) >=
-      Number(this.state.selectcount)
-    ) {
-      this.state.canfill = true;
-    } else {
-      this.state.canfill = false;
-    }
+
     return (
       <View style={styles.background}>
         <ScrollView
@@ -640,7 +413,7 @@ export default class OutfitScreen extends Component {
                     borderWidth: 1,
                     backgroundColor: "orange"
                   }}
-                  // ปุ่มดูใส่เสื้อ
+                  // ปุ่มดูไซส์เสื้อ
                   onPress={() => {
                     this.setState({ showsModel1: true });
                   }}
@@ -665,7 +438,8 @@ export default class OutfitScreen extends Component {
                   source={require("../../asset/outfit_image/uniform-1.png")}
                 />
 
-                {this.state.bob ? (
+                {this.state.show_bob ||
+                (this.state.select_uniform && this.state.status_bob) ? (
                   <ScrollView
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
@@ -674,17 +448,14 @@ export default class OutfitScreen extends Component {
                       style={{ backgroundColor: "red" }}
                       mode="contained"
                       disabled={this.state.select_uniform}
-                      onPress={() =>
+                      onPress={() => {
+                        let select_bob = this.state.select_bob;
+                        select_bob.selects = false;
                         this.setState({
-                          bob: false,
-                          bob_size: "",
-                          edit_bob_size: "",
-                          bob_pant_size: "",
-                          edit_bob_pant_size: "",
-                          bob_gender: "",
-                          bob_count: 0
-                        })
-                      }
+                          show_bob: false,
+                          select_bob
+                        });
+                      }}
                     >
                       {" "}
                       <Icons
@@ -710,9 +481,7 @@ export default class OutfitScreen extends Component {
                       <Picker
                         enabled={!this.state.select_uniform}
                         mode="dropdown"
-                        placeholder={
-                          this.state.lang === "EN" ? "Sex..." : "เพศ..."
-                        }
+                        placeholder={this.state.lang === "EN" ? "Sex" : "เพศ"}
                         iosIcon={
                           <Icon
                             name="angle-down"
@@ -726,14 +495,16 @@ export default class OutfitScreen extends Component {
                         style={styles.selectableInputStyle}
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholderIconColor="#007aff"
-                        selectedValue={this.state.bob_gender}
-                        onValueChange={(text) =>
-                          this.setState({ bob_gender: text })
-                        }
+                        selectedValue={this.state.select_bob.sex}
+                        onValueChange={(text) => {
+                          let select_bob = this.state.select_bob;
+                          select_bob.sex = text;
+                          this.setState({ select_bob });
+                        }}
                         textStyle={{ fontSize: 14 }}
                       >
                         <Picker.Item
-                          label={this.state.lang === "EN" ? "Sex..." : "เพศ..."}
+                          label={this.state.lang === "EN" ? "Sex" : "เพศ"}
                           value=""
                         />
                         {this.state.gender.map((item) => {
@@ -757,6 +528,7 @@ export default class OutfitScreen extends Component {
                         {this.state.lang === "EN" ? "Shirt size" : "ขนาดเสื้อ"}
                         <Text style={{ color: "red" }}>*</Text>
                       </Text>
+
                       <Picker
                         enabled={!this.state.select_uniform}
                         mode="dropdown"
@@ -778,10 +550,12 @@ export default class OutfitScreen extends Component {
                         style={styles.selectableInputStyle}
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholderIconColor="#007aff"
-                        selectedValue={this.state.bob_size}
-                        onValueChange={(text) =>
-                          this.setState({ bob_size: text })
-                        }
+                        selectedValue={this.state.bob_shirt_size}
+                        onValueChange={(text) => {
+                          let select_bob = this.state.select_bob;
+                          select_bob.shirt_size = text;
+                          this.setState({ bob_shirt_size: text, select_bob });
+                        }}
                         textStyle={{ fontSize: 14 }}
                       >
                         <Picker.Item
@@ -792,14 +566,13 @@ export default class OutfitScreen extends Component {
                           }
                           value=""
                         />
-                        {this.state.select_1.map((item) => {
+                        {this.state.sizeUniforms.map((item) => {
                           return (
                             <Picker.Item label={item.name} value={item.id} />
                           );
                         })}
                       </Picker>
                     </View>
-
                     {/* เพิ่ม */}
                     <View>
                       <Text>
@@ -816,10 +589,12 @@ export default class OutfitScreen extends Component {
                             ? "Type Inch..."
                             : "ขนาด(นิ้ว)..."
                         }
-                        value={this.state.edit_bob_size}
-                        onChangeText={(text) =>
-                          this.setState({ edit_bob_size: text })
-                        }
+                        value={this.state.select_bob.edit_shirt}
+                        onChangeText={(text) => {
+                          let select_bob = this.state.select_bob;
+                          select_bob.edit_shirt = text;
+                          this.setState({ select_bob });
+                        }}
                         // onChangeText={(text) => setTrouserBeak(text)}
                       ></TextInput>
                     </View>
@@ -852,9 +627,11 @@ export default class OutfitScreen extends Component {
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholderIconColor="#007aff"
                         selectedValue={this.state.bob_pant_size}
-                        onValueChange={(text) =>
-                          this.setState({ bob_pant_size: text })
-                        }
+                        onValueChange={(text) => {
+                          let select_bob = this.state.select_bob;
+                          select_bob.pant_size = text;
+                          this.setState({ bob_pant_size: text, select_bob });
+                        }}
                         textStyle={{ fontSize: 14 }}
                       >
                         <Picker.Item
@@ -865,7 +642,7 @@ export default class OutfitScreen extends Component {
                           }
                           value=""
                         />
-                        {this.state.select_1.map((item) => {
+                        {this.state.sizeUniforms.map((item) => {
                           return (
                             <Picker.Item label={item.name} value={item.id} />
                           );
@@ -889,10 +666,12 @@ export default class OutfitScreen extends Component {
                             ? "Type Inch..."
                             : "ขนาด(นิ้ว)..."
                         }
-                        value={this.state.edit_bob_pant_size}
-                        onChangeText={(text) =>
-                          this.setState({ edit_bob_pant_size: text })
-                        }
+                        value={this.state.select_bob.edit_pant}
+                        onChangeText={(text) => {
+                          let select_bob = this.state.select_bob;
+                          select_bob.edit_pant = text;
+                          this.setState({ select_bob });
+                        }}
                         // onChangeText={(text) => setTrouserBeak(text)}
                       ></TextInput>
                     </View>
@@ -910,10 +689,12 @@ export default class OutfitScreen extends Component {
                         }
                         keyboardType="numeric"
                         editable={!this.state.select_uniform}
-                        value={this.state.bob_count}
-                        onChangeText={(text) =>
-                          this.setState({ bob_count: text })
-                        }
+                        value={this.state.select_bob.amount.toString()}
+                        onChangeText={(text) => {
+                          let select_bob = this.state.select_bob;
+                          select_bob.amount = text;
+                          this.setState({ select_bob });
+                        }}
                         // onChangeText={(text) => setTrouserBeak(text)}
                       ></TextInput>
                     </View>
@@ -922,17 +703,15 @@ export default class OutfitScreen extends Component {
                 ) : (
                   <Button
                     mode="contained"
-                    disabled={this.state.select_uniform || this.state.canfill}
+                    disabled={this.state.select_uniform}
                     onPress={() =>
-                      this.setState({
-                        bob: true,
-                        bob_size: "",
-                        edit_bob_size: "",
-                        bob_pant_size: "",
-                        edit_bob_pant_size: "",
-                        bob_gender: "",
-                        bob_count: 0
-                      })
+                      {let select_bob=this.state.select_bob
+                        select_bob.selects=true 
+                         this.setState({
+                        show_bob: true,
+                        select_bob
+                      })}
+                    
                     }
                   >
                     {this.state.lang === "EN"
@@ -967,7 +746,7 @@ export default class OutfitScreen extends Component {
                     borderWidth: 1,
                     backgroundColor: "orange"
                   }}
-                  // ปุ่มดูใส่เสื้อ
+                  // ปุ่มดูไซส์เสื้อ
                   onPress={() => {
                     this.setState({ showsModel2: true });
                   }}
@@ -992,8 +771,8 @@ export default class OutfitScreen extends Component {
                   style={styles.cardImage}
                   source={require("../../asset/outfit_image/uniform-2.png")}
                 />
-
-                {this.state.shirt ? (
+                {this.state.show_shirt ||
+                (this.state.select_uniform && this.state.status_shirt) ? (
                   <ScrollView
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
@@ -1003,15 +782,12 @@ export default class OutfitScreen extends Component {
                       mode="contained"
                       disabled={this.state.select_uniform}
                       onPress={() =>
-                        this.setState({
-                          shirt: false,
-                          shirt_size: "",
-                          edit_shirt_size: "",
-                          shirt_pant_size: "",
-                          edit_shirt_pant_size: "",
-                          shirt_gender: "",
-                          shirt_count: 0
-                        })
+                        {let select_shirt=this.state.select_shirt
+                          select_shirt.selects=false 
+                           this.setState({
+                          show_shirt: false,
+                          select_shirt
+                        })}
                       }
                     >
                       {" "}
@@ -1054,10 +830,13 @@ export default class OutfitScreen extends Component {
                         style={styles.selectableInputStyle}
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholderIconColor="#007aff"
-                        selectedValue={this.state.shirt_gender}
-                        onValueChange={(text) =>
-                          this.setState({ shirt_gender: text })
-                        }
+                        selectedValue={this.state.select_shirt.sex}
+                        // selectedValue={this.state.shirt_gender}
+                        onValueChange={(text) => {
+                          let select_shirt = this.state.select_shirt;
+                          select_shirt.sex = text;
+                          this.setState({ select_shirt });
+                        }}
                         textStyle={{ fontSize: 14 }}
                       >
                         <Picker.Item
@@ -1106,10 +885,15 @@ export default class OutfitScreen extends Component {
                         style={styles.selectableInputStyle}
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholderIconColor="#007aff"
-                        selectedValue={this.state.shirt_size}
-                        onValueChange={(text) =>
-                          this.setState({ shirt_size: text })
-                        }
+                        selectedValue={this.state.shirt_shirt_size}
+                        onValueChange={(text) => {
+                          let select_shirt = this.state.select_shirt;
+                          select_shirt.shirt_size = text;
+                          this.setState({
+                            shirt_shirt_size: text,
+                            select_shirt
+                          });
+                        }}
                         textStyle={{ fontSize: 14 }}
                       >
                         <Picker.Item
@@ -1120,7 +904,7 @@ export default class OutfitScreen extends Component {
                           }
                           value=""
                         />
-                        {this.state.select_1.map((item) => {
+                        {this.state.sizeUniforms.map((item) => {
                           return (
                             <Picker.Item label={item.name} value={item.id} />
                           );
@@ -1144,10 +928,16 @@ export default class OutfitScreen extends Component {
                             ? "Type Inch..."
                             : "ขนาด(นิ้ว)..."
                         }
-                        value={this.state.edit_shirt_size}
-                        onChangeText={(text) =>
-                          this.setState({ edit_shirt_size: text })
-                        }
+                        value={this.state.select_shirt.edit_shirt}
+                        onChangeText={(text) => {
+                          let select_shirt = this.state.select_shirt;
+                          select_shirt.edit_shirt = text;
+
+                          this.setState({
+                            edit_shirt_size: text,
+                            select_shirt
+                          });
+                        }}
                         // onChangeText={(text) => setTrouserBeak(text)}
                       ></TextInput>
                     </View>
@@ -1180,9 +970,15 @@ export default class OutfitScreen extends Component {
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholderIconColor="#007aff"
                         selectedValue={this.state.shirt_pant_size}
-                        onValueChange={(text) =>
-                          this.setState({ shirt_pant_size: text })
-                        }
+                        onValueChange={(text) => {
+                          let select_shirt = this.state.select_shirt;
+                          select_shirt.pant_size = text;
+
+                          this.setState({
+                            shirt_pant_size: text,
+                            select_shirt
+                          });
+                        }}
                         textStyle={{ fontSize: 14 }}
                       >
                         <Picker.Item
@@ -1193,7 +989,7 @@ export default class OutfitScreen extends Component {
                           }
                           value=""
                         />
-                        {this.state.select_1.map((item) => {
+                        {this.state.sizeUniforms.map((item) => {
                           return (
                             <Picker.Item label={item.name} value={item.id} />
                           );
@@ -1217,10 +1013,15 @@ export default class OutfitScreen extends Component {
                             ? "Type Inch..."
                             : "ขนาด(นิ้ว)..."
                         }
-                        value={this.state.edit_shirt_pant_size}
-                        onChangeText={(text) =>
-                          this.setState({ edit_shirt_pant_size: text })
-                        }
+                        value={this.state.select_shirt.edit_pant.toString()}
+                        onChangeText={(text) => {
+                          let select_shirt = this.state.select_shirt;
+                          select_shirt.edit_pant = text;
+
+                          this.setState({
+                            select_shirt
+                          });
+                        }}
                         // onChangeText={(text) => setTrouserBeak(text)}
                       ></TextInput>
                     </View>
@@ -1237,10 +1038,16 @@ export default class OutfitScreen extends Component {
                         placeholder={
                           this.state.lang === "EN" ? "Amount..." : "จำนวน..."
                         }
-                        value={this.state.shirt_count}
-                        onChangeText={(text) =>
-                          this.setState({ shirt_count: text })
-                        }
+                        value={this.state.select_shirt.amount}
+                        onChangeText={(text) => {
+                          let select_shirt = this.state.select_shirt;
+                          select_shirt.amount = text;
+
+                          this.setState({
+                            select_shirt
+                          });
+                          console.log(select_shirt);
+                        }}
                         // onChangeText={(text) => setTrouserBeak(text)}
                       ></TextInput>
                     </View>
@@ -1249,17 +1056,14 @@ export default class OutfitScreen extends Component {
                 ) : (
                   <Button
                     mode="contained"
-                    disabled={this.state.select_uniform || this.state.canfill}
+                    disabled={this.state.select_uniform}
                     onPress={() =>
-                      this.setState({
-                        shirt: true,
-                        shirt_size: "",
-                        edit_shirt_size: "",
-                        shirt_pant_size: "",
-                        edit_shirt_pant_size: "",
-                        shirt_gender: "",
-                        shirt_count: 0
-                      })
+                      {let select_shirt=this.state.select_shirt
+                        select_shirt.selects=true 
+                         this.setState({
+                        show_shirt: true,
+                        select_shirt
+                      })}
                     }
                   >
                     {this.state.lang === "EN"
@@ -1315,7 +1119,7 @@ export default class OutfitScreen extends Component {
                     borderWidth: 1,
                     backgroundColor: "orange"
                   }}
-                  // ปุ่มดูใส่เสื้อ
+                  // ปุ่มดูไซส์เสื้อ
                   onPress={() => {
                     this.setState({ showsModel3: true });
                   }}
@@ -1341,7 +1145,8 @@ export default class OutfitScreen extends Component {
                   source={require("../../asset/outfit_image/uniform-3.png")}
                 />
 
-                {this.state.coverall ? (
+                {this.state.show_coverall ||
+                (this.state.select_uniform && this.state.status_coverall) ? (
                   <ScrollView
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
@@ -1351,15 +1156,13 @@ export default class OutfitScreen extends Component {
                       mode="contained"
                       disabled={this.state.select_uniform}
                       onPress={() =>
-                        this.setState({
-                          coverall: false,
-                          coverall_size: "",
-                          edit_coverall_size: "",
-                          //coverall_pant_size: "",
-                          //edit_coverall_pant_size: "",
-                          //coverall_gender: "",
-                          coverall_count: 0
+                        {let select_coverall=this.state.select_coverall
+                          select_coverall.selects=false 
+                           this.setState({
+                          show_coverall: false,
+                          select_coverall
                         })
+                      }
                       }
                     >
                       {" "}
@@ -1407,9 +1210,14 @@ export default class OutfitScreen extends Component {
                         placeholderStyle={{ color: "#bfc6ea" }}
                         placeholderIconColor="#007aff"
                         selectedValue={this.state.coverall_size}
-                        onValueChange={(text) =>
-                          this.setState({ coverall_size: text })
-                        }
+                        onValueChange={(text) => {
+                          let select_coverall = this.state.select_coverall;
+                          select_coverall.size = text;
+                          this.setState({
+                            coverall_size: text,
+                            select_coverall
+                          });
+                        }}
                         textStyle={{ fontSize: 14 }}
                       >
                         <Picker.Item
@@ -1420,7 +1228,7 @@ export default class OutfitScreen extends Component {
                           }
                           value=""
                         />
-                        {this.state.select_1.map((item) => {
+                        {this.state.sizeUniforms.map((item) => {
                           return (
                             <Picker.Item label={item.name} value={item.id} />
                           );
@@ -1444,10 +1252,12 @@ export default class OutfitScreen extends Component {
                             ? "Type Inch..."
                             : "ขนาด(นิ้ว)..."
                         }
-                        value={this.state.edit_coverall_size}
-                        onChangeText={(text) =>
-                          this.setState({ edit_coverall_size: text })
-                        }
+                        value={this.state.select_coverall.edit}
+                        onChangeText={(text) => {
+                          let select_coverall = this.state.select_coverall;
+                          select_coverall.edit = text;
+                          this.setState({ select_coverall });
+                        }}
                         // onChangeText={(text) => setTrouserBeak(text)}
                       ></TextInput>
                     </View>
@@ -1465,10 +1275,13 @@ export default class OutfitScreen extends Component {
                           this.state.lang === "EN" ? "Amount..." : "จำนวน..."
                         }
                         editable={!this.state.select_uniform}
-                        value={this.state.coverall_count}
-                        onChangeText={(text) =>
-                          this.setState({ coverall_count: text })
-                        }
+                        value={this.state.select_coverall.amount}
+                        onChangeText={(text) => {
+                          let select_coverall = this.state.select_coverall;
+                          select_coverall.amount = text;
+                          this.setState({ select_coverall });
+                          console.log(select_coverall);
+                        }}
                         // onChangeText={(text) => setTrouserBeak(text)}
                       ></TextInput>
                     </View>
@@ -1477,17 +1290,15 @@ export default class OutfitScreen extends Component {
                 ) : (
                   <Button
                     mode="contained"
-                    disabled={this.state.select_uniform || this.state.canfill}
+                    disabled={this.state.select_uniform}
                     onPress={() =>
-                      this.setState({
-                        coverall: true,
-                        coverall_size: "",
-                        edit_coverall_size: "",
-                        //coverall_pant_size: "",
-                        //edit_coverall_pant_size: "",
-                        //coverall_gender: "",
-                        coverall_count: 0
+                      {let select_coverall=this.state.select_coverall
+                        select_coverall.selects=true 
+                         this.setState({
+                        show_coverall: true,
+                        select_coverall
                       })
+                    }
                     }
                   >
                     {this.state.lang === "EN"
