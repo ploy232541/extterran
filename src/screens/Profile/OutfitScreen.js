@@ -119,11 +119,11 @@ export default class OutfitScreen extends Component {
           let yearss = "";
           let status_bob = getshirtBob ? true : false;
           let status_shirt = getshirtShirt ? true : false;
-          let status_Covercall = getCovercall ? true : false;
+          let status_covercall = getCovercall ? true : false;
           this.setState({
             status_bob,
             status_shirt,
-            status_Covercall,
+            status_covercall,
             status2: true
           });
 
@@ -206,75 +206,75 @@ export default class OutfitScreen extends Component {
           };
 
           this.setState({ select_shirt });
+
           let select_coverall = {
             size: getCovercall.uniform_size ? getCovercall.uniform_size : "",
             edit: getCovercall.sleevelength ? getCovercall.sleevelength : "",
             amount: getCovercall.uniform_total ? getCovercall.uniform_total : ""
           };
-
           this.setState({ select_coverall });
         }
       });
     } catch (error) {}
   }
-  onPressSend =async () => {
+  onPressSend = async () => {
     let id = await AsyncStorage.getItem("userId");
     let { select_shirt, select_bob, select_coverall } = this.state;
-    let getShirt = select_shirt.selects? select_shirt : null;
+    let getShirt = select_shirt.selects ? select_shirt : null;
     let getBob = select_bob.selects ? select_bob : null;
-    let getCoverall = select_coverall .selects ? select_coverall : null;
-    let getData = { getBob, getShirt, getCoverall ,id};
-    if (getShirt==null&&getBob==null&&getCoverall==null) {
-      Alert.alert( this.state.lang === "EN" ? "Please select a uniform" : "กรุณาเลือกชุดยูนิฟอร์ม")
-    }else{ Alert.alert(
-      this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-      this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
-      [
-        {
-          text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        ,
-        {
-          text: this.state.lang === "EN" ? "OK" : "ตกลง",
-          onPress: () => {
+    let getCoverall = select_coverall.selects ? select_coverall : null;
+    let getData = { getBob, getShirt, getCoverall, id };
+    if (getShirt == null && getBob == null && getCoverall == null) {
+      Alert.alert(
+        this.state.lang === "EN"
+          ? "Please select a uniform"
+          : "กรุณาเลือกชุดยูนิฟอร์ม"
+      );
+    } else {
+      Alert.alert(
+        this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+        this.state.lang === "EN" ? "Confirm" : "ยืนยัน",
+        [
+          {
+            text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          ,
+          {
+            text: this.state.lang === "EN" ? "OK" : "ตกลง",
+            onPress: () => {
+              httpClient
+                .post(`/Profile/InsertUniforms`, getData)
+                .then((response) => {
+                  const result = response.data;
 
-            httpClient
-              .post(`/Profile/InsertUniforms`, getData)
-              .then((response) => {
-                const result = response.data;
-
-                if (result === true) {
-                  Alert.alert(
-                    this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
-                    this.state.lang === "EN"
-                      ? "Success"
-                      : "บันทึกสำเร็จ",
-                    [
-                      {
-                        text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                        onPress: (e) => this.props.navigation.goBack()
-                      }
-                    ],
-                    { cancelable: false }
-                  );
-                } else {
-                  Alert.alert(
-                    this.state.lang === "EN"
-                      ? `Fail`
-                      : "เกิดข้อผิดพลาด"
-                  );
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+                  if (result === true) {
+                    Alert.alert(
+                      this.state.lang === "EN" ? "Alert" : "แจ้งเตือน",
+                      this.state.lang === "EN" ? "Success" : "บันทึกสำเร็จ",
+                      [
+                        {
+                          text: this.state.lang === "EN" ? "OK" : "ตกลง",
+                          onPress: (e) => this.props.navigation.goBack()
+                        }
+                      ],
+                      { cancelable: false }
+                    );
+                  } else {
+                    Alert.alert(
+                      this.state.lang === "EN" ? `Fail` : "เกิดข้อผิดพลาด"
+                    );
+                  }
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }
           }
-        }
-      ]
-    );}
-   
+        ]
+      );
+    }
   };
   render() {
     if (
@@ -285,40 +285,43 @@ export default class OutfitScreen extends Component {
         this.state.select_shirt.amount > 0 ||
         this.state.select_coverall.amount > 0)
     ) {
-      let bob_shirt_size,
-        bob_pant_size,
-        shirt_shirt_size,
-        shirt_pant_size,
-        coverall_size;
-      for (let a of this.state.sizeUniforms) {
-        if (a.name == this.state.select_bob.shirt_size.toUpperCase()) {
-          bob_shirt_size = a.id;
-        }
+      setTimeout(() => {
+        let bob_shirt_size,
+          bob_pant_size,
+          shirt_shirt_size,
+          shirt_pant_size,
+          coverall_size;
+        for (let a of this.state.sizeUniforms) {
+          if (a.name == this.state.select_bob.shirt_size.toUpperCase()) {
+            bob_shirt_size = a.id;
+          }
 
-        if (a.name == this.state.select_bob.pant_size.toUpperCase()) {
-          bob_pant_size = a.id;
-        }
-        if (a.name == this.state.select_shirt.shirt_size.toUpperCase()) {
-          shirt_shirt_size = a.id;
-        }
+          if (a.name == this.state.select_bob.pant_size.toUpperCase()) {
+            bob_pant_size = a.id;
+          }
+          if (a.name == this.state.select_shirt.shirt_size.toUpperCase()) {
+            shirt_shirt_size = a.id;
+          }
 
-        if (a.name == this.state.select_shirt.pant_size.toUpperCase()) {
-          shirt_pant_size = a.id;
+          if (a.name == this.state.select_shirt.pant_size.toUpperCase()) {
+            shirt_pant_size = a.id;
+          }
+          console.log(this.state.select_coverall);
+          if (a.name == this.state.select_coverall.size.toUpperCase()) {
+            coverall_size = a.id;
+          }
         }
-        if (a.name == this.state.select_coverall.size.toUpperCase()) {
-          coverall_size = a.id;
-        }
-      }
-
-      this.setState({
-        bob_shirt_size,
-        bob_pant_size,
-        shirt_shirt_size,
-        shirt_pant_size,
-        coverall_size,
-        status1: true
-      });
+        this.setState({
+          bob_shirt_size,
+          bob_pant_size,
+          shirt_shirt_size,
+          shirt_pant_size,
+          coverall_size,
+          status1: true
+        });
+      }, 2000);
     }
+
     const closeModal1 = () => {
       if (this.state.showsModel1) {
         this.setState({ showsModel1: false });
@@ -437,7 +440,6 @@ export default class OutfitScreen extends Component {
                   style={styles.cardImage}
                   source={require("../../asset/outfit_image/uniform-1.png")}
                 />
-
                 {this.state.show_bob ||
                 (this.state.select_uniform && this.state.status_bob) ? (
                   <ScrollView
@@ -553,7 +555,14 @@ export default class OutfitScreen extends Component {
                         selectedValue={this.state.bob_shirt_size}
                         onValueChange={(text) => {
                           let select_bob = this.state.select_bob;
-                          select_bob.shirt_size = text;
+
+                          for (let a of this.state.sizeUniforms) {
+                            if (a.id == text) {
+                              select_bob.shirt_size = a.name;
+                              break;
+                            }
+                          }
+
                           this.setState({ bob_shirt_size: text, select_bob });
                         }}
                         textStyle={{ fontSize: 14 }}
@@ -629,7 +638,13 @@ export default class OutfitScreen extends Component {
                         selectedValue={this.state.bob_pant_size}
                         onValueChange={(text) => {
                           let select_bob = this.state.select_bob;
-                          select_bob.pant_size = text;
+                          for (let a of this.state.sizeUniforms) {
+                            if (a.id == text) {
+                              select_bob.pant_size = a.name;
+                              break;
+                            }
+                          }
+
                           this.setState({ bob_pant_size: text, select_bob });
                         }}
                         textStyle={{ fontSize: 14 }}
@@ -704,15 +719,14 @@ export default class OutfitScreen extends Component {
                   <Button
                     mode="contained"
                     disabled={this.state.select_uniform}
-                    onPress={() =>
-                      {let select_bob=this.state.select_bob
-                        select_bob.selects=true 
-                         this.setState({
+                    onPress={() => {
+                      let select_bob = this.state.select_bob;
+                      select_bob.selects = true;
+                      this.setState({
                         show_bob: true,
                         select_bob
-                      })}
-                    
-                    }
+                      });
+                    }}
                   >
                     {this.state.lang === "EN"
                       ? "ชุดเชิ้ตเอวบ๊อบ (Bob)"
@@ -781,14 +795,14 @@ export default class OutfitScreen extends Component {
                       style={{ backgroundColor: "red" }}
                       mode="contained"
                       disabled={this.state.select_uniform}
-                      onPress={() =>
-                        {let select_shirt=this.state.select_shirt
-                          select_shirt.selects=false 
-                           this.setState({
+                      onPress={() => {
+                        let select_shirt = this.state.select_shirt;
+                        select_shirt.selects = false;
+                        this.setState({
                           show_shirt: false,
                           select_shirt
-                        })}
-                      }
+                        });
+                      }}
                     >
                       {" "}
                       <Icons
@@ -888,7 +902,15 @@ export default class OutfitScreen extends Component {
                         selectedValue={this.state.shirt_shirt_size}
                         onValueChange={(text) => {
                           let select_shirt = this.state.select_shirt;
-                          select_shirt.shirt_size = text;
+
+                          for (let a of this.state.sizeUniforms) {
+                            if (a.id == text) {
+                              select_shirt.shirt_size = a.name;
+
+                              break;
+                            }
+                          }
+
                           this.setState({
                             shirt_shirt_size: text,
                             select_shirt
@@ -972,7 +994,12 @@ export default class OutfitScreen extends Component {
                         selectedValue={this.state.shirt_pant_size}
                         onValueChange={(text) => {
                           let select_shirt = this.state.select_shirt;
-                          select_shirt.pant_size = text;
+                          for (let a of this.state.sizeUniforms) {
+                            if (a.id == text) {
+                              select_shirt.pant_size = a.name;
+                              break;
+                            }
+                          }
 
                           this.setState({
                             shirt_pant_size: text,
@@ -1038,7 +1065,7 @@ export default class OutfitScreen extends Component {
                         placeholder={
                           this.state.lang === "EN" ? "Amount..." : "จำนวน..."
                         }
-                        value={this.state.select_shirt.amount}
+                        value={this.state.select_shirt.amount.toString()}
                         onChangeText={(text) => {
                           let select_shirt = this.state.select_shirt;
                           select_shirt.amount = text;
@@ -1046,7 +1073,6 @@ export default class OutfitScreen extends Component {
                           this.setState({
                             select_shirt
                           });
-                          console.log(select_shirt);
                         }}
                         // onChangeText={(text) => setTrouserBeak(text)}
                       ></TextInput>
@@ -1057,14 +1083,14 @@ export default class OutfitScreen extends Component {
                   <Button
                     mode="contained"
                     disabled={this.state.select_uniform}
-                    onPress={() =>
-                      {let select_shirt=this.state.select_shirt
-                        select_shirt.selects=true 
-                         this.setState({
+                    onPress={() => {
+                      let select_shirt = this.state.select_shirt;
+                      select_shirt.selects = true;
+                      this.setState({
                         show_shirt: true,
                         select_shirt
-                      })}
-                    }
+                      });
+                    }}
                   >
                     {this.state.lang === "EN"
                       ? "ชุดเชิ้ตเอวปล่อย (Shirt)"
@@ -1146,7 +1172,7 @@ export default class OutfitScreen extends Component {
                 />
 
                 {this.state.show_coverall ||
-                (this.state.select_uniform && this.state.status_coverall) ? (
+                (this.state.select_uniform && this.state.status_covercall) ? (
                   <ScrollView
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
@@ -1155,15 +1181,14 @@ export default class OutfitScreen extends Component {
                       style={{ backgroundColor: "red" }}
                       mode="contained"
                       disabled={this.state.select_uniform}
-                      onPress={() =>
-                        {let select_coverall=this.state.select_coverall
-                          select_coverall.selects=false 
-                           this.setState({
+                      onPress={() => {
+                        let select_coverall = this.state.select_coverall;
+                        select_coverall.selects = false;
+                        this.setState({
                           show_coverall: false,
                           select_coverall
-                        })
-                      }
-                      }
+                        });
+                      }}
                     >
                       {" "}
                       <Icons
@@ -1212,7 +1237,13 @@ export default class OutfitScreen extends Component {
                         selectedValue={this.state.coverall_size}
                         onValueChange={(text) => {
                           let select_coverall = this.state.select_coverall;
-                          select_coverall.size = text;
+                          for (let a of this.state.sizeUniforms) {
+                            if (a.id == text) {
+                              select_coverall.size = a.name;
+                              break;
+                            }
+                          }
+
                           this.setState({
                             coverall_size: text,
                             select_coverall
@@ -1275,12 +1306,11 @@ export default class OutfitScreen extends Component {
                           this.state.lang === "EN" ? "Amount..." : "จำนวน..."
                         }
                         editable={!this.state.select_uniform}
-                        value={this.state.select_coverall.amount}
+                        value={this.state.select_coverall.amount.toString()}
                         onChangeText={(text) => {
                           let select_coverall = this.state.select_coverall;
                           select_coverall.amount = text;
                           this.setState({ select_coverall });
-                          console.log(select_coverall);
                         }}
                         // onChangeText={(text) => setTrouserBeak(text)}
                       ></TextInput>
@@ -1291,15 +1321,14 @@ export default class OutfitScreen extends Component {
                   <Button
                     mode="contained"
                     disabled={this.state.select_uniform}
-                    onPress={() =>
-                      {let select_coverall=this.state.select_coverall
-                        select_coverall.selects=true 
-                         this.setState({
+                    onPress={() => {
+                      let select_coverall = this.state.select_coverall;
+                      select_coverall.selects = true;
+                      this.setState({
                         show_coverall: true,
                         select_coverall
-                      })
-                    }
-                    }
+                      });
+                    }}
                   >
                     {this.state.lang === "EN"
                       ? "ชุดหมี (Coverall)"
