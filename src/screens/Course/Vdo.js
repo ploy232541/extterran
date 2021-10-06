@@ -27,6 +27,7 @@ import AwesomeAlert from "react-native-awesome-alerts";
 import { WebView } from "react-native-webview";
 import { useNavigation } from "@react-navigation/native";
 import YoutubePlayer from "react-native-youtube-iframe";
+import { Button } from "native-base";
 ////
 import ProgressCircle from "react-native-progress-circle";
 import PaginationDot from "react-native-animated-pagination-dot";
@@ -38,6 +39,7 @@ import MediaControls, { PLAYER_STATES } from "react-native-media-controls";
 import { activateKeepAwake, deactivateKeepAwake } from "expo-keep-awake";
 import SliderEntry from "./SliderEntry";
 import { sliderWidth, itemWidth } from "../../styles/SliderEntry.style";
+import { and } from "react-native-reanimated";
 
 const { width, height } = Dimensions.get("window");
 const BannerWidth = Dimensions.get("window").width;
@@ -222,7 +224,7 @@ class Vdo extends Component {
     alert("Exit full screen");
   };
 
-  enterFullScreen = () => {};
+  enterFullScreen = () => { };
 
   onFullScreen = () => {
     if (this.state.screenType == "content")
@@ -255,8 +257,8 @@ class Vdo extends Component {
               item.status == "s"
                 ? 100
                 : item.status == "l" || item.status != null
-                ? 100
-                : 100
+                  ? 100
+                  : 100
             }
             radius={13}
             borderWidth={5}
@@ -264,8 +266,8 @@ class Vdo extends Component {
               item.status == "s"
                 ? "#258e25"
                 : item.status == "l" || item.status != null
-                ? "#ff751a"
-                : "#cc0000"
+                  ? "#ff751a"
+                  : "#cc0000"
             }
             shadowColor="#999"
           ></ProgressCircle>
@@ -395,7 +397,7 @@ class Vdo extends Component {
         .post("/Learn/LearnSaveVdo/Complete", params)
         .then((response) => {
           const result = response.data;
-
+          
           this.componentDidMount();
         })
         .catch((error) => {
@@ -407,6 +409,8 @@ class Vdo extends Component {
   _renderContentVideo = (item) => {
     let { status, uirSildeImageStore } = this.state;
     const passLearn = status == "s" ? true : false;
+    // console.log(this.passLearn);
+    console.log(status);
     return (
       <View>
         <View style={styles.subContainer}>
@@ -655,8 +659,8 @@ class Vdo extends Component {
               item.data[0].status == "s"
                 ? 100
                 : item.data[0].status != null
-                ? 100
-                : 100
+                  ? 100
+                  : 100
             }
             radius={13}
             borderWidth={5}
@@ -664,8 +668,8 @@ class Vdo extends Component {
               item.data[0].status == "s"
                 ? "#258e25"
                 : item.data[0].status != null
-                ? "#ff751a"
-                : "#cc0000"
+                  ? "#ff751a"
+                  : "#cc0000"
             }
             shadowColor="#999"
           ></ProgressCircle>
@@ -826,8 +830,8 @@ class Vdo extends Component {
               item.status == "s"
                 ? 100
                 : item.status == "l" || item.status != null
-                ? 100
-                : 100
+                  ? 100
+                  : 100
             }
             radius={13}
             borderWidth={5}
@@ -835,8 +839,8 @@ class Vdo extends Component {
               item.status == "s"
                 ? "#258e25"
                 : item.status == "l" || item.status != null
-                ? "#ff751a"
-                : "#cc0000"
+                  ? "#ff751a"
+                  : "#cc0000"
             }
             shadowColor="#999"
           ></ProgressCircle>
@@ -935,8 +939,8 @@ class Vdo extends Component {
               item.status == "s"
                 ? 100
                 : item.status == "l" || item.status != null
-                ? 100
-                : 100
+                  ? 100
+                  : 100
             }
             radius={13}
             borderWidth={5}
@@ -944,8 +948,8 @@ class Vdo extends Component {
               item.status == "s"
                 ? "#258e25"
                 : item.status == "l" || item.status != null
-                ? "#ff751a"
-                : "#cc0000"
+                  ? "#ff751a"
+                  : "#cc0000"
             }
             shadowColor="#999"
           ></ProgressCircle>
@@ -1003,8 +1007,8 @@ class Vdo extends Component {
               item.status == "s"
                 ? "#258e25"
                 : item.status == "l"
-                ? "#ff751a"
-                : "#cc0000"
+                  ? "#ff751a"
+                  : "#cc0000"
             }
             shadowColor="#999"
           ></ProgressCircle>
@@ -1064,8 +1068,8 @@ class Vdo extends Component {
               item.status == "s"
                 ? "#258e25"
                 : item.status == "l"
-                ? "#ff751a"
-                : "#cc0000"
+                  ? "#ff751a"
+                  : "#cc0000"
             }
             shadowColor="#999"
           ></ProgressCircle>
@@ -1299,6 +1303,8 @@ class Vdo extends Component {
             {this.state.lang == "EN" ? "Save" : "จดบันทึก"}
           </Text>
         </TouchableOpacity>
+
+
         {item.list ? (
           <View>
             <View
@@ -1388,6 +1394,8 @@ class Vdo extends Component {
   /////////////////////////////////End all function note////////////////////////////////////
 
   render() {
+    const { navigation } = this.props;
+    const { result } = this.props.route.params;
     const { dataArray } = this.state;
     activateKeepAwake();
     if (this.state.loading) {
@@ -1519,6 +1527,63 @@ class Vdo extends Component {
               confirmButtonColor="#0099ff"
               onConfirmPressed={this.onConfirm}
             />
+
+            {/* ปุ่มถัดไปเมื่อเรียบครบสำเร็จ */}
+
+            <Button
+              iconLeft
+              light
+              style={{
+                padding: 10,
+                display: this.state.status == 's' ? 'flex' : 'none',
+                backgroundColor: "green",
+                borderRadius: 5
+              }}
+              onPress={() =>
+                navigation.dispatch(
+                  StackActions.replace("CourseCategory", {
+                    // course_id: result.course_id
+                  })
+                )
+              }
+            >
+              {/* <Icon
+                name="reload1"
+                size={20}
+                style={{ marginRight: 10, color: "#fff" }}
+              /> */}
+              <Text style={{ fontSize: 18, color: "#fff"}}>
+                {this.state.lang === "EN"
+                  ? "Back to course"
+                  : "กลับหน้าหลักสูตร"}
+              </Text>
+            </Button>
+
+            {/* <TouchableOpacity
+              onPress={this.saveNote.bind(this)}
+
+              // disabled={this.state.status != 's' }
+              style={{
+                backgroundColor: "green",
+                alignItems: "center",
+                marginTop: 20,
+                marginLeft: 100,
+                marginRight: 100,
+                borderRadius: 10,
+                display: this.state.status == 's' ? 'flex' : 'none'
+              }}
+            >
+              <Text
+                style={{
+                  padding: 10,
+                  fontSize: 14,
+                  fontWeight: "bold",
+                  color: "#fff"
+                }}
+              >
+                {this.state.lang == "EN" ? "์Next" : "ถัดไป"}
+              </Text>
+            </TouchableOpacity> */}
           </ScrollView>
         </SafeAreaView>
       );

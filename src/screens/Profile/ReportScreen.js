@@ -179,7 +179,7 @@ export default class ReportScreen extends Component {
             </Item>
           </Header>
           <Header>
-            <Item style={{ backgroundColor: "#fff", margin: 7 }}>
+            {/* <Item style={{ backgroundColor: "#fff", margin: 7 }}> */}
               <Pressable
                 style={[stylesdialog.button, stylesdialog.buttonOpen]}
                 onPress={() => {
@@ -244,8 +244,8 @@ export default class ReportScreen extends Component {
                   {this.state.lang === "EN" ? "  Search" : "  ค้นหา"}
                 </Text>
               </Pressable>
-            </Item>
-            <Item style={{ margin: 7 }}>
+            {/* </Item> */}
+            {/* <Item style={{ margin: 7 }}> */}
               <Pressable
                 style={[stylesdialog.button, stylesdialog.buttonCancel]}
                 onPress={() => {
@@ -261,7 +261,7 @@ export default class ReportScreen extends Component {
                   {this.state.lang === "EN" ? "  Clear" : "  ล้างค่า"}
                 </Text>
               </Pressable>
-            </Item>
+            {/* </Item> */}
           </Header>
         </View>
       </ScrollView>
@@ -407,10 +407,12 @@ const stylesdialog = StyleSheet.create({
     // margin:5
   },
   buttonOpen: {
-    backgroundColor: "green"
+    backgroundColor: "green",
+    margin: 12 
   },
   buttonCancel: {
-    backgroundColor: "gray"
+    backgroundColor: "gray",
+    margin: 12
   },
   buttonClose: {
     backgroundColor: "#2196F3"
