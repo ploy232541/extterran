@@ -1372,11 +1372,33 @@ class TabCourse extends Component {
             </View>
           );
   }
-
+ /* ***** */
+ mimetype = (name) => {
+  let allow = {
+    png: "image/png",
+    JPG: "image/JPG",
+    pdf: "application/pdf",
+    jpeg: "image/jpeg",
+    jpg: "image/jpg"
+  };
+  let extention = name.split(".")[1];
+  if (allow[extention] !== undefined) {
+    return allow[extention];
+  } else {
+    return undefined;
+  }
+};
   async file_feedback() {
     let result = await DocumentPicker.getDocumentAsync({});
-    if(result.type == "success"){
+    result.type = this.mimetype(result.name);
+    if (result.type !== undefined) {
       this.setState({file_feedback: result});
+    }else {
+      Alert.alert(
+        this.state.lang === "EN"
+          ? "Please select image or PDF file"
+          : "กรุณาเลือกเป็นรูปภาพหรือไฟล์ PDF"
+      );
     }
   }
 
