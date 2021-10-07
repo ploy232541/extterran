@@ -33,9 +33,10 @@ export default class InHouseScreen extends Component {
       selectCourse: [],
       lang: "",
       firstname: "",
+
       empList: [],
-      emp:[],
-      placeHolderText: 'กรุณาเลือกพนักงาน',
+      emp: [],
+      placeHolderText: 'Select Employee',
       selectedText: '',
       defaultValue: true,
       select: '',
@@ -52,19 +53,20 @@ export default class InHouseScreen extends Component {
     }
 
     try {
+
       httpClient
         .get(`/Training/EmployeeTrainingNeed/${id}`)
         .then((response) => {
           const result = response.data;
           if (result != null) {
-           let emp=[]
+            // console.log(result);
+            let emp = []
             for (let i in result) {
-              emp[i]={
-                id:result[i].user_id,
-                name:result[i].firstname
+              emp[i] = {
+                id: result[i].user_id,
+                name: result[i].firstname
               }
-             
-              console.log(emp);
+
             }
             this.setState({
               empList: emp
@@ -92,7 +94,7 @@ export default class InHouseScreen extends Component {
     }
   }
   selectedValue(index, item) {
-    this.setState({selectedText: item.name});
+    this.setState({ selectedText: item.name });
   }
   deleteEmployee(index) {
     let itemCopy = [...this.state.trainingNeed];
@@ -147,9 +149,9 @@ export default class InHouseScreen extends Component {
                 if (param == null || param == "") {
                   Alert.alert(
                     "กรุณาเลือกหลักสูตร \n พนักงานคนที่ " +
-                      (index + 1) +
-                      "\n ลำดับที่ " +
-                      (i + 1)
+                    (index + 1) +
+                    "\n ลำดับที่ " +
+                    (i + 1)
                   );
                 } else {
                   error = false;
@@ -216,6 +218,7 @@ export default class InHouseScreen extends Component {
   reset() {
     this.setState({ trainingNeed: [] });
   }
+
   render() {
     return (
       <View style={styles.background}>
@@ -246,32 +249,7 @@ export default class InHouseScreen extends Component {
             />
             <Divider style={{ paddingBottom: 1, flex: 1 }} />
           </View>
-          <View style={Styless.container}>
-        <Text style={{marginBottom: 50, fontSize: 25, fontWeight: 'bold'}}>
-          {'React Native Picker With Search'}
-        </Text>
-        <RNPickerDialog
-          data={this.state.empList}
-          pickerTitle={'Sort by'}
-          // labelText={'testss'}
-          showSearchBar={true}
-          showPickerTitle={true}
-          listTextStyle={Styless.listTextStyle}
-          pickerStyle={Styless.pickerStyle}
-          selectedText={this.state.selectedText}
-          placeHolderText={this.state.placeHolderText}
-          searchBarPlaceHolder={'Search.....'}
-          searchBarPlaceHolderColor={'#398DDD'}
-          selectedTextStyle={Styless.selectedTextStyle}
-          placeHolderTextColor={'black'}
-          dropDownIconStyle={Styless.dropDownIconStyle}
-          searchBarStyle={Styless.searchBarStyle}
-          //dropDownIcon={require('../assets/pin.png')}
-          selectedValue={(index, item) => this.selectedValue(index, item)}
-        />
 
-      </View>
-          {/* Start */}
           {this.state.trainingNeed.map((item, index) => {
             let excludeEmployees = [];
 
@@ -284,7 +262,7 @@ export default class InHouseScreen extends Component {
             let listEmployees = [];
             for (let i = 0; i < this.state.empList.length; i++) {
               let employee = this.state.empList[i];
-              let employeeId = employee.user_id;
+              let employeeId = employee.id;
               // เช็คว่ามี
               if (!excludeEmployees.includes(employeeId)) {
                 listEmployees.push(employee);
@@ -306,34 +284,37 @@ export default class InHouseScreen extends Component {
                     <View style={{ flexDirection: "row" }}>
                       <View style={{ flex: 1 }}></View>
                       <View style={{ flex: 80 }}>
-                        {/* Start User Picker */}
 
-                        <Picker
-                          mode="dropdown"
-                          iosIcon={
-                            <Icon name="angle-down" style={{ width: "8%" }} />
-                          }
-                          style={styles.bdPicker}
-                          placeholderStyle={{ color: "#bfc6ea" }}
-                          placeholder="SelectEmployee"
-                          placeholderIconColor="#007aff"
-                          textStyle={{ fontSize: 14 }}
-                          selectedValue={item.employee_id}
-                          onValueChange={(text) => {
+                        <RNPickerDialog
+                          data={listEmployees}
+                          pickerTitle={'กรุณาเลือกพนักงาน'}
+                          // labelText={'กรุณาเลือกพนักงาน'}
+                          showSearchBar={true}
+                          showPickerTitle={true}
+                          listTextStyle={Styless.listTextStyle}
+                          pickerStyle={Styless.pickerStyle}
+                          selectedText={this.state.selectedText}
+                          placeHolderText={this.state.placeHolderText}
+                          searchBarPlaceHolder={'Search.....'}
+                          searchBarPlaceHolderColor={'#007aff'}
+                          selectedTextStyle={Styless.selectedTextStyle}
+                          placeHolderTextColor={'#d9d9d9'}
+                          dropDownIconStyle={Styless.dropDownIconStyle}
+                          searchBarStyle={Styless.searchBarStyle}
+                          //dropDownIcon={require('../assets/pin.png')}
+                      
+                          selectedValue={(i, items) => {
                             let trainingNeed = [...this.state.trainingNeed];
                             let item = { ...trainingNeed[index] };
-                            item.employee_id = text;
+                            item.employee_id = items.id;
                             trainingNeed[index] = item;
-
-                            this.setState({
-                              trainingNeed
-                            });
+                            this.setState({ trainingNeed: trainingNeed });
+                            this.selectedValue(index, items)
                           }}
                         >
-                          {/* <Picker.Item label={"SelectEmployee"} /> */}
-                          {listEmployees.map((element, l) => {
+                          {/* {listEmployees.map((element, l) => {
                             return (
-                              <Picker.Item
+                              <RNPickerDialog.item
                                 label={
                                   this.state.lang === "EN"
                                     ? element.firstname_en +
@@ -344,8 +325,8 @@ export default class InHouseScreen extends Component {
                                 value={element.user_id}
                               />
                             );
-                          })}
-                        </Picker>
+                          })} */}
+                        </RNPickerDialog>
                       </View>
 
                       <View style={{ flex: 1 }}></View>
@@ -356,7 +337,7 @@ export default class InHouseScreen extends Component {
 
                     {/* เริ่มจุดนี้ ที่ทำให้อยู่แถวเดียวกัน */}
 
-                    {item.data.map((p) => {})}
+                    {item.data.map((p) => { })}
                     {item.data.map((param, ip) => {
                       let excludeCourse = [];
 
@@ -762,34 +743,41 @@ const styles = StyleSheet.create({
     marginTop: 5
   }
 });
+
+
+
+
 const Styless = StyleSheet.create({
+
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    width: 500
   },
   selectedTextStyle: {
-    height: 50,
-    borderColor: 'gray',
+    height: 100,
+    borderColor: '#d9d9d9',
     backgroundColor: 'transparent',
     justifyContent: 'center',
     width: '100%',
-    color: 'black',
-    fontSize: 20,
-    paddingLeft: 10,
-    marginTop: -2,
+    color: 'gray',
+    fontSize: 15,
+    paddingLeft: 15,
+    marginTop: -5,
   },
+
   selectedTextStyle1: {
     height: 50,
     borderColor: 'gray',
     backgroundColor: 'transparent',
     justifyContent: 'center',
     width: '100%',
-    color: 'black',
+    color: 'gray',
     fontSize: 20,
     paddingLeft: 10,
     marginTop: 15,
   },
+
   listTextStyle: {
     color: '#000',
     marginVertical: 10,
@@ -801,16 +789,16 @@ const Styless = StyleSheet.create({
   searchBarStyle: {
     marginBottom: 10,
     flexDirection: 'row',
-    height: 40,
+    height: 60,
     shadowRadius: 1,
     shadowOpacity: 1.0,
     borderWidth: 1,
-    shadowOffset: {
-      width: 1,
-      height: 1,
-    },
-    borderColor: '#303030',
-    shadowColor: '#303030',
+    // shadowOffset: {
+    //   width: 1,
+    //   height: 1,
+    // },
+    borderColor: 'gray',
+    // shadowColor: '#303030',
     borderRadius: 5,
     elevation: 1,
     marginHorizontal: 10,
@@ -833,24 +821,25 @@ const Styless = StyleSheet.create({
     height: 10,
     left: -40,
     marginTop: 15,
+
   },
   pickerStyle: {
-    shadowRadius: 0.5,
-    shadowOpacity: 0.5,
-    borderWidth: 0.5,
-    shadowOffset: {
-      width: 0.5,
-      height: 0.5,
-    },
-    height: 60,
-    borderColor: '#303030',
-    shadowColor: '#303030',
-    borderRadius: 2,
-    elevation: 0.5,
+    marginTop: 12,
+
+    marginBottom: 12,
+    paddingHorizontal: 6,
+    borderWidth: 0.6,
+    height: 43,
+    width: 350,
+    borderColor: 'gray',
+    borderRadius: 4,
+    elevation: 0.6,
   },
   pickerStyle1: {
-    height: 60,
-    borderBottomColor: 'dodgerblue',
-    borderBottomWidth: 2,
+    flexDirection: "row",
+    justifyContent: "center",
+    marginVertical: 5,
+    marginBottom: 12
   },
 });
+
