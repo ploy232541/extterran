@@ -306,7 +306,7 @@ export default class OutfitScreen extends Component {
           if (a.name == this.state.select_shirt.pant_size.toUpperCase()) {
             shirt_pant_size = a.id;
           }
-          console.log(this.state.select_coverall);
+
           if (a.name == this.state.select_coverall.size.toUpperCase()) {
             coverall_size = a.id;
           }

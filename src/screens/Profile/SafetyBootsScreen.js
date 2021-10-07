@@ -219,7 +219,7 @@ export default class SafetyBootsScreen extends Component {
                       [
                         {
                           text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                          onPress: () => this.reset()
+                          onPress: (e) => this.props.navigation.goBack()
                         }
                       ],
                       { cancelable: false }
