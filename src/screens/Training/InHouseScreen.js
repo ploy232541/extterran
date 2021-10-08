@@ -94,6 +94,7 @@ export default class InHouseScreen extends Component {
     }
   }
   selectedValue(index, item) {
+    console.log(item);
     this.setState({ selectedText: item.name });
   }
   deleteEmployee(index) {
@@ -293,7 +294,7 @@ export default class InHouseScreen extends Component {
                           showPickerTitle={true}
                           listTextStyle={Styless.listTextStyle}
                           pickerStyle={Styless.pickerStyle}
-                          selectedText={this.state.selectedText}
+                          selectedText={item.employee_name}
                           placeHolderText={this.state.placeHolderText}
                           searchBarPlaceHolder={'Search.....'}
                           searchBarPlaceHolderColor={'#007aff'}
@@ -307,6 +308,7 @@ export default class InHouseScreen extends Component {
                             let trainingNeed = [...this.state.trainingNeed];
                             let item = { ...trainingNeed[index] };
                             item.employee_id = items.id;
+                            item.employee_name = items.name;
                             trainingNeed[index] = item;
                             this.setState({ trainingNeed: trainingNeed });
                             this.selectedValue(index, items)
