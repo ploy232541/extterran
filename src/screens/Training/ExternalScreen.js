@@ -62,7 +62,8 @@ export default class ExternalScreen extends Component {
       tem: -1,
       dateIndex: -1,
       dateI: -1,
-      statusSubmit: true
+      statusSubmit: true,
+      lang:"",
     };
   }
 
@@ -193,16 +194,18 @@ export default class ExternalScreen extends Component {
 
   async uploadFile(index, i) {
     let result = await DocumentPicker.getDocumentAsync({});
+    
     result.type = this.mimetype(result.name);
     if (result.type !== undefined) {
       let trainingNeed = [...this.state.trainingNeed];
-
+      // console.log(trainingNeed);
       let item = { ...trainingNeed[index] };
       let data = { ...item["data"] };
       let param = data[i];
       param.upload_file = result;
       data[i] = param;
       trainingNeed[index] = item;
+      // console.log(trainingNeed);
       var id = "Id of subbrands to remove: ";
       //ลบ key ส่วนเกินออก
       trainingNeed.forEach(function (o) {
@@ -349,12 +352,15 @@ export default class ExternalScreen extends Component {
                       .then((response) => {
                         const result = response.data;
                         if (result != false) {
+                          console.log(result);
                           let pic = new FormData();
                           pic.append("file", {
+                        
                             name: result + "",
-                            type: upload_file.type,
+                            type: param.upload_file.type,
                             uri: param.upload_file.uri
                           });
+                          console.log(pic);
                           httpClient
                             .post("/Training/InsertTrainingNeedPic", pic)
                             .then((response) => {
