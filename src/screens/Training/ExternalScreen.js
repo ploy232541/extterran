@@ -28,6 +28,7 @@ import * as DocumentPicker from "expo-document-picker";
 import HTML from "react-native-render-html";
 import { Rows, Table } from "react-native-table-component";
 import FormData from "form-data";
+import RNPickerDialog from 'rn-modal-picker';
 
 let dimensions = Dimensions.get("window");
 let pickerWidth = dimensions.width - 56;
@@ -52,7 +53,6 @@ export default class ExternalScreen extends Component {
         upload_file: null,
         file: null
       },
-
       isDatePickerVisible: false,
       trainingNeed: [],
       empList: [],
@@ -64,6 +64,14 @@ export default class ExternalScreen extends Component {
       dateI: -1,
       statusSubmit: true,
       lang:"",
+
+      empList: [],
+      emp: [],
+      placeHolderText: 'Select Employee',
+      selectedText: '',
+      defaultValue: true,
+      select: '',
+      value: '',
     };
   }
 
@@ -81,8 +89,17 @@ export default class ExternalScreen extends Component {
         .then((response) => {
           const result = response.data;
           if (result != null) {
+            // console.log(result);
+            let emp = []
+            for (let i in result) {
+              emp[i] = {
+                id: result[i].user_id,
+                name: result[i].firstname
+              }
+
+            }
             this.setState({
-              empList: result
+              empList: emp
             });
           }
         })
@@ -119,6 +136,11 @@ export default class ExternalScreen extends Component {
 
     return [day, month, year].join("/");
   };
+
+  selectedValue(index, item) {
+    console.log(item);
+    this.setState({ selectedText: item.name });
+  }
 
   showDatePicker = (index, i) => {
     this.setState({ isDatePickerVisible: true, dateIndex: index, dateI: i });
@@ -483,9 +505,28 @@ export default class ExternalScreen extends Component {
             <Divider style={{ paddingBottom: 1, flex: 1 }} />
           </View>
 
-          {/* Start Card by aek*/}
+          {this.state.trainingNeed.map((item, index) => {
+            let excludeEmployees = [];
+
+            for (let i = 0; i < this.state.trainingNeed.length; i++) {
+              if (i != index) {
+                excludeEmployees.push(this.state.trainingNeed[i].employee_id);
+              }
+            }
+
+            let listEmployees = [];
+            for (let i = 0; i < this.state.empList.length; i++) {
+              let employee = this.state.empList[i];
+              let employeeId = employee.id;
+              // เช็คว่ามี
+              if (!excludeEmployees.includes(employeeId)) {
+                listEmployees.push(employee);
+              }
+            }   
+
+          {/* Start Card by aek
           {/* จะทำการแสดงพนักงาน */}
-          {this.state.trainingNeed.map((Item, index) => {
+          {/* {this.state.trainingNeed.map((Item, index) => {
             //เริ่มทำกอปปี้พนักงาน
             // excludeEmployees คือก็อปปี้ไอดีพนักงาน
             let excludeEmployees = [];
@@ -504,8 +545,8 @@ export default class ExternalScreen extends Component {
               if (!excludeEmployees.includes(employeeId)) {
                 listEmployees.push(employee);
               }
-            }
-            // จบ การกอปปี้พนักงาน
+            }  */}
+            {/* // จบ การกอปปี้พนักงาน */}
             return (
               <View>
                 <ScrollView
@@ -529,7 +570,37 @@ export default class ExternalScreen extends Component {
                         </Text>
 
                         <View>
-                          <Picker
+
+                        <RNPickerDialog
+                          data={listEmployees}
+                          pickerTitle={'กรุณาเลือกพนักงาน'}
+                          // labelText={'กรุณาเลือกพนักงาน'}
+                          showSearchBar={true}
+                          showPickerTitle={true}
+                          listTextStyle={Styless.listTextStyle}
+                          pickerStyle={Styless.pickerStyle}
+                          selectedText={item.employee_name}
+                          placeHolderText={this.state.placeHolderText}
+                          searchBarPlaceHolder={'Search.....'}
+                          searchBarPlaceHolderColor={'#007aff'}
+                          selectedTextStyle={Styless.selectedTextStyle}
+                          placeHolderTextColor={'#d9d9d9'}
+                          dropDownIconStyle={Styless.dropDownIconStyle}
+                          searchBarStyle={Styless.searchBarStyle}
+                          //dropDownIcon={require('../assets/pin.png')}
+                      
+                          selectedValue={(i, items) => {
+                            let trainingNeed = [...this.state.trainingNeed];
+                            let item = { ...trainingNeed[index] };
+                            item.employee_id = items.id;
+                            item.employee_name = items.name;
+                            trainingNeed[index] = item;
+                            this.setState({ trainingNeed: trainingNeed });
+                            this.selectedValue(index, items)
+                          }}
+                        >
+                           </RNPickerDialog>
+                          {/* <Picker
                             mode="filter"
                             iosIcon={
                               <Icon
@@ -582,7 +653,7 @@ export default class ExternalScreen extends Component {
                                 />
                               );
                             })}
-                          </Picker>
+                          </Picker> */}
                         </View>
                       </View>
 
@@ -594,7 +665,7 @@ export default class ExternalScreen extends Component {
                         }}
                       />
 
-                      {Item.data.map((param, i) => {
+                      {item.data.map((param, i) => {
                         return (
                           <View style={{ marginTop: 24 }}>
                             <View style={styles.containerSec3}>
@@ -1278,3 +1349,100 @@ const styles = StyleSheet.create({
     marginTop: 18
   }
 });
+
+const Styless = StyleSheet.create({
+
+  container: {
+    flex: 1,
+    alignItems: "center",
+    width: 500
+  },
+  selectedTextStyle: {
+    height: 100,
+    borderColor: '#d9d9d9',
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    width: '100%',
+    color: 'gray',
+    fontSize: 15,
+    paddingLeft: 15,
+    marginTop: -5,
+  },
+
+  selectedTextStyle1: {
+    height: 50,
+    borderColor: 'gray',
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    width: '100%',
+    color: 'gray',
+    fontSize: 20,
+    paddingLeft: 10,
+    marginTop: 15,
+  },
+
+  listTextStyle: {
+    color: '#000',
+    marginVertical: 10,
+    flex: 0.9,
+    marginLeft: 20,
+    marginHorizontal: 10,
+    textAlign: 'left',
+  },
+  searchBarStyle: {
+    marginBottom: 10,
+    flexDirection: 'row',
+    height: 60,
+    shadowRadius: 1,
+    shadowOpacity: 1.0,
+    borderWidth: 1,
+    // shadowOffset: {
+    //   width: 1,
+    //   height: 1,
+    // },
+    borderColor: 'gray',
+    // shadowColor: '#303030',
+    borderRadius: 5,
+    elevation: 1,
+    marginHorizontal: 10,
+  },
+  placeHolderTextStyle: {
+    color: 'red',
+    padding: 10,
+    textAlign: 'left',
+    width: '99%',
+    flexDirection: 'row',
+  },
+  dropDownIconStyle: {
+    width: 10,
+    height: 10,
+    left: -40,
+    // marginTop: 20,
+  },
+  dropDownIconStyle1: {
+    width: 10,
+    height: 10,
+    left: -40,
+    marginTop: 15,
+
+  },
+  pickerStyle: {
+    marginTop: 12,
+
+    marginBottom: 12,
+    paddingHorizontal: 6,
+    borderWidth: 0.6,
+    height: 43,
+    width: 350,
+    borderColor: 'gray',
+    borderRadius: 4,
+    elevation: 0.6,
+  },
+  pickerStyle1: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginVertical: 5,
+    marginBottom: 12
+  },
+});
+
