@@ -23,13 +23,13 @@ function FeedBackScreen() {
   let staffData = [
     {
       id:1,
-      title:'หลักสูตรบังคับภายใน',
+      title: lang == "EN" ? "Internal Compulsory Course" :"หลักสูตรบังคับภายใน",
       icon: "chalkboard-teacher",
       to:'FeedBackCourseInScreen'
     },
     {
       id:2,
-      title:'หลักสูตรทั่วไป',
+      title: lang == "EN" ? "General Course" : "หลักสูตรทั่วไป",
       icon: "book",
       to:'FeedBackCourseGeneralScreen'
     }

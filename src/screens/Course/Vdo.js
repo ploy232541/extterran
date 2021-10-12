@@ -1530,7 +1530,11 @@ class Vdo extends Component {
 
             {/* ปุ่มถัดไปเมื่อเรียบครบสำเร็จ */}
 
-            <Button
+ 
+
+          
+              <View style={styles.buttonContainer}>
+              <Button
               iconLeft
               light
               style={{
@@ -1542,7 +1546,7 @@ class Vdo extends Component {
               onPress={() =>
                 navigation.dispatch(
                   StackActions.replace("CourseCategory", {
-                    // course_id: result.course_id
+                    course_id: result.course_id
                   })
                 )
               }
@@ -1555,9 +1559,10 @@ class Vdo extends Component {
               <Text style={{ fontSize: 18, color: "#fff"}}>
                 {this.state.lang === "EN"
                   ? "Back to course"
-                  : "กลับหน้าหลักสูตร"}
+                  : "กลับสู่หน้าหลักสูตร"}
               </Text>
             </Button>
+              </View>
 
             {/* <TouchableOpacity
               onPress={this.saveNote.bind(this)}
@@ -1680,7 +1685,15 @@ const styles = StyleSheet.create({
   lottie: {
     width: 100,
     height: 100
-  }
+  },
+  buttonContainer: {
+    alignSelf: "flex-end",
+    justifyContent: "center",
+    paddingTop: 20,
+    borderRadius: 4,
+    marginTop: 2,
+    width: "50%"
+  },
 });
 
 export default function (props) {

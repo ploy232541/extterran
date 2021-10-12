@@ -325,7 +325,7 @@ const ModalBookingUnderStatus = (props) => {
                             />
 
                             <Text>Check out date(D/M/Y) :</Text>
-                            <Text style={styles.textInput}>เช็คเอาต์</Text>
+                            <Text style={styles.textInput}>เช็คเอาท์</Text>
                             <TextInput
                               editable={false}
                               style={styles.inputStyle}

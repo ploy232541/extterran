@@ -1,11 +1,44 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import  { useContext, useEffect, useState } from "react";
 import { AsyncStorage } from "react-native";
 import { View, StyleSheet, FlatList } from "react-native";
 import { httpClient } from "../../core/HttpClient";
 import ButtonCard from "../../shared/ButtonCard";
 
 function TrainingScreen() {
+  // useEffect(() => {
+  //   const run = async () => {
+  //     try {
+  //       const user_id = await AsyncStorage.getItem("userId");
+
+  //       httpClient
+  //         .get(`/Team/getMenuTeam/${user_id}`)
+  //         .then(async (response) => {
+  //           const res = response.data;
+  //           setTeam(res);
+  //         })
+  //         .catch((error) => {
+  //           console.log(error);
+  //         });
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
+  //   run();
+  // }, []);
+  const [lang,setLang] = useState(null);
+  useEffect(() => {
+    const run = async () => {
+      try {
+        setLang(await AsyncStorage.getItem("language"));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    run();
+  }, []);
+
+  
   const [team, setTeam] = useState(null);
   const formatDataList = (dataList, numberColumns) => {
     const totalRows = Math.floor(dataList.length / numberColumns);
@@ -18,37 +51,19 @@ function TrainingScreen() {
     return dataList;
   };
 
-  useEffect(() => {
-    const run = async () => {
-      try {
-        const user_id = await AsyncStorage.getItem("userId");
 
-        httpClient
-          .get(`/Team/getMenuTeam/${user_id}`)
-          .then(async (response) => {
-            const res = response.data;
-            setTeam(res);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    run();
-  }, []);
 
   const TrainingHeader = [];
+
   TrainingHeader.push({
     id: 1,
-    title: "ใบคำขอฝึกอบรม",
+    title: lang == "EN" ? "Training Request":"ใบคำขอฝึกอบรม",
     icon: "edit",
     to: "TrainingFormScreen",
   });
   TrainingHeader.push({
     id: 2,
-    title: "สถานะการอนุมัติ",
+    title: lang == "EN" ? "Approval Status" : "สถานะการอนุมัติ",
     icon: "user",
     to: "TrainingStatusScreen",
   });
@@ -56,7 +71,7 @@ function TrainingScreen() {
   if (team == true) {
     TrainingHeader.push({
       id: 3,
-      title: "สถานะการอนุมัติทีมงาน",
+      title: lang == "EN" ? "Team Approval Status" : "สถานะการอนุมัติทีมงาน",
       icon: "users",
 
       to: "TrainingStaffStatusScreen",
@@ -68,14 +83,14 @@ function TrainingScreen() {
   if (d.getMonth() == 9) {
     TrainingHeader.push({
       id: 4,
-      title: "Training Need",
+      title: lang == "EN" ? "Training Need" : "คำขอฝึกอบรม",
       icon: "newspaper",
       to: "TrainingNeedScreen",
     });
   }
   TrainingHeader.push({
     id: 5,
-    title: "Booking",
+    title: lang == "EN" ? "Booking" : "การจอง",
     icon: "address-book",
     to: "BookingScreen",
   });

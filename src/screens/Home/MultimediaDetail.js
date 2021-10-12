@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { StatusBar, Text, View, SafeAreaView, AsyncStorage, FlatList, StyleSheet, Dimensions, TouchableOpacity, Image, Platform, Alert, ActivityIndicator } from 'react-native'
 import {httpClient} from '../../core/HttpClient';
 import Icon1 from 'react-native-vector-icons/Feather';
+import FileSystemView from 'expo-file-system-view'
 // import RNFetchBlob from 'rn-fetch-blob';
 import {
   Header,
@@ -263,6 +264,7 @@ class MultimediaDetail extends Component {
                         </Text>
                     </Button>  
                   : item.req_status === 'Download' ? 
+                  
                     <Button iconLeft
                         onPress={() => downloadFIle(item.library_address, item.library_filename)}
                         style={{height: 35, marginBottom: 10, borderRadius: 5, backgroundColor: '#28a745'}}>

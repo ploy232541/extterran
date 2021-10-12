@@ -249,7 +249,7 @@ export default class AccommodationBookingScreen extends Component {
       } else if (endDate == "DD/MM/YYYY") {
         this.state.lang === "EN"
           ? Alert.alert("Please select a Check-out date")
-          : Alert.alert("กรุณาเลือกวันเช็คเอาต์");
+          : Alert.alert("กรุณาเลือกวันเช็คเอาท์");
       } else {
         var i = 0;
         var end_i = accommodation.length - 1;
@@ -306,8 +306,8 @@ export default class AccommodationBookingScreen extends Component {
                       ")"
                   )
                 : Alert.alert(
-                    "กรุณาเลือกวันเช็คเอ้าต์" +
-                      " \n (ช่องเช็คเอ้าต์  " +
+                    "กรุณาเลือกวันเช็คเอาท์" +
+                      " \n (ช่องเช็คเอาท์  " +
                       (i + 2) +
                       ")"
                   );
@@ -710,7 +710,7 @@ export default class AccommodationBookingScreen extends Component {
               </TouchableOpacity>
 
               <Text>Check out date (D/M/Y):</Text>
-              <Text style={styles.textInput}>เช็คเอาต์</Text>
+              <Text style={styles.textInput}>เช็คเอาท์</Text>
               <TouchableOpacity onPress={() => this.showDatePicker()}>
                 <View style={styles.inputDate}>
                   <Text style={{ color: "#000" }}>{this.state.endDate}</Text>
@@ -842,7 +842,7 @@ export default class AccommodationBookingScreen extends Component {
                     </TouchableOpacity>
 
                     <Text>Check out date (D/M/Y):</Text>
-                    <Text style={styles.textInput}>เช็คเอาต์</Text>
+                    <Text style={styles.textInput}>เช็คเอาท์</Text>
                     <TouchableOpacity
                       onPress={() => this.showDatePicker(index)}
                     >

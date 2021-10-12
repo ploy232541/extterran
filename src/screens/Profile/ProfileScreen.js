@@ -1,9 +1,27 @@
 import * as React from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import  { useContext, useEffect, useState } from "react";
+import { View, StyleSheet, FlatList,AsyncStorage } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import ButtonCard_Profile from "../../shared/ButtonCard_Profile";
 
+
+
+
 function ProfileScreen() {
+
+  const [lang,setLang] = useState(null);
+  useEffect(() => {
+    const run = async () => {
+      try {
+        setLang(await AsyncStorage.getItem("language"));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    run();
+  }, []);
+
+  
   const formatDataList = (dataList, numberColumns) => {
     const totalRows = Math.floor(dataList.length / numberColumns);
     let totalLastRow = dataList.length - totalRows * numberColumns;
@@ -15,28 +33,29 @@ function ProfileScreen() {
     return dataList;
   };
 
-  const ProfileHeader = [
+  const ProfileHeader  = [
+    
     {
       id: 1,
-      title: "ชุด",
+      title: lang == "EN" ? "Unifrom" : "ชุด", 
       src: require("../../asset/dashboardIcon/uniform.png"),
       to: "OutfitScreen"
     },
     {
       id: 2,
-      title: "รองเท้าเซฟตี้",
+      title: lang == "EN" ? "Safety Shoe" : "รองเท้าเซฟตี้",
       src: require("../../asset/dashboardIcon/safetyb.png"),
       to: "SafetyBootsScreen"
     },
     {
       id: 3,
-      title: "Medical Checkups",
+      title: lang == "EN" ?  "Medical Checkups" : "ตรวจสุขภาพ",
       src: require("../../asset/dashboardIcon/medical.png"),
       to: "MedicalCheckupsScreen"
     },
     {
       id: 4,
-      title: "ข้อมูลส่วนตัว",
+      title: lang == "EN" ? "Personal Information" : "ข้อมูลส่วนตัว",
       src: require("../../asset/dashboardIcon/infomation.png"),
       to: "ProfileInfor"
     }

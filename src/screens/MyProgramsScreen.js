@@ -1,7 +1,8 @@
 import * as React from "react";
+import  { useContext, useEffect, useState } from "react";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { Button, Title, Card } from "react-native-paper";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity,  AsyncStorage } from "react-native";
 import ButtonCard from "../shared/ButtonCard";
 import { Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -10,18 +11,32 @@ import Icons from "react-native-vector-icons/FontAwesome5";
 
 const HEIGHT = Dimensions.get("window").height;
 function MyProgramsScreen() {
+
+  const [lang,setLang] = useState(null);
+  useEffect(() => {
+    const run = async () => {
+      try {
+        setLang(await AsyncStorage.getItem("language"));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    run();
+  }, []);
+
+
   const navigation = useNavigation();
   const myProgramData = [
     {
       id: 1,
-      title: "หลักสูตรบังคับภายใน",
+      title: lang == "EN" ? "Internal Compulsory Courses" : "หลักสูตรบังคับภายใน",
       //imgSrc: 'http://smartxlearning.com/themes/template/img/book.png',
       icon: "chalkboard-teacher",
       to: "1"
     },
     {
       id: 2,
-      title: "หลักสูตรบังคับภายนอก",
+      title: lang == "EN"  ? "External Compulsory Courses" : "หลักสูตรบังคับภายนอก",
       //imgSrc: 'http://smartxlearning.com/themes/template/img/book.png',
       icon: "warehouse",
       to: "3"

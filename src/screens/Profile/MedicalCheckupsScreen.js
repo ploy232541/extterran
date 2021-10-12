@@ -423,6 +423,7 @@ export default class MedicalCheckupsScreen extends Component {
       jpg: "image/jpg"
     };
     let extention = name.split(".")[1];
+    console.log(extention);
     if (allow[extention] !== undefined) {
       return allow[extention];
     } else {

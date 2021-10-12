@@ -1,12 +1,15 @@
 import * as React from "react";
+import  { useContext, useEffect, useState } from "react";
 import {
   View,
   FlatList,
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  Text
+  Text,
+  AsyncStorage
 } from "react-native";
+
 import ButtonCard from "../../shared/ButtonCard";
 import { useNavigation } from "@react-navigation/native";
 import { Button, Card } from "react-native-paper";
@@ -15,6 +18,19 @@ import Icons from "react-native-vector-icons/FontAwesome5";
 const HEIGHT = Dimensions.get("window").height;
 
 function LearningStatusScreen() {
+
+  const [lang,setLang] = useState(null);
+  useEffect(() => {
+    const run = async () => {
+      try {
+        setLang(await AsyncStorage.getItem("language"));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    run();
+  }, []);
+
   const navigation = useNavigation();
 
   const formatDataList = (dataList, numberColumns) => {
@@ -31,21 +47,21 @@ function LearningStatusScreen() {
   const TrainingHeader = [
     {
       id: 1,
-      title: "หลักสูตรบังคับภายใน",
+      title: lang == "EN" ? "Internal Compulsory Courses" : "หลักสูตรบังคับภายใน",
       //imgSource: "http://smartxlearning.com/themes/template/img/book.png",
       icon: "chalkboard-teacher",
       to: "1",
     },
     {
       id: 2,
-      title: "หลักสูตรบังคับภายนอก",
+      title: lang == "EN" ? "External Compulsory Courses" : "หลักสูตรบังคับภายนอก",
       //imgSource: "http://smartxlearning.com/themes/template/img/book.png",
       icon: "warehouse",
       to: "3",
     },
     {
       id: 3,
-      title: "หลักสูตรทั่วไป",
+      title: lang == "EN" ? "General Course" : "หลักสูตรทั่วไป",
       //imgSource: "http://smartxlearning.com/themes/template/img/book.png",
       icon: "book",
       to: "5",

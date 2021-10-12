@@ -514,9 +514,10 @@ export default class InHouseScreen extends Component {
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.btnConfirmStyle}
+                  
                   onPress={() => this.onPressSend()}
                 >
-                  <Text style={{ color: "white" }}>ยืนยัน</Text>
+                  <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Confirm":"ยืนยัน"}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -529,7 +530,7 @@ export default class InHouseScreen extends Component {
                   style={styles.btnCancelStyle}
                   onPress={(e) => this.props.navigation.goBack()}
                 >
-                  <Text style={{ color: "white" }}>ยกเลิก</Text>
+                  <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Cancel":"ยกเลิก"}</Text>
                 </TouchableOpacity>
               </View>
             </View>

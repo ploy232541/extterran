@@ -150,7 +150,7 @@ function CourseCategory({route}) {
                     style={{ flex: 1, backgroundColor: "white" }}
                   >
           {/* <TouchableOpacity disabled style={{borderRadius: 5,width:'40%', alignSelf:'center', alignItems:'center', height:HEIGHT*0.05, justifyContent:'center', backgroundColor:'#3b5998', marginVertical:20}}>
-            <Text style={{color:'white', fontSize: 16}}>{lang == "EN" ? 'Course category' : 'หมวดหมู่หลักสูตร'}</Text>
+            <Text style={{color:'white', fontSize: 16}}>{lang == "EN" ? 'Course category' : 'หมวดหมู่หลักสูตร5555'}</Text>
          </TouchableOpacity> */}
 
           <View style={styles.container_title}>

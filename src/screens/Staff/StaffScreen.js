@@ -32,7 +32,7 @@ function StaffScreen() {
   let staffData = [
     {
       id: 1,
-      title: "หลักสูตรบังคับภายใน",
+      title: lang == "EN" ? "Internal Compulsory Course" : "หลักสูตรบังคับภายใน",
       counts: countNoti[0]?countNoti[0].counts:0,
       //imgSrc: 'https://source.unsplash.com/1024x768/?nature',
       icon: "chalkboard-teacher",
@@ -40,7 +40,7 @@ function StaffScreen() {
     },
     {
       id: 2,
-      title: "หลักสูตรทั่วไป",
+      title: lang == "EN" ? "General Course" : "หลักสูตรทั่วไป",
       counts: countNoti[1]?countNoti[1].counts:0,
       //imgSrc: 'https://source.unsplash.com/1024x768/?nature',
       icon: "book",
@@ -56,7 +56,7 @@ function StaffScreen() {
     },
     {
       id: 4,
-      title: lang == "EN" ? "Booking" : "Booking",
+      title: lang == "EN" ? "Booking" : "การจอง",
       counts: 0,
       //imgSrc: 'https://source.unsplash.com/1024x768/?nature',
       icon: "address-book",
