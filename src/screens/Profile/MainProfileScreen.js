@@ -632,7 +632,9 @@ export default class MainProfileScreen extends Component {
               <TextInput style={styles.inputStyle} />
               <Text style={styles.textInputEng}>Work location :</Text>
               <Text style={styles.textInputThai}>สถาณที่ทำงาน</Text>
-              <TextInput style={styles.inputStyle} />
+              <TextInput style={styles.inputStyle}
+                  value={this.state.profile.work_location}
+              />
             </View>
 
             <View

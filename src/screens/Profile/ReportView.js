@@ -341,8 +341,11 @@ export default class ReportView extends Component {
               <Text style={styles.textInputThai}>ที่พัก</Text>
               <TextInput style={styles.inputStyle} />
               <Text style={styles.textInputEng}>Work location :</Text>
-              <Text style={styles.textInputThai}>สถาณที่ทำงาน</Text>
-              <TextInput style={styles.inputStyle} />
+              <Text style={styles.textInputThai}>สถานที่ทำงาน</Text>
+              <TextInput style={styles.inputStyle}
+             value={this.state.profile.work_location}
+              />
+              
             </View>
 
             <View
