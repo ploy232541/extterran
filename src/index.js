@@ -143,7 +143,7 @@ function CustomDrawerContent(props) {
             padding: 20
           }}
         >
-          <Button icon="exit-to-app" mode="contained" onPress={Logout}>
+          <Button icon="exit-to-app" mode="contained" onPress={Logout} style={{backgroundColor:"#DC143C"}}>
             {lang == "EN" ? "Logout" : "ออกจากระบบ"}
           </Button>
         </View>

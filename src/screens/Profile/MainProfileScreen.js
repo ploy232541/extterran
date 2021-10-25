@@ -11,7 +11,7 @@ import {
   SafeAreaView,
   Image,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import React, { Component, createRef } from "react";
 import { Avatar } from "react-native-paper";
@@ -39,34 +39,34 @@ var radio_props = [
   { label: "HazOb รายงานความสภาพเสี่ยงที่จะเกิดอุบัติภัย", value: 2 },
   {
     label: "Near Miss สภาพที่เป็นอันตราย/เหตุการณ์เกือบเกิดอุบัติเหตุ",
-    value: 3
+    value: 3,
   },
-  { label: "Other", value: 4 }
+  { label: "Other", value: 4 },
 ];
 var radio_check = [
   { label: "Yes (ใช่)\t", value: 0 },
   { label: "No (ไม่)\t", value: 1 },
-  { label: "N/A\t", value: 2 }
+  { label: "N/A\t", value: 2 },
 ];
 var dropdown_check = [
   { title: "Yes (ใช่)\t", id: 1 },
   { title: "No (ไม่)\t", id: 2 },
-  { title: "N/A\t", id: 3 }
+  { title: "N/A\t", id: 3 },
 ];
 var situation = [
   { title: "No/ไม่ใช่", status: false },
   {
     title: "Yes/ใช่ (Please provide detail / กรุณาระบุรายละเอียดใน Other",
-    status: false
+    status: false,
   },
-  { title: "Other", status: false }
+  { title: "Other", status: false },
 ];
 const radio_severity = [
   { label: "Severe / ร้ายแรงที่สุด", value: 0 },
   { label: "Major / ร้ายแรงมาก", value: 1 },
   { label: "Serious / ร้ายแรง", value: 2 },
   { label: "Minor / ไม่ร้ายแรง", value: 3 },
-  { label: "Incidental / เล็กน้อย", value: 4 }
+  { label: "Incidental / เล็กน้อย", value: 4 },
 ];
 
 const accounts = [
@@ -108,19 +108,19 @@ const accounts = [
   { accNumber: "8.9 อุปกรณ์ป้องกันเท้า" },
   { accNumber: "9.1 เข็มขัดนิรภัย" },
   { accNumber: "9.2 อัตราความเร็ว" },
-  { accNumber: "9.3 ระยะห่างระหว่างรถ" }
+  { accNumber: "9.3 ระยะห่างระหว่างรถ" },
 ];
 const radio_probability = [
   { label: "Frequent / เกิดขึ้นบ่อยมาก", value: 0 },
   { label: "Occational / เกิดได้บ่อยก", value: 1 },
   { label: "Seldom / นาน ๆ ครั้ง", value: 2 },
   { label: "Unlikely / มีโอกาสเกิดขึ้นน้อย", value: 3 },
-  { label: "Remote / เกิดขึ้นได้ยากมาก", value: 4 }
+  { label: "Remote / เกิดขึ้นได้ยากมาก", value: 4 },
 ];
 const radio_BBS = [
   { label: "Safe \t", value: 0 },
   { label: "At risk \t", value: 1 },
-  { label: "N/A \t", value: 2 }
+  { label: "N/A \t", value: 2 },
 ];
 
 const cataegery = [
@@ -134,7 +134,7 @@ const cataegery = [
   { title: "Process Upset / ระบบกระบวนการผลิตขัดข้อง", status: false },
   { title: "Property, Equipment Damage / ทรัพย์สินเสียหาย", status: false },
   { title: "Splill or Release / การรั่วไหลของก๊าซและของแหลว", status: false },
-  { title: "Other", status: false }
+  { title: "Other", status: false },
 ];
 const relatedwith = [
   { title: "Chemical / สารเคมี", status: false },
@@ -144,11 +144,11 @@ const relatedwith = [
   { title: "Hygiene, Sanitation / อนามัยและความสะอาด", status: false },
   {
     title: "Labeling, Marketing & Signs / ฉลาก, เครื่องหมาย ป้าย",
-    status: false
+    status: false,
   },
   {
     title: "Lifting Appliances / อุปกรณ์การยก, ผูก และเคลื่อนย้าย",
-    status: false
+    status: false,
   },
   { title: "Mechanical / เครื่องจักรกล", status: false },
   { title: "PPE / อุปกรณ์ป้องกันอันตรายส่วนบุคคล", status: false },
@@ -156,13 +156,13 @@ const relatedwith = [
   { title: "Vehicles / ยานพาหนะ, การขนส่ง", status: false },
   {
     title: "Welding, Burning / งานเชื่อม. งานเกี่ยวกับความร้อน",
-    status: false
+    status: false,
   },
   {
     title: "Walking Surface, Railings, Ladders / ทางเดิน, บันได",
-    status: false
+    status: false,
   },
-  { title: "Other", status: false }
+  { title: "Other", status: false },
 ];
 export default class MainProfileScreen extends Component {
   constructor(props) {
@@ -194,7 +194,7 @@ export default class MainProfileScreen extends Component {
       explain: "",
       resolved: "",
       realproblem: "",
-      loading: true
+      loading: true,
     };
   }
 
@@ -211,7 +211,7 @@ export default class MainProfileScreen extends Component {
     let id = await AsyncStorage.getItem("userId");
 
     this.setState({
-      user_id: id
+      user_id: id,
     });
     const res = await AsyncStorage.getItem("language");
     if (res === "EN") {
@@ -230,7 +230,7 @@ export default class MainProfileScreen extends Component {
             this.setState({
               profile: result.profile[0],
               question: result.question,
-              location: result.location
+              location: result.location,
             });
           }
         })
@@ -244,7 +244,7 @@ export default class MainProfileScreen extends Component {
 
   formatDate = (date) => {
     let d = new Date(date),
-      month = "" +( d.getMonth()+1),
+      month = "" + (d.getMonth() + 1),
       day = "" + d.getDate(),
       year = d.getFullYear();
 
@@ -268,7 +268,7 @@ export default class MainProfileScreen extends Component {
 
     if (this.state.isStart) {
       this.setState({
-        startDate: date
+        startDate: date,
       });
     }
 
@@ -282,7 +282,7 @@ export default class MainProfileScreen extends Component {
       reportype,
       reportype_detail,
       startDate,
-      question
+      question,
     } = this.state;
     if (startDate === "DD/MM/YYYY") {
       Alert.alert(
@@ -319,7 +319,7 @@ export default class MainProfileScreen extends Component {
         location_seleced,
         sublocation_seleced,
         reportype: reportype + 1,
-        reportype_detail
+        reportype_detail,
       };
       let data = [];
       if (reportype == 0 || reportype == 4) {
@@ -500,7 +500,7 @@ export default class MainProfileScreen extends Component {
         {
           text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
         ,
         {
@@ -518,8 +518,8 @@ export default class MainProfileScreen extends Component {
                     [
                       {
                         text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                        onPress: this.props.navigation.goBack()
-                      }
+                        onPress: this.props.navigation.goBack(),
+                      },
                     ],
                     { cancelable: false }
                   );
@@ -534,8 +534,8 @@ export default class MainProfileScreen extends Component {
               .catch((error) => {
                 console.log(error);
               });
-          }
-        }
+          },
+        },
       ]
     );
   };
@@ -569,7 +569,7 @@ export default class MainProfileScreen extends Component {
             borderColor: "white",
             backgroundColor: "white",
             marginHorizontal: 15,
-            marginBottom: 20
+            marginBottom: 20,
           }}
         >
           <View style={styles.containerSec1}>
@@ -580,7 +580,7 @@ export default class MainProfileScreen extends Component {
                 color: "#4393de",
                 marginTop: 18,
                 marginBottom: 15,
-                alignSelf: "center"
+                alignSelf: "center",
               }}
             >
               แบบฟอร์มรายงาน
@@ -632,8 +632,9 @@ export default class MainProfileScreen extends Component {
               <TextInput style={styles.inputStyle} />
               <Text style={styles.textInputEng}>Work location :</Text>
               <Text style={styles.textInputThai}>สถาณที่ทำงาน</Text>
-              <TextInput style={styles.inputStyle}
-                  value={this.state.profile.work_location}
+              <TextInput
+                style={styles.inputStyle}
+                value={this.state.profile.work_location}
               />
             </View>
 
@@ -642,7 +643,7 @@ export default class MainProfileScreen extends Component {
                 marginBottom: 10,
                 flexDirection: "row",
                 justifyContent: "center",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -671,6 +672,8 @@ export default class MainProfileScreen extends Component {
               </TouchableOpacity>
 
               <DateTimePickerModal
+                isDarkModeEnabled
+                textColor="#fff"
                 locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
                 isVisible={this.state.isDatePickerVisible}
                 mode="date"
@@ -698,7 +701,7 @@ export default class MainProfileScreen extends Component {
                 onValueChange={(t) => {
                   this.setState({
                     location_seleced: t,
-                    sublocation_seleced: ""
+                    sublocation_seleced: "",
                   });
                   if (t != "") {
                     try {
@@ -709,7 +712,7 @@ export default class MainProfileScreen extends Component {
 
                           if (result != null) {
                             this.setState({
-                              sublocation: result
+                              sublocation: result,
                             });
                           }
                         })
@@ -780,7 +783,7 @@ export default class MainProfileScreen extends Component {
               marginVertical: 30,
               flexDirection: "row",
               justifyContent: "center",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -798,7 +801,7 @@ export default class MainProfileScreen extends Component {
               fontWeight: "bold",
               color: "#4393de",
               marginBottom: 15,
-              alignSelf: "center"
+              alignSelf: "center",
             }}
           >
             Report Type ประเภทของรายงาน
@@ -814,7 +817,7 @@ export default class MainProfileScreen extends Component {
                   flexDirection: "row",
                   justifyContent: "space-between",
                   paddingVertical: 2,
-                  marginBottom: 2
+                  marginBottom: 2,
                 }}
               >
                 <RadioForm
@@ -829,7 +832,7 @@ export default class MainProfileScreen extends Component {
                     flexDirection: "column",
                     justifyContent: "space-between",
                     paddingVertical: 2,
-                    margin: 4
+                    margin: 4,
                   }}
                 ></View>
               </View>
@@ -850,7 +853,7 @@ export default class MainProfileScreen extends Component {
               marginVertical: 30,
               flexDirection: "row",
               justifyContent: "center",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -870,7 +873,7 @@ export default class MainProfileScreen extends Component {
                   fontWeight: "bold",
                   color: "#4393de",
                   marginBottom: 15,
-                  alignSelf: "center"
+                  alignSelf: "center",
                 }}
               >
                 BBS Observation การสังเกตพฤติกรรมความปลอดภัย
@@ -1029,7 +1032,7 @@ export default class MainProfileScreen extends Component {
                   fontWeight: "bold",
                   color: "#4393de",
                   marginBottom: 15,
-                  alignSelf: "center"
+                  alignSelf: "center",
                 }}
               >
                 {
@@ -1291,12 +1294,10 @@ export default class MainProfileScreen extends Component {
                   fontWeight: "bold",
                   color: "#4393de",
                   marginBottom: 15,
-                  alignSelf: "center"
+                  alignSelf: "center",
                 }}
               >
-                {
-                  " HazOb & Near Miss Report"
-                }
+                {" HazOb & Near Miss Report"}
               </Text>
               <View style={styles.containerSec2}>
                 <View style={styles.contentInSec2}>
@@ -1415,7 +1416,7 @@ export default class MainProfileScreen extends Component {
                       flexDirection: "row",
                       justifyContent: "space-between",
                       paddingVertical: 2,
-                      marginBottom: 2
+                      marginBottom: 2,
                     }}
                   >
                     <RadioForm
@@ -1435,7 +1436,7 @@ export default class MainProfileScreen extends Component {
                         flexDirection: "column",
                         justifyContent: "space-between",
                         paddingVertical: 2,
-                        margin: 4
+                        margin: 4,
                       }}
                     />
                   </View>
@@ -1449,7 +1450,7 @@ export default class MainProfileScreen extends Component {
                       flexDirection: "row",
                       justifyContent: "space-between",
                       paddingVertical: 2,
-                      marginBottom: 2
+                      marginBottom: 2,
                     }}
                   >
                     <RadioForm
@@ -1469,7 +1470,7 @@ export default class MainProfileScreen extends Component {
                         flexDirection: "column",
                         justifyContent: "space-between",
                         paddingVertical: 2,
-                        margin: 4
+                        margin: 4,
                       }}
                     ></View>
                   </View>
@@ -1555,7 +1556,7 @@ export default class MainProfileScreen extends Component {
                 justifyContent: "space-between",
                 paddingHorizontal: 45,
                 marginBottom: 10,
-                marginTop: 10
+                marginTop: 10,
               }}
             >
               <Pressable
@@ -1589,61 +1590,61 @@ export default class MainProfileScreen extends Component {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   container: {
     flex: 1,
     marginHorizontal: WIDTH / 20,
-    marginVertical: HEIGHT / 36
+    marginVertical: HEIGHT / 36,
   },
   containerSec1: {
     marginHorizontal: 8,
-    marginVertical: 18
+    marginVertical: 18,
   },
   //กรอบข้อมูลรอบนอก
   containerSec2: {
     marginHorizontal: 12,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: "#398DDD"
+    borderColor: "#398DDD",
   },
   containerSec4: {
     marginHorizontal: 12,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: "red"
+    borderColor: "red",
   },
   containerSec5: {
     marginHorizontal: 12,
     marginBottom: 30,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: "gray"
+    borderColor: "gray",
   },
   containerSec3: {
     marginTop: 18,
     borderRadius: 8,
     borderWidth: 2,
     borderColor: "#999999",
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
   contentInSec2: {
-    padding: 12
+    padding: 12,
   },
   textHeader: {
     alignItems: "center",
-    padding: 14
+    padding: 14,
   },
   textHeader1: {
     fontWeight: "bold",
     fontSize: 20,
-    marginTop: 15
+    marginTop: 15,
   },
   textHeader2: {
     fontWeight: "bold",
     fontSize: 14,
     marginTop: 8,
-    alignSelf: "center"
+    alignSelf: "center",
   },
   inputStyle: {
     backgroundColor: "#DCDCDC",
@@ -1651,7 +1652,7 @@ const styles = StyleSheet.create({
     height: HEIGHT / 20,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   inputStyle1: {
     borderRadius: 15,
@@ -1660,7 +1661,7 @@ const styles = StyleSheet.create({
     height: HEIGHT / 20,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   inputStyle2: {
     borderRadius: 15,
@@ -1670,7 +1671,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingLeft: 10,
     marginBottom: 10,
-    width: "85%"
+    width: "85%",
   },
   inputStyle3: {
     backgroundColor: "#FFF",
@@ -1679,7 +1680,7 @@ const styles = StyleSheet.create({
     paddingLeft: 18,
     marginTop: 8,
     marginHorizontal: 8,
-    width: 270
+    width: 270,
   },
   inputStyle4: {
     backgroundColor: "#FFF",
@@ -1689,7 +1690,7 @@ const styles = StyleSheet.create({
     marginLeft: -298,
     //marginHorizontal: 20,
     marginTop: 15,
-    width: "123%"
+    width: "123%",
   },
   inputStyle5: {
     backgroundColor: "#FFF",
@@ -1698,7 +1699,7 @@ const styles = StyleSheet.create({
     paddingLeft: 18,
     marginTop: 8,
     marginHorizontal: 12,
-    width: "78%"
+    width: "78%",
   },
   inputStyle6: {
     backgroundColor: "#fff",
@@ -1707,7 +1708,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingLeft: 18,
     marginHorizontal: 12,
-    marginBottom: 12
+    marginBottom: 12,
   },
   ///กรอบเพิ่มข้อมูล
   pickerContainer: {
@@ -1715,76 +1716,76 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
     marginVertical: 1,
     marginTop: 1,
-    marginBottom: 4
+    marginBottom: 4,
   },
   pickerContainer1: {
     flexDirection: "column",
     alignItems: "center",
     marginVertical: 1,
     marginTop: 1,
-    marginBottom: 4
+    marginBottom: 4,
   },
   pickerContainer2: {
     flexDirection: "row",
-    justifyContent: "space-evenly"
+    justifyContent: "space-evenly",
     // paddingVertical: 12,
     // marginBottom: 2,
   },
   textInputEng: {
-    marginTop: 10
+    marginTop: 10,
   },
   textInputEng1: {
     marginTop: 5,
     marginHorizontal: 8,
-    textAlign: "left"
+    textAlign: "left",
   },
   textInputEng2: {
     marginTop: 10,
     marginLeft: 10,
-    marginBottom: 5
+    marginBottom: 5,
   },
   textInputEng3: {
     marginTop: 5,
-    fontSize: 12
+    fontSize: 12,
   },
   textInputEng4: {
     fontWeight: "bold",
     marginTop: 5,
-    fontSize: 12
+    fontSize: 12,
   },
   textInputEng5: {
     marginTop: 12,
-    textAlign: "justify"
+    textAlign: "justify",
     // marginHorizontal: 8,
   },
   textInputThai: {
-    color: "grey"
+    color: "grey",
   },
   textInputThai1: {
     marginTop: 5,
     fontSize: 14,
-    textAlign: "center"
+    textAlign: "center",
   },
   textInputThai2: {
     marginTop: 15,
-    textAlign: "justify"
+    textAlign: "justify",
     // marginHorizontal: 8,
   },
   textInputEng6: {
-    textAlign: "justify"
+    textAlign: "justify",
     // marginHorizontal: 8,
   },
   textInputThai3: {
-    textAlign: "justify"
+    textAlign: "justify",
     // marginHorizontal: 8,
   },
   textInputThai4: {
     textAlign: "justify",
     // marginHorizontal: 8,
-    marginBottom: 4
+    marginBottom: 4,
   },
   textInputThai5: {
-    textAlign: "justify"
+    textAlign: "justify",
     // marginHorizontal: 8,
     // marginBottom: 18,
   },
@@ -1797,14 +1798,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     // paddingLeft: 10,
     marginBottom: 10,
-    borderColor: "#007aff"
+    borderColor: "#007aff",
   },
   viewBorderDropdown: {
     borderWidth: 1,
     borderRadius: 15,
     marginBottom: 10,
     paddingLeft: 10,
-    marginTop: 10
+    marginTop: 10,
   },
   inputDate: {
     borderWidth: 1,
@@ -1815,33 +1816,33 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flex: 1,
     justifyContent: "center",
-    borderColor: "#007aff"
+    borderColor: "#007aff",
   },
   confirmStyle: {
     marginTop: 10,
     marginBottom: 10,
     marginHorizontal: 30,
     paddingTop: 60,
-    paddingBottom: 30
+    paddingBottom: 30,
   },
   confirmStyle1: {
     marginTop: 2,
     marginBottom: 10,
-    marginHorizontal: 14
+    marginHorizontal: 14,
     // paddingTop: 2,
     // paddingBottom: 10,
   },
   textConfirm: {
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 10
+    paddingTop: 10,
   },
   addButtonText: {
     color: "white",
     fontSize: 20,
     fontWeight: "700",
     textAlign: "center",
-    margin: 7
+    margin: 7,
   },
   addButton: {
     borderRadius: 50,
@@ -1850,7 +1851,7 @@ const styles = StyleSheet.create({
     height: HEIGHT / 21,
     marginHorizontal: 2,
     marginTop: 5,
-    fontSize: 24
+    fontSize: 24,
   },
   deleteButton: {
     borderRadius: 50,
@@ -1859,24 +1860,24 @@ const styles = StyleSheet.create({
     height: HEIGHT / 21,
     marginHorizontal: 5,
     marginTop: 8,
-    fontSize: 24
+    fontSize: 24,
   },
   logo1: {
     marginTop: 4,
     // marginBottom: 12,
     alignItems: "center",
     width: 250,
-    height: 120
+    height: 120,
     // width: WIDTH / 2,
     // height: HEIGHT / 2,
   },
   head: {
     height: 40,
-    backgroundColor: "#f1f8ff"
+    backgroundColor: "#f1f8ff",
   },
   text: {
     margin: 6,
-    textAlign: "center"
+    textAlign: "center",
   },
 
   checkboxContainer: {
@@ -1884,21 +1885,21 @@ const styles = StyleSheet.create({
     // flexDirection: "row",
 
     marginBottom: 5,
-    marginTop: 5
+    marginTop: 5,
   },
   checkbox: {
     alignSelf: "center",
-    borderRadius: 1
+    borderRadius: 1,
   },
   label: {
-    margin: 18
+    margin: 18,
     // marginHorizontal: 18,
   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
   },
   modalView: {
     margin: 20,
@@ -1909,62 +1910,62 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   button: {
     borderRadius: 15,
     paddingVertical: 15,
     paddingHorizontal: 22,
-    elevation: 2
+    elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: "#F194FF"
+    backgroundColor: "#F194FF",
   },
   buttonCancel: {
-    backgroundColor: "gray"
+    backgroundColor: "gray",
   },
   buttonAccept: {
-    backgroundColor: "blue"
+    backgroundColor: "blue",
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
   },
   textStyle1: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
   },
   logo: {
     width: WIDTH / 5,
     height: HEIGHT / 12,
     marginLeft: 8,
     alignItems: "center",
-    marginTop: 2
+    marginTop: 2,
   },
   logo2: {
     width: WIDTH / 3,
     height: HEIGHT / 9,
     // padding: 1,
     alignItems: "center",
-    marginTop: 5
-  }
+    marginTop: 5,
+  },
 });
 const stylesdialog = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
   },
   modalView: {
     margin: 20,
@@ -1975,37 +1976,37 @@ const stylesdialog = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   button: {
     borderRadius: 15,
     paddingVertical: 15,
     paddingHorizontal: 24,
-    elevation: 2
+    elevation: 2,
     // margin:5
   },
   buttonOpen: {
-    backgroundColor: "green"
+    backgroundColor: "green",
   },
   buttonClose: {
-    backgroundColor: "#2196F3"
+    backgroundColor: "#2196F3",
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
   },
   containerSec: {
     flex: 1,
     backgroundColor: "#ff0",
-    borderRadius: 20
-  }
+    borderRadius: 20,
+  },
 });

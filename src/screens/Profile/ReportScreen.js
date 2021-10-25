@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   Dimensions,
   Alert,
-  Pressable
+  Pressable,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import {
@@ -17,7 +17,7 @@ import {
   Card,
   Button,
   Divider,
-  ProgressBar
+  ProgressBar,
 } from "react-native-paper";
 import Modal from "react-native-modal";
 import Icons from "react-native-vector-icons/MaterialIcons";
@@ -35,7 +35,7 @@ const type = [
   { title: "SWA การหยุดงาน", id: 2 },
   { title: "HazOb รายงานความสภาพเสี่ยงที่จะเกิดอุบัติภัย", id: 3 },
   { title: "Near Miss สภาพที่เป็นอันตราย/เหตุการณ์เกือบเกิดอุบัติเหตุ", id: 4 },
-  { title: "", id: 5 }
+  { title: "", id: 5 },
 ];
 
 export default class ReportScreen extends Component {
@@ -47,7 +47,7 @@ export default class ReportScreen extends Component {
       loading: true,
       startDate: "Start Date",
       endDate: "End Date",
-      maindatalist: []
+      maindatalist: [],
     };
   }
   async componentDidMount() {
@@ -69,7 +69,7 @@ export default class ReportScreen extends Component {
             this.setState({
               datalist: result,
               maindatalist: result,
-              loading: false
+              loading: false,
             });
           }
         })
@@ -107,11 +107,11 @@ export default class ReportScreen extends Component {
     if (this.state.isStart) {
       this.setState({
         startDate: date,
-        isStart: false
+        isStart: false,
       });
     } else {
       this.setState({
-        endDate: date
+        endDate: date,
       });
     }
 
@@ -151,6 +151,8 @@ export default class ReportScreen extends Component {
       >
         <View>
           <DateTimePickerModal
+            isDarkModeEnabled
+            textColor="#fff"
             locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
             isVisible={this.state.isDatePickerVisible}
             mode="date"
@@ -180,87 +182,87 @@ export default class ReportScreen extends Component {
           </Header>
           <Header>
             {/* <Item style={{ backgroundColor: "#fff", margin: 7 }}> */}
-              <Pressable
-                style={[stylesdialog.button, stylesdialog.buttonOpen]}
-                onPress={() => {
-                  if (
-                    this.state.startDate != "Start Date" ||
-                    this.state.endDate != "End Date"
-                  ) {
-                    const newData = this.state.maindatalist.filter((item) => {
-                      let dateString = moment(item.observation_date).format(
+            <Pressable
+              style={[stylesdialog.button, stylesdialog.buttonOpen]}
+              onPress={() => {
+                if (
+                  this.state.startDate != "Start Date" ||
+                  this.state.endDate != "End Date"
+                ) {
+                  const newData = this.state.maindatalist.filter((item) => {
+                    let dateString = moment(item.observation_date).format(
+                      "DD/MM/YYYY"
+                    );
+                    var dateMomentObject = moment(dateString, "DD/MM/YYYY");
+                    var dateObject = dateMomentObject.toDate();
+                    if (
+                      this.state.startDate != "Start Date" &&
+                      this.state.endDate != "End Date"
+                    ) {
+                      var dateMomentObjectStart = moment(
+                        this.state.startDate,
                         "DD/MM/YYYY"
                       );
-                      var dateMomentObject = moment(dateString, "DD/MM/YYYY");
-                      var dateObject = dateMomentObject.toDate();
+                      var dateObjectStart = dateMomentObjectStart.toDate();
+                      var dateMomentObjectEnd = moment(
+                        this.state.endDate,
+                        "DD/MM/YYYY"
+                      );
+                      var dateObjectEnd = dateMomentObjectEnd.toDate();
                       if (
-                        this.state.startDate != "Start Date" &&
-                        this.state.endDate != "End Date"
+                        dateObject >= dateObjectStart &&
+                        dateObject <= dateObjectEnd
                       ) {
-                        var dateMomentObjectStart = moment(
-                          this.state.startDate,
-                          "DD/MM/YYYY"
-                        );
-                        var dateObjectStart = dateMomentObjectStart.toDate();
-                        var dateMomentObjectEnd = moment(
-                          this.state.endDate,
-                          "DD/MM/YYYY"
-                        );
-                        var dateObjectEnd = dateMomentObjectEnd.toDate();
-                        if (
-                          dateObject >= dateObjectStart &&
-                          dateObject <= dateObjectEnd
-                        ) {
-                          return item;
-                        }
-                      } else if (this.state.startDate != "Start Date") {
-                        var dateMomentObjectStart = moment(
-                          this.state.startDate,
-                          "DD/MM/YYYY"
-                        );
-                        var dateObjectStart = dateMomentObjectStart.toDate();
-                        if (dateObject >= dateObjectStart) {
-                          return item;
-                        }
-                      } else if (this.state.endDate != "End Date") {
-                        var dateMomentObjectEnd = moment(
-                          this.state.endDate,
-                          "DD/MM/YYYY"
-                        );
-                        var dateObjectEnd = dateMomentObjectEnd.toDate();
-                        if (dateObject <= dateObjectEnd) {
-                          return item;
-                        }
+                        return item;
                       }
-                    });
-                    this.setState({ datalist: newData });
-                  } else {
-                    this.setState({ datalist: this.state.maindatalist });
-                  }
-                }}
-              >
-                <Text style={styles.textStyle}>
-                  <Icon1 name="search" style={{ marginRight: 10 }} size={18} />
-                  {this.state.lang === "EN" ? "  Search" : "  ค้นหา"}
-                </Text>
-              </Pressable>
+                    } else if (this.state.startDate != "Start Date") {
+                      var dateMomentObjectStart = moment(
+                        this.state.startDate,
+                        "DD/MM/YYYY"
+                      );
+                      var dateObjectStart = dateMomentObjectStart.toDate();
+                      if (dateObject >= dateObjectStart) {
+                        return item;
+                      }
+                    } else if (this.state.endDate != "End Date") {
+                      var dateMomentObjectEnd = moment(
+                        this.state.endDate,
+                        "DD/MM/YYYY"
+                      );
+                      var dateObjectEnd = dateMomentObjectEnd.toDate();
+                      if (dateObject <= dateObjectEnd) {
+                        return item;
+                      }
+                    }
+                  });
+                  this.setState({ datalist: newData });
+                } else {
+                  this.setState({ datalist: this.state.maindatalist });
+                }
+              }}
+            >
+              <Text style={styles.textStyle}>
+                <Icon1 name="search" style={{ marginRight: 10 }} size={18} />
+                {this.state.lang === "EN" ? "  Search" : "  ค้นหา"}
+              </Text>
+            </Pressable>
             {/* </Item> */}
             {/* <Item style={{ margin: 7 }}> */}
-              <Pressable
-                style={[stylesdialog.button, stylesdialog.buttonCancel]}
-                onPress={() => {
-                  this.setState({
-                    startDate: "Start Date",
-                    endDate: "End Date",
-                    datalist: this.state.maindatalist
-                  });
-                }}
-              >
-                <Text style={styles.textStyle}>
-                  <Icon1 name="retweet" style={{ marginRight: 10 }} size={18} />
-                  {this.state.lang === "EN" ? "  Clear" : "  ล้างค่า"}
-                </Text>
-              </Pressable>
+            <Pressable
+              style={[stylesdialog.button, stylesdialog.buttonCancel]}
+              onPress={() => {
+                this.setState({
+                  startDate: "Start Date",
+                  endDate: "End Date",
+                  datalist: this.state.maindatalist,
+                });
+              }}
+            >
+              <Text style={styles.textStyle}>
+                <Icon1 name="retweet" style={{ marginRight: 10 }} size={18} />
+                {this.state.lang === "EN" ? "  Clear" : "  ล้างค่า"}
+              </Text>
+            </Pressable>
             {/* </Item> */}
           </Header>
         </View>
@@ -318,26 +320,26 @@ export default class ReportScreen extends Component {
 }
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
   container: {
     flex: 1,
     marginHorizontal: 10,
     marginVertical: 15,
     borderColor: "#ddd",
-    borderWidth: 1
+    borderWidth: 1,
   },
   headline: {
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 18,
     color: "#398DDD",
-    marginTop: 30
+    marginTop: 30,
   },
   searchbar: { marginVertical: 20 },
   view: {
     justifyContent: "flex-end",
-    margin: 0
+    margin: 0,
   },
   content: {
     backgroundColor: "white",
@@ -345,17 +347,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 4,
-    borderColor: "rgba(0, 0, 0, 0.1)"
+    borderColor: "rgba(0, 0, 0, 0.1)",
   },
   contentTitle: {
     fontSize: 20,
-    marginBottom: 12
+    marginBottom: 12,
   },
   list: {
     width: "100%",
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    padding: 16
+    padding: 16,
   },
   inputDate: {
     borderWidth: 1,
@@ -366,23 +368,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flex: 1,
     justifyContent: "center",
-    borderColor: "#007aff"
+    borderColor: "#007aff",
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
   },
   buttonCancel: {
-    backgroundColor: "gray"
-  }
+    backgroundColor: "gray",
+  },
 });
 const stylesdialog = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
   },
   modalView: {
     margin: 20,
@@ -393,42 +395,42 @@ const stylesdialog = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   button: {
     borderRadius: 15,
     paddingVertical: 10,
     paddingHorizontal: 24,
-    elevation: 2
+    elevation: 2,
     // margin:5
   },
   buttonOpen: {
     backgroundColor: "green",
-    margin: 12 
+    margin: 12,
   },
   buttonCancel: {
     backgroundColor: "gray",
-    margin: 12
+    margin: 12,
   },
   buttonClose: {
-    backgroundColor: "#2196F3"
+    backgroundColor: "#2196F3",
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
   },
   containerSec: {
     flex: 1,
     backgroundColor: "#ff0",
-    borderRadius: 20
-  }
+    borderRadius: 20,
+  },
 });

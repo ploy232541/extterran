@@ -29,6 +29,7 @@ const _renderItem = ({ item }) => {
 const _numColumns = 2;
 
 function TrainingNeedScreen() {
+  
   return (
     <View style={styles.background}>
       <FlatList

@@ -7,7 +7,7 @@ import {
   TextInput,
   ActivityIndicator,
   SafeAreaView,
-  Alert
+  Alert,
 } from "react-native";
 // import AsyncStorage1 from "@react-native-async-storage/async-storage"; //--
 import { AsyncStorage } from "react-native";
@@ -33,7 +33,7 @@ const ModalTrainingStatus = (props) => {
           borderRadius: 12,
           marginTop: 20,
           borderColor: "#d9d9d9",
-          backgroundColor: "white"
+          backgroundColor: "white",
         }}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
@@ -53,15 +53,22 @@ const ModalTrainingStatus = (props) => {
                   return null;
                 }
               };
-              item.start_date = getdetenew(item.start_date);
-              item.end_date = getdetenew(item.end_date);
+              let startdate = "",
+                enddate = "";
+              if (item.start_date) {
+                startdate = getdetenew(item.start_date);
+              }
+              if (item.end_date) {
+                enddate = getdetenew(item.end_date);
+              }
+
               return (
                 <View style={styles.container}>
                   <Text
                     style={{
                       alignSelf: "center",
                       fontSize: 18,
-                      marginBottom: 10
+                      marginBottom: 10,
                     }}
                   >
                     ติดตามสถานะ
@@ -75,7 +82,7 @@ const ModalTrainingStatus = (props) => {
                       fontSize: 16,
                       color: "#4393de",
                       marginTop: 10,
-                      alignSelf: "center"
+                      alignSelf: "center",
                     }}
                   >
                     บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด
@@ -85,7 +92,7 @@ const ModalTrainingStatus = (props) => {
                       alignSelf: "center",
                       fontSize: 16,
                       marginBottom: 15,
-                      marginTop: 10
+                      marginTop: 10,
                     }}
                   >
                     Training Request
@@ -336,7 +343,7 @@ const ModalTrainingStatus = (props) => {
                     style={{
                       flexDirection: "row",
                       justifyContent: "space-around",
-                      margin: 20
+                      margin: 20,
                     }}
                   >
                     <TouchableOpacity
@@ -347,7 +354,7 @@ const ModalTrainingStatus = (props) => {
                         height: HEIGHT * 0.04,
                         justifyContent: "center",
                         alignItems: "center",
-                        borderRadius: 4
+                        borderRadius: 4,
                       }}
                     >
                       <Text style={{ color: "white" }}>ปิด</Text>
@@ -365,10 +372,10 @@ const ModalTrainingStatus = (props) => {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 18,
-    marginVertical: 18
+    marginVertical: 18,
   },
   marginText: {
-    marginTop: 5
+    marginTop: 5,
   },
   inputStyle: {
     backgroundColor: "#DCDCDC",
@@ -376,23 +383,23 @@ const styles = StyleSheet.create({
     height: HEIGHT / 25,
     marginTop: 10,
     paddingLeft: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   textInput: {
-    color: "grey"
+    color: "grey",
   },
   confirmStyle: {
     marginTop: 10,
     marginBottom: 10,
     marginHorizontal: 20,
     paddingTop: 60,
-    paddingBottom: 30
+    paddingBottom: 30,
   },
   textConfirm: {
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 10
-  }
+    paddingTop: 10,
+  },
 });
 
 export default ModalTrainingStatus;

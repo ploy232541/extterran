@@ -12,7 +12,7 @@ const bookFunctionList = [
   },
   {
     id: 2,
-    funcType: "Accomodation",
+    funcType: "Accommodation",
     src: require('../../asset/booking-2.png'),
     to: "AccommodationBookingScreen",
   },

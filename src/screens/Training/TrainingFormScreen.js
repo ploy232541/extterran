@@ -1247,9 +1247,13 @@ export default class TrainingFormScreen extends Component {
               </TouchableOpacity>
 
               <DateTimePickerModal
+               isDarkModeEnabled
+                textColor="#fff"
                 locale="th_TH"
                 isVisible={this.state.isDatePickerVisible}
                 mode="date"
+                isDarkModeEnabled
+                textColor="#fff"
                 onConfirm={this.handleConfirm}
                 onCancel={this.hideDatePicker}
               />

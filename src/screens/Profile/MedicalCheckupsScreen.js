@@ -9,7 +9,7 @@ import {
   StyleSheet,
   TextInput,
   Dimensions,
-  Alert
+  Alert,
 } from "react-native";
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
 import { CheckBox } from "react-native-elements";
@@ -18,7 +18,7 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import RadioForm, {
   RadioButton,
   RadioButtonInput,
-  RadioButtonLabel
+  RadioButtonLabel,
 } from "react-native-simple-radio-button";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import FormData from "form-data";
@@ -30,13 +30,13 @@ const radio_props = [
   { label: "A: Fit, no restrictions recommended", value: 1 },
   { label: "B: Fit, with restrictions recommended (see comments)", value: 2 },
   { label: "C: Unfit at this time, to be rechecked on (date)", value: 3 },
-  { label: "D: Unfit", value: 4 }
+  { label: "D: Unfit", value: 4 },
 ];
 
 const radio1_props = [
   { label: "ใช่", value: 1 },
   { label: "ไม่", value: 2 },
-  { label: "N/A", value: 3 }
+  { label: "N/A", value: 3 },
 ];
 
 export default class MedicalCheckupsScreen extends Component {
@@ -69,7 +69,7 @@ export default class MedicalCheckupsScreen extends Component {
       select_1: [],
       select_2: [],
       getmedical: false,
-      medicalApproval: -1
+      medicalApproval: -1,
     };
   }
 
@@ -95,7 +95,7 @@ export default class MedicalCheckupsScreen extends Component {
             //     data[i] = {id: result[i,i+1], name: result[i,i]};
             // }
             this.setState({
-              select_1: result
+              select_1: result,
             });
           }
         })
@@ -110,7 +110,7 @@ export default class MedicalCheckupsScreen extends Component {
           //console.log("result2 = " + result);
           if (result != null && result != "") {
             this.setState({
-              staff_id: result[0].username
+              staff_id: result[0].username,
             });
           }
         })
@@ -137,7 +137,7 @@ export default class MedicalCheckupsScreen extends Component {
                     console.log(result);
                     if (result == true) {
                       this.setState({
-                        getmedical: true
+                        getmedical: true,
                       });
                       try {
                         httpClient
@@ -169,7 +169,7 @@ export default class MedicalCheckupsScreen extends Component {
                                     result[0].follow_up_date
                                   ),
                                   comment_follow: result[0].comment_follow,
-                                  certificate: result[0].certificate
+                                  certificate: result[0].certificate,
                                 });
                                 this.radiocheck3(Number(this.state.fitness));
                                 let get_hospital_id = this.state.select_1.find(
@@ -178,7 +178,7 @@ export default class MedicalCheckupsScreen extends Component {
                                   }
                                 );
                                 this.setState({
-                                  hospital_id: get_hospital_id.id
+                                  hospital_id: get_hospital_id.id,
                                 });
                                 if (
                                   this.state.hospital_id != "" &&
@@ -193,7 +193,7 @@ export default class MedicalCheckupsScreen extends Component {
                                         const result = response.data;
                                         if (result != null && result != "") {
                                           this.setState({
-                                            select_2: result
+                                            select_2: result,
                                           });
                                           // console.log(this.state.select_2);
                                           // console.log(this.state.doctor_id);
@@ -210,7 +210,7 @@ export default class MedicalCheckupsScreen extends Component {
                                               }
                                             );
                                           this.setState({
-                                            doctor_id: get_doctor_id.id
+                                            doctor_id: get_doctor_id.id,
                                           });
                                           console.log(get_doctor_id);
                                           console.log(
@@ -244,7 +244,7 @@ export default class MedicalCheckupsScreen extends Component {
                                     result[0].follow_up_date
                                   ),
                                   comment_follow: result[0].comment_follow,
-                                  certificate: result[0].certificate
+                                  certificate: result[0].certificate,
                                 });
                                 console.log(this.state.fitness);
                                 this.radiocheck3(Number(this.state.fitness));
@@ -297,7 +297,7 @@ export default class MedicalCheckupsScreen extends Component {
           const result = response.data;
           if (result != null && result != "") {
             this.setState({
-              select_2: result
+              select_2: result,
             });
           }
         })
@@ -352,11 +352,11 @@ export default class MedicalCheckupsScreen extends Component {
       this.setState({
         startDate: date1,
         endDate: date2,
-        isStart: false
+        isStart: false,
       });
     } else {
       this.setState({
-        followupdate: date1
+        followupdate: date1,
       });
     }
     this.hideDatePicker();
@@ -373,7 +373,7 @@ export default class MedicalCheckupsScreen extends Component {
         file_download: null,
         followupdate: "DD/MM/YYYY",
         comment_follow: null,
-        certificate: null
+        certificate: null,
       });
     } else if (check === 2 || check === 3 || check === 4) {
       this.setState({
@@ -385,7 +385,7 @@ export default class MedicalCheckupsScreen extends Component {
         file_download: null,
         followupdate: "DD/MM/YYYY",
         comment_follow: null,
-        certificate: null
+        certificate: null,
       });
     }
   };
@@ -393,7 +393,7 @@ export default class MedicalCheckupsScreen extends Component {
   radiocheck2 = (check) => {
     if (check === 1 || check === 2 || check === 3) {
       this.setState({
-        fit_for_confined: check
+        fit_for_confined: check,
       });
     }
   };
@@ -403,13 +403,13 @@ export default class MedicalCheckupsScreen extends Component {
       this.setState({
         fitness: Number(check),
         radioformA: true,
-        radioformB: false
+        radioformB: false,
       });
     } else if (check === 2 || check === 3 || check === 4) {
       this.setState({
         fitness: Number(check),
         radioformB: true,
-        radioformA: false
+        radioformA: false,
       });
     }
   };
@@ -420,7 +420,7 @@ export default class MedicalCheckupsScreen extends Component {
       png: "image/png",
       pdf: "application/pdf",
       jpeg: "image/jpeg",
-      jpg: "image/jpg"
+      jpg: "image/jpg",
     };
     let extention = name.split(".")[1];
     console.log(extention);
@@ -497,7 +497,7 @@ export default class MedicalCheckupsScreen extends Component {
               width: "30%",
               marginTop: 10,
               height: HEIGHT / 25,
-              marginBottom: 12
+              marginBottom: 12,
             }}
             onPress={this.uploadFile.bind(this)}
           >
@@ -505,7 +505,7 @@ export default class MedicalCheckupsScreen extends Component {
               style={{
                 justifyContent: "center",
                 alignItems: "center",
-                flex: 1
+                flex: 1,
               }}
             >
               <Text>Choose File</Text>
@@ -568,7 +568,7 @@ export default class MedicalCheckupsScreen extends Component {
               width: "30%",
               marginTop: 10,
               height: HEIGHT / 25,
-              marginBottom: 12
+              marginBottom: 12,
             }}
             onPress={this.uploadFile.bind(this)}
           >
@@ -576,7 +576,7 @@ export default class MedicalCheckupsScreen extends Component {
               style={{
                 justifyContent: "center",
                 alignItems: "center",
-                flex: 1
+                flex: 1,
               }}
             >
               <Text>Choose File</Text>
@@ -629,7 +629,7 @@ export default class MedicalCheckupsScreen extends Component {
               width: "30%",
               marginTop: 10,
               height: HEIGHT / 25,
-              marginBottom: 12
+              marginBottom: 12,
             }}
             onPress={this.uploadCertificateFile.bind(this)}
           >
@@ -637,7 +637,7 @@ export default class MedicalCheckupsScreen extends Component {
               style={{
                 justifyContent: "center",
                 alignItems: "center",
-                flex: 1
+                flex: 1,
               }}
             >
               <Text>Choose File</Text>
@@ -706,7 +706,7 @@ export default class MedicalCheckupsScreen extends Component {
               style={{
                 width: "10%",
                 paddingHorizontal: 1,
-                paddingBottom: 24
+                paddingBottom: 24,
               }}
             />
           }
@@ -735,7 +735,7 @@ export default class MedicalCheckupsScreen extends Component {
               style={{
                 width: "10%",
                 paddingHorizontal: 1,
-                paddingBottom: 24
+                paddingBottom: 24,
               }}
             />
           }
@@ -800,7 +800,7 @@ export default class MedicalCheckupsScreen extends Component {
       file_download,
       followupdate,
       comment_follow,
-      certificate
+      certificate,
     } = this.state;
 
     // const data = new FormData();
@@ -873,7 +873,7 @@ export default class MedicalCheckupsScreen extends Component {
           fit_for_confined,
           // file_download,
           followupdate,
-          comment_follow
+          comment_follow,
           // certificate,
         };
         Alert.alert(
@@ -883,7 +883,7 @@ export default class MedicalCheckupsScreen extends Component {
             {
               text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
               onPress: () => console.log("Cancel Pressed"),
-              style: "cancel"
+              style: "cancel",
             },
             ,
             {
@@ -930,8 +930,8 @@ export default class MedicalCheckupsScreen extends Component {
                                     text:
                                       this.state.lang === "EN" ? "OK" : "ตกลง",
                                     onPress: () =>
-                                      this.props.navigation.goBack()
-                                  }
+                                      this.props.navigation.goBack(),
+                                  },
                                 ],
                                 { cancelable: false }
                               );
@@ -952,8 +952,8 @@ export default class MedicalCheckupsScreen extends Component {
                   .catch((error) => {
                     console.log(error);
                   });
-              }
-            }
+              },
+            },
           ]
         );
       }
@@ -1009,7 +1009,7 @@ export default class MedicalCheckupsScreen extends Component {
           fit_for_confined,
           // file_download,
           followupdate,
-          comment_follow
+          comment_follow,
           // certificate,
         };
         Alert.alert(
@@ -1019,7 +1019,7 @@ export default class MedicalCheckupsScreen extends Component {
             {
               text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
               onPress: () => console.log("Cancel Pressed"),
-              style: "cancel"
+              style: "cancel",
             },
             ,
             {
@@ -1070,8 +1070,8 @@ export default class MedicalCheckupsScreen extends Component {
                                               ? "OK"
                                               : "ตกลง",
                                           onPress: () =>
-                                            this.props.navigation.goBack()
-                                        }
+                                            this.props.navigation.goBack(),
+                                        },
                                       ],
                                       { cancelable: false }
                                     );
@@ -1103,8 +1103,8 @@ export default class MedicalCheckupsScreen extends Component {
                   .catch((error) => {
                     console.log(error);
                   });
-              }
-            }
+              },
+            },
           ]
         );
       }
@@ -1132,7 +1132,7 @@ export default class MedicalCheckupsScreen extends Component {
                     console.log(result);
                     if (result == true) {
                       this.setState({
-                        getmedical: true
+                        getmedical: true,
                       });
                       try {
                         httpClient
@@ -1164,7 +1164,7 @@ export default class MedicalCheckupsScreen extends Component {
                                     result[0].follow_up_date
                                   ),
                                   comment_follow: result[0].comment_follow,
-                                  certificate: result[0].certificate
+                                  certificate: result[0].certificate,
                                 });
                                 this.radiocheck3(Number(this.state.fitness));
                                 let get_hospital_id = this.state.select_1.find(
@@ -1173,7 +1173,7 @@ export default class MedicalCheckupsScreen extends Component {
                                   }
                                 );
                                 this.setState({
-                                  hospital_id: get_hospital_id.id
+                                  hospital_id: get_hospital_id.id,
                                 });
                                 if (
                                   this.state.hospital_id != "" &&
@@ -1188,7 +1188,7 @@ export default class MedicalCheckupsScreen extends Component {
                                         const result = response.data;
                                         if (result != null && result != "") {
                                           this.setState({
-                                            select_2: result
+                                            select_2: result,
                                           });
                                           // console.log(this.state.select_2);
                                           // console.log(this.state.doctor_id);
@@ -1205,7 +1205,7 @@ export default class MedicalCheckupsScreen extends Component {
                                               }
                                             );
                                           this.setState({
-                                            doctor_id: get_doctor_id.id
+                                            doctor_id: get_doctor_id.id,
                                           });
                                           console.log(get_doctor_id);
                                           console.log(
@@ -1239,7 +1239,7 @@ export default class MedicalCheckupsScreen extends Component {
                                     result[0].follow_up_date
                                   ),
                                   comment_follow: result[0].comment_follow,
-                                  certificate: result[0].certificate
+                                  certificate: result[0].certificate,
                                 });
                                 console.log(this.state.fitness);
                                 this.radiocheck3(Number(this.state.fitness));
@@ -1282,7 +1282,7 @@ export default class MedicalCheckupsScreen extends Component {
       this.state.hospital_id = "";
       this.state.doctor_id = "";
     }
-  return (
+    return (
       <ScrollView
         style={styles.background}
         showsVerticalScrollIndicator={false}
@@ -1294,7 +1294,7 @@ export default class MedicalCheckupsScreen extends Component {
               fontSize: 24,
               color: "#1E90FF",
               fontWeight: "bold",
-              alignSelf: "center"
+              alignSelf: "center",
             }}
           >
             Medical Checkups
@@ -1315,6 +1315,8 @@ export default class MedicalCheckupsScreen extends Component {
 
           {/* โชว์ DateTimePickerModal*/}
           <DateTimePickerModal
+            isDarkModeEnabled
+            textColor="#fff"
             isVisible={this.state.isDatePickerVisible}
             mode="date"
             onConfirm={this.handleConfirm}
@@ -1509,7 +1511,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "white",
-    borderWidth: 2
+    borderWidth: 2,
   },
   container: {
     borderWidth: 1,
@@ -1518,13 +1520,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 20,
     marginBottom: 20,
-    borderColor: "#398DDD"
+    borderColor: "#398DDD",
   },
   checkboxContainer: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   checkbox: {
-    alignSelf: "center"
+    alignSelf: "center",
   },
   selectableInputStyle2: {
     borderColor: "#DCDCDC",
@@ -1536,7 +1538,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
     paddingLeft: 25,
-    width: "100%"
+    width: "100%",
   },
   submitButton: {
     alignSelf: "center",
@@ -1546,11 +1548,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#28A745",
     marginTop: 20,
     color: "#fff",
-    borderRadius: 20
+    borderRadius: 20,
   },
   textHeader: {
     alignItems: "center",
-    padding: 20
+    padding: 20,
   },
   inputStyle: {
     borderWidth: 1,
@@ -1559,7 +1561,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingLeft: 10,
     marginBottom: 10,
-    borderColor: "#007aff"
+    borderColor: "#007aff",
   },
   dropdownstyle: {
     borderWidth: 1,
@@ -1569,10 +1571,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingLeft: 10,
     marginBottom: 10,
-    borderColor: "#007aff"
+    borderColor: "#007aff",
   },
   textInput: {
-    color: "grey"
+    color: "grey",
   },
   inputLightStyle: {
     borderWidth: 1,
@@ -1581,14 +1583,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingLeft: 10,
     marginBottom: 10,
-    flex: 1
+    flex: 1,
   },
   viewBorderDropdown: {
     borderWidth: 1,
     borderRadius: 15,
     marginBottom: 10,
     paddingLeft: 10,
-    marginTop: 10
+    marginTop: 10,
   },
   inputDate: {
     borderWidth: 1,
@@ -1599,23 +1601,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flex: 1,
     justifyContent: "center",
-    borderColor: "#007aff"
+    borderColor: "#007aff",
   },
   confirmStyle: {
     marginTop: 10,
     marginBottom: 10,
     marginHorizontal: 30,
     paddingTop: 60,
-    paddingBottom: 30
+    paddingBottom: 30,
   },
   textConfirm: {
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 10
+    paddingTop: 10,
   },
   textHead1: {
-    marginTop: 20
+    marginTop: 20,
     // marginLeft: 20,
     // marginVertical: 50,
-  }
+  },
 });
