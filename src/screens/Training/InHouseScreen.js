@@ -6,7 +6,7 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
-  Alert
+  Alert,
 } from "react-native";
 import { Picker } from "native-base";
 import { Avatar, trainingNeed } from "react-native-paper";
@@ -17,11 +17,10 @@ import { set } from "react-native-reanimated";
 import { httpClient } from "../../core/HttpClient";
 import { AsyncStorage } from "react-native";
 import Icons from "react-native-vector-icons/Ionicons";
-import RNPickerDialog from 'rn-modal-picker';
+import RNPickerDialog from "rn-modal-picker";
 let dimensions = Dimensions.get("window");
 let pickerWidth = dimensions.width - 56;
 const WIDTH = Dimensions.get("window").height;
-
 
 export default class InHouseScreen extends Component {
   constructor(props) {
@@ -33,14 +32,14 @@ export default class InHouseScreen extends Component {
       selectCourse: [],
       lang: "",
       firstname: "",
-
+      team: false,
       empList: [],
       emp: [],
-      placeHolderText: 'Select Employee',
-      selectedText: '',
+      placeHolderText: "Select Employee",
+      selectedText: "",
       defaultValue: true,
-      select: '',
-      value: '',
+      select: "",
+      value: "",
     };
   }
   async componentDidMount() {
@@ -53,6 +52,17 @@ export default class InHouseScreen extends Component {
     }
 
     try {
+      const user_id = await AsyncStorage.getItem("userId");
+
+      httpClient
+        .get(`/Team/getMenuTeam/${user_id}`)
+        .then(async (response) => {
+          const res = response.data;
+          this.setState({ team: res });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
       httpClient
         .get(`/Training/EmployeeTrainingNeed/${id}`)
@@ -60,16 +70,15 @@ export default class InHouseScreen extends Component {
           const result = response.data;
           if (result != null) {
             // console.log(result);
-            let emp = []
+            let emp = [];
             for (let i in result) {
               emp[i] = {
                 id: result[i].user_id,
-                name: result[i].firstname
-              }
-
+                name: result[i].firstname,
+              };
             }
             this.setState({
-              empList: emp
+              empList: emp,
             });
           }
         })
@@ -82,7 +91,7 @@ export default class InHouseScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              selectCourse: result
+              selectCourse: result,
             });
           }
         })
@@ -150,9 +159,9 @@ export default class InHouseScreen extends Component {
                 if (param == null || param == "") {
                   Alert.alert(
                     "กรุณาเลือกหลักสูตร \n พนักงานคนที่ " +
-                    (index + 1) +
-                    "\n ลำดับที่ " +
-                    (i + 1)
+                      (index + 1) +
+                      "\n ลำดับที่ " +
+                      (i + 1)
                   );
                 } else {
                   error = false;
@@ -174,7 +183,7 @@ export default class InHouseScreen extends Component {
             {
               text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
               onPress: () => console.log("Cancel Pressed"),
-              style: "cancel"
+              style: "cancel",
             },
             ,
             {
@@ -193,8 +202,8 @@ export default class InHouseScreen extends Component {
                         [
                           {
                             text: this.state.lang === "EN" ? "OK" : "ตกลง",
-                            onPress: () => this.reset()
-                          }
+                            onPress: () => this.reset(),
+                          },
                         ],
                         { cancelable: false }
                       );
@@ -209,8 +218,8 @@ export default class InHouseScreen extends Component {
                   .catch((error) => {
                     console.log(error);
                   });
-              }
-            }
+              },
+            },
           ]
         );
       }
@@ -239,7 +248,7 @@ export default class InHouseScreen extends Component {
               marginVertical: 20,
               flexDirection: "row",
               justifyContent: "center",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -285,10 +294,9 @@ export default class InHouseScreen extends Component {
                     <View style={{ flexDirection: "row" }}>
                       <View style={{ flex: 1 }}></View>
                       <View style={{ flex: 80 }}>
-
                         <RNPickerDialog
                           data={listEmployees}
-                          pickerTitle={'กรุณาเลือกพนักงาน'}
+                          pickerTitle={"กรุณาเลือกพนักงาน"}
                           // labelText={'กรุณาเลือกพนักงาน'}
                           showSearchBar={true}
                           showPickerTitle={true}
@@ -296,10 +304,10 @@ export default class InHouseScreen extends Component {
                           pickerStyle={Styless.pickerStyle}
                           selectedText={item.employee_name}
                           placeHolderText={this.state.placeHolderText}
-                          searchBarPlaceHolder={'Search.....'}
-                          searchBarPlaceHolderColor={'#007aff'}
+                          searchBarPlaceHolder={"Search....."}
+                          searchBarPlaceHolderColor={"#007aff"}
                           selectedTextStyle={Styless.selectedTextStyle}
-                          placeHolderTextColor={'#d9d9d9'}
+                          placeHolderTextColor={"#d9d9d9"}
                           dropDownIconStyle={Styless.dropDownIconStyle}
                           searchBarStyle={Styless.searchBarStyle}
                           //dropDownIcon={require('../assets/pin.png')}
@@ -311,7 +319,7 @@ export default class InHouseScreen extends Component {
                             item.employee_name = items.name;
                             trainingNeed[index] = item;
                             this.setState({ trainingNeed: trainingNeed });
-                            this.selectedValue(index, items)
+                            this.selectedValue(index, items);
                           }}
                         >
                           {/* {listEmployees.map((element, l) => {
@@ -339,7 +347,7 @@ export default class InHouseScreen extends Component {
 
                     {/* เริ่มจุดนี้ ที่ทำให้อยู่แถวเดียวกัน */}
 
-                    {item.data.map((p) => { })}
+                    {item.data.map((p) => {})}
                     {item.data.map((param, ip) => {
                       let excludeCourse = [];
 
@@ -385,12 +393,12 @@ export default class InHouseScreen extends Component {
                                   placeholderIconColor="#007aff"
                                   textStyle={{
                                     fontSize: 14,
-                                    marginRight: "45%"
+                                    marginRight: "45%",
                                   }}
                                   selectedValue={param.course_id}
                                   onValueChange={(text) => {
                                     let trainingNeed = [
-                                      ...this.state.trainingNeed
+                                      ...this.state.trainingNeed,
                                     ];
 
                                     let item = { ...trainingNeed[index] };
@@ -405,7 +413,7 @@ export default class InHouseScreen extends Component {
                                       o.data = o.data.filter((s) => s.id != id);
                                     });
                                     this.setState({
-                                      trainingNeed: trainingNeed
+                                      trainingNeed: trainingNeed,
                                     });
                                   }}
                                 >
@@ -451,14 +459,14 @@ export default class InHouseScreen extends Component {
                       style={{
                         marginLeft: 10,
                         marginRight: 5,
-                        color: "white"
+                        color: "white",
                       }}
                     />
                     <Text
                       style={{
                         color: "white",
                         marginRight: 10,
-                        fontSize: 14
+                        fontSize: 14,
                       }}
                     >
                       {this.state.lang === "EN" ? "Delete" : "ลบ"}
@@ -479,21 +487,25 @@ export default class InHouseScreen extends Component {
             <Button
               style={styles.btnStyle1}
               onPress={() => {
-                let trainingNeed = [
-                  ...this.state.trainingNeed,
-                  {
-                    employee_id: "",
-                    data: [{ course_id: "" }]
-                  }
-                ];
-                this.setState({ trainingNeed: trainingNeed });
+                if (this.state.team) {
+                  let trainingNeed = [
+                    ...this.state.trainingNeed,
+                    {
+                      employee_id: "",
+                      data: [{ course_id: "" }],
+                    },
+                  ];
+                  this.setState({ trainingNeed: trainingNeed });
+                } else {
+                  Alert.alert("ท่านยังไม่มีสิทธิ์ใช้งานฟังก์ชันนี้");
+                }
               }}
             >
               <Icon name="user-plus" color="#fff" size={26} />
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 16
+                  fontSize: 16,
                 }}
               >
                 {this.state.lang === "EN" ? "Add Employee" : "เพิ่มพนักงาน"}
@@ -507,17 +519,18 @@ export default class InHouseScreen extends Component {
               // justifyContent: "space-around",
               paddingVertical: 12,
               paddingHorizontal: 24,
-              marginBottom: 40
+              marginBottom: 40,
             }}
           >
             <View style={{ flex: 4 }}>
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.btnConfirmStyle}
-
                   onPress={() => this.onPressSend()}
                 >
-                  <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Confirm" : "ยืนยัน"}</Text>
+                  <Text style={{ color: "white" }}>
+                    {this.state.lang === "EN" ? "Confirm" : "ยืนยัน"}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -530,7 +543,9 @@ export default class InHouseScreen extends Component {
                   style={styles.btnCancelStyle}
                   onPress={(e) => this.props.navigation.goBack()}
                 >
-                  <Text style={{ color: "white" }}>{this.state.lang === "EN" ? "Cancel" : "ยกเลิก"}</Text>
+                  <Text style={{ color: "white" }}>
+                    {this.state.lang === "EN" ? "Cancel" : "ยกเลิก"}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -546,16 +561,16 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     // flex: 1,
     width: "100%",
-    height: "100%"
+    height: "100%",
   },
   container: {
     flex: 1,
     alignItems: "center",
-    width: 500
+    width: 500,
   },
   textHeader: {
     alignItems: "center",
-    padding: 20
+    padding: 20,
   },
   //btn Add trainingNeed
   btnStyle1: {
@@ -566,7 +581,7 @@ const styles = StyleSheet.create({
     // marginTop: 5,
     // width: "60%",
     alignSelf: "center",
-    borderRadius: 10
+    borderRadius: 10,
   },
   //กรอบข้อมูลรอบนอก
   containerSec2: {
@@ -575,16 +590,16 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#398DDD",
     marginHorizontal: 10,
-    marginBottom: 24
+    marginBottom: 24,
   },
   //ชื่อหัวข้อ
   textStyle1: {
     marginTop: 12,
     marginBottom: 12,
-    paddingHorizontal: 6
+    paddingHorizontal: 6,
   },
   trainingNeedStyle: {
-    marginVertical: "100%"
+    marginVertical: "100%",
     //marginTop: 12,
   },
   /// picker styles
@@ -596,27 +611,27 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     marginLeft: 14,
     // marginVertical: 24,
-    height: 60
+    height: 60,
   },
   coursePickerStyles: {
     //height: 10,
     width: pickerWidth - 56,
     borderWidth: 1,
     borderColor: "#B1B1B1",
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   ///กรอบเพิ่มข้อมูล
   pickerContainer: {
     flexDirection: "row",
     marginTop: 5,
-    marginBottom: 12
+    marginBottom: 12,
   },
   /// add button
   addButton: {
     borderRadius: 10,
     backgroundColor: "#4392de",
     height: 44,
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
   },
   /// del button
   deleteButton: {
@@ -627,7 +642,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     marginLeft: -152,
-    marginTop: 5
+    marginTop: 5,
   },
   addButtonText: {
     // color: "white",
@@ -638,14 +653,14 @@ const styles = StyleSheet.create({
     // marginLeft: 1,
   },
   contentInSec: {
-    padding: 2
+    padding: 2,
   },
   submitButton: {
     alignSelf: "center",
     marginVertical: 8,
     backgroundColor: "#3BB54A",
     marginTop: 30,
-    marginBottom: 20
+    marginBottom: 20,
   },
   buttonContainer: {
     alignSelf: "center",
@@ -653,21 +668,21 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     borderRadius: 4,
     marginTop: 2,
-    width: "50%"
+    width: "50%",
   },
   btnConfirmStyle: {
     backgroundColor: "#449D44",
     padding: 12,
     alignItems: "center",
     borderRadius: 10,
-    height: 45
+    height: 45,
   },
   btnCancelStyle: {
     backgroundColor: "#5A6268",
     padding: 12,
     alignItems: "center",
     borderRadius: 10,
-    height: 45
+    height: 45,
   },
   btnDeltrainingNeed: {
     backgroundColor: "#b30000",
@@ -675,15 +690,15 @@ const styles = StyleSheet.create({
     marginRight: 12,
     marginTop: 10,
     marginBottom: 20,
-    borderRadius: 10
+    borderRadius: 10,
   },
   scFlex: {
-    flex: 5
+    flex: 5,
   },
   scFlex1: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   bdPicker: {
     width: "100%",
@@ -691,13 +706,13 @@ const styles = StyleSheet.create({
     borderColor: "#d9d9d9",
     marginBottom: 5,
     // marginHorizontal: 5,
-    marginVertical: 5
+    marginVertical: 5,
   },
   bdPicker1: {
     width: "100%",
     borderWidth: 1,
     borderColor: "#d9d9d9",
-    marginHorizontal: 4
+    marginHorizontal: 4,
   },
   btnDelCard: {
     backgroundColor: "#b30000",
@@ -705,13 +720,13 @@ const styles = StyleSheet.create({
     marginRight: 12,
     marginTop: 10,
     marginBottom: 20,
-    borderRadius: 10
+    borderRadius: 10,
   },
   pickerContainer2: {
     flexDirection: "row",
     justifyContent: "center",
     marginVertical: 5,
-    marginBottom: 12
+    marginBottom: 12,
   },
   addButtonText: {
     color: "white",
@@ -719,7 +734,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 5,
     marginTop: -2,
-    marginLeft: 1
+    marginLeft: 1,
   },
   /// add button
   addButton: {
@@ -731,7 +746,7 @@ const styles = StyleSheet.create({
     height: 36,
     marginLeft: 10,
     marginRight: 8,
-    marginTop: 5
+    marginTop: 5,
   },
   /// del button
   deleteButton: {
@@ -743,27 +758,23 @@ const styles = StyleSheet.create({
     height: 36,
     marginLeft: 8,
     marginRight: 2,
-    marginTop: 5
-  }
+    marginTop: 5,
+  },
 });
 
-
-
-
 const Styless = StyleSheet.create({
-
   container: {
     flex: 1,
     alignItems: "center",
-    width: 500
+    width: 500,
   },
   selectedTextStyle: {
     height: 100,
-    borderColor: '#d9d9d9',
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-    width: '100%',
-    color: 'gray',
+    borderColor: "#d9d9d9",
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    width: "100%",
+    color: "gray",
     fontSize: 15,
     paddingLeft: 15,
     marginTop: -5,
@@ -771,27 +782,27 @@ const Styless = StyleSheet.create({
 
   selectedTextStyle1: {
     height: 50,
-    borderColor: 'gray',
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-    width: '100%',
-    color: 'gray',
+    borderColor: "gray",
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    width: "100%",
+    color: "gray",
     fontSize: 20,
     paddingLeft: 10,
     marginTop: 15,
   },
 
   listTextStyle: {
-    color: '#000',
+    color: "#000",
     marginVertical: 10,
     flex: 0.9,
     marginLeft: 20,
     marginHorizontal: 10,
-    textAlign: 'left',
+    textAlign: "left",
   },
   searchBarStyle: {
     marginBottom: 10,
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 60,
     shadowRadius: 1,
     shadowOpacity: 1.0,
@@ -800,18 +811,18 @@ const Styless = StyleSheet.create({
     //   width: 1,
     //   height: 1,
     // },
-    borderColor: 'gray',
+    borderColor: "gray",
     // shadowColor: '#303030',
     borderRadius: 5,
     elevation: 1,
     marginHorizontal: 10,
   },
   placeHolderTextStyle: {
-    color: 'red',
+    color: "red",
     padding: 10,
-    textAlign: 'left',
-    width: '99%',
-    flexDirection: 'row',
+    textAlign: "left",
+    width: "99%",
+    flexDirection: "row",
   },
   dropDownIconStyle: {
     width: 10,
@@ -824,7 +835,6 @@ const Styless = StyleSheet.create({
     height: 10,
     left: -40,
     marginTop: 15,
-
   },
   pickerStyle: {
     marginTop: 12,
@@ -833,16 +843,16 @@ const Styless = StyleSheet.create({
     paddingHorizontal: 6,
     borderWidth: 0.6,
     height: 43,
-    width: "100%",
-    borderColor: 'gray',
+    width: 350,
+    borderColor: "gray",
     borderRadius: 4,
     elevation: 0.6,
+    width: "100%",
   },
   pickerStyle1: {
     flexDirection: "row",
     justifyContent: "center",
     marginVertical: 5,
-    marginBottom: 12
+    marginBottom: 12,
   },
 });
-

@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  AsyncStorage
+  AsyncStorage,
 } from "react-native";
 import { Picker, Tab } from "native-base";
 import { Avatar } from "react-native-paper";
@@ -28,7 +28,7 @@ import * as DocumentPicker from "expo-document-picker";
 import HTML from "react-native-render-html";
 import { Rows, Table } from "react-native-table-component";
 import FormData from "form-data";
-import RNPickerDialog from 'rn-modal-picker';
+import RNPickerDialog from "rn-modal-picker";
 
 let dimensions = Dimensions.get("window");
 let pickerWidth = dimensions.width - 56;
@@ -41,7 +41,7 @@ export default class ExternalScreen extends Component {
     this.state = {
       trainingNeedItem: {
         employee_id: "",
-        data: []
+        data: [],
       },
       courseItem: {
         courseName: "",
@@ -51,7 +51,7 @@ export default class ExternalScreen extends Component {
         price: "",
         other: "",
         upload_file: null,
-        file: null
+        file: null,
       },
       isDatePickerVisible: false,
       trainingNeed: [],
@@ -63,15 +63,16 @@ export default class ExternalScreen extends Component {
       dateIndex: -1,
       dateI: -1,
       statusSubmit: true,
-      lang:"",
+      lang: "",
 
       empList: [],
       emp: [],
-      placeHolderText: 'Select Employee',
-      selectedText: '',
+      placeHolderText: "Select Employee",
+      selectedText: "",
       defaultValue: true,
-      select: '',
-      value: '',
+      select: "",
+      value: "",
+      team: false,
     };
   }
 
@@ -84,22 +85,31 @@ export default class ExternalScreen extends Component {
       this.setState({ lang: "TH", lang_id: 2 });
     }
     try {
+      const user_id = await AsyncStorage.getItem("userId");
+      httpClient
+        .get(`/Team/getMenuTeam/${user_id}`)
+        .then(async (response) => {
+          const res = response.data;
+          this.setState({ team: res });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       httpClient
         .get(`/Training/EmployeeTrainingNeed/${id}`)
         .then((response) => {
           const result = response.data;
           if (result != null) {
             // console.log(result);
-            let emp = []
+            let emp = [];
             for (let i in result) {
               emp[i] = {
                 id: result[i].user_id,
-                name: result[i].firstname
-              }
-
+                name: result[i].firstname,
+              };
             }
             this.setState({
-              empList: emp
+              empList: emp,
             });
           }
         })
@@ -113,7 +123,7 @@ export default class ExternalScreen extends Component {
           const result = response.data;
           if (result != null) {
             this.setState({
-              purposeList: result
+              purposeList: result,
             });
           }
         })
@@ -167,7 +177,7 @@ export default class ExternalScreen extends Component {
     });
 
     this.setState({
-      trainingNeed: trainingNeed
+      trainingNeed: trainingNeed,
     });
 
     this.hideDatePicker();
@@ -177,13 +187,13 @@ export default class ExternalScreen extends Component {
     let date1 = new Date(startcul);
     let date2 = new Date(endcul);
     this.setState({
-      total: "0"
+      total: "0",
     });
     if (date2 >= date1) {
       let diffInMs = Math.abs(date2 - date1);
       let totals = diffInMs / (1000 * 60 * 60 * 24) + 1;
       this.setState({
-        total: totals.toString()
+        total: totals.toString(),
       });
     }
   };
@@ -216,7 +226,7 @@ export default class ExternalScreen extends Component {
 
   async uploadFile(index, i) {
     let result = await DocumentPicker.getDocumentAsync({});
-    
+
     result.type = this.mimetype(result.name);
     if (result.type !== undefined) {
       let trainingNeed = [...this.state.trainingNeed];
@@ -234,7 +244,7 @@ export default class ExternalScreen extends Component {
         o.data = o.data.filter((s) => s.id != id);
       });
       this.setState({
-        trainingNeed: trainingNeed
+        trainingNeed: trainingNeed,
       });
     }
   }
@@ -245,7 +255,7 @@ export default class ExternalScreen extends Component {
       JPG: "image/JPG",
       pdf: "application/pdf",
       jpeg: "image/jpeg",
-      jpg: "image/jpg"
+      jpg: "image/jpg",
     };
     let extention = name.split(".")[1];
     if (allow[extention] !== undefined) {
@@ -348,7 +358,7 @@ export default class ExternalScreen extends Component {
             {
               text: this.state.lang === "EN" ? "CANCEL" : "ยกเลิก",
               onPress: () => this.setState({ statusSubmit: true }),
-              style: "cancel"
+              style: "cancel",
             },
             ,
             {
@@ -367,7 +377,7 @@ export default class ExternalScreen extends Component {
                     let params = {
                       employee_id: employee_id,
                       data: param,
-                      user_id: userID
+                      user_id: userID,
                     };
                     httpClient
                       .post("/Training/InsertTrainingNeedsExternal", params)
@@ -377,10 +387,9 @@ export default class ExternalScreen extends Component {
                           console.log(result);
                           let pic = new FormData();
                           pic.append("file", {
-                        
                             name: result + "",
                             type: param.upload_file.type,
-                            uri: param.upload_file.uri
+                            uri: param.upload_file.uri,
                           });
                           console.log(pic);
                           httpClient
@@ -419,8 +428,8 @@ export default class ExternalScreen extends Component {
                                         this.state.lang === "EN"
                                           ? "OK"
                                           : "ตกลง",
-                                      onPress: () => this.reset()
-                                    }
+                                      onPress: () => this.reset(),
+                                    },
                                   ],
                                   { cancelable: false }
                                 );
@@ -464,8 +473,8 @@ export default class ExternalScreen extends Component {
                       : "ไม่สามารถส่งคำร้องขอฝึกอบรมได้"
                   );
                 }
-              }
-            }
+              },
+            },
           ]
         );
       }
@@ -493,7 +502,7 @@ export default class ExternalScreen extends Component {
               marginVertical: 20,
               flexDirection: "row",
               justifyContent: "center",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <Divider style={{ paddingBottom: 1, flex: 1 }} />
@@ -522,11 +531,14 @@ export default class ExternalScreen extends Component {
               if (!excludeEmployees.includes(employeeId)) {
                 listEmployees.push(employee);
               }
-            }   
+            }
 
-          {/* Start Card by aek
-          {/* จะทำการแสดงพนักงาน */}
-          {/* {this.state.trainingNeed.map((Item, index) => {
+            {
+              /* Start Card by aek
+          {/* จะทำการแสดงพนักงาน */
+            }
+            {
+              /* {this.state.trainingNeed.map((Item, index) => {
             //เริ่มทำกอปปี้พนักงาน
             // excludeEmployees คือก็อปปี้ไอดีพนักงาน
             let excludeEmployees = [];
@@ -545,8 +557,11 @@ export default class ExternalScreen extends Component {
               if (!excludeEmployees.includes(employeeId)) {
                 listEmployees.push(employee);
               }
-            }  */}
-            {/* // จบ การกอปปี้พนักงาน */}
+            }  */
+            }
+            {
+              /* // จบ การกอปปี้พนักงาน */
+            }
             return (
               <View>
                 <ScrollView
@@ -560,7 +575,7 @@ export default class ExternalScreen extends Component {
                           flexDirection: "column",
                           justifyContent: "space-around",
                           paddingHorizontal: 8,
-                          marginBottom: 8
+                          marginBottom: 8,
                         }}
                       >
                         <Text style={styles.textStyle1}>
@@ -570,36 +585,34 @@ export default class ExternalScreen extends Component {
                         </Text>
 
                         <View>
+                          <RNPickerDialog
+                            data={listEmployees}
+                            pickerTitle={"กรุณาเลือกพนักงาน"}
+                            // labelText={'กรุณาเลือกพนักงาน'}
+                            showSearchBar={true}
+                            showPickerTitle={true}
+                            listTextStyle={Styless.listTextStyle}
+                            pickerStyle={Styless.pickerStyle}
+                            selectedText={item.employee_name}
+                            placeHolderText={this.state.placeHolderText}
+                            searchBarPlaceHolder={"Search....."}
+                            searchBarPlaceHolderColor={"#007aff"}
+                            selectedTextStyle={Styless.selectedTextStyle}
+                            placeHolderTextColor={"#d9d9d9"}
+                            dropDownIconStyle={Styless.dropDownIconStyle}
+                            searchBarStyle={Styless.searchBarStyle}
+                            //dropDownIcon={require('../assets/pin.png')}
 
-                        <RNPickerDialog
-                          data={listEmployees}
-                          pickerTitle={'กรุณาเลือกพนักงาน'}
-                          // labelText={'กรุณาเลือกพนักงาน'}
-                          showSearchBar={true}
-                          showPickerTitle={true}
-                          listTextStyle={Styless.listTextStyle}
-                          pickerStyle={Styless.pickerStyle}
-                          selectedText={item.employee_name}
-                          placeHolderText={this.state.placeHolderText}
-                          searchBarPlaceHolder={'Search.....'}
-                          searchBarPlaceHolderColor={'#007aff'}
-                          selectedTextStyle={Styless.selectedTextStyle}
-                          placeHolderTextColor={'#d9d9d9'}
-                          dropDownIconStyle={Styless.dropDownIconStyle}
-                          searchBarStyle={Styless.searchBarStyle}
-                          //dropDownIcon={require('../assets/pin.png')}
-                      
-                          selectedValue={(i, items) => {
-                            let trainingNeed = [...this.state.trainingNeed];
-                            let item = { ...trainingNeed[index] };
-                            item.employee_id = items.id;
-                            item.employee_name = items.name;
-                            trainingNeed[index] = item;
-                            this.setState({ trainingNeed: trainingNeed });
-                            this.selectedValue(index, items)
-                          }}
-                        >
-                           </RNPickerDialog>
+                            selectedValue={(i, items) => {
+                              let trainingNeed = [...this.state.trainingNeed];
+                              let item = { ...trainingNeed[index] };
+                              item.employee_id = items.id;
+                              item.employee_name = items.name;
+                              trainingNeed[index] = item;
+                              this.setState({ trainingNeed: trainingNeed });
+                              this.selectedValue(index, items);
+                            }}
+                          ></RNPickerDialog>
                           {/* <Picker
                             mode="filter"
                             iosIcon={
@@ -661,7 +674,7 @@ export default class ExternalScreen extends Component {
                         style={{
                           paddingBottom: 1,
                           marginTop: 10,
-                          backgroundColor: "#398DDD"
+                          backgroundColor: "#398DDD",
                         }}
                       />
 
@@ -673,7 +686,7 @@ export default class ExternalScreen extends Component {
                                 style={{
                                   flexDirection: "column",
                                   justifyContent: "space-around",
-                                  paddingHorizontal: 10
+                                  paddingHorizontal: 10,
                                   // marginBottom: 8,
                                 }}
                               >
@@ -695,7 +708,7 @@ export default class ExternalScreen extends Component {
                                   value={param.courseName}
                                   onChangeText={(text) => {
                                     let trainingNeed = [
-                                      ...this.state.trainingNeed
+                                      ...this.state.trainingNeed,
                                     ];
 
                                     let item = { ...trainingNeed[index] };
@@ -711,7 +724,7 @@ export default class ExternalScreen extends Component {
                                     });
 
                                     this.setState({
-                                      trainingNeed: trainingNeed
+                                      trainingNeed: trainingNeed,
                                     });
                                   }}
                                 ></TextInput>
@@ -726,7 +739,7 @@ export default class ExternalScreen extends Component {
                                   value={param.trainingProvider}
                                   onChangeText={(text) => {
                                     let trainingNeed = [
-                                      ...this.state.trainingNeed
+                                      ...this.state.trainingNeed,
                                     ];
 
                                     let item = { ...trainingNeed[index] };
@@ -742,7 +755,7 @@ export default class ExternalScreen extends Component {
                                     });
 
                                     this.setState({
-                                      trainingNeed: trainingNeed
+                                      trainingNeed: trainingNeed,
                                     });
                                   }}
                                 ></TextInput>
@@ -761,7 +774,7 @@ export default class ExternalScreen extends Component {
                                     selectedValue={param.trainingPurpose}
                                     onValueChange={(text) => {
                                       let trainingNeed = [
-                                        ...this.state.trainingNeed
+                                        ...this.state.trainingNeed,
                                       ];
 
                                       let item = { ...trainingNeed[index] };
@@ -778,7 +791,7 @@ export default class ExternalScreen extends Component {
                                         );
                                       });
                                       this.setState({
-                                        trainingNeed: trainingNeed
+                                        trainingNeed: trainingNeed,
                                       });
                                     }}
                                     textStyle={{ fontSize: 14 }}
@@ -831,7 +844,7 @@ export default class ExternalScreen extends Component {
                                   value={param.price}
                                   onChangeText={(text) => {
                                     let trainingNeed = [
-                                      ...this.state.trainingNeed
+                                      ...this.state.trainingNeed,
                                     ];
 
                                     let item = { ...trainingNeed[index] };
@@ -847,7 +860,7 @@ export default class ExternalScreen extends Component {
                                     });
 
                                     this.setState({
-                                      trainingNeed: trainingNeed
+                                      trainingNeed: trainingNeed,
                                     });
                                   }}
                                 ></TextInput>
@@ -860,7 +873,7 @@ export default class ExternalScreen extends Component {
                                   value={param.other}
                                   onChangeText={(text) => {
                                     let trainingNeed = [
-                                      ...this.state.trainingNeed
+                                      ...this.state.trainingNeed,
                                     ];
 
                                     let item = { ...trainingNeed[index] };
@@ -876,7 +889,7 @@ export default class ExternalScreen extends Component {
                                     });
 
                                     this.setState({
-                                      trainingNeed: trainingNeed
+                                      trainingNeed: trainingNeed,
                                     });
                                   }}
                                 ></TextInput>
@@ -900,7 +913,7 @@ export default class ExternalScreen extends Component {
                                         // width: "20%",
                                         marginTop: 10,
                                         marginBottom: 10,
-                                        borderColor: "#4392de"
+                                        borderColor: "#4392de",
                                       }}
                                       onPress={this.uploadFile.bind(
                                         this,
@@ -911,7 +924,7 @@ export default class ExternalScreen extends Component {
                                       <Text
                                         style={{
                                           marginHorizontal: 8,
-                                          color: "white"
+                                          color: "white",
                                         }}
                                       >
                                         {this.state.lang == "EN"
@@ -924,7 +937,7 @@ export default class ExternalScreen extends Component {
                                       style={{
                                         flex: 1,
                                         marginTop: 10,
-                                        alignItems: "center"
+                                        alignItems: "center",
                                       }}
                                     >
                                       {param.upload_file ? (
@@ -945,12 +958,14 @@ export default class ExternalScreen extends Component {
                                     paddingBottom: 1,
 
                                     marginBottom: 4,
-                                    marginTop: 10
+                                    marginTop: 10,
                                   }}
                                 />
                               </View>
 
                               <DateTimePickerModal
+                                isDarkModeEnabled
+                                textColor="#fff"
                                 locale="th"
                                 isVisible={this.state.isDatePickerVisible}
                                 mode="date"
@@ -992,14 +1007,14 @@ export default class ExternalScreen extends Component {
                         style={{
                           marginLeft: 10,
                           marginRight: 5,
-                          color: "white"
+                          color: "white",
                         }}
                       />
                       <Text
                         style={{
                           color: "white",
                           marginRight: 10,
-                          fontSize: 14
+                          fontSize: 14,
                         }}
                       >
                         {this.state.lang === "EN" ? "Delete" : "ลบ"}
@@ -1020,33 +1035,37 @@ export default class ExternalScreen extends Component {
             <Button
               style={styles.btnStyle1}
               onPress={() => {
-                let trainingNeedItem = this.state.trainingNeedItem;
-                trainingNeedItem["data"] = [
-                  {
-                    courseName: "",
-                    trainingProvider: "",
-                    trainingPurpose: "",
-                    startDate: "DD/MM/YYYY",
-                    price: "",
-                    other: "",
-                    upload_file: null,
-                    file: null
-                  }
-                ];
-                let trainingNeed = [
-                  ...this.state.trainingNeed,
-                  trainingNeedItem
-                ];
-                this.setState({
-                  trainingNeed: trainingNeed
-                });
+                if (this.state.team) {
+                  let trainingNeedItem = this.state.trainingNeedItem;
+                  trainingNeedItem["data"] = [
+                    {
+                      courseName: "",
+                      trainingProvider: "",
+                      trainingPurpose: "",
+                      startDate: "DD/MM/YYYY",
+                      price: "",
+                      other: "",
+                      upload_file: null,
+                      file: null,
+                    },
+                  ];
+                  let trainingNeed = [
+                    ...this.state.trainingNeed,
+                    trainingNeedItem,
+                  ];
+                  this.setState({
+                    trainingNeed: trainingNeed,
+                  });
+                } else {
+                  Alert.alert("ท่านยังไม่มีสิทธิ์ใช้งานฟังก์ชันนี้");
+                }
               }}
             >
               <Icon name="user-plus" color="#fff" size={26} />
               <Text
                 style={{
                   color: "#fff",
-                  fontSize: 16
+                  fontSize: 16,
                 }}
               >
                 {this.state.lang === "EN" ? "Add Employee" : "เพิ่มพนักงาน"}
@@ -1059,7 +1078,7 @@ export default class ExternalScreen extends Component {
               flexDirection: "row",
               justifyContent: "space-around",
               paddingVertical: 20,
-              marginBottom: 40
+              marginBottom: 40,
             }}
           >
             <View style={styles.buttonContainer}>
@@ -1109,14 +1128,14 @@ export default class ExternalScreen extends Component {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   container: {
     flex: 1,
     alignItems: "center",
     width: 500,
     marginHorizontal: WIDTH / 20,
-    marginVertical: HEIGHT / 36
+    marginVertical: HEIGHT / 36,
   },
   //กรอบข้อมูล
   containerSec2: {
@@ -1125,20 +1144,20 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#398DDD",
     marginHorizontal: 10,
-    marginBottom: 24
+    marginBottom: 24,
   },
   textHeader: {
     alignItems: "center",
-    padding: 15
+    padding: 15,
   },
   //ชื่อหัวข้อ
   textStyle1: {
     marginTop: 12,
     marginBottom: 12,
-    paddingHorizontal: 6
+    paddingHorizontal: 6,
   },
   cardStyle: {
-    marginVertical: 100
+    marginVertical: 100,
     //marginTop: 12,
   },
   /// picker styles
@@ -1150,14 +1169,14 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     marginLeft: 14,
     // marginVertical: 24,
-    height: 60
+    height: 60,
   },
   coursePickerStyles: {
     //height: 10,
     width: pickerWidth - 56,
     borderWidth: 1,
     borderColor: "#B1B1B1",
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   ///กรอบเพิ่มข้อมูล
   pickerContainer: {
@@ -1166,13 +1185,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 12,
     marginLeft: 1,
-    marginRight: -95
+    marginRight: -95,
   },
   pickerContainer2: {
     flexDirection: "row",
     justifyContent: "center",
     marginVertical: 5,
-    marginBottom: 12
+    marginBottom: 12,
   },
   addButtonText: {
     color: "white",
@@ -1180,7 +1199,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 5,
     marginTop: -2,
-    marginLeft: 1
+    marginLeft: 1,
   },
   /// add button
   addButton: {
@@ -1192,7 +1211,7 @@ const styles = StyleSheet.create({
     height: 36,
     marginLeft: 10,
     marginRight: 8,
-    marginTop: 5
+    marginTop: 5,
   },
   /// del button
   deleteButton: {
@@ -1204,22 +1223,22 @@ const styles = StyleSheet.create({
     height: 36,
     marginLeft: 8,
     marginRight: 2,
-    marginTop: 5
+    marginTop: 5,
   },
   containerSec1: {
-    marginHorizontal: 20
+    marginHorizontal: 20,
   },
   containerSec3: {
     // width: "95%",
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#999998",
-    marginHorizontal: 10
+    marginHorizontal: 10,
     // marginRight: 8,
     // marginLeft: 10,
   },
   contentInSec: {
-    padding: 2
+    padding: 2,
   },
   btnStyle1: {
     height: 45,
@@ -1229,14 +1248,14 @@ const styles = StyleSheet.create({
     // marginTop: 5,
     width: "60%",
     alignSelf: "center",
-    borderRadius: 10
+    borderRadius: 10,
   },
   submitButton: {
     alignSelf: "center",
     marginVertical: 8,
     backgroundColor: "#3BB54A",
     marginTop: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   input: {
     backgroundColor: "#fff",
@@ -1247,7 +1266,7 @@ const styles = StyleSheet.create({
     marginTop: 18,
     marginBottom: 10,
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   input1: {
     backgroundColor: "#fff",
@@ -1257,7 +1276,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     marginBottom: 10,
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   inputDate: {
     borderWidth: 1,
@@ -1266,7 +1285,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     marginBottom: 10,
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   btnDelCard: {
     backgroundColor: "#b30000",
@@ -1274,7 +1293,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
     marginTop: 10,
     marginBottom: 20,
-    borderRadius: 10
+    borderRadius: 10,
   },
   inputLightStyle: {
     borderWidth: 1,
@@ -1283,7 +1302,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 15,
     marginBottom: 2,
-    borderColor: "#007aff"
+    borderColor: "#007aff",
   },
   inputStyle4: {
     borderRadius: 15,
@@ -1292,7 +1311,7 @@ const styles = StyleSheet.create({
     height: HEIGHT / 20,
     marginTop: 15,
     paddingLeft: 10,
-    marginBottom: 2
+    marginBottom: 2,
   },
   inputStyle5: {
     borderRadius: 15,
@@ -1302,14 +1321,14 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingLeft: 10,
     marginBottom: 2,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   buttonContainer: {
     alignSelf: "center",
     justifyContent: "center",
     paddingTop: 20,
     width: "30%",
-    borderRadius: 4
+    borderRadius: 4,
   },
   buttonContainer1: {
     alignSelf: "center",
@@ -1318,27 +1337,27 @@ const styles = StyleSheet.create({
     width: "20%",
     borderRadius: 4,
     marginTop: 2,
-    marginBottom: 18
+    marginBottom: 18,
   },
   btnConfirmStyle: {
     backgroundColor: "#449D44",
     justifyContent: "center",
     alignSelf: "center",
-    borderRadius: 10
+    borderRadius: 10,
     // paddingHorizontal: 32,
   },
   btnConfirmStyle1: {
     backgroundColor: "#5b6455",
     justifyContent: "center",
     alignSelf: "center",
-    borderRadius: 10
+    borderRadius: 10,
     // paddingHorizontal: 32,
   },
   btnCancelStyle: {
     backgroundColor: "#5A6268",
     justifyContent: "center",
     alignSelf: "center",
-    borderRadius: 10
+    borderRadius: 10,
     // paddingHorizontal: 32,
   },
   containerSec1: {
@@ -1346,25 +1365,23 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginHorizontal: 20,
-    marginTop: 18
-  }
+    marginTop: 18,
+  },
 });
 
 const Styless = StyleSheet.create({
-
   container: {
     flex: 1,
     alignItems: "center",
-    width: "500"
-
+    width: 500,
   },
   selectedTextStyle: {
     height: 100,
-    borderColor: '#d9d9d9',
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-    width: '100%',
-    color: 'gray',
+    borderColor: "#d9d9d9",
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    width: "100%",
+    color: "gray",
     fontSize: 15,
     paddingLeft: 15,
     marginTop: -5,
@@ -1372,27 +1389,27 @@ const Styless = StyleSheet.create({
 
   selectedTextStyle1: {
     height: 50,
-    borderColor: 'gray',
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-    width: '100%',
-    color: 'gray',
+    borderColor: "gray",
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    width: "100%",
+    color: "gray",
     fontSize: 20,
     paddingLeft: 10,
     marginTop: 15,
   },
 
   listTextStyle: {
-    color: '#000',
+    color: "#000",
     marginVertical: 10,
     flex: 0.9,
     marginLeft: 20,
     marginHorizontal: 10,
-    textAlign: 'left',
+    textAlign: "left",
   },
   searchBarStyle: {
     marginBottom: 10,
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 60,
     shadowRadius: 1,
     shadowOpacity: 1.0,
@@ -1401,18 +1418,18 @@ const Styless = StyleSheet.create({
     //   width: 1,
     //   height: 1,
     // },
-    borderColor: 'gray',
+    borderColor: "gray",
     // shadowColor: '#303030',
     borderRadius: 5,
     elevation: 1,
     marginHorizontal: 10,
   },
   placeHolderTextStyle: {
-    color: 'red',
+    color: "red",
     padding: 10,
-    textAlign: 'left',
-    width: '99%',
-    flexDirection: 'row',
+    textAlign: "left",
+    width: "99%",
+    flexDirection: "row",
   },
   dropDownIconStyle: {
     width: 10,
@@ -1425,24 +1442,25 @@ const Styless = StyleSheet.create({
     height: 10,
     left: -40,
     marginTop: 15,
-
   },
   pickerStyle: {
     marginTop: 12,
+
     marginBottom: 12,
     paddingHorizontal: 6,
     borderWidth: 0.6,
     height: 43,
-    width: "100%",
-    borderColor: 'gray',
+    width: 350,
+    borderColor: "gray",
     borderRadius: 4,
     elevation: 0.6,
+    width: "100%",
   },
   pickerStyle1: {
     flexDirection: "row",
     justifyContent: "center",
     marginVertical: 5,
-    marginBottom: 12
+    marginBottom: 12,
+    
   },
 });
-
