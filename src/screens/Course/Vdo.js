@@ -41,11 +41,12 @@ import SliderEntry from "./SliderEntry";
 import { sliderWidth, itemWidth } from "../../styles/SliderEntry.style";
 import { and } from "react-native-reanimated";
 
+import axios from "axios";
+
 const { width, height } = Dimensions.get("window");
 const BannerWidth = Dimensions.get("window").width;
 const BannerHeight = 200;
 const HEIGHT = Dimensions.get("window").height;
-
 var maxPlayPosition = 0.0;
 var lastPlayPosition = 0;
 var fristTime = false;
@@ -284,7 +285,6 @@ class Vdo extends Component {
       this.player.pauseAsync();
     }
     if (fristTime == false && e.isPlaying == false && lastPlayPosition != "s") {
-      console.log("ครั้งแรก");
       this.player.playAsync();
       fristTime = true;
 
@@ -321,7 +321,7 @@ class Vdo extends Component {
         }, 1000);
       }
     }
-    if (!maxPlayPosition > 0 && lastPlayPosition != "s") {
+    if (fristTime == false&&!maxPlayPosition > 0 && lastPlayPosition != "s") {
       console.log("ครั้งแรก");
       let { note_file_id, note_lesson_id, user_id, course_id, note_gen_id } =
         this.state;
@@ -329,14 +329,17 @@ class Vdo extends Component {
         lesson_id: note_lesson_id,
         file_id: note_file_id,
         user_id: user_id,
-        gen_id: note_gen_id,
+        gen_id: item.startcourse_id,
         course_id: course_id,
         current_time: current_time,
         type: item.type
       };
-
+      console.log("88888",params,);
       httpClient
         .post("/Learn/LearnSaveVdo/UpdateTimeFirst", params)
+        .then((res)=>{
+          console.log(456);
+        })
 
         .catch((error) => {
           console.log(error);
@@ -363,14 +366,18 @@ class Vdo extends Component {
           current_time: current_time,
           type: item.type
         };
+       
+        const response =  axios.get(`https://smartxlearning.com/api/index?lesson=${note_lesson_id}&file=${note_file_id}&user_id=${user_id}&time=${current_time}`);
+     
+        // httpClientWeb.get("/api/index?lesson=720&file=769&user_id=1&time=200")
+        // .then((res) => console.log(56787654))
+        // httpClient
+        //   .post("/Learn/LearnSaveVdo/UpdateTime", params)
+        //   // .then((res) => this.componentDidMount())
 
-        httpClient
-          .post("/Learn/LearnSaveVdo/UpdateTime", params)
-          // .then((res) => this.componentDidMount())
-
-          .catch((error) => {
-            console.log(error);
-          });
+        //   .catch((error) => {
+        //     console.log(error);
+        //   });
       }
       // }
     }
@@ -385,13 +392,13 @@ class Vdo extends Component {
       let { note_file_id, note_lesson_id, user_id, course_id, note_gen_id } =
         this.state;
       let params = {
-        lesson_id: note_lesson_id,
+        lesson : note_lesson_id,
         file_id: note_file_id,
-        user_id: user_id,
-        gen_id: note_gen_id,
-        course_id: course_id,
+        // user_id: user_id,
+        // gen_id: note_gen_id,
+        // course_id: course_id,
         current_time: current_time,
-        type: item.type
+        // type: item.type
       };
       httpClient
         .post("/Learn/LearnSaveVdo/Complete", params)

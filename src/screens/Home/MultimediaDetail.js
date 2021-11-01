@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { StatusBar, Text, View, SafeAreaView, AsyncStorage, FlatList, StyleSheet, Dimensions, TouchableOpacity, Image, Platform, Alert, ActivityIndicator } from 'react-native'
 import {httpClient} from '../../core/HttpClient';
 import Icon1 from 'react-native-vector-icons/Feather';
-import FileSystemView from 'expo-file-system-view'
+// import FileSystemView from 'expo-file-system-view'
 // import RNFetchBlob from 'rn-fetch-blob';
 import {
   Header,

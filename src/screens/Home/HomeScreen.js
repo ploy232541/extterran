@@ -52,7 +52,7 @@ const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT_VIDEO = (Dimensions.get("window").width * 9) / 16;
 //แก้ไขเวอร์ชัน
-const mobileversion = 36;
+const mobileversion = 39;
 var mobileversionshow = true;
 
 const functionHomeList = [
