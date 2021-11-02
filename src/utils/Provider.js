@@ -238,7 +238,7 @@ export function accordionListScreen(type, subtype, title = null) {
                     ? `Waiting for approval :    ${count}    person${
                         isOnlyOne ? "" : "s"
                       }.`
-                    : `กำลังรออนุมัติจำนวน    ${count}    คน`
+                    : `กำลังรออนุมัติจำนวน ${count} รายการ`
                   : lang == "EN"
                   ? "No person is waiting for approval."
                   : "ไม่มีทีมงานที่กำลังรออนุมัติ"

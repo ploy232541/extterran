@@ -80,7 +80,7 @@ function TrainingScreen() {
 
   var d = new Date();
    // เปิดไว้สำหรับเทส ควรจะเป็น 8
-  if (d.getMonth() == 9) {
+  if (d.getMonth() == 10) {
     TrainingHeader.push({
       id: 4,
       title: lang == "EN" ? "Training Need" : "คำขอฝึกอบรม",
