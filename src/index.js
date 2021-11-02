@@ -43,41 +43,13 @@ import { httpClient } from "./core/HttpClient";
 import StaffScreen from "./screens/Staff/StaffScreen";
 import FeedBackScreen from "./screens/FeedBack/FeedBackScreen";
 import ClassroomScreen from "./screens/Classroom/ClassroomScreen";
-import {
-  useFonts,
-  BaiJamjuree_200ExtraLight,
-  BaiJamjuree_200ExtraLight_Italic,
-  BaiJamjuree_300Light,
-  BaiJamjuree_300Light_Italic,
-  BaiJamjuree_400Regular,
-  BaiJamjuree_400Regular_Italic,
-  BaiJamjuree_500Medium,
-  BaiJamjuree_500Medium_Italic,
-  BaiJamjuree_600SemiBold,
-  BaiJamjuree_600SemiBold_Italic,
-  BaiJamjuree_700Bold,
-  BaiJamjuree_700Bold_Italic
-} from "@expo-google-fonts/bai-jamjuree";
-import { AppLoading } from "expo";
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent(props) {
-  let [fontsLoaded] = useFonts({
-    BaiJamjuree_200ExtraLight,
-    BaiJamjuree_200ExtraLight_Italic,
-    BaiJamjuree_300Light,
-    BaiJamjuree_300Light_Italic,
-    BaiJamjuree_400Regular,
-    BaiJamjuree_400Regular_Italic,
-    BaiJamjuree_500Medium,
-    BaiJamjuree_500Medium_Italic,
-    BaiJamjuree_600SemiBold,
-    BaiJamjuree_600SemiBold_Italic,
-    BaiJamjuree_700Bold,
-    BaiJamjuree_700Bold_Italic
-  });
+
   const navigation = useNavigation();
   const [lang, setLang] = useState(null);
   const [fullName, setFullName] = useState(null);
@@ -108,9 +80,7 @@ function CustomDrawerContent(props) {
     await AsyncStorage.removeItem("fullnameEN");
     navigation.dispatch(StackActions.replace("LoginScreen"));
   };
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  } else {
+
     return (
       <DrawerContentScrollView {...props}>
         <View
@@ -124,7 +94,7 @@ function CustomDrawerContent(props) {
             <Avatar.Image />
           </Col> */}
             <Col size={2}>
-              <Title style={{ fontFamily: "BaiJamjuree_700Bold" }}>
+              <Title >
                 {fullName}
               </Title>
               {/* <Caption>สมาชิกทั่วไป</Caption> */}
@@ -149,7 +119,7 @@ function CustomDrawerContent(props) {
         </View>
       </DrawerContentScrollView>
     );
-  }
+  
 }
 
 function getHeaderTitle(route,lang) {

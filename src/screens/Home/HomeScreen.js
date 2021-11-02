@@ -30,21 +30,7 @@ import { httpClient } from "../../core/HttpClient";
 import { WebView } from "react-native-webview";
 import YoutubePlayer from "react-native-youtube-iframe";
 import VideoPlayer from "expo-video-player";
-import {
-  useFonts,
-  BaiJamjuree_200ExtraLight,
-  BaiJamjuree_200ExtraLight_Italic,
-  BaiJamjuree_300Light,
-  BaiJamjuree_300Light_Italic,
-  BaiJamjuree_400Regular,
-  BaiJamjuree_400Regular_Italic,
-  BaiJamjuree_500Medium,
-  BaiJamjuree_500Medium_Italic,
-  BaiJamjuree_600SemiBold,
-  BaiJamjuree_600SemiBold_Italic,
-  BaiJamjuree_700Bold,
-  BaiJamjuree_700Bold_Italic
-} from "@expo-google-fonts/bai-jamjuree";
+
 import { AppLoading } from "expo";
 
 // const vdo = require("../../video/benner_video.mp4");
@@ -110,20 +96,7 @@ const renderPage = (image, index) => {
 const _numColumns = 2;
 
 function HomeScreen() {
-  let [fontsLoaded] = useFonts({
-    BaiJamjuree_200ExtraLight,
-    BaiJamjuree_200ExtraLight_Italic,
-    BaiJamjuree_300Light,
-    BaiJamjuree_300Light_Italic,
-    BaiJamjuree_400Regular,
-    BaiJamjuree_400Regular_Italic,
-    BaiJamjuree_500Medium,
-    BaiJamjuree_500Medium_Italic,
-    BaiJamjuree_600SemiBold,
-    BaiJamjuree_600SemiBold_Italic,
-    BaiJamjuree_700Bold,
-    BaiJamjuree_700Bold_Italic
-  });
+
   const navigation = useNavigation();
   const [lang, setLang] = useState("");
   const [course, setCourse] = useState([]);
@@ -221,9 +194,7 @@ function HomeScreen() {
       </View>
     );
   };
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  } else {
+  
     if (loading) {
       setTimeout(() => {
         setCountloading(countloading + 1);
@@ -469,7 +440,7 @@ function HomeScreen() {
       </ScrollView>
     );
   }
-}
+
 
 const styles = StyleSheet.create({
   videoBenner: {

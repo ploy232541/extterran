@@ -32,7 +32,7 @@ function StaffScreen() {
   let staffData = [
     {
       id: 1,
-      title: lang == "EN" ? "Internal Compulsory Course" : "หลักสูตรบังคับภายใน555",
+      title: lang == "EN" ? "Internal Compulsory Course" : "หลักสูตรบังคับภายใน",
       counts: countNoti[0]?countNoti[0].counts:0,
       //imgSrc: 'https://source.unsplash.com/1024x768/?nature',
       icon: "chalkboard-teacher",
