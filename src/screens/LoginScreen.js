@@ -99,8 +99,8 @@ export default function LoginScreen(props) {
               <TouchableOpacity onPress={onPressTH}>
                 <Text
                   style={
-                    (lang === "TH" ? styles.active : styles.noActive,
-                    { fontFamily: "BaiJamjuree_500Medium_Italic" })
+                    (lang === "TH" ? styles.active : styles.noActive
+                  )
                   }
                 >
                   TH
@@ -109,7 +109,7 @@ export default function LoginScreen(props) {
               <Text
                 style={{
                   fontSize: 18,
-                  fontFamily: "BaiJamjuree_500Medium_Italic",
+                
                 }}
               >
                 {" "}
@@ -147,12 +147,12 @@ export default function LoginScreen(props) {
             <View style={{ paddingLeft: 15, paddingRight: 15 }}>
               <Item floatingLabel style={{ marginBottom: 10 }}>
                 <Label
-                  style={{ fontSize: 14, fontFamily: "BaiJamjuree_400Regular" }}
+       
                 >
                   {lang === "EN" ? "Employee code" : "รหัสพนักงาน"}
                 </Label>
                 <Input
-                  style={{ fontSize: 14, fontFamily: "BaiJamjuree_400Regular" }}
+                  
                   onChangeText={(text) => setUsername(text)}
                   autoCapitalize={"none"}
                   autoCorrect={false}
@@ -160,12 +160,12 @@ export default function LoginScreen(props) {
               </Item>
               <Item floatingLabel>
                 <Label
-                  style={{ fontSize: 14, fontFamily: "BaiJamjuree_400Regular" }}
+                
                 >
                   {lang === "EN" ? "Password" : "รหัสผ่าน"}
                 </Label>
                 <Input
-                  style={{ fontSize: 14, fontFamily: "BaiJamjuree_400Regular" }}
+                 
                   secureTextEntry={showPassword}
                   onChangeText={(text) => setPassword(text)}
                 />
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   text1: {
-    fontFamily: "BaiJamjuree_700Bold",
+
     marginTop: 20,
     alignSelf: "center",
     // fontWeight: 'bold',
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#FFF",
     alignSelf: "center",
-    fontFamily: "BaiJamjuree_600SemiBold",
+
   },
   labelRegister: {
     fontSize: 16,
@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#002266",
     alignSelf: "center",
-    fontFamily: "BaiJamjuree_400Regular",
+
   },
   heading: {
     fontSize: 30,

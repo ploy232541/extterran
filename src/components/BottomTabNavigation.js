@@ -25,7 +25,7 @@ export default function BottomTabNavigation({ initRoute }) {
   return (
     <Tab.Navigator initialRouteName={initRoute}>
       <Tab.Screen
-      style={{fontFamily:'BaiJamjuree_400Regular'}}
+   
         name="HomeTab"
         component={HomeScreen}
         options={{
@@ -58,7 +58,7 @@ export default function BottomTabNavigation({ initRoute }) {
       <Tab.Screen
         name="ProfileTab"
         component={ProfileScreen}
-        style={{fontFamily:'BaiJamjuree_400Regular'}}
+   
         options={{
           tabBarLabel: lang == 'EN' ? 'User' : "ผู้ใช้",
           tabBarIcon: ({ color, size }) => (

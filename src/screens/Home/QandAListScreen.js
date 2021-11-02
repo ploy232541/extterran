@@ -17,7 +17,7 @@ import {
   var decode = require('decode-html');
   import HTML from 'react-native-render-html';
 
-class QandAListScreen extends Component {
+export default class QandAListScreen extends Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -135,6 +135,11 @@ class QandAListScreen extends Component {
     }
 }
 
-export default function(props) {
-    return <QandAListScreen {...props}  />;
-  }
+// export default function(props) {
+//     return <QandAListScreen {...props}  />;
+//   }
+
+
+  
+
+  

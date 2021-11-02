@@ -379,7 +379,7 @@ function HomeScreen() {
                 <Text
                   style={{
                     color: "white",
-                    fontFamily: "BaiJamjuree_400Regular"
+                
                   }}
                 >
                   {lang == "EN" ? "View" : "ดูทั้งหมด"}
@@ -414,7 +414,7 @@ function HomeScreen() {
                 <Text
                   style={{
                     color: "white",
-                    fontFamily: "BaiJamjuree_400Regular"
+              
                   }}
                 >
                   {lang == "EN" ? "View" : "ดูทั้งหมด"}
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     paddingHorizontal: 5,
-    fontFamily: "BaiJamjuree_500Medium"
+
   },
   section: {
     backgroundColor: "#fff",

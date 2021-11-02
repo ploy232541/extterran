@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, Alert, TouchableOpacity, AsyncStorage } from "r
 import { Avatar } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import {httpClient} from '../core/HttpClient';
-const FunctionHome = ({ functionType }) => {
 
+export default function FunctionHome({ functionType }) {
   const navigation = useNavigation();
   const [lang, setLang] = useState('');
   const [visitors, setVisitors] = useState(0);
@@ -118,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FunctionHome;
+
