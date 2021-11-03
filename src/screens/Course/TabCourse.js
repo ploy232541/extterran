@@ -1632,8 +1632,6 @@ class TabCourse extends Component {
                   </TouchableOpacity>
                 </View>
           </FancyAlert>
-
-               
             </View>
         )
     }
