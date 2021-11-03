@@ -1463,7 +1463,7 @@ class TabCourse extends Component {
                   <Accordion
                   dataArray={PreTestCourse}
                   animation={true}
-                  expanded={true}
+                  expanded={[0]}
                   renderHeader={this._renderHeader_PreTestCourse}
                   renderContent={this._renderContent_PreTestCourse}
                   />
@@ -1493,7 +1493,7 @@ class TabCourse extends Component {
                 <Accordion
                     dataArray={LessonAll}
                     animation={true}
-                    expanded={true}
+                    expanded={[0]}
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
                 /> 
@@ -1502,7 +1502,7 @@ class TabCourse extends Component {
                    <Accordion
                    dataArray={PostTestCourse}
                    animation={true}
-                   expanded={true}
+                   expanded={[0]}
                    renderHeader={this._renderHeader_PostTestCourse}
                    renderContent={this._renderContent_PostTestCourse}
                    />
