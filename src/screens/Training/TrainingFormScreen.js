@@ -384,6 +384,7 @@ export default class TrainingFormScreen extends Component {
       const {
         user_id,
         course,
+        lang_id,
         courseselect,
         nameCourse,
         expense,
@@ -446,6 +447,7 @@ export default class TrainingFormScreen extends Component {
       } else {
         const params = {
           user_id,
+          lang_id,
           course,
           courseselect,
           nameCourse,
