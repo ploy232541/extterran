@@ -28,6 +28,7 @@ class TabCourse extends Component {
       detail_feedback: '',
       file_feedback: '',
 
+
       ///state alert
       visible: false,
       icon: '',
@@ -1388,6 +1389,7 @@ class TabCourse extends Component {
     return undefined;
   }
 };
+
   async file_feedback() {
     let result = await DocumentPicker.getDocumentAsync({});
     result.type = this.mimetype(result.name);
@@ -1417,18 +1419,21 @@ class TabCourse extends Component {
 
         const data = new FormData();
           data.append('file', {
-            name: file_feedback.name,
-            type: file_feedback.type,
-            uri: file_feedback.uri,
+            name: file_feedback.name ? name : 'name',
+            type: file_feedback.type ? type : 'type',
+            uri: file_feedback.uri ? uri : 'uri',
           });
-
         Object.keys(params).forEach(key => data.append(key, params[key]));
 
         httpClient
-          .post('/Learn/SaveFeedback', data, {})
+          .post('/Learn/SaveFeedback', data, { })
+          
+
           .then(response => {
+            console.log(response);
+
             const result = response.data;
-            if(result != null){
+            if(result){
                 this.setState({modalVisible: false, detail_feedback: '', file_feedback: ''})
                 this.setState({
                   visible: true,
@@ -1541,7 +1546,7 @@ class TabCourse extends Component {
                   <View style={styles.modalView}>
                     <View style={{alignItems: 'center', marginBottom: 15}}>
                       <Text style={{fontWeight: 'bold', fontSize: 20 }}>
-                        {this.state.lang === "EN" ? "Feedback " : "Feedback"}
+                        {this.state.lang === "EN" ? "Feedback" : "Feedback"}
                       </Text>
                     </View>
                     <View style={{alignItems: 'flex-start', marginBottom: 15}}>
@@ -1550,7 +1555,7 @@ class TabCourse extends Component {
                       </Text>
                     </View>
                     <View>
-                      <Label style={{fontSize: 16}}>{this.state.lang === "EN" ? "Detail" : "รายละเอียด"}<Label style={{color: 'red'}}>*</Label></Label>
+                      <Label style={{fontSize: 16}}>{this.state.lang === "EN" ? "Detail" : "รายละเอียด555"}<Label style={{color: 'red'}}>*</Label></Label>
                       <Textarea value={this.state.note_text}  style={{backgroundColor: '#e6e6e6', borderRadius: 10}} rowSpan={5} 
                         onChangeText={text => this.setState({detail_feedback: text})}
                       />

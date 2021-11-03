@@ -278,14 +278,16 @@ export function accordionListScreen(type, subtype, title = null) {
                             // style={indexStyle.iconsStyle}
                             style={{ color: "#007bff", marginBottom: 10 }}
                           />
-                        ) : item.booking_type == 2 ? (
+                        ) : item.booking_type == 2 ||
+                        item.type == "โรงแรม"? (
                           <Icons1
                             name={"hotel"}
                             size={30}
                             // style={indexStyle.iconsStyle}
                             style={{ color: "#007bff", marginBottom: 10 }}
                           />
-                        ) : item.booking_type == 3 ? (
+                        ) : item.booking_type == 3 ||
+                        item.type == "รถยนต์"? (
                           <Icons2
                             name={"car"}
                             size={30}
@@ -293,6 +295,31 @@ export function accordionListScreen(type, subtype, title = null) {
                             style={{ color: "#007bff", marginBottom: 10 }}
                           />
                         ) : null}
+
+                        {/* <View style={{flexDirection: "row",
+                            flexWrap: "wrap"}}>
+
+                        
+                          <Icons0
+                            name={"aircraft"}
+                            size={30}
+                            // style={indexStyle.iconsStyle}
+                            style={{ color: "#007bff",  marginBottom: 10 }}
+                            
+                          />
+                          <Icons1
+                            name={"hotel"}
+                            size={30}
+                            // style={indexStyle.iconsStyle}
+                            style={{ color: "#007bff", marginBottom: 10 }}
+                          />
+                          <Icons2
+                            name={"car"}
+                            size={30}
+                            // style={indexStyle.iconsStyle}
+                            style={{ color: "#007bff", marginBottom: 10 }}
+                          />
+                        </View> */}
 
                         <Text style={indexStyle.textStyle}>
                           {(type == 0 && subtype == 1) || type == 1
