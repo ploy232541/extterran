@@ -1315,6 +1315,8 @@ export default class MedicalCheckupsScreen extends Component {
 
           {/* โชว์ DateTimePickerModal*/}
           <DateTimePickerModal
+            isDarkModeEnabled
+            textColor="#fff"
             isVisible={this.state.isDatePickerVisible}
             mode="date"
             onConfirm={this.handleConfirm}

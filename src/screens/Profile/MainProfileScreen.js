@@ -673,6 +673,8 @@ export default class MainProfileScreen extends Component {
               </TouchableOpacity>
 
               <DateTimePickerModal
+               isDarkModeEnabled
+               textColor="#fff"
                 locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
                 isVisible={this.state.isDatePickerVisible}
                 mode="date"
