@@ -55,6 +55,7 @@ const BookingApproveFormScreen = (props) => {
             setDataArray(res);
             // setLoading(false)
           }
+          console.log(response.data)
           //   else{
           //     setLoading(false)
           //   }
@@ -150,7 +151,7 @@ const BookingApproveFormScreen = (props) => {
             <Text
               style={{ alignSelf: "center", fontSize: 18, marginBottom: 10 }}
             >
-              ใบคำขอ Booking
+              ใบคำขอ Booking555
             </Text>
             <View style={{ marginHorizontal: 20 }}>
               <Divider style={{ backgroundColor: "#d9d9d9" }} />
@@ -352,6 +353,7 @@ const BookingApproveFormScreen = (props) => {
                         editable={false}
                         style={styles.inputStyle}
                         value={item.from}
+                          // value={item.flight_from}
                       />
 
                       <Text>To :</Text>
@@ -360,6 +362,7 @@ const BookingApproveFormScreen = (props) => {
                         editable={false}
                         style={styles.inputStyle}
                         value={item.to}
+                        // value={item.flight_to}
                       />
 
                       <Text>Flight :</Text>
