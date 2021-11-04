@@ -1411,44 +1411,72 @@ class TabCourse extends Component {
       if(detail_feedback == ''){
           Alert.alert(this.state.lang == "EN" ? "Please enter details." : "กรุณาใส่ รายละเอียด")
       }else{
+    
         var params = {
           user_id: user_id,
           course_id: course_id,
           detail_feedback: detail_feedback,
         };
 
-        const data = new FormData();
-          data.append('file', {
-            name: file_feedback.name ? name : 'name',
-            type: file_feedback.type ? type : 'type',
-            uri: file_feedback.uri ? uri : 'uri',
-          });
-        Object.keys(params).forEach(key => data.append(key, params[key]));
-
-        httpClient
-          .post('/Learn/SaveFeedback', data, { })
-          
-
-          .then(response => {
-            console.log(response);
-
-            const result = response.data;
-            if(result){
-                this.setState({modalVisible: false, detail_feedback: '', file_feedback: ''})
+        if (file_feedback=='') {
+      
+          httpClient
+            .post("/Learn/SaveFeedbackNofile", params)
+            .then((response) => {
+              const result = response.data;
+              if (result != null) {
+                this.setState({
+                  modalVisible: false,
+                  detail_feedback: "",
+                  file_feedback: "",
+                });
                 this.setState({
                   visible: true,
-                  icon: 'check',
-                  backgroundColorIcon: 'green',
-                  content: this.state.lang == 'EN' ? 'Success.' : 'เรียบร้อย',
-                })
-            }else{
-              console.log("ส่งไม่สำเร็จ")
-            }
-          })
-          .catch(error => {
-            console.log(error);
+                  icon: "check",
+                  backgroundColorIcon: "green",
+                  content: this.state.lang == "EN" ? "Success." : "เรียบร้อย",
+                });
+              } else {
+                console.log("ส่งไม่สำเร็จ");
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+    
+          const data = new FormData();
+          data.append("file", {
+            name: file_feedback.name,
+            type: file_feedback.type,
+            uri: file_feedback.uri,
           });
-
+          Object.keys(params).forEach((key) => data.append(key, params[key]));
+  
+          httpClient
+            .post("/Learn/SaveFeedback", data, {})
+            .then((response) => {
+              const result = response.data;
+              if (result != null) {
+                this.setState({
+                  modalVisible: false,
+                  detail_feedback: "",
+                  file_feedback: "",
+                });
+                this.setState({
+                  visible: true,
+                  icon: "check",
+                  backgroundColorIcon: "green",
+                  content: this.state.lang == "EN" ? "Success." : "เรียบร้อย",
+                });
+              } else {
+                console.log("ส่งไม่สำเร็จ");
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
       }
     
   }
@@ -1463,7 +1491,7 @@ class TabCourse extends Component {
                   <Accordion
                   dataArray={PreTestCourse}
                   animation={true}
-                  expanded={[0]}
+                  expanded={[]}
                   renderHeader={this._renderHeader_PreTestCourse}
                   renderContent={this._renderContent_PreTestCourse}
                   />
@@ -1493,7 +1521,7 @@ class TabCourse extends Component {
                 <Accordion
                     dataArray={LessonAll}
                     animation={true}
-                    expanded={[0]}
+                    expanded={[]}
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
                 /> 
@@ -1502,7 +1530,7 @@ class TabCourse extends Component {
                    <Accordion
                    dataArray={PostTestCourse}
                    animation={true}
-                   expanded={[0]}
+                   expanded={[]}
                    renderHeader={this._renderHeader_PostTestCourse}
                    renderContent={this._renderContent_PostTestCourse}
                    />
@@ -1555,7 +1583,7 @@ class TabCourse extends Component {
                       </Text>
                     </View>
                     <View>
-                      <Label style={{fontSize: 16}}>{this.state.lang === "EN" ? "Detail" : "รายละเอียด555"}<Label style={{color: 'red'}}>*</Label></Label>
+                      <Label style={{fontSize: 16}}>{this.state.lang === "EN" ? "Detail" : "รายละเอียด"}<Label style={{color: 'red'}}>*</Label></Label>
                       <Textarea value={this.state.note_text}  style={{backgroundColor: '#e6e6e6', borderRadius: 10}} rowSpan={5} 
                         onChangeText={text => this.setState({detail_feedback: text})}
                       />
