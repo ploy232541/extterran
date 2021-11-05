@@ -40,11 +40,12 @@ const StaffCourseInScreen = (props) => {
         }else{
           var lang_id = '2'
         }
-
-        httpClient
+if (!dataArray.length>0) {
+   httpClient
         .get(`/Team/getTeamCourseIn/${user_id}/${lang_id}`)
         .then(response => {
             let res = response.data;
+            // console.log(response.data);
             if (res != null) {
               setDataArray(res)
               setLoading(false)
@@ -55,6 +56,8 @@ const StaffCourseInScreen = (props) => {
         .catch(error => {
             console.log(error);
       });
+}
+       
 
 
       } catch (e) {
@@ -89,10 +92,14 @@ const StaffCourseInScreen = (props) => {
             <View style={{ justifyContent: "flex-end", marginRight: 10 }}>
               {
                 // item.feedback_show_button ?
+                item.num_alert != null ?
+
                 <Button 
                 onPress={() => showModal(item.user_id)}
                 style={{height: 30, backgroundColor: '#3399ff'}}
+                
                 >
+                  
                     <Text style={{marginLeft: 5, marginRight: 5, color: '#fff'}}>
                         FeedBack
                     </Text>
@@ -116,12 +123,21 @@ const StaffCourseInScreen = (props) => {
                     }
                    
                 </Button>
-                // :
-                // <Button disabled style={{height: 30, backgroundColor: '#b3e0ff'}}>
-                //     <Text style={{marginLeft: 5, marginRight: 5, color: '#fff'}}>
+                :       
+                
+                // <Button   disable={true} color="secondary"
+                // style={{height: 30}}
+                // >
+                //     <Text style={{marginLeft: 5, marginRight: 5, color: '#CCCCCC'}}>
                 //         FeedBack
                 //     </Text>
                 // </Button>
+                // :
+                <Button disabled style={{height: 30, backgroundColor: '#b3e0ff'}}>
+                    <Text style={{marginLeft: 5, marginRight: 5, color: '#fff'}}>
+                        FeedBack
+                    </Text>
+                </Button>
               }
             </View>
             <View style={{justifyContent: 'flex-end'}}>
@@ -140,6 +156,19 @@ const StaffCourseInScreen = (props) => {
           <View style={{flex: 1}}>
             {item.course != null ?
                 item.course.map((data) =>{
+                  let status,color;
+                  if(data.status_popup_regis == 1){
+                    status = "ยังไม่เรียน";
+                    color = "red";
+                  }else if(data.status_popup_regis == 2){
+                    status = "กำลังเรียน";
+                    color = "#1E90FF";
+                  }else if(data.status_popup_regis == 3){
+                    status = "เรียนแล้ว";
+                    color = "green";
+                  }
+                  // console.log(status,color);
+
                   return (
                     <View
                     style={{
@@ -149,11 +178,11 @@ const StaffCourseInScreen = (props) => {
                     <View style={{flex: 1,flexDirection: 'row', padding: 10, alignItems: 'center'}}>
                       <Icon2 style={{color: '#cccccc'}} size={20} name="book" />
                       <Text style={{marginLeft: 5}}>
-                        {data.course_name}
+                        {data.course_title}
                       </Text>
                     </View>
                     <View style={{flex: 0.4,padding: 10, alignItems: 'flex-end', }}>
-                        <Text style={{color: data.color}}>{data.status_course_user}</Text>
+                        <Text style={{color: color}}>{status}</Text>
                     </View>
                   </View>
                   )

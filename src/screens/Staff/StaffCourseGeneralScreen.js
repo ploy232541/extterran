@@ -209,11 +209,11 @@ const StaffCourseGeneralScreen = (props) => {
                         จำนวน <Text style={{ color: "#398DDD" }}>{dataArray.length}</Text> คน
                     </Text>
                 </View>
-
+            
                 <Accordion
                   dataArray={dataArray}
                   animation={true}
-                  expanded={true}
+                  expanded={[0]}
                   renderHeader={_renderHeader}
                   renderContent={_renderContent}
                 />

@@ -247,7 +247,7 @@ export default class ReportScreen extends Component {
               </Text>
             </Pressable>
             {/* </Item> */}
-            {/* <Item style={{ margin: 7 }}> */}
+            <Item style={{ margin: 7 }}/>
             <Pressable
               style={[stylesdialog.button, stylesdialog.buttonCancel]}
               onPress={() => {
@@ -410,11 +410,14 @@ const stylesdialog = StyleSheet.create({
   },
   buttonOpen: {
     backgroundColor: "green",
-    margin: 12,
+    height: 40,
+  
+    // margin: 12,
   },
   buttonCancel: {
     backgroundColor: "gray",
-    margin: 12,
+    // margin: 12,
+    height: 40,
   },
   buttonClose: {
     backgroundColor: "#2196F3",

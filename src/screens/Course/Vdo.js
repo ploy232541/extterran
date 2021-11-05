@@ -394,9 +394,9 @@ class Vdo extends Component {
       let params = {
         lesson : note_lesson_id,
         file_id: note_file_id,
-        // user_id: user_id,
-        // gen_id: note_gen_id,
-        // course_id: course_id,
+        user_id: user_id,
+        gen_id: note_gen_id,
+        course_id: course_id,
         current_time: current_time,
         // type: item.type
       };
@@ -1553,7 +1553,7 @@ class Vdo extends Component {
               onPress={() =>
                 navigation.dispatch(
                   StackActions.replace("CourseCategory", {
-                    course_id: result.course_id
+                  
                   })
                 )
               }
@@ -1694,12 +1694,12 @@ const styles = StyleSheet.create({
     height: 100
   },
   buttonContainer: {
-    alignSelf: "flex-end",
+    alignSelf: "center",
     justifyContent: "center",
     paddingTop: 20,
     borderRadius: 4,
     marginTop: 2,
-    width: "50%"
+    width: 160,
   },
 });
 
