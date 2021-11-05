@@ -444,13 +444,7 @@ export default class TrainingFormScreen extends Component {
             ? "Include at least 1 training day."
             : "รวมวันฝึกอบรมต้องมีอย่างน้อย 1 วัน"
         );
-      }   else if (total <= 0) {
-        Alert.alert(
-          this.state.lang === "EN"
-            ? "Include at least 1 training day."
-            : "รวมวันฝึกอบรมต้องมีอย่างน้อย 1 วัน"
-        );
-      } else {
+      }  else {
         const params = {
           user_id,
           lang_id,
@@ -906,7 +900,7 @@ export default class TrainingFormScreen extends Component {
   }
 
   checkcourse = (expensecourse) => {
-    if (!isNaN(expensecourse)) {
+    if (!isNaN(expensecourse) && expensecourse >0) {
       let condition = 0;
       if (expensecourse >= 35000) {
         for (let data of this.state.conditionExpenseCourse) {
