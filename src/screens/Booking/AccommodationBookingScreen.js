@@ -159,23 +159,34 @@ export default class AccommodationBookingScreen extends Component {
 
     return [day, month, year].join("/");
   };
-  showDatePicker = (props, index) => {
+
+  showDatePicker = (props) => {
     this.setState({ isDatePickerVisible: true });
     if (props == "start") {
       this.setState({ isStart: true });
-    }
-    if (props == "start" && index >= 0) {
-      this.setState({ isStart: true, tem: index });
     }
     if (props != "start" && props >= 0) {
       this.setState({ tem: props });
     }
   };
+  // showDatePicker = (props, index) => {
+  //   this.setState({ isDatePickerVisible: true });
+  //   if (props == "start") {
+  //     this.setState({ isStart: true });
+  //   }
+  //   if (props == "start" && index >= 0) {
+  //     this.setState({ isStart: true, tem: index });
+  //   }
+  //   if (props != "start" && props >= 0) {
+  //     this.setState({ tem: props });
+  //   }
+  // };
   hideDatePicker = () => {
     this.setState({ isDatePickerVisible: false });
   };
   handleConfirm = (date) => {
     var date = this.formatDate(date);
+    
     if (this.state.isStart && this.state.tem == -1) {
       this.setState({ startDate: date, isStart: false });
     } else if (this.state.isStart && this.state.tem >= 0) {
@@ -889,9 +900,10 @@ export default class AccommodationBookingScreen extends Component {
           <DateTimePickerModal
             isDarkModeEnabled
             textColor="#fff"
-            locale="th"
+            locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
             isVisible={this.state.isDatePickerVisible}
             mode="date"
+            minimumDate={new Date()}
             onConfirm={this.handleConfirm}
             onCancel={this.hideDatePicker}
           />

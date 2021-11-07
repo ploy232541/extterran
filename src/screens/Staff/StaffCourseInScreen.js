@@ -87,6 +87,8 @@ if (!dataArray.length>0) {
             }}>
             <Icon2 style={{color: '#cccccc'}} size={20} name="user" />
             <Text style={{flex: 1, marginLeft: 5, color: '#000'}}>
+              {/* {item.user_id}  :  */}
+
               {item.fullname}
             </Text>
             <View style={{ justifyContent: "flex-end", marginRight: 10 }}>
@@ -152,9 +154,11 @@ if (!dataArray.length>0) {
       }
 
       const _renderContent = item => {
+                  console.log(item.course);
+
         return (
           <View style={{flex: 1}}>
-            {item.course != null ?
+            {item.course.length > 0 ?
                 item.course.map((data) =>{
                   let status,color;
                   if(data.status_popup_regis == 1){
@@ -167,7 +171,6 @@ if (!dataArray.length>0) {
                     status = "เรียนแล้ว";
                     color = "green";
                   }
-                  // console.log(status,color);
 
                   return (
                     <View

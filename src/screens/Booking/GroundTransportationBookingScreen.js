@@ -764,8 +764,10 @@ export default class GroundTransportationBookingScreen extends Component {
           <DateTimePickerModal
             isDarkModeEnabled
             textColor="#fff"
+            locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
             locale="th"
             isVisible={this.state.isDatePickerVisible}
+            minimumDate={new Date()}
             mode="date"
             onConfirm={this.handleConfirm}
             onCancel={this.hideDatePicker}

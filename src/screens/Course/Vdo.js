@@ -145,6 +145,7 @@ class Vdo extends Component {
             console.log("ค่ามากสุด", maxPlayPosition);
             this.setState({
               dataArray: result,
+              status :"",
               status: result.last,
               currentSlide: result.image
             });
@@ -284,6 +285,9 @@ class Vdo extends Component {
     if (stoped) {
       this.player.pauseAsync();
     }
+    // console.log(fristTime);
+    // console.log(e.isPlaying );
+    // console.log(lastPlayPosition);
     if (fristTime == false && e.isPlaying == false && lastPlayPosition != "s") {
       this.player.playAsync();
       fristTime = true;
@@ -321,7 +325,13 @@ class Vdo extends Component {
         }, 1000);
       }
     }
-    if (fristTime == false&&!maxPlayPosition > 0 && lastPlayPosition != "s") {
+    // console.log(fristTime);
+    // console.log(maxPlayPosition);
+    // console.log(lastPlayPosition);
+
+    // if (fristTime == false &&!maxPlayPosition > 0 && lastPlayPosition != "s") {
+
+    if (!maxPlayPosition > 0 && lastPlayPosition != "s") {
       console.log("ครั้งแรก");
       let { note_file_id, note_lesson_id, user_id, course_id, note_gen_id } =
         this.state;
@@ -339,6 +349,13 @@ class Vdo extends Component {
         .post("/Learn/LearnSaveVdo/UpdateTimeFirst", params)
         .then((res)=>{
           console.log(456);
+          this.params.lesson_id = "";
+          this.params.file_id = "";
+          this.params.user_id = "";
+          this.params.gen_id = "";
+          this.params.course_id = "";
+          this.params.current_time = "";
+          this.params.type = "";
         })
 
         .catch((error) => {

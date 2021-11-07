@@ -133,7 +133,7 @@ class LearningStatusListScreen extends Component {
          {
            type == '1' ?
             <>
-            <Text style={styles.headline}>{lang === 'EN' ? 'Status' : 'สถานะ'} : หลักสูตรบังคับภายใน</Text>
+            <Text style={styles.headline}>{lang === 'EN' ? 'Status : Internal Compulsory Course' : 'สถานะ  : หลักสูตรบังคับภายใน'}</Text>
             {
                 statusList.length > 0 ?
                   <View style={styles.container}>

@@ -64,7 +64,7 @@ export default class TrainingFormScreen extends Component {
       nameCourse: "",
       courseselect: "",
       lang_id: 1,
-      expense: 0,
+      expense: "",
       showinputExpense: true,
       showuninputExpense: false,
       startDate: "DD/MM/YYYY",
@@ -426,6 +426,12 @@ export default class TrainingFormScreen extends Component {
           this.state.lang === "EN"
             ? "Please enter the training end date"
             : "กรุณากรอกวันที่สิ้นสุดการฝึกอบรม"
+        );
+      }else  if (expense == "" || expense == "0") {
+        Alert.alert(
+          this.state.lang === "EN"
+            ? "Please enter the cost per person more than 0"
+            : "กรุณากรอกค่าใช้จ่ายต่อบุคคลให้มากกว่า 0"
         );
       } 
       // else if (
@@ -1198,11 +1204,11 @@ export default class TrainingFormScreen extends Component {
                         });
                       }
                       this.setState({
-                        expense: Number(text.replace(/,/g, ""))
+                        expense: Number(text.replace(/,/g, "0"))
                       });
                     }}
                     placeholder="กรุณากรอกจำนวนเงิน"
-                    value={this.state.expense}
+                    value={this.state.expense != 0}
                     onBlur={(e) => this.checkcourse(this.state.expense)}
                   />
                 </View>

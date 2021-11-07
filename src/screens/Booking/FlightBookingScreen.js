@@ -93,6 +93,7 @@ export default class FlightBookingScreen extends Component {
         .get(`/Training/TrainingFormScreen/${id}`)
         .then((response) => {
           const result = response.data;
+          // console.log(response.data);
           if (result != null) {
             for (let i = 0; i < result.length; i++) {
               var row = result[i];
