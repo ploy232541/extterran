@@ -125,15 +125,26 @@ function CustomDrawerContent(props) {
 function getHeaderTitle(route,lang) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
 
-  switch (routeName) {
-    case "HomeTab":
-      return lang == "EN" ? "EXTERRAN (THAILAND) LTD." : "บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด";
-    case "MyProgramsTab":
-      return lang == "EN" ? "Courses" : "หลักสูตรของฉัน";
-    case "ProfileTab":
-      return lang == "EN" ? "User" : "ผู้ใช้";
+  // switch (routeName) {
+  //   case "HomeTab":
+  //     return lang == "EN" ? "EXTERRAN (THAILAND) LTD." : "บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด";
+  //   case "MyProgramsTab":
+  //     return lang == "EN" ? "Courses" : "หลักสูตรของฉัน";
+  //   case "ProfileTab":
+  //     return lang == "EN" ? "User" : "ผู้ใช้";
 
-  }
+  // }
+
+
+  if(routeName=="HomeTab"){
+    return lang == "EN" ? "EXTERRAN (THAILAND) LTD." : "บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด";
+    }else if(routeName=="MyProgramsTab"){
+    return lang == "EN" ? "Courses" : "หลักสูตรของฉัน";
+    }else if(routeName=="ProfileTab"){
+    return lang == "EN" ? "User" : "ผู้ใช้";
+    }else{
+    return lang == "EN" ? "EXTERRAN (THAILAND) LTD." : "บริษัท เอ็กซ์เธอร์แอน (ประเทศไทย) จำกัด";
+    }
 }
 
 function DrawerStack() {
@@ -186,7 +197,7 @@ function DrawerStack() {
         options={({ route }) => ({
           headerTintColor: "#1877f2",
           headerTitleStyle:{fontSize: 16,},
-          headerTitle: getHeaderTitle(route,lang),
+          // headerTitle: getHeaderTitle(route,lang),
           title: lang == "EN" ? "Course" : "หลักสูตรของฉัน",
           drawerIcon: ({ size, color }) => (
             <Icons size={size} color={color} name="view-list" />
