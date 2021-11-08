@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/FontAwesome';
 import {httpClient} from '../../core/HttpClient';
 import ModalFeedBack from './ModalFeedBack';
+import { Badge } from "react-native-elements";
 
 const HEIGHT = Dimensions.get("window").height
 const StaffCourseInScreen = (props) => {
@@ -105,7 +106,18 @@ if (!dataArray.length>0) {
                     <Text style={{marginLeft: 5, marginRight: 5, color: '#fff'}}>
                         FeedBack
                     </Text>
-                    {
+                    {item.num_alert > 0 && (
+          <Badge
+            value={item.num_alert}
+            status="error"
+            containerStyle={{
+              position: "absolute",
+              top: -10,
+              right: -4
+            }}
+          />
+        )}
+                    {/* {
                        item.num_alert != null ?
                       <View style={{width: 15,
                         height: 15,
@@ -122,7 +134,7 @@ if (!dataArray.length>0) {
                      </View>
                      :
                       null
-                    }
+                    } */}
                    
                 </Button>
                 :       

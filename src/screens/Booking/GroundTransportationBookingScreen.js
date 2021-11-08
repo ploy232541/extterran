@@ -765,7 +765,7 @@ export default class GroundTransportationBookingScreen extends Component {
             isDarkModeEnabled
             textColor="#fff"
             locale={this.state.lang == "EN" ? "en_EN" : "th_TH"}
-            locale="th"
+            // locale="th"
             isVisible={this.state.isDatePickerVisible}
             minimumDate={new Date()}
             mode="date"

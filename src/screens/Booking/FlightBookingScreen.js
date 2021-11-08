@@ -924,8 +924,9 @@ export default class FlightBookingScreen extends Component {
               </View>
               {/* Checkbox */}
 
-              <Text>Flight:</Text>
-              <Text style={styles.textInput}>เที่ยวบิน</Text>
+              <Text>Flight: <Text style={{ color: "red" }}> *</Text>
+              </Text>
+              <Text style={styles.textInput}>เที่ยวบิน  </Text>
               <TextInput
                 style={styles.inputStyle1}
                 placeholder={

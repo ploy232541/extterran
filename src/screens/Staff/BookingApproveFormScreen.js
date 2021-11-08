@@ -151,7 +151,7 @@ const BookingApproveFormScreen = (props) => {
             <Text
               style={{ alignSelf: "center", fontSize: 18, marginBottom: 10 }}
             >
-              ใบคำขอ Booking555
+              ใบคำขอ Booking
             </Text>
             <View style={{ marginHorizontal: 20 }}>
               <Divider style={{ backgroundColor: "#d9d9d9" }} />
